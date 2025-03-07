@@ -91,7 +91,7 @@ class CourseImport extends \ST\Lms\Helpers\FileImport {
 				$item_id = get_post( (int) $item ) ? (int) $item : 0;
 			} else {
 				$item_id = 0;
-				if ( str_contains( $item, 'Quiz:' ) ) {  // @phpstan-ignore-line
+				if ( str_contains( $item, 'Quiz:' ) ) { // @phpstan-ignore-line
 					$item      = ltrim( $item, 'Quiz:' );
 					$quiz_data = get_posts(
 						array(

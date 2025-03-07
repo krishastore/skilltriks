@@ -28,6 +28,7 @@ window.wp = window.wp || {};
 		 */
 		init: function() {
 			this.dialogInit();
+			this.newRoleModal();
             this.addMedia();
 			this.addLogo();
 			this.openTab();
@@ -60,6 +61,27 @@ window.wp = window.wp || {};
 			});
 			$('#bulk-import-cancel-modal').dialog({
 				title: settingObject.i18n.CancelPopupTitle,
+				dialogClass: "wp-dialog stlms-modal bulk-import-modal",
+				autoOpen: false,
+				draggable: false,
+				width: "auto",
+				modal: true,
+				resizable: false,
+				closeOnEscape: true,
+				position: {
+					my: "center",
+					at: "center",
+					of: window,
+				},
+				open: function (event, ui) {
+				},
+				create: function () {
+				},
+				beforeClose: function() {
+				}
+			});
+			$('#add-new-role-modal').dialog({
+				title: settingObject.i18n.RoleTitle,
 				dialogClass: "wp-dialog stlms-modal bulk-import-modal",
 				autoOpen: false,
 				draggable: false,
@@ -175,6 +197,16 @@ window.wp = window.wp || {};
 						$('#bulk-import-cancel-modal').prev().find('.ui-dialog-titlebar-close').trigger('click');
 						window.location.reload();
 				});
+			});
+		},
+
+		/**
+		 * Add new role.
+		 */
+		newRoleModal: function() {
+			$(document).on('click', '.stlms-add-new-role', function(e) {
+				$('#add-new-role-modal').dialog('open');
+				e.preventDefault();
 			});
 		},
 

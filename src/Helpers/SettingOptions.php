@@ -125,6 +125,8 @@ class SettingOptions {
 			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
+		add_action( 'admin_post_user_role', array( $this, 'stlms_new_user_role' ) );
+		add_action( 'admin_post_user_caps', array( $this, 'stlms_user_capabilities' ) );
 		add_action( 'admin_action_activate_layout', array( $this, 'handle_layout_activation' ) );
 		add_action( 'admin_post_stlms_setting', array( $this, 'stlms_setting_options' ) );
 	}
@@ -417,6 +419,75 @@ class SettingOptions {
 			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 			wp_redirect( add_query_arg( 'theme', $value, wp_get_referer() ) );
 			exit;
+		} else {
+			wp_die(
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
+				esc_html_e( 'Error', 'skilltriks-lms' ),
+				array( 'back_link' => true )
+			);
+		}
+	}
+
+	/**
+	 * Get new user role.
+	 */
+	public function stlms_new_user_role() {
+		if ( isset( $_POST['user-role-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['user-role-nonce'] ) ), 'user_role' ) ) {
+			if ( isset( $_POST['user_role'] ) && ! empty( $_POST['user_role'] ) ) :
+				$role_name = sanitize_text_field( wp_unslash( $_POST['user_role'] ) );
+				$role_key  = preg_replace( '/\s+/', '_', strtolower( $role_name ) );
+				if ( ! isset( $this->options['user_role'] ) || ! array_key_exists( $role_key, $this->options['user_role'] ) ) :
+					$user_role                  = get_option( 'user_role', array() );
+					$user_role[ $role_key ]     = ucwords( $role_name );
+					$this->options['user_role'] = $user_role;
+					update_option( 'stlms_settings', $this->options );
+
+					// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+					wp_redirect( add_query_arg( 'role', sanitize_title( $role_name ), wp_get_referer() ) );
+				endif;
+			endif;
+		} else {
+			wp_die(
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
+				esc_html_e( 'Error', 'skilltriks-lms' ),
+				array( 'back_link' => true )
+			);
+		}
+	}
+
+	/**
+	 * Get new user capabilities.
+	 */
+	public function stlms_user_capabilities() {
+		if ( isset( $_POST['user-caps-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['user-caps-nonce'] ) ), 'user_caps' ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$caps      = isset( $_POST['users_can'] ) ? map_deep( $_POST['users_can'], 'sanitize_text_field' ) : array();
+			$user_role = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
+
+			if ( ! empty( $user_role ) && ! empty( $caps ) ) {
+				if ( array_key_exists( $user_role, $this->options['user_role'] ) ) {
+					$caps        = array_fill_keys( $caps, true );
+					$role_exists = get_role( $user_role );
+					if ( empty( $role_exists ) ) {
+						add_role( $user_role, $this->options['user_role'][ $user_role ], $caps );
+					} else {
+						$existing_caps = get_role( $user_role )->capabilities;
+						foreach ( $caps as $key => $value ) {
+							if ( ! array_key_exists( $key, $existing_caps ) ) {
+								$role_exists->add_cap( $key, true );
+							}
+						}
+						foreach ( $existing_caps as $key => $value ) {
+							if ( ! array_key_exists( $key, $caps ) ) {
+								$role_exists->remove_cap( $key );
+							}
+						}
+					}
+				}
+			}
+
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+			wp_redirect( add_query_arg( 'page', 'stlms_manage_roles', admin_url( 'admin.php' ) ) );
 		} else {
 			wp_die(
 				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),

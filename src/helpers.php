@@ -806,3 +806,53 @@ function layout_typographies() {
 
 	return $layout;
 }
+
+/**
+ * User Capability List.
+ *
+ * @return array
+ */
+function user_capability_list() {
+	return apply_filters(
+		'stlms_user_capability_list',
+		array(
+			'course'   => array(
+				'create_course'          => __( 'Create Course', 'skilltriks-lms' ),
+				'view_course'            => __( 'View Course', 'skilltriks-lms' ),
+				'edit_course'            => __( 'Edit Course', 'skilltriks-lms' ),
+				'delete_course'          => __( 'Delete Course', 'skilltriks-lms' ),
+				'create_course_category' => __( 'Create Course Category', 'skilltriks-lms' ),
+				'edit_course_category'   => __( 'Edit Course Category', 'skilltriks-lms' ),
+				'delete_course_category' => __( 'Delete Course Category', 'skilltriks-lms' ),
+				'create_course_level'    => __( 'Create Course Level', 'skilltriks-lms' ),
+				'edit_course_level'      => __( 'Edit Course Level', 'skilltriks-lms' ),
+				'delete_course_level'    => __( 'Delete Course Level', 'skilltriks-lms' ),
+			),
+			'lesson'   => array(
+				'create_lesson' => __( 'Create Lesson', 'skilltriks-lms' ),
+				'view_lesson'   => __( 'View Lesson', 'skilltriks-lms' ),
+				'edit_lesson'   => __( 'Edit Lesson', 'skilltriks-lms' ),
+				'delete_lesson' => __( 'Delete Lesson', 'skilltriks-lms' ),
+			),
+			'question' => array(
+				'create_question' => __( 'Create Question', 'skilltriks-lms' ),
+				'view_question'   => __( 'View Question', 'skilltriks-lms' ),
+				'edit_question'   => __( 'Edit Question', 'skilltriks-lms' ),
+				'delete_question' => __( 'Delete Question', 'skilltriks-lms' ),
+			),
+			'quiz'     => array(
+				'create_quiz' => __( 'Create Quiz', 'skilltriks-lms' ),
+				'view_quiz'   => __( 'View Quiz', 'skilltriks-lms' ),
+				'edit_quiz'   => __( 'Edit Quiz', 'skilltriks-lms' ),
+				'delete_quiz' => __( 'Delete Quiz', 'skilltriks-lms' ),
+			),
+			'result'   => array(
+				'view_result'   => __( 'View Result', 'skilltriks-lms' ),
+				'delete_result' => __( 'Delete Result', 'skilltriks-lms' ),
+			),
+			'setting'  => array(
+				'view_setting' => __( 'View Setting', 'skilltriks-lms' ),
+			),
+		)
+	);
+}

@@ -12,8 +12,13 @@ $role_name       = preg_replace( '/_/', ' ', $user_role );
 $capability_list = \ST\Lms\user_capability_list();
 ?>
 
-<h1>Edit User Capability</h1>
-<h3>Add Capability to this new role:- <span><?php echo esc_html( ucwords( $role_name ) ); ?></span></h3>
+<h1><?php esc_html_e( 'Edit User Capability', 'skilltriks-lms' ); ?></h1>
+<?php
+printf(
+	'<h3>Add Capability to this new role:- <span>%s</span></h3>',
+	esc_html( ucwords( $role_name ) )
+);
+?>
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="user-caps-form" method="post">
 	<input type="hidden" name="action" value="user_caps" />
 	<input type="hidden" name="role" value="<?php echo esc_html( $user_role ); ?>" />

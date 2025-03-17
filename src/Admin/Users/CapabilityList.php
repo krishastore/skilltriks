@@ -95,9 +95,10 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 				esc_url(
 					add_query_arg(
 						array(
-							'page'   => 'stlms_manage_roles',
-							'action' => 'delete_role',
-							'id'     => sanitize_title( $item ),
+							'page'     => 'stlms_manage_roles',
+							'action'   => 'delete_role',
+							'id'       => sanitize_title( $item ),
+							'_wpnonce' => wp_create_nonce( 'delete_role' ),
 						),
 						admin_url( 'admin.php' )
 					)

@@ -1,6 +1,6 @@
 jQuery(function ($) {
   // Password Toggle
-  $(".bdlms-password-toggle").on("click", function () {
+  $(".stlms-password-toggle").on("click", function () {
     $(this).toggleClass("active");
     var input = $($(this).attr("toggle"));
     if (input.attr("type") == "password") {
@@ -11,79 +11,79 @@ jQuery(function ($) {
   });
 
   // Accordion
-  $(".bdlms-accordion .bdlms-accordion-item").each(function (i, el) {
+  $(".stlms-accordion .stlms-accordion-item").each(function (i, el) {
     var isExpanded = $(el).data("expanded") === true;
     if (isExpanded) {
-      $(el).find(".bdlms-accordion-collapse").slideDown();
-      $(el).find(".bdlms-accordion-header:not(.no-accordion)").addClass("active");
+      $(el).find(".stlms-accordion-collapse").slideDown();
+      $(el).find(".stlms-accordion-header:not(.no-accordion)").addClass("active");
     }
   });
-  $(".bdlms-accordion .bdlms-accordion-header:not(.no-accordion)").click(function () {
-    var currentAccordionItem = $(this).parents(".bdlms-accordion-item");
+  $(".stlms-accordion .stlms-accordion-header:not(.no-accordion)").click(function () {
+    var currentAccordionItem = $(this).parents(".stlms-accordion-item");
     if ($(this).hasClass("active")) {
       currentAccordionItem.data("expanded", false);
-      currentAccordionItem.find(".bdlms-accordion-collapse").slideUp();
+      currentAccordionItem.find(".stlms-accordion-collapse").slideUp();
       currentAccordionItem
-        .find(".bdlms-accordion-header")
+        .find(".stlms-accordion-header")
         .removeClass("active");
     } else {
       $(this)
-        .parents(".bdlms-accordion")
-        .find(".bdlms-accordion-item")
+        .parents(".stlms-accordion")
+        .find(".stlms-accordion-item")
         .each(function (i, el) {
           $(el).data("expanded", false);
-          $(el).find(".bdlms-accordion-collapse").slideUp();
-          $(el).find(".bdlms-accordion-header").removeClass("active");
+          $(el).find(".stlms-accordion-collapse").slideUp();
+          $(el).find(".stlms-accordion-header").removeClass("active");
         });
       currentAccordionItem.data(
         "expanded",
         !currentAccordionItem.data("expanded")
       );
-      currentAccordionItem.find(".bdlms-accordion-collapse").slideToggle();
+      currentAccordionItem.find(".stlms-accordion-collapse").slideToggle();
       currentAccordionItem
-        .find(".bdlms-accordion-header")
+        .find(".stlms-accordion-header")
         .toggleClass("active");
     }
   });
 
   // Filter Sidebar Toggle
-  $(".bdlms-filter-toggle").on("click", function () {
-    $(".bdlms-course-filter").toggleClass("active");
+  $(".stlms-filter-toggle").on("click", function () {
+    $(".stlms-course-filter").toggleClass("active");
   });
 
   // Lesson Sidebar Toggle.
-  $(".bdlms-lesson-toggle").on("click", '.icon', function () {
-    $(".bdlms-lesson-view").addClass("active");
+  $(".stlms-lesson-toggle").on("click", '.icon', function () {
+    $(".stlms-lesson-view").addClass("active");
   });
-  $(".bdlms-lesson-toggle").on("click", '.icon-cross', function () {
-    $(".bdlms-lesson-view").removeClass("active");
+  $(".stlms-lesson-toggle").on("click", '.icon-cross', function () {
+    $(".stlms-lesson-view").removeClass("active");
   });
 
   // Login form ajax.
-  $(document).on('submit', '.bdlms-login__body form', function() {
+  $(document).on('submit', '.stlms-login__body form', function() {
     var _this =  $(this);
     _this
-    .find('.bdlms-error-message')
+    .find('.stlms-error-message')
     .addClass('hidden')
-    .next('.bdlms-form-footer')
-    .find('.bdlms-loader')
+    .next('.stlms-form-footer')
+    .find('.stlms-loader')
     .addClass('is-active');
 
     $.post(
-      BdlmsObject.ajaxurl,
+      StlmsObject.ajaxurl,
       _this.serialize(),
       function(response) {
         if ( response.status ) {
           window.location.href = response.redirect;
         } else {
           _this
-          .find('.bdlms-error-message')
+          .find('.stlms-error-message')
           .removeClass('hidden')
           .find('span')
           .html(response.message)
           .parent('div')
-          .next('.bdlms-form-footer')
-          .find('.bdlms-loader')
+          .next('.stlms-form-footer')
+          .find('.stlms-loader')
           .removeClass('is-active');
         }
       },
@@ -94,13 +94,13 @@ jQuery(function ($) {
   
   // Filter items.
   var sendFilterItemRequest = function() {
-  	var data = $('form.bdlms-filter-form').serializeArray();
+  	var data = $('form.stlms-filter-form').serializeArray();
 		var url = new URL(window.location.href);
 		if ( data.length > 0 ) {
 			var getCurrentVal = [];
 			url.searchParams.delete('category');
 			url.searchParams.delete('levels');
-            var updateUrl = BdlmsObject.currentUrl;
+            var updateUrl = StlmsObject.currentUrl;
 			var url = new URL(updateUrl);
 			$.each(data, function(index, item){
 				var inputName = item.name.replace('[]', '');
@@ -119,10 +119,10 @@ jQuery(function ($) {
 			}
 		}
 		window.history.replaceState(null, null, url.toString());
-		$('#bdlms_course_view')
+		$('#stlms_course_view')
 		.addClass('is-loading')
 		.load(
-			url.toString() + ' #bdlms_course_view > *',
+			url.toString() + ' #stlms_course_view > *',
 			function() {
 				$(this).removeClass('is-loading');
 			}
@@ -130,10 +130,10 @@ jQuery(function ($) {
   };
 
   // Filter category.
-  $(document).on('change', '.bdlms-filter-list input:checkbox:not(#bdlms_category_all)', function() {
+  $(document).on('change', '.stlms-filter-list input:checkbox:not(#stlms_category_all)', function() {
     sendFilterItemRequest();
   });
-  $(document).on('change', '.bdlms-filter-list input:checkbox#bdlms_category_all, .bdlms-filter-list input:checkbox#bdlms_level_all', function() {
+  $(document).on('change', '.stlms-filter-list input:checkbox#stlms_category_all, .stlms-filter-list input:checkbox#stlms_level_all', function() {
 	var isChecked = $(this).is(':checked');
 	$(this)
 	.parents('ul')
@@ -145,35 +145,35 @@ jQuery(function ($) {
 	.trigger('change');
   });
 
-  $(document).on('change', '.bdlms-form-group select.category', function() {
-    $('.bdlms-filter-form input[name="category"]').val( $(this).val() );
+  $(document).on('change', '.stlms-form-group select.category', function() {
+    $('.stlms-filter-form input[name="category"]').val( $(this).val() );
     sendFilterItemRequest();
   });
-  $(document).on('change', '.bdlms-form-group select.progress', function() {
-    $('.bdlms-filter-form input[name="progress"]').val( $(this).val() );
+  $(document).on('change', '.stlms-form-group select.progress', function() {
+    $('.stlms-filter-form input[name="progress"]').val( $(this).val() );
     sendFilterItemRequest();
   });
-  $(document).on('change', '.bdlms-sort-by select', function(){
-		$('.bdlms-filter-form input[name="order_by"]').val( $(this).val() );
+  $(document).on('change', '.stlms-sort-by select', function(){
+		$('.stlms-filter-form input[name="order_by"]').val( $(this).val() );
 		sendFilterItemRequest();
   });
 
-  $(document).on('submit','.bdlms-course-search form', function() {
-  	$('.bdlms-filter-form input[name="_s"]').val( $('input:text', $(this)).val() );
+  $(document).on('submit','.stlms-course-search form', function() {
+  	$('.stlms-filter-form input[name="_s"]').val( $('input:text', $(this)).val() );
 		sendFilterItemRequest();
   });
 
-  $(document).on('click', '.bdlms-reset-btn', function() {
+  $(document).on('click', '.stlms-reset-btn', function() {
     var url = new URL(window.location.href);
     url.searchParams.delete('category');
     url.searchParams.delete('progress');
     url.searchParams.delete('_s');
-    $('.bdlms-filter-form input[name="category"]').val('');
-    $('.bdlms-filter-form input[name="progress"]').val('');
-    $('.bdlms-filter-form input[name="_s"]').val('');
+    $('.stlms-filter-form input[name="category"]').val('');
+    $('.stlms-filter-form input[name="progress"]').val('');
+    $('.stlms-filter-form input[name="_s"]').val('');
     window.history.replaceState(null, null, url.toString());
     sendFilterItemRequest();
-    $('.bdlms-form-group select.category, .bdlms-form-group select.progress, .bdlms-search input:text').val('');
+    $('.stlms-form-group select.category, .stlms-form-group select.progress, .stlms-search input:text').val('');
   });
 	// var uri = window.location.toString();
 	// if (uri.indexOf("?") > 0) {
@@ -184,11 +184,11 @@ jQuery(function ($) {
 
 jQuery(window).on('load', function() {
   
-	var activeElement = jQuery('.bdlms-lesson-accordion .bdlms-lesson-list li.active');
+	var activeElement = jQuery('.stlms-lesson-accordion .stlms-lesson-list li.active');
 
 	var activeHeight = activeElement.innerHeight();
 	if (activeElement.length) {
-		var container = jQuery('.bdlms-lesson-accordion');
+		var container = jQuery('.stlms-lesson-accordion');
 		var elementTop = activeElement.offset().top - activeHeight - 40 ;
 		var elementTop2 = activeElement.position().top - 80;
 		setTimeout(() => {
@@ -221,27 +221,27 @@ jQuery(window).on('load', function() {
 
   jQuery(document).on('click', '#download-certificate', function(e) {
 		e.preventDefault();
-    jQuery(this).next('.bdlms-loader').addClass('is-active');
+    jQuery(this).next('.stlms-loader').addClass('is-active');
 		var courseId = jQuery(this).data('course'); // Retrieve the course ID from a data attribute
 
 		jQuery.ajax({
-			url: BdlmsObject.ajaxurl,
+			url: StlmsObject.ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'bdlms_download_course_certificate',
-				_nonce: BdlmsObject.nonce,
+				action: 'stlms_download_course_certificate',
+				_nonce: StlmsObject.nonce,
 				course_id: courseId,
 			},
 			xhrFields: {
 				responseType: 'blob' // Specify that we expect a blob response (PDF file)
 			},
 			success: function(response) {
-        jQuery('#download-certificate').next('.bdlms-loader').removeClass('is-active');
+        jQuery('#download-certificate').next('.stlms-loader').removeClass('is-active');
 				// Create a URL for the blob and trigger a download
 				var url = window.URL.createObjectURL(response);
 				var a = document.createElement('a');
 				a.href = url;
-				a.download = BdlmsObject.fileName + courseId;
+				a.download = StlmsObject.fileName + courseId;
 				document.body.appendChild(a);
 				a.click();
 				a.remove();
@@ -250,7 +250,7 @@ jQuery(window).on('load', function() {
 			},
       error: function() {
         setTimeout(function () {
-          jQuery('#download-certificate').next('.bdlms-loader').removeClass('is-active'); 
+          jQuery('#download-certificate').next('.stlms-loader').removeClass('is-active'); 
         }, 3000 );
       }
 		});
@@ -258,16 +258,16 @@ jQuery(window).on('load', function() {
 
   jQuery(document).on('click', '#enrol-now', function(e) {
 		e.preventDefault();
-    var loader = jQuery(this).find('.bdlms-loader');
+    var loader = jQuery(this).find('.stlms-loader');
     loader.addClass('is-active');
 		var courseId = jQuery(this).data('course'); // Retrieve the course ID from a data attribute
 
 		jQuery.ajax({
-			url: BdlmsObject.ajaxurl,
+			url: StlmsObject.ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'bdlms_enrol_course',
-				_nonce: BdlmsObject.nonce,
+				action: 'stlms_enrol_course',
+				_nonce: StlmsObject.nonce,
 				course_id: courseId,
 			},
 			success: function(response) {
@@ -283,7 +283,7 @@ jQuery(window).on('load', function() {
 	});
 
   // User Dropdown Toggle
-  jQuery(".bdlms-user-dd .bdlms-user-dd__toggle").on("click", function () {
-    jQuery(this).next(".bdlms-user-dd__menu").slideToggle();
+  jQuery(".stlms-user-dd .stlms-user-dd__toggle").on("click", function () {
+    jQuery(this).next(".stlms-user-dd__menu").slideToggle();
   });
 });

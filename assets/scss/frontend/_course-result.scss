@@ -1,37 +1,37 @@
 .course-result-box {
   padding: 20px 0;
-  .bdlms-quiz-complete {
+  .stlms-quiz-complete {
     max-width: 578px;
   }
-  .bdlms-quiz-complete {
+  .stlms-quiz-complete {
     img {
       display: inline;
     }
-    .bdlms-quiz-result-list {
-      &.bdlms-result-view {
+    .stlms-quiz-result-list {
+      &.stlms-result-view {
         max-width: 250px;
         padding-top: 18px;
         padding-bottom: 20px;
         margin: 0 auto;
-        .bdlms-quiz-result-item {
+        .stlms-quiz-result-item {
           font-size: 20px;
           color: $primary_dark;
           font-weight: 600;
           p {
             font-size: 28px;
-            &.bdlms-text-red {
+            &.stlms-text-red {
               color: $red;
             }
-            &.bdlms-text-green {
+            &.stlms-text-green {
               color: $green;
             }
           }
         }
       }
-      &.bdlms-course-complete-result {
+      &.stlms-course-complete-result {
         padding-top: 18px;
         padding-bottom: 20px;
-        .bdlms-quiz-result-item {
+        .stlms-quiz-result-item {
           font-size: 18px;
           color: $primary_dark;
           padding-left: 10px;

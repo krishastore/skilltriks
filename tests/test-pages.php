@@ -2,7 +2,7 @@
 /**
  * Class PagesTest
  *
- * @package BD\Lms\Admin\Users
+ * @package ST\Lms\Admin\Users
  */
 
 /**
@@ -23,7 +23,7 @@ class PagesTest extends WP_UnitTestCase {
 	 * Verify default pages.
 	 */
 	public function test_verify_pages() {
-		\BD\Lms\Helpers\Utility::activation_hook();
+		\ST\Lms\Helpers\Utility::activation_hook();
 
 		$pages = array(
 			'All Courses',

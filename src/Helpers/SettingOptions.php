@@ -2,15 +2,15 @@
 /**
  * The file that manage the setting options.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Helpers;
+namespace ST\Lms\Helpers;
 
-use BD\Lms\ErrorLog as EL;
+use ST\Lms\ErrorLog as EL;
 
 /**
  * Helpers utility class.
@@ -29,21 +29,21 @@ class SettingOptions {
 	 *
 	 * @var string $option_group
 	 */
-	private $option_group = 'bdlms_settings';
+	private $option_group = 'stlms_settings';
 
 	/**
 	 * Option section
 	 *
 	 * @var string $option_section
 	 */
-	private $option_section = 'bdlms_section';
+	private $option_section = 'stlms_section';
 
 	/**
 	 * Option name
 	 *
 	 * @var string $option_name
 	 */
-	private $option_name = 'bdlms_settings';
+	private $option_name = 'stlms_settings';
 
 	/**
 	 * Setting fields
@@ -90,50 +90,50 @@ class SettingOptions {
 	public function set_fields() {
 		$this->fields = array(
 			'client_id'             => array(
-				'title' => esc_html__( 'Client ID', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Client ID', 'skilltriks-lms' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'client_secret'         => array(
-				'title' => esc_html__( 'Client Secret', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Client Secret', 'skilltriks-lms' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'redirect_uri'          => array(
-				'title'    => esc_html__( 'Redirect URL', 'bluedolphin-lms' ),
+				'title'    => esc_html__( 'Redirect URL', 'skilltriks-lms' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
+				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
 				'type'     => 'url',
-				'value'    => home_url( \BD\Lms\get_page_url( 'login', true ) ),
+				'value'    => home_url( \ST\Lms\get_page_url( 'login', true ) ),
 				'readonly' => true,
 			),
 			'company_logo'          => array(
-				'title' => esc_html__( 'Company Logo', 'bluedolphin-lms' ),
-				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Company Logo', 'skilltriks-lms' ),
+				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'skilltriks-lms' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['company_logo'] ) ? esc_url( $this->options['company_logo'] ) : '',
 			),
 			'certificate_signature' => array(
-				'title' => esc_html__( 'Certificate Signature', 'bluedolphin-lms' ),
-				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Certificate Signature', 'skilltriks-lms' ),
+				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'skilltriks-lms' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['certificate_signature'] ) ? esc_url( $this->options['certificate_signature'] ) : '',
 			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
 		add_action( 'admin_action_activate_layout', array( $this, 'handle_layout_activation' ) );
-		add_action( 'admin_post_bdlms_setting', array( $this, 'bdlms_setting_options' ) );
+		add_action( 'admin_post_stlms_setting', array( $this, 'stlms_setting_options' ) );
 	}
 
 	/**
 	 * Save setting options.
 	 */
-	public function bdlms_setting_options() {
-		if ( isset( $_POST['bdlms-setting-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms-setting-nonce'] ) ), 'bdlms_setting' ) ) :
+	public function stlms_setting_options() {
+		if ( isset( $_POST['stlms-setting-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms-setting-nonce'] ) ), 'stlms_setting' ) ) :
 			$setting_options = array();
 			foreach ( $this->fields as $key => $field ) :
 				if ( isset( $_POST[ $this->option_name ][ $key ] ) ) :
@@ -153,9 +153,9 @@ class SettingOptions {
 	 * Option Page.
 	 */
 	public function register_settings() {
-		$setting_name = esc_html__( 'Settings', 'bluedolphin-lms' );
+		$setting_name = esc_html__( 'Settings', 'skilltriks-lms' );
 		// Add option page.
-		$hook = add_submenu_page( \BD\Lms\PARENT_MENU_SLUG, $setting_name, $setting_name, 'manage_options', 'bdlms-settings', array( $this, 'view_admin_settings' ) );
+		$hook = add_submenu_page( \ST\Lms\PARENT_MENU_SLUG, $setting_name, $setting_name, 'manage_options', 'stlms-settings', array( $this, 'view_admin_settings' ) );
 		// Add setting section.
 		add_settings_section( $this->option_section, '', '__return_false', $this->option_group );
 		// Add field.
@@ -193,8 +193,8 @@ class SettingOptions {
 	 */
 	public function setting_enqueue_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_style( \BD\Lms\BDLMS_SETTING );
-		wp_enqueue_script( \BD\Lms\BDLMS_SETTING );
+		wp_enqueue_style( \ST\Lms\STLMS_SETTING );
+		wp_enqueue_script( \ST\Lms\STLMS_SETTING );
 	}
 
 	/**
@@ -208,7 +208,7 @@ class SettingOptions {
 		add_screen_option(
 			'per_page',
 			array(
-				'label'   => __( 'Number of items per page:', 'bluedolphin-lms' ),
+				'label'   => __( 'Number of items per page:', 'skilltriks-lms' ),
 				'default' => get_option( 'posts_per_page', 10 ),
 				'option'  => 'imports_per_page',
 			)
@@ -265,7 +265,7 @@ class SettingOptions {
 		$value       = ! empty( $value ) ? $value : $default_val;
 
 		if ( 'file' === $type ) {
-			$button_text = $value ? esc_html__( 'Change Image', 'bluedolphin-lms' ) : esc_html__( 'Upload Image', 'bluedolphin-lms' );
+			$button_text = $value ? esc_html__( 'Change Image', 'skilltriks-lms' ) : esc_html__( 'Upload Image', 'skilltriks-lms' );
 			echo '<input type="hidden" id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" />';
 			echo '<button type="button" id="upload_logo" class="button upload_image_button" data-target="#' . esc_attr( $id ) . '">' . $button_text . '</button>'; //phpcs:ignore
 			if ( $value ) {
@@ -295,25 +295,25 @@ class SettingOptions {
 			$tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		?>
-		<div class="wrap bdlms-settings">
+		<div class="wrap stlms-settings">
 			<div id="icon-options-general" class="icon32"></div>
 			<nav class="nav-tab-wrapper">
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'bluedolphin-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'bluedolphin-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'bluedolphin-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks-lms' ); ?></a>
 				<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'bluedolphin-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks-lms' ); ?></a>
 				<?php endif; ?>
 			</nav>
 			<?php
 			if ( 'bulk-import' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-bulk-import.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-bulk-import.php';
 			} elseif ( 'theme' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-theme.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-theme.php';
 			} elseif ( 'customise-theme' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-customise-theme.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-customise-theme.php';
 			} else {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-general.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-general.php';
 			}
 			?>
 		</div>
@@ -340,9 +340,9 @@ class SettingOptions {
 			$typography     = array();
 			$theme_settings = array();
 			$theme_name     = $this->options['theme'];
-			$colors         = \BD\Lms\layout_colors();
+			$colors         = \ST\Lms\layout_colors();
 			$colors         = isset( $colors[ $theme_name ] ) ? $colors[ $theme_name ] : array();
-			$layout         = \BD\Lms\layout_typographies();
+			$layout         = \ST\Lms\layout_typographies();
 			$html_tags      = $layout['tag'];
 			$typographies   = $layout['typography'];
 
@@ -384,12 +384,12 @@ class SettingOptions {
 			$theme_settings = wp_parse_args( $args, $this->options );
 
 			if ( ! empty( $theme_settings[ $theme_name ]['colors'] ) || ! empty( $theme_settings[ $theme_name ]['typography'] ) ) {
-				update_option( 'bdlms_settings', $theme_settings );
+				update_option( 'stlms_settings', $theme_settings );
 			}
 
 			if ( isset( $_POST['reset'] ) ) {
 				unset( $this->options[ $theme_name ]['typography'], $this->options[ $theme_name ]['colors'] );
-				update_option( 'bdlms_settings', $this->options );
+				update_option( 'stlms_settings', $this->options );
 			}
 
 		endif;
@@ -410,7 +410,7 @@ class SettingOptions {
 				$value = sanitize_text_field( wp_unslash( $_GET['theme'] ) );
 				if ( ! isset( $this->options['theme'] ) || $this->options['theme'] !== $value ) :
 					$this->options['theme'] = $value;
-					update_option( 'bdlms_settings', $this->options );
+					update_option( 'stlms_settings', $this->options );
 				endif;
 			endif;
 
@@ -419,8 +419,8 @@ class SettingOptions {
 			exit;
 		} else {
 			wp_die(
-				esc_html_e( 'Security check failed. Please try again.', 'bluedolphin-lms' ),
-				esc_html_e( 'Error', 'bluedolphin-lms' ),
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
+				esc_html_e( 'Error', 'skilltriks-lms' ),
 				array( 'back_link' => true )
 			);
 		}

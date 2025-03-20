@@ -2,21 +2,21 @@
 /**
  * The file that defines the courses shortcode functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms\Shortcode
+ * @package    ST\Lms\Shortcode
  */
 
-namespace BD\Lms\Shortcode;
+namespace ST\Lms\Shortcode;
 
-use BD\Lms\ErrorLog as EL;
-use BD\Lms\Helpers\SettingOptions as Options;
+use ST\Lms\ErrorLog as EL;
+use ST\Lms\Helpers\SettingOptions as Options;
 
 /**
  * Shortcode register manage class.
  */
-class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Courses {
+class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\Courses {
 
 	/**
 	 * Class constructor.
@@ -25,18 +25,18 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 		$this->set_shortcode_tag( 'courses' );
 		add_filter( 'template_include', array( $this, 'template_include' ) );
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
-		add_action( 'bdlms_before_single_course', array( $this, 'fetch_course_data' ) );
-		add_action( 'bdlms_after_single_course', array( $this, 'flush_course_data' ) );
-		add_action( 'bdlms_single_course_action_bar', array( $this, 'single_course_action_bar' ) );
+		add_action( 'stlms_before_single_course', array( $this, 'fetch_course_data' ) );
+		add_action( 'stlms_after_single_course', array( $this, 'flush_course_data' ) );
+		add_action( 'stlms_single_course_action_bar', array( $this, 'single_course_action_bar' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( 'bdlms_after_single_course', array( $this, 'update_user_course_view_status' ), 15, 1 );
-		add_action( 'wp_ajax_bdlms_check_answer', array( $this, 'quick_check_answer' ) );
-		add_action( 'wp_ajax_nopriv_bdlms_check_answer', array( $this, 'quick_check_answer' ) );
-		add_action( 'wp_ajax_bdlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
-		add_action( 'wp_ajax_nopriv_bdlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
-		add_action( 'wp_ajax_bdlms_download_course_certificate', array( $this, 'download_course_certificate' ) );
-		add_action( 'bdlms_before_search_bar', array( $this, 'add_userinfo_before_search_bar' ) );
-		add_action( 'wp_ajax_bdlms_enrol_course', array( $this, 'enrol_course' ) );
+		add_action( 'stlms_after_single_course', array( $this, 'update_user_course_view_status' ), 15, 1 );
+		add_action( 'wp_ajax_stlms_check_answer', array( $this, 'quick_check_answer' ) );
+		add_action( 'wp_ajax_nopriv_stlms_check_answer', array( $this, 'quick_check_answer' ) );
+		add_action( 'wp_ajax_stlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
+		add_action( 'wp_ajax_nopriv_stlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
+		add_action( 'wp_ajax_stlms_download_course_certificate', array( $this, 'download_course_certificate' ) );
+		add_action( 'stlms_before_search_bar', array( $this, 'add_userinfo_before_search_bar' ) );
+		add_action( 'wp_ajax_stlms_enrol_course', array( $this, 'enrol_course' ) );
 		$this->init();
 	}
 
@@ -57,7 +57,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			$this->shortcode_tag
 		);
 		ob_start();
-		load_template( \BD\Lms\locate_template( 'courses.php' ), false, $args );
+		load_template( \ST\Lms\locate_template( 'courses.php' ), false, $args );
 		$content = ob_get_clean();
 		return $content;
 	}
@@ -70,18 +70,18 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 */
 	public function template_include( $template ) {
 		$is_block_theme = function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
-		if ( is_singular( \BD\Lms\BDLMS_COURSE_CPT ) ) {
+		if ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) ) {
 			$suffix = '';
 			if ( ! ( get_query_var( 'section' ) && get_query_var( 'item_id' ) ) ) {
 				$suffix = '-detail';
 			}
 			$template_path = $is_block_theme ? "block-theme/single-courses$suffix.php" : "single-courses$suffix.php";
-			$template      = \BD\Lms\locate_template( $template_path );
+			$template      = \ST\Lms\locate_template( $template_path );
 		}
 		$course_id = ! empty( get_query_var( 'course_id' ) ) ? (int) get_query_var( 'course_id' ) : 0;
 		if ( $course_id ) {
 			$template_path = $is_block_theme ? 'block-theme/courses-result.php' : 'courses-result.php';
-			$template      = \BD\Lms\locate_template( $template_path );
+			$template      = \ST\Lms\locate_template( $template_path );
 		}
 		return $template;
 	}
@@ -96,7 +96,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			wp_enqueue_style( $this->handler );
 			return;
 		}
-		if ( is_singular( \BD\Lms\BDLMS_COURSE_CPT ) && ! ( get_query_var( 'section' ) && get_query_var( 'item_id' ) ) ) {
+		if ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) && ! ( get_query_var( 'section' ) && get_query_var( 'item_id' ) ) ) {
 			// Swiper.
 			wp_enqueue_script( $this->handler . '-swiper' );
 			wp_enqueue_style( $this->handler . '-swiper' );
@@ -105,7 +105,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			wp_enqueue_style( $this->handler );
 			return;
 		}
-		if ( ! is_singular( \BD\Lms\BDLMS_COURSE_CPT ) ) {
+		if ( ! is_singular( \ST\Lms\STLMS_COURSE_CPT ) ) {
 			return;
 		}
 		// CountDownTimer.
@@ -127,16 +127,16 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * @param int $course_id Course ID.
 	 */
 	public function single_course_action_bar( $course_id ) {
-		global $bdlms_course_data;
-		$curriculums     = isset( $bdlms_course_data['curriculums'] ) ? $bdlms_course_data['curriculums'] : array();
-		$curriculum_type = isset( $bdlms_course_data['current_curriculum']['media']['media_type'] ) ? $bdlms_course_data['current_curriculum']['media']['media_type'] : '';
-		$current_item    = isset( $bdlms_course_data['current_curriculum']['item_id'] ) ? $bdlms_course_data['current_curriculum']['item_id'] : 0;
+		global $stlms_course_data;
+		$curriculums     = isset( $stlms_course_data['curriculums'] ) ? $stlms_course_data['curriculums'] : array();
+		$curriculum_type = isset( $stlms_course_data['current_curriculum']['media']['media_type'] ) ? $stlms_course_data['current_curriculum']['media']['media_type'] : '';
+		$current_item    = isset( $stlms_course_data['current_curriculum']['item_id'] ) ? $stlms_course_data['current_curriculum']['item_id'] : 0;
 		load_template(
-			\BD\Lms\locate_template( 'action-bar.php' ),
+			\ST\Lms\locate_template( 'action-bar.php' ),
 			true,
 			array(
 				'course_id'       => $course_id,
-				'curriculums'     => \BD\Lms\merge_curriculum_items( $curriculums ),
+				'curriculums'     => \ST\Lms\merge_curriculum_items( $curriculums ),
 				'current_item'    => $current_item,
 				'curriculum_type' => $curriculum_type,
 			)
@@ -149,25 +149,25 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * @param int $course_id Course ID.
 	 */
 	public function fetch_course_data( $course_id ) {
-		global $bdlms_course_data;
-		$curriculums                      = get_post_meta( $course_id, \BD\Lms\META_KEY_COURSE_CURRICULUM, true );
+		global $stlms_course_data;
+		$curriculums                      = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 		$curriculums                      = ! empty( $curriculums ) ? $curriculums : array();
-		$curriculums                      = array_map( '\BD\Lms\get_curriculum_section_items', $curriculums );
-		$current_curriculum               = \BD\Lms\get_current_curriculum( $curriculums );
-		$bdlms_course_data['curriculums'] = $curriculums;
+		$curriculums                      = array_map( '\ST\Lms\get_curriculum_section_items', $curriculums );
+		$current_curriculum               = \ST\Lms\get_current_curriculum( $curriculums );
+		$stlms_course_data['curriculums'] = $curriculums;
 		if ( isset( $current_curriculum['media'] ) ) {
 			$current_curriculum['media'] = array_filter( $current_curriculum['media'] );
 		}
-		$bdlms_course_data['current_curriculum'] = $current_curriculum;
+		$stlms_course_data['current_curriculum'] = $current_curriculum;
 	}
 
 	/**
 	 * Flush current course data.
 	 */
 	public function flush_course_data() {
-		global $bdlms_course_data;
-		if ( apply_filters( 'bdlms_flush_course_data', true ) ) {
-			$bdlms_course_data = array();
+		global $stlms_course_data;
+		if ( apply_filters( 'stlms_flush_course_data', true ) ) {
+			$stlms_course_data = array();
 		}
 	}
 
@@ -175,8 +175,8 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * Handle template redirect hook.
 	 */
 	public function template_redirect() {
-		if ( ! is_user_logged_in() && is_singular( \BD\Lms\BDLMS_COURSE_CPT ) && get_query_var( 'section' ) && get_query_var( 'item_id' ) ) {
-			wp_safe_redirect( \BD\Lms\get_page_url( 'login' ) );
+		if ( ! is_user_logged_in() && is_singular( \ST\Lms\STLMS_COURSE_CPT ) && get_query_var( 'section' ) && get_query_var( 'item_id' ) ) {
+			wp_safe_redirect( \ST\Lms\get_page_url( 'login' ) );
 			exit;
 		}
 		$this->set_404_page();
@@ -206,7 +206,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * @param int $course_id Course ID.
 	 */
 	public function update_user_course_view_status( $course_id ) {
-		$meta_key        = sprintf( \BD\Lms\BDLMS_COURSE_STATUS, $course_id );
+		$meta_key        = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
 		$curriculum_type = get_query_var( 'curriculum_type' );
 		$item_id         = $curriculum_type ? get_query_var( 'item_id' ) : 0;
 		if ( is_user_logged_in() && $item_id ) {
@@ -215,7 +215,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			$current_status = ! empty( $current_status ) ? $current_status : array();
 			$current_status = is_array( $current_status ) ? $current_status : array( $current_status );
 			if ( 'lesson' === $curriculum_type ) {
-				$view_meta_key = sprintf( \BD\Lms\BDLMS_LESSON_VIEW, $item_id );
+				$view_meta_key = sprintf( \ST\Lms\STLMS_LESSON_VIEW, $item_id );
 				update_user_meta( $user_id, $view_meta_key, $item_id );
 			}
 			if ( $current_status === $item_id ) {
@@ -234,20 +234,20 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * Quick check answer.
 	 */
 	public function quick_check_answer() {
-		check_ajax_referer( \BD\Lms\BDLMS_QUESTION_VALIDATE_NONCE, 'nonce' );
+		check_ajax_referer( \ST\Lms\STLMS_QUESTION_VALIDATE_NONCE, 'nonce' );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		$bdlms_answers = ! empty( $_POST['bdlms_answers'] ) ? map_deep( $_POST['bdlms_answers'], 'sanitize_text_field' ) : array();
-		if ( empty( $bdlms_answers ) ) {
+		$stlms_answers = ! empty( $_POST['stlms_answers'] ) ? map_deep( $_POST['stlms_answers'], 'sanitize_text_field' ) : array();
+		if ( empty( $stlms_answers ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-			$bdlms_answers = ! empty( $_POST['bdlms_written_answer'] ) ? map_deep( $_POST['bdlms_written_answer'], 'sanitize_text_field' ) : array();
+			$stlms_answers = ! empty( $_POST['stlms_written_answer'] ) ? map_deep( $_POST['stlms_written_answer'], 'sanitize_text_field' ) : array();
 		}
-		$selected_answer = reset( $bdlms_answers );
-		$question_id     = array_key_first( $bdlms_answers );
-		$question_type   = get_post_meta( $question_id, \BD\Lms\META_KEY_QUESTION_TYPE, true );
+		$selected_answer = reset( $stlms_answers );
+		$question_id     = array_key_first( $stlms_answers );
+		$question_type   = get_post_meta( $question_id, \ST\Lms\META_KEY_QUESTION_TYPE, true );
 		if ( 'fill_blank' === $question_type ) {
-			$mandatory_answers = get_post_meta( $question_id, \BD\Lms\META_KEY_MANDATORY_ANSWERS, true );
+			$mandatory_answers = get_post_meta( $question_id, \ST\Lms\META_KEY_MANDATORY_ANSWERS, true );
 			$right_answers     = ! empty( $mandatory_answers ) ? array( $mandatory_answers ) : array();
-			$optional_answers  = get_post_meta( $question_id, \BD\Lms\META_KEY_OPTIONAL_ANSWERS, true );
+			$optional_answers  = get_post_meta( $question_id, \ST\Lms\META_KEY_OPTIONAL_ANSWERS, true );
 			$right_answers     = array_merge( $right_answers, $optional_answers );
 
 			$matched = array();
@@ -263,7 +263,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			);
 			$status = ! empty( $status );
 		} else {
-			$right_answer_key = sprintf( \BD\Lms\META_KEY_RIGHT_ANSWERS, $question_type );
+			$right_answer_key = sprintf( \ST\Lms\META_KEY_RIGHT_ANSWERS, $question_type );
 			$right_answers    = get_post_meta( $question_id, $right_answer_key, true );
 			if ( is_array( $selected_answer ) && ! empty( $right_answers ) ) {
 				$answer_diff = array_diff( $selected_answer, $right_answers );
@@ -273,31 +273,31 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 				$status = $selected_answer === $right_answers;
 			}
 		}
-		$settings = get_post_meta( $question_id, \BD\Lms\META_KEY_QUESTION_SETTINGS, true );
+		$settings = get_post_meta( $question_id, \ST\Lms\META_KEY_QUESTION_SETTINGS, true );
 
 		$correct_msg   = isset( $settings['hint'] ) ? $settings['hint'] : '';
 		$incorrect_msg = isset( $settings['explanation'] ) ? $settings['explanation'] : '';
 		if ( $status ) {
-			$message = '<div class="bdlms-alert bdlms-alert-success">
-			<div class="bdlms-alert-icon">
+			$message = '<div class="stlms-alert stlms-alert-success">
+			<div class="stlms-alert-icon">
 				<svg class="icon-cross" width="30" height="30">
-					<use xlink:href="' . BDLMS_ASSETS . '/images/sprite-front.svg#circle-check"></use>
+					<use xlink:href="' . STLMS_ASSETS . '/images/sprite-front.svg#circle-check"></use>
 				</svg>
 			</div>
-			<div class="bdlms-alert-text">
-				<div class="bdlms-alert-title">' . esc_html__( 'Correct Answer', 'bluedolphin-lms' ) . '</div>
+			<div class="stlms-alert-text">
+				<div class="stlms-alert-title">' . esc_html__( 'Correct Answer', 'skilltriks-lms' ) . '</div>
 				<p>' . esc_html( $correct_msg ) . '</p>
 			</div>
 		</div>';
 		} else {
-			$message = '<div class="bdlms-alert bdlms-alert-error">
-			<div class="bdlms-alert-icon">
+			$message = '<div class="stlms-alert stlms-alert-error">
+			<div class="stlms-alert-icon">
 				<svg class="icon-cross" width="30" height="30">
-					<use xlink:href="' . BDLMS_ASSETS . '/images/sprite-front.svg#circle-close"></use>
+					<use xlink:href="' . STLMS_ASSETS . '/images/sprite-front.svg#circle-close"></use>
 				</svg>
 			</div>
-			<div class="bdlms-alert-text">
-				<div class="bdlms-alert-title">' . esc_html__( 'Incorrect Answer', 'bluedolphin-lms' ) . '</div>
+			<div class="stlms-alert-text">
+				<div class="stlms-alert-title">' . esc_html__( 'Incorrect Answer', 'skilltriks-lms' ) . '</div>
 				<p>' . $incorrect_msg . '</p>
 			</div>
 		</div>';
@@ -314,11 +314,11 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * Save user quiz data in result post type.
 	 */
 	public function save_quiz_data() {
-		check_ajax_referer( \BD\Lms\BDLMS_QUESTION_VALIDATE_NONCE, 'nonce' );
+		check_ajax_referer( \ST\Lms\STLMS_QUESTION_VALIDATE_NONCE, 'nonce' );
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		$bdlms_answers = ! empty( $_POST['bdlms_answers'] ) ? map_deep( $_POST['bdlms_answers'], 'sanitize_text_field' ) : array();
+		$stlms_answers = ! empty( $_POST['stlms_answers'] ) ? map_deep( $_POST['stlms_answers'], 'sanitize_text_field' ) : array();
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		$written_answer  = ! empty( $_POST['bdlms_written_answer'] ) ? map_deep( $_POST['bdlms_written_answer'], 'sanitize_text_field' ) : array();
+		$written_answer  = ! empty( $_POST['stlms_written_answer'] ) ? map_deep( $_POST['stlms_written_answer'], 'sanitize_text_field' ) : array();
 		$written_answer  = array_filter( $written_answer );
 		$quiz_id         = ! empty( $_POST['quiz_id'] ) ? (int) $_POST['quiz_id'] : 0;
 		$course_id       = ! empty( $_POST['course_id'] ) ? (int) $_POST['course_id'] : 0;
@@ -333,19 +333,19 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 				)
 			);
 		}
-		$attend_checklist_questions = array_keys( $bdlms_answers );
+		$attend_checklist_questions = array_keys( $stlms_answers );
 		$attend_written_questions   = array_keys( $written_answer );
 		$total_attend_questions     = array_merge( $attend_checklist_questions, $attend_written_questions );
 
 		$correct_answers = array();
 		foreach ( $total_attend_questions as $attend_question_id ) {
-			$question_type   = get_post_meta( $attend_question_id, \BD\Lms\META_KEY_QUESTION_TYPE, true );
+			$question_type   = get_post_meta( $attend_question_id, \ST\Lms\META_KEY_QUESTION_TYPE, true );
 			$status          = false;
 			$selected_answer = false;
 			if ( 'fill_blank' === $question_type ) {
-				$mandatory_answers = get_post_meta( $attend_question_id, \BD\Lms\META_KEY_MANDATORY_ANSWERS, true );
+				$mandatory_answers = get_post_meta( $attend_question_id, \ST\Lms\META_KEY_MANDATORY_ANSWERS, true );
 				$right_answers     = ! empty( $mandatory_answers ) ? array( $mandatory_answers ) : array();
-				$optional_answers  = get_post_meta( $attend_question_id, \BD\Lms\META_KEY_OPTIONAL_ANSWERS, true );
+				$optional_answers  = get_post_meta( $attend_question_id, \ST\Lms\META_KEY_OPTIONAL_ANSWERS, true );
 				$right_answers     = array_merge( $right_answers, $optional_answers );
 
 				$matched = array();
@@ -359,9 +359,9 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 						return $p > 50;
 					}
 				);
-			} elseif ( isset( $bdlms_answers[ $attend_question_id ] ) ) {
-				$selected_answer  = $bdlms_answers[ $attend_question_id ];
-				$right_answer_key = sprintf( \BD\Lms\META_KEY_RIGHT_ANSWERS, $question_type );
+			} elseif ( isset( $stlms_answers[ $attend_question_id ] ) ) {
+				$selected_answer  = $stlms_answers[ $attend_question_id ];
+				$right_answer_key = sprintf( \ST\Lms\META_KEY_RIGHT_ANSWERS, $question_type );
 				$right_answers    = get_post_meta( $attend_question_id, $right_answer_key, true );
 				if ( is_array( $selected_answer ) && ! empty( $right_answers ) ) {
 					$answer_diff = array_diff( $selected_answer, $right_answers );
@@ -378,7 +378,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 
 		$quiz_title    = get_the_title( $quiz_id );
 		$course_title  = get_the_title( $course_id );
-		$quiz_settings = get_post_meta( $quiz_id, \BD\Lms\META_KEY_QUIZ_SETTINGS, true );
+		$quiz_settings = get_post_meta( $quiz_id, \ST\Lms\META_KEY_QUIZ_SETTINGS, true );
 		$passing_mark  = 0;
 		if ( ! empty( $quiz_settings['passing_marks'] ) ) {
 			$passing_mark = (int) $quiz_settings['passing_marks'];
@@ -392,9 +392,9 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 
 		$diff_timestamp = abs( $quiz_timestamp - $timer_timestamp );
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$time_str = sprintf( esc_html__( '%s mins', 'bluedolphin-lms' ), round( $diff_timestamp / 60, 2 ) );
+		$time_str = sprintf( esc_html__( '%s mins', 'skilltriks-lms' ), round( $diff_timestamp / 60, 2 ) );
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$accuracy = sprintf( esc_html__( '%1$d/%2$d', 'bluedolphin-lms' ), intval( count( $total_attend_questions ) ), $total_questions );
+		$accuracy = sprintf( esc_html__( '%1$d/%2$d', 'skilltriks-lms' ), intval( count( $total_attend_questions ) ), $total_questions );
 
 		$grade_percentage = round( count( $correct_answers ) / $total_questions * 100, 2 );
 		// Quiz data.
@@ -412,9 +412,9 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 			'grade_percentage'    => $grade_percentage,
 		);
 
-		$result_id   = post_exists( $result_title, '', '', \BD\Lms\BDLMS_RESULTS_CPT );
+		$result_id   = post_exists( $result_title, '', '', \ST\Lms\STLMS_RESULTS_CPT );
 		$result_args = array(
-			'post_type'   => \BD\Lms\BDLMS_RESULTS_CPT,
+			'post_type'   => \ST\Lms\STLMS_RESULTS_CPT,
 			'post_title'  => $result_title,
 			'ID'          => $result_id ? $result_id : 0,
 			'meta_input'  => $quiz_data,
@@ -444,7 +444,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 * Add userinfo before search bar.
 	 */
 	public function add_userinfo_before_search_bar() {
-		echo do_shortcode( '[bdlms_userinfo]' );
+		echo do_shortcode( '[stlms_userinfo]' );
 	}
 
 	/**
@@ -452,7 +452,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 */
 	public function download_course_certificate() {
 
-		check_ajax_referer( BDLMS_BASEFILE, '_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 		$course_id = ! empty( $_POST['course_id'] ) ? (int) $_POST['course_id'] : 0;
 
 		$mpdf = new \Mpdf\Mpdf(
@@ -460,7 +460,7 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 				'tempDir'     => sys_get_temp_dir(),
 				'format'      => array( 209, 280 ),
 				'orientation' => 'L',
-				'fontDir'     => array( BDLMS_ABSPATH . '/assets/font' ), // @phpstan-ignore-line
+				'fontDir'     => array( STLMS_ABSPATH . '/assets/font' ), // @phpstan-ignore-line
 				'fontdata'    => array(
 					'times-new-roman' => array(
 						'R' => 'times-new-roman.ttf',
@@ -474,14 +474,14 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 		);
 
 		// set the sourcefile.
-		$mpdf->setSourceFile( BDLMS_ABSPATH . '/assets/images/Certificate-Blank.pdf' ); // @phpstan-ignore-line
+		$mpdf->setSourceFile( STLMS_ABSPATH . '/assets/images/Certificate-Blank.pdf' ); // @phpstan-ignore-line
 
 		$import_page          = $mpdf->importPage( 1 );
 		$userinfo             = wp_get_current_user();
 		$user_name            = $userinfo->display_name;
-		$course_completed_key = sprintf( \BD\Lms\BDLMS_COURSE_COMPLETED_ON, $course_id );
+		$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 		$completed_on         = get_user_meta( $userinfo->ID, $course_completed_key, true );
-		$signature            = get_post_meta( $course_id, \BD\Lms\META_KEY_COURSE_SIGNATURE, true );
+		$signature            = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_SIGNATURE, true );
 		$date_format          = get_option( 'date_format' );
 		$date                 = gmdate( $date_format, (int) $completed_on );
 		$course               = get_the_title( $course_id );
@@ -494,30 +494,30 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 		 * @link https://mpdf.github.io/css-stylesheets/introduction.html#example-using-a-stylesheet
 		 */
 		$print_media_style = '@media print {
-			div.bdlms-user-name {
+			div.stlms-user-name {
 				font-family: times-new-roman !important; font-size:32px !important; width: 900px; margin: 0 auto; text-align: center; color: #191970;
 			}
-			div.bdlms-course-name {
+			div.stlms-course-name {
 				font-family: inter !important; font-size:32px; font-weight: bold; width: 900px; margin: 0 auto; text-align: center; color: #191970;
 			}
-			div.bdlms-text-sign {
+			div.stlms-text-sign {
 				position: absolute; left: 35mm; bottom: 40mm; width: 240px; text-align: center; font-family: inter !important; font-size: 20px; color: #012c58;
 			}
-			div.bdlms-image-sign {
+			div.stlms-image-sign {
 				width: 300px; position: absolute; left: 100px; bottom: 150px; text-align: center;
 			}
 			.sign-image{
 				max-width: 220px;
 				max-height: 60px;
 			}
-			div.bdlms-date{
+			div.stlms-date{
 				position: absolute; right: 35mm; bottom: 40mm; width: 240px; text-align: center; font-family: inter !important; font-size: 20px; font-weight: bold; color: #012c58;
 			}
 			.pdf-image {
 				max-width: 260px; 
 				max-height: 100px;
 			} 
-			p.bdlms-pdf-logo { 
+			p.stlms-pdf-logo { 
 				text-align: center; 
 			}
 		}';
@@ -526,22 +526,22 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 
 		$mpdf->useTemplate( $import_page, 0, 0, 280 );
 		$mpdf->SetY( 85 );
-		$mpdf->WriteHTML( '<div class="bdlms-user-name">' . esc_html( $user_name ) . '</div>' );
+		$mpdf->WriteHTML( '<div class="stlms-user-name">' . esc_html( $user_name ) . '</div>' );
 		$mpdf->SetY( 120 );
-		$mpdf->WriteHTML( '<div class="bdlms-course-name">' . esc_html( $course ) . '</div>' );
+		$mpdf->WriteHTML( '<div class="stlms-course-name">' . esc_html( $course ) . '</div>' );
 		if ( ! empty( $signature['text'] ) ) {
-			$mpdf->WriteHTML( '<div class="bdlms-text-sign">' . esc_html( $signature['text'] ) . '</div>' );
+			$mpdf->WriteHTML( '<div class="stlms-text-sign">' . esc_html( $signature['text'] ) . '</div>' );
 		} elseif ( ! empty( $signature['image_id'] ) ) {
 			// phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
-			$mpdf->WriteHTML( '<div class="bdlms-image-sign"><img class="sign-image" src="' . esc_url( wp_get_attachment_image_url( $signature['image_id'] ) ) . '" /></div>' );
+			$mpdf->WriteHTML( '<div class="stlms-image-sign"><img class="sign-image" src="' . esc_url( wp_get_attachment_image_url( $signature['image_id'] ) ) . '" /></div>' );
 		} elseif ( ! empty( $fallback_signature ) ) {
 			// phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
-			$mpdf->WriteHTML( '<div class="bdlms-image-sign"><img class="sign-image" src="' . esc_url( wp_get_attachment_image_url( $fallback_signature ) ) . '" /></div>' );
+			$mpdf->WriteHTML( '<div class="stlms-image-sign"><img class="sign-image" src="' . esc_url( wp_get_attachment_image_url( $fallback_signature ) ) . '" /></div>' );
 		}
-		$mpdf->WriteHTML( '<div class="bdlms-date">' . esc_html( $date ) . '</div>' );
+		$mpdf->WriteHTML( '<div class="stlms-date">' . esc_html( $date ) . '</div>' );
 		$mpdf->SetY( 160 );
 		// phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
-		$mpdf->WriteHTML( '<p class="bdlms-pdf-logo"><img class="pdf-image" src="' . esc_url( wp_get_attachment_image_url( $logo ) ) . '" /></p>' );
+		$mpdf->WriteHTML( '<p class="stlms-pdf-logo"><img class="pdf-image" src="' . esc_url( wp_get_attachment_image_url( $logo ) ) . '" /></p>' );
 		$mpdf->Output( '', 'D' );
 	}
 
@@ -550,15 +550,15 @@ class Courses extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\C
 	 */
 	public function enrol_course() {
 
-		check_ajax_referer( BDLMS_BASEFILE, '_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 
 		$course_id     = ! empty( $_POST['course_id'] ) ? (int) $_POST['course_id'] : 0;
 		$user_id       = get_current_user_id();
-		$enrol_courses = get_user_meta( $user_id, \BD\Lms\BDLMS_ENROL_COURSES, true );
+		$enrol_courses = get_user_meta( $user_id, \ST\Lms\STLMS_ENROL_COURSES, true );
 		$enrol_courses = ! empty( $enrol_courses ) ? $enrol_courses : array();
 		if ( empty( $enrol_courses ) || ! in_array( $course_id, $enrol_courses, true ) ) {
 			$enrol_courses[] = $course_id;
-			update_user_meta( $user_id, \BD\Lms\BDLMS_ENROL_COURSES, $enrol_courses );
+			update_user_meta( $user_id, \ST\Lms\STLMS_ENROL_COURSES, $enrol_courses );
 		}
 		wp_send_json(
 			array(

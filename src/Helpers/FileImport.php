@@ -2,17 +2,17 @@
 /**
  * The file that manage the file import functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Helpers;
+namespace ST\Lms\Helpers;
 
-use BD\Lms\Core;
-use BD\Lms\ErrorLog as EL;
-use BD\Lms\Helpers\SettingOptions as Options;
+use ST\Lms\Core;
+use ST\Lms\ErrorLog as EL;
+use ST\Lms\Helpers\SettingOptions as Options;
 use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
 
 /**
@@ -61,9 +61,9 @@ abstract class FileImport {
 	 * Init function.
 	 */
 	public function init() {
-		add_action( 'wp_ajax_bdlms_get_file_attachment_id', array( $this, 'get_file_attachment_id' ) );
-		add_action( 'wp_ajax_bdlms_get_import_cancel_data', array( $this, 'get_import_cancel_data' ) );
-		add_action( 'init', array( $this, 'bdlms_schedule_cron_event' ) );
+		add_action( 'wp_ajax_stlms_get_file_attachment_id', array( $this, 'get_file_attachment_id' ) );
+		add_action( 'wp_ajax_stlms_get_import_cancel_data', array( $this, 'get_import_cancel_data' ) );
+		add_action( 'init', array( $this, 'stlms_schedule_cron_event' ) );
 		add_action( 'admin_notices', array( $this, 'check_extension' ) );
 	}
 
@@ -73,7 +73,7 @@ abstract class FileImport {
 	public function check_extension() {
 		if ( ! extension_loaded( 'zip' ) && ! extension_loaded( 'gd' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			?>
-			<div class="notice notice-error inline is-dismissible"><p><?php esc_html_e( 'Bluedolphin required PHP `zip` and `GD` extension for external library.', 'bluedolphin-lms' ); ?></p></div>
+			<div class="notice notice-error inline is-dismissible"><p><?php esc_html_e( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ); ?></p></div>
 			<?php
 
 		}
@@ -82,14 +82,14 @@ abstract class FileImport {
 	/**
 	 * Schedule cron event.
 	 */
-	public function bdlms_schedule_cron_event() {
+	public function stlms_schedule_cron_event() {
 		$cron_hook = '';
 
-		$import_data = \BD\Lms\fetch_import_data();
+		$import_data = \ST\Lms\fetch_import_data();
 
 		foreach ( $import_data as $data ) {
 			if ( 1 === (int) $data['import_status'] && $this->import_type === (int) $data['import_type'] ) {
-				$cron_hook = 'bdlms_cron_import_' . $data['id'];
+				$cron_hook = 'stlms_cron_import_' . $data['id'];
 
 				add_action( $cron_hook, array( $this, 'import_data' ), 10, 2 );
 			}
@@ -102,7 +102,7 @@ abstract class FileImport {
 	public function get_file_attachment_id() {
 		global $wpdb;
 
-		check_ajax_referer( BDLMS_BASEFILE, '_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) $_POST['attachment_id'] : 0;
 		$import_type   = isset( $_POST['import_type'] ) ? (int) $_POST['import_type'] : 0;
 		$file_name     = basename( get_attached_file( $attachment_id ) );
@@ -114,7 +114,7 @@ abstract class FileImport {
 		$run_time      = 0;
 
 		// Table name.
-		$table_name = $wpdb->prefix . \BD\Lms\BDLMS_CRON_TABLE;
+		$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
 		// insert a new record in a table.
 		$result = $wpdb->query( //phpcs:ignore.
 			$wpdb->prepare(
@@ -128,12 +128,12 @@ abstract class FileImport {
 		);
 
 		if ( false !== $result && $import_type && $attachment_id ) {
-			delete_transient( 'bdlms_import_data' );
+			delete_transient( 'stlms_import_data' );
 
 			$args_1    = $wpdb->insert_id;
 			$args_2    = $attachment_id;
 			$args      = array( $args_1, $args_2 );
-			$cron_hook = 'bdlms_cron_import_' . $args_1;
+			$cron_hook = 'stlms_cron_import_' . $args_1;
 			$run_time  = strtotime( '+1 minutes', time() );
 
 			if ( ! wp_next_scheduled( $cron_hook, $args ) ) {
@@ -165,7 +165,7 @@ abstract class FileImport {
 		global $wpdb;
 
 		// Table name.
-		$table_name = $wpdb->prefix . \BD\Lms\BDLMS_CRON_TABLE;
+		$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
 		$status     = '';
 
 		if ( null !== $args_2 ) {
@@ -211,7 +211,7 @@ abstract class FileImport {
 				);
 				if ( false !== $result ) {
 					EL::add( sprintf( 'File import status updated to failed: %d', $status ), 'info', __FILE__, __LINE__ );
-					delete_transient( 'bdlms_import_data' );
+					delete_transient( 'stlms_import_data' );
 					return;
 				}
 			}
@@ -224,7 +224,7 @@ abstract class FileImport {
 						$terms_id     = array();
 						$taxonomy_tag = $this->taxonomy_tag;
 						$import_id    = 0;
-						$post_type    = \BD\Lms\import_post_type();
+						$post_type    = \ST\Lms\import_post_type();
 
 						if ( empty( $value[0] ) ) {
 							continue;
@@ -249,7 +249,7 @@ abstract class FileImport {
 
 						if ( $import_id ) {
 							wp_set_post_terms( $import_id, $terms_id, $taxonomy_tag );
-							update_post_meta( $import_id, \BD\Lms\META_KEY_IMPORT, $args_1 );
+							update_post_meta( $import_id, \ST\Lms\META_KEY_IMPORT, $args_1 );
 							++$success_cnt;
 							EL::add( sprintf( '%1$s: %2$s, %3$s ID: %4$d', $post_type[ $this->import_type ], get_the_title( $import_id ), $post_type[ $this->import_type ], $import_id ), 'info', __FILE__, __LINE__ );
 						} else {
@@ -282,7 +282,7 @@ abstract class FileImport {
 
 						if ( false !== $result ) {
 							EL::add( sprintf( 'File import progress : %d', $progress ), 'info', __FILE__, __LINE__ );
-							delete_transient( 'bdlms_import_data' );
+							delete_transient( 'stlms_import_data' );
 						}
 					}
 				}
@@ -307,7 +307,7 @@ abstract class FileImport {
 
 		if ( false !== $result ) {
 			EL::add( sprintf( 'File import status updated to : %d', $status ), 'info', __FILE__, __LINE__ );
-			delete_transient( 'bdlms_import_data' );
+			delete_transient( 'stlms_import_data' );
 		}
 	}
 
@@ -318,15 +318,15 @@ abstract class FileImport {
 		global $wpdb;
 
 		// Table name.
-		$table_name = $wpdb->prefix . \BD\Lms\BDLMS_CRON_TABLE;
+		$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
 
-		check_ajax_referer( BDLMS_BASEFILE, '_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 		$id            = isset( $_POST['id'] ) ? (int) $_POST['id'] : '';
 		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) $_POST['attachment_id'] : '';
 		$data          = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
 		$import_type   = isset( $_POST['import_type'] ) ? (int) $_POST['import_type'] : '';
-		$post_type     = \BD\Lms\import_post_type();
-		$cron_hook     = 'bdlms_cron_import_' . $id;
+		$post_type     = \ST\Lms\import_post_type();
+		$cron_hook     = 'stlms_cron_import_' . $id;
 		$status        = 3;
 
 		if ( ! empty( $id ) && ! empty( $attachment_id ) ) {
@@ -338,7 +338,7 @@ abstract class FileImport {
 					'post_type'    => $post_type[ $import_type ],
 					'numberposts'  => -1,
 					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-					'meta_key'     => \BD\Lms\META_KEY_IMPORT,
+					'meta_key'     => \ST\Lms\META_KEY_IMPORT,
 					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 					'meta_value'   => (string) $id,
 					'meta_compare' => '=',
@@ -360,7 +360,7 @@ abstract class FileImport {
 
 			if ( false !== $result ) {
 				EL::add( sprintf( 'File import status updated to failed: %d', $status ), 'info', __FILE__, __LINE__ );
-				delete_transient( 'bdlms_import_data' );
+				delete_transient( 'stlms_import_data' );
 			}
 		}
 

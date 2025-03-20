@@ -1,12 +1,12 @@
 import Swiper from 'swiper/bundle';
 
-const swiper = new Swiper(".bdlms-similar-course-slider", {
+const swiper = new Swiper(".stlms-similar-course-slider", {
     loop: true,
     slidesPerView: 1,
     spaceBetween: 10,
     navigation: {
-      nextEl: ".bdlms-sc-slider-next",
-      prevEl: ".bdlms-sc-slider-prev",
+      nextEl: ".stlms-sc-slider-next",
+      prevEl: ".stlms-sc-slider-prev",
     },
     breakpoints: {
       768: {

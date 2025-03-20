@@ -2,14 +2,14 @@
 /**
  * Class CourseTest
  *
- * @package BD\Lms\Admin\MetaBoxes
+ * @package ST\Lms\Admin\MetaBoxes
  *
  * phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput
  */
 
-use const BD\Lms\BDLMS_COURSE_CPT;
-use const BD\Lms\BDLMS_COURSE_CATEGORY_TAX;
-use const BD\Lms\BDLMS_COURSE_TAXONOMY_TAG;
+use const ST\Lms\STLMS_COURSE_CPT;
+use const ST\Lms\STLMS_COURSE_CATEGORY_TAX;
+use const ST\Lms\STLMS_COURSE_TAXONOMY_TAG;
 
 /**
  * Course test case.
@@ -45,22 +45,22 @@ class CourseTest extends WP_UnitTestCase {
 		$p = $this->factory->post->create_and_get(
 			array(
 				'post_title'  => 'Create First Course',
-				'post_type'   => BDLMS_COURSE_CPT,
+				'post_type'   => STLMS_COURSE_CPT,
 				'post_author' => $user_id,
 			)
 		);
 		$this->assertNotWPError( $p );
 
-		$category = wp_create_term( 'WordPress Basic', BDLMS_COURSE_CATEGORY_TAX );
+		$category = wp_create_term( 'WordPress Basic', STLMS_COURSE_CATEGORY_TAX );
 		$this->assertNotWPError( $category );
 
-		$set_term = wp_set_post_terms( $p->ID, $category['term_id'], BDLMS_COURSE_CATEGORY_TAX );
+		$set_term = wp_set_post_terms( $p->ID, $category['term_id'], STLMS_COURSE_CATEGORY_TAX );
 		$this->assertNotWPError( $set_term );
 
-		$tag = wp_create_term( 'Tag 1', BDLMS_COURSE_TAXONOMY_TAG );
+		$tag = wp_create_term( 'Tag 1', STLMS_COURSE_TAXONOMY_TAG );
 		$this->assertNotWPError( $tag );
 
-		$set_tag = wp_set_post_terms( $p->ID, $tag['term_id'], BDLMS_COURSE_TAXONOMY_TAG );
+		$set_tag = wp_set_post_terms( $p->ID, $tag['term_id'], STLMS_COURSE_TAXONOMY_TAG );
 		$this->assertNotWPError( $set_tag );
 
 		$media = $this->factory->attachment->create_and_get(
@@ -77,8 +77,8 @@ class CourseTest extends WP_UnitTestCase {
 		);
 		$this->assertNotWPError( $signature );
 
-		$_POST['bdlms_nonce']   = wp_create_nonce( BDLMS_BASEFILE );
-		$_POST['_bdlms_course'] = array(
+		$_POST['stlms_nonce']   = wp_create_nonce( STLMS_BASEFILE );
+		$_POST['_stlms_course'] = array(
 			'information' => array(
 				'requirement'     => array(
 					'Course Requirement 1',
@@ -123,7 +123,7 @@ class CourseTest extends WP_UnitTestCase {
 				array(
 					'title'    => 'Course Material 2',
 					'method'   => 'external',
-					'media_id' => 'https://getbluedolphin.com/',
+					'media_id' => 'https://www.skilltriks.com//',
 				),
 			),
 			'curriculum'  => array(
@@ -147,10 +147,10 @@ class CourseTest extends WP_UnitTestCase {
 			),
 		);
 		$post                   = get_post( $p->ID );
-		do_action( 'save_post_' . BDLMS_COURSE_CPT, $p->ID, $p );
+		do_action( 'save_post_' . STLMS_COURSE_CPT, $p->ID, $p );
 
-		foreach ( $_POST['_bdlms_course'] as $key => $data ) {
-			$key        = '_bdlms_course_' . $key;
+		foreach ( $_POST['_stlms_course'] as $key => $data ) {
+			$key        = '_stlms_course_' . $key;
 			$saved_data = get_post_meta( $p->ID, $key, true );
 			if ( is_array( $data ) ) {
 				$this->assertEquals( $data, $saved_data );
@@ -166,7 +166,7 @@ class CourseTest extends WP_UnitTestCase {
 	public function test_get_courses() {
 		$courses = get_posts(
 			array(
-				'post_type'      => BDLMS_COURSE_CPT,
+				'post_type'      => STLMS_COURSE_CPT,
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
 			)
@@ -178,7 +178,7 @@ class CourseTest extends WP_UnitTestCase {
 	 * Check category exists or not.
 	 */
 	public function test_category_exists() {
-		$category = term_exists( 'WordPress Basic', BDLMS_COURSE_CATEGORY_TAX );
+		$category = term_exists( 'WordPress Basic', STLMS_COURSE_CATEGORY_TAX );
 		$this->assertNotEmpty( $category );
 	}
 
@@ -186,7 +186,7 @@ class CourseTest extends WP_UnitTestCase {
 	 * Check course tag exists or not.
 	 */
 	public function test_tag_exists() {
-		$tag = term_exists( 'Tag 1', BDLMS_COURSE_TAXONOMY_TAG );
+		$tag = term_exists( 'Tag 1', STLMS_COURSE_TAXONOMY_TAG );
 		$this->assertNotEmpty( $tag );
 	}
 }

@@ -27,7 +27,7 @@
     </rule>
     <rule ref="WordPress.Security.EscapeOutput">
         <properties>
-            <property name="customAutoEscapedFunctions" type="array" value="bdlms_utmify"/>
+            <property name="customAutoEscapedFunctions" type="array" value="stlms_utmify"/>
         </properties>
     </rule>
     <arg name="extensions" value="php"/>

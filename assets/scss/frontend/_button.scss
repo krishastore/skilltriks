@@ -1,4 +1,4 @@
-.bdlms-btn {
+.stlms-btn {
   padding: 10px $spacing_32;
   border-radius: 6px;
   font-size: $font_size_sm;
@@ -17,7 +17,7 @@
   &:focus {
     background: darken($primary, 10%);
   }
-  &.bdlms-btn-block {
+  &.stlms-btn-block {
     width: 100%;
     display: flex;
     text-align: center;
@@ -63,13 +63,13 @@
       display: none;
     }
   }
-  &.bdlms-next-wizard {
+  &.stlms-next-wizard {
     &:disabled {
       opacity: 0.5;
       pointer-events: none;
     }
   }
-  &.bdlms-check-answer {
+  &.stlms-check-answer {
     &:disabled {
       opacity: 0.5;
       pointer-events: none;

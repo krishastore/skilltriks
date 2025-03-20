@@ -2,10 +2,10 @@
 /**
  * Helpers functions,
  *
- * @package BD\Lms
+ * @package ST\Lms
  */
 
-namespace BD\Lms;
+namespace ST\Lms;
 
 /**
  * Utility method to insert before specific key
@@ -60,11 +60,11 @@ function column_post_author( $post_id = 0 ) {
  */
 function question_levels() {
 	return apply_filters(
-		'bdlms_question_levels',
+		'stlms_question_levels',
 		array(
-			'easy'   => __( 'Easy', 'bluedolphin-lms' ),
-			'medium' => __( 'Medium', 'bluedolphin-lms' ),
-			'hard'   => __( 'Hard', 'bluedolphin-lms' ),
+			'easy'   => __( 'Easy', 'skilltriks-lms' ),
+			'medium' => __( 'Medium', 'skilltriks-lms' ),
+			'hard'   => __( 'Hard', 'skilltriks-lms' ),
 		)
 	);
 }
@@ -91,8 +91,8 @@ function get_question_by_type( $post_id = 0, $type = '' ) {
 		return $data;
 	}
 	if ( 'fill_blank' === $type ) {
-		$mandatory_answers = get_post_meta( $post_id, \BD\Lms\META_KEY_MANDATORY_ANSWERS, true );
-		$optional_answers  = get_post_meta( $post_id, \BD\Lms\META_KEY_OPTIONAL_ANSWERS, true );
+		$mandatory_answers = get_post_meta( $post_id, \ST\Lms\META_KEY_MANDATORY_ANSWERS, true );
+		$optional_answers  = get_post_meta( $post_id, \ST\Lms\META_KEY_OPTIONAL_ANSWERS, true );
 		if ( ! empty( $mandatory_answers ) ) {
 			$data['mandatory_answers'] = $mandatory_answers;
 		}
@@ -100,8 +100,8 @@ function get_question_by_type( $post_id = 0, $type = '' ) {
 			$data['optional_answers'] = $optional_answers;
 		}
 	} else {
-		$type_data = get_post_meta( $post_id, sprintf( \BD\Lms\META_KEY_ANSWERS_LIST, $type ), true );
-		$answers   = get_post_meta( $post_id, sprintf( \BD\Lms\META_KEY_RIGHT_ANSWERS, $type ), true );
+		$type_data = get_post_meta( $post_id, sprintf( \ST\Lms\META_KEY_ANSWERS_LIST, $type ), true );
+		$answers   = get_post_meta( $post_id, sprintf( \ST\Lms\META_KEY_RIGHT_ANSWERS, $type ), true );
 		if ( ! empty( $type_data ) ) {
 			$data[ $type . '_answers' ] = $answers;
 			$data[ $type ]              = $type_data;
@@ -116,24 +116,24 @@ function get_question_by_type( $post_id = 0, $type = '' ) {
  * @param int $quiz_id Quiz ID.
  * @return array
  */
-function bdlms_evaluation_list( $quiz_id = 0 ) {
+function stlms_evaluation_list( $quiz_id = 0 ) {
 	$passing_marks = 0;
 	if ( $quiz_id ) {
-		$settings      = get_post_meta( $quiz_id, \BD\Lms\META_KEY_QUIZ_SETTINGS, true );
+		$settings      = get_post_meta( $quiz_id, \ST\Lms\META_KEY_QUIZ_SETTINGS, true );
 		$settings      = ! empty( $settings ) ? $settings : array();
 		$passing_marks = ! empty( $settings['passing_marks'] ) ? $settings['passing_marks'] : 0;
 	}
 	return array(
 		1 => array(
-			'label' => __( 'Evaluate via lessons', 'bluedolphin-lms' ),
+			'label' => __( 'Evaluate via lessons', 'skilltriks-lms' ),
 		),
 		2 => array(
-			'label'  => __( 'Evaluate via results of the final quiz / last quiz', 'bluedolphin-lms' ),
+			'label'  => __( 'Evaluate via results of the final quiz / last quiz', 'skilltriks-lms' ),
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.MissingTranslatorsComment
-			'notice' => $quiz_id ? sprintf( __( 'Passing Grade: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'bluedolphin-lms' ), $passing_marks . '%', esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'bluedolphin-lms' ),
+			'notice' => $quiz_id ? sprintf( __( 'Passing Grade: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'skilltriks-lms' ), $passing_marks . '%', esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'skilltriks-lms' ),
 		),
 		3 => array(
-			'label' => __( 'Evaluate via passed quizzes', 'bluedolphin-lms' ),
+			'label' => __( 'Evaluate via passed quizzes', 'skilltriks-lms' ),
 		),
 	);
 }
@@ -183,17 +183,17 @@ function get_curriculums( $curriculums = array(), $reference = '' ) {
 function locate_template( $template ) {
 
 	$layout = 'default';
-	if ( function_exists( 'bdlms_addons_template' ) ) {
-		$layout = \bdlms_addons_template();
+	if ( function_exists( 'stlms_addons_template' ) ) {
+		$layout = \stlms_addons_template();
 	}
-	if ( file_exists( get_stylesheet_directory() . '/bluedolphin/' . $layout . '/' . $template ) ) {
-		$template = get_stylesheet_directory() . '/bluedolphin/' . $layout . '/' . $template;
-	} elseif ( file_exists( get_template_directory() . '/bluedolphin/' . $layout . '/' . $template ) ) {
-		$template = get_template_directory() . '/bluedolphin/' . $layout . '/' . $template;
-	} elseif ( 'default' !== $layout && defined( 'BDLMS_ADDONS_TEMPLATEPATH' ) && file_exists( BDLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
-		$template = BDLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
-	} elseif ( file_exists( BDLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
-		$template = BDLMS_TEMPLATEPATH . '/frontend/' . $template;
+	if ( file_exists( get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
+		$template = get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template;
+	} elseif ( file_exists( get_template_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
+		$template = get_template_directory() . '/skilltriks/' . $layout . '/' . $template;
+	} elseif ( 'default' !== $layout && defined( 'STLMS_ADDONS_TEMPLATEPATH' ) && file_exists( STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
+		$template = STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
+	} elseif ( file_exists( STLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
+		$template = STLMS_TEMPLATEPATH . '/frontend/' . $template;
 	}
 
 	return $template;
@@ -207,7 +207,7 @@ function locate_template( $template ) {
  * @return string
  */
 function get_page_url( $option_name = '', $page_uri = false ) {
-	$page_id = get_option( 'bdlms_' . $option_name . '_page_id', 0 );
+	$page_id = get_option( 'stlms_' . $option_name . '_page_id', 0 );
 	if ( $page_uri ) {
 		return get_page_uri( $page_id );
 	}
@@ -224,7 +224,7 @@ function is_lms_user() {
 	if ( is_user_logged_in() && current_user_can( 'read' ) ) {
 		$user  = wp_get_current_user();
 		$roles = (array) $user->roles;
-		return in_array( 'bdlms', $roles, true );
+		return in_array( 'stlms', $roles, true );
 	}
 	return false;
 }
@@ -258,9 +258,9 @@ function count_duration( $curriculums = array() ) {
 	$lessons_duration = array_map(
 		function ( $curriculum ) {
 			if ( ! isset( $curriculum['settings'] ) ) {
-				$meta_key = \BD\Lms\META_KEY_QUIZ_SETTINGS;
-				if ( \BD\Lms\BDLMS_LESSON_CPT === get_post_type( $curriculum ) ) {
-					$meta_key = \BD\Lms\META_KEY_LESSON_SETTINGS;
+				$meta_key = \ST\Lms\META_KEY_QUIZ_SETTINGS;
+				if ( \ST\Lms\STLMS_LESSON_CPT === get_post_type( $curriculum ) ) {
+					$meta_key = \ST\Lms\META_KEY_LESSON_SETTINGS;
 				}
 				$settings = get_post_meta( $curriculum, $meta_key, true );
 			} else {
@@ -307,7 +307,7 @@ function seconds_to_hours_str( $seconds ) {
 	if ( ! empty( $hours ) ) {
 		$duration_str .= sprintf(
 			// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-			_n( '%s Hour', '%s Hours', (int) $hours, 'bluedolphin-lms' ),
+			_n( '%s Hour', '%s Hours', (int) $hours, 'skilltriks-lms' ),
 			number_format_i18n( $hours )
 		);
 	}
@@ -317,7 +317,7 @@ function seconds_to_hours_str( $seconds ) {
 		$mins          = (int) gmdate( 'i', $mins );
 		$duration_str .= sprintf(
 			// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-			_n( ' %s Min', ' %s Mins', (int) $mins, 'bluedolphin-lms' ),
+			_n( ' %s Min', ' %s Mins', (int) $mins, 'skilltriks-lms' ),
 			number_format_i18n( $mins )
 		);
 	}
@@ -331,7 +331,7 @@ function seconds_to_hours_str( $seconds ) {
  * @return array
  */
 function merge_curriculum_items( $section_data ) {
-	$items = \BD\Lms\get_curriculums( $section_data, 'item_list' );
+	$items = \ST\Lms\get_curriculums( $section_data, 'item_list' );
 	return $items;
 }
 
@@ -344,22 +344,22 @@ function get_curriculum_section_items( $item ) {
 	if ( ! empty( $item['items'] ) ) {
 		$item['items'] = array_map(
 			function ( $item_id ) {
-				if ( \BD\Lms\BDLMS_LESSON_CPT === get_post_type( $item_id ) ) {
-					$media    = get_post_meta( $item_id, \BD\Lms\META_KEY_LESSON_MEDIA, true );
-					$settings = get_post_meta( $item_id, \BD\Lms\META_KEY_LESSON_SETTINGS, true );
+				if ( \ST\Lms\STLMS_LESSON_CPT === get_post_type( $item_id ) ) {
+					$media    = get_post_meta( $item_id, \ST\Lms\META_KEY_LESSON_MEDIA, true );
+					$settings = get_post_meta( $item_id, \ST\Lms\META_KEY_LESSON_SETTINGS, true );
 					return array(
-						'curriculum_type' => \BD\Lms\BDLMS_LESSON_CPT,
+						'curriculum_type' => \ST\Lms\STLMS_LESSON_CPT,
 						'item_id'         => $item_id,
 						'media'           => $media,
 						'settings'        => $settings,
 					);
 				}
 
-				if ( \BD\Lms\BDLMS_QUIZ_CPT === get_post_type( $item_id ) ) {
-					$questions = get_post_meta( $item_id, \BD\Lms\META_KEY_QUIZ_QUESTION_IDS, true );
-					$settings  = get_post_meta( $item_id, \BD\Lms\META_KEY_QUIZ_SETTINGS, true );
+				if ( \ST\Lms\STLMS_QUIZ_CPT === get_post_type( $item_id ) ) {
+					$questions = get_post_meta( $item_id, \ST\Lms\META_KEY_QUIZ_QUESTION_IDS, true );
+					$settings  = get_post_meta( $item_id, \ST\Lms\META_KEY_QUIZ_SETTINGS, true );
 					return array(
-						'curriculum_type' => \BD\Lms\BDLMS_QUIZ_CPT,
+						'curriculum_type' => \ST\Lms\STLMS_QUIZ_CPT,
 						'item_id'         => $item_id,
 						'questions'       => $questions,
 						'settings'        => $settings,
@@ -402,7 +402,7 @@ function get_curriculum_link( $item_key ) {
 	$item_id    = (int) end( $item_key );
 	if ( $item_id ) {
 		$type = get_post_type( $item_id );
-		$type = str_replace( 'bdlms_', '', $type );
+		$type = str_replace( 'stlms_', '', $type );
 		return sprintf( '%s/%d/%s/%d', untrailingslashit( get_the_permalink( get_the_ID() ) ), (int) $section_id, esc_html( $type ), (int) $item_id );
 	}
 	return '';
@@ -438,7 +438,7 @@ function restart_course( $course_id = 0 ) {
 	if ( empty( $course_id ) || ! is_user_logged_in() ) {
 		return false;
 	}
-	$course_completed_key = sprintf( \BD\Lms\BDLMS_COURSE_COMPLETED_ON, $course_id );
+	$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 	$completed_on         = get_user_meta( get_current_user_id(), $course_completed_key, true );
 	return ! empty( $completed_on );
 }
@@ -456,7 +456,7 @@ function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
 	}
 	$results = get_posts(
 		array(
-			'post_type'      => \BD\Lms\BDLMS_RESULTS_CPT,
+			'post_type'      => \ST\Lms\STLMS_RESULTS_CPT,
 			'fields'         => 'ids',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'meta_key'       => 'course_id',
@@ -495,11 +495,11 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 		}
 	}
 	if ( 'lesson' === $curriculum_type ) {
-		$lessons = \BD\Lms\get_curriculums( $curriculums, \BD\Lms\BDLMS_LESSON_CPT );
+		$lessons = \ST\Lms\get_curriculums( $curriculums, \ST\Lms\STLMS_LESSON_CPT );
 		if ( ! empty( $lessons ) ) {
 			$completed_lesson = 0;
 			foreach ( $lessons as $lesson ) {
-				$meta_key      = sprintf( \BD\Lms\BDLMS_LESSON_VIEW, $lesson );
+				$meta_key      = sprintf( \ST\Lms\STLMS_LESSON_VIEW, $lesson );
 				$viewed_lesson = (int) get_user_meta( $user_id, $meta_key, true );
 				if ( $viewed_lesson ) {
 					++$completed_lesson;
@@ -510,7 +510,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			}
 		}
 	} elseif ( 'quiz' === $curriculum_type ) {
-		$results               = \BD\Lms\get_results_course_by_id();
+		$results               = \ST\Lms\get_results_course_by_id();
 		$total_questions       = 0;
 		$total_correct_answers = 0;
 		if ( ! empty( $results ) ) {
@@ -524,7 +524,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			$completed_grade = round( $total_correct_answers / $total_questions * 100, 2 );
 		}
 	} elseif ( 'last_quiz' === $curriculum_type ) {
-		$results   = \BD\Lms\get_results_course_by_id( 0, 1 );
+		$results   = \ST\Lms\get_results_course_by_id( 0, 1 );
 		$result_id = ! empty( $results ) ? reset( $results ) : 0;
 		if ( $result_id ) {
 			$grade_percentage = get_post_meta( $result_id, 'grade_percentage', true );
@@ -534,7 +534,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 	if ( $return_grade_only ) {
 		return $completed_grade;
 	}
-	$course_completed_key = sprintf( \BD\Lms\BDLMS_COURSE_COMPLETED_ON, $course_id );
+	$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 	$completed_on         = get_user_meta( $user_id, $course_completed_key, true );
 	if ( empty( $completed_on ) ) {
 		$completed_on = time();
@@ -556,9 +556,9 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 function fetch_import_data( $status = 0, $status_count = false ) {
 	global $wpdb;
 
-	$table_name = $wpdb->prefix . \BD\Lms\BDLMS_CRON_TABLE;
+	$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
 
-	$import_log = get_transient( 'bdlms_import_data' );
+	$import_log = get_transient( 'stlms_import_data' );
 
 	if ( empty( $status ) ) {
 		$status = ! empty( $_REQUEST['status'] ) ? trim( sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -584,7 +584,7 @@ function fetch_import_data( $status = 0, $status_count = false ) {
 
 	$import_log = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A ); // phpcs:ignore
 
-	set_transient( 'bdlms_import_data', $import_log );
+	set_transient( 'stlms_import_data', $import_log );
 	return $import_log;
 }
 
@@ -596,10 +596,10 @@ function fetch_import_data( $status = 0, $status_count = false ) {
 function import_job_status() {
 
 	return array(
-		1 => __( 'In-Progress', 'bluedolphin-lms' ),
-		2 => __( 'Complete', 'bluedolphin-lms' ),
-		3 => __( 'Cancelled', 'bluedolphin-lms' ),
-		4 => __( 'Failed', 'bluedolphin-lms' ),
+		1 => __( 'In-Progress', 'skilltriks-lms' ),
+		2 => __( 'Complete', 'skilltriks-lms' ),
+		3 => __( 'Cancelled', 'skilltriks-lms' ),
+		4 => __( 'Failed', 'skilltriks-lms' ),
 	);
 }
 
@@ -611,9 +611,9 @@ function import_job_status() {
 function import_post_type() {
 
 	return array(
-		1 => \BD\Lms\BDLMS_QUESTION_CPT,
-		2 => \BD\Lms\BDLMS_LESSON_CPT,
-		3 => \BD\Lms\BDLMS_COURSE_CPT,
+		1 => \ST\Lms\STLMS_QUESTION_CPT,
+		2 => \ST\Lms\STLMS_LESSON_CPT,
+		3 => \ST\Lms\STLMS_COURSE_CPT,
 	);
 }
 
@@ -641,10 +641,10 @@ function course_statistics() {
 	$progressed    = array();
 	$not_started   = array();
 	$total_course  = 0;
-	$enrol_courses = get_user_meta( get_current_user_id(), \BD\Lms\BDLMS_ENROL_COURSES, true );
+	$enrol_courses = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURSES, true );
 
 	$course_args = array(
-		'post_type'      => \BD\Lms\BDLMS_COURSE_CPT,
+		'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 		'post_status'    => 'publish',
 		'posts_per_page' => -1,
 	);
@@ -661,15 +661,15 @@ function course_statistics() {
 			$course_id = get_the_ID();
 
 			$user_id     = get_current_user_id();
-			$curriculums = get_post_meta( $course_id, \BD\Lms\META_KEY_COURSE_CURRICULUM, true );
+			$curriculums = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 			if ( ! empty( $curriculums ) ) {
 
-				$curriculums     = \BD\Lms\merge_curriculum_items( $curriculums );
+				$curriculums     = \ST\Lms\merge_curriculum_items( $curriculums );
 				$curriculums     = array_keys( $curriculums );
 				$last_curriculum = end( $curriculums );
 				$last_curriculum = explode( '_', $last_curriculum );
 				$last_curriculum = array_map( 'intval', $last_curriculum );
-				$course_status   = get_user_meta( $user_id, sprintf( \BD\Lms\BDLMS_COURSE_STATUS, $course_id ), true );
+				$course_status   = get_user_meta( $user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
 				if ( ! empty( $course_status ) ) {
 
 					$course_status = ! is_string( $course_status ) ? end( $course_status ) : $course_status;
@@ -677,7 +677,7 @@ function course_statistics() {
 					$section_id    = reset( $course_status );
 					$item_id       = end( $course_status );
 
-					$course_status = \BD\Lms\restart_course( $course_id );
+					$course_status = \ST\Lms\restart_course( $course_id );
 					if ( $course_status && reset( $last_curriculum ) === (int) $section_id && end( $last_curriculum ) === (int) $item_id ) {
 						$completed[] = $course_id;
 					} else {
@@ -713,7 +713,7 @@ function calculate_course_progress( $course_id, $curriculums, $current_status = 
 	}
 
 	if ( empty( $current_status ) ) {
-		$current_status = get_user_meta( get_current_user_id(), sprintf( \BD\Lms\BDLMS_COURSE_STATUS, $course_id ), true );
+		$current_status = get_user_meta( get_current_user_id(), sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
 	}
 	$course_completed = 0;
 	if ( ! empty( $current_status ) ) {
@@ -723,7 +723,7 @@ function calculate_course_progress( $course_id, $curriculums, $current_status = 
 		$course_completed  = (int) ( ( ( $completed_course - 1 ) / $total_curriculums ) * 100 );
 
 		if ( $total_curriculums === $completed_course ) {
-			$course_status    = \BD\Lms\restart_course( $course_id );
+			$course_status    = \ST\Lms\restart_course( $course_id );
 			$course_completed = $course_status ? 100 : $course_completed;
 		}
 	}

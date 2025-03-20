@@ -3,7 +3,7 @@ import countdowntimer from '@countdowntimer/dist/js/jQuery.countdownTimer.js';
 jQuery(function ($) {
 	
 	var quizCountDownTimer = function(stopTimer) {
-		var timerElement = $(document).find('.bdlms-quiz-countdown');
+		var timerElement = $(document).find('.stlms-quiz-countdown');
 		if ( timerElement.length === 0 ) {
 			return;
 		}
@@ -20,19 +20,19 @@ jQuery(function ($) {
 			regexpMatchFormat: '([0-9]{1,2}):([0-9]{1,2})',
 			regexpReplaceWith: '$1m$2s',
 			timeUp: function() {
-				$('.bdlms-next-wizard, .bdlms-check-answer').attr('disabled', true);
+				$('.stlms-next-wizard, .stlms-check-answer').attr('disabled', true);
 			}
 		};
 		timerElement.countdowntimer(timerOptions);
 	};
 
-	$('body').on('bdlms:show:step', function(e, data){
+	$('body').on('stlms:show:step', function(e, data){
 		e.preventDefault();
 		if ( 1 === data.currentStepIndex ) {
 			quizCountDownTimer(false);
 		}
 	});
-	$('body').on('bdlms:show:quizResult', function(e, data){
+	$('body').on('stlms:show:quizResult', function(e, data){
 		quizCountDownTimer(true);
 	});
 });

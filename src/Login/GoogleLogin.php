@@ -2,17 +2,17 @@
 /**
  * The file is handle the google sso login.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BD\Lms\Login;
+namespace ST\Lms\Login;
 
-use BD\Lms\Helpers\SettingOptions as Options;
+use ST\Lms\Helpers\SettingOptions as Options;
 
 /**
  * Register post types.
@@ -91,7 +91,7 @@ class GoogleLogin {
 							'email'   => '',
 							'message' => 1,
 						),
-						\BD\Lms\get_page_url( 'login' )
+						\ST\Lms\get_page_url( 'login' )
 					)
 				);
 				exit;
@@ -106,21 +106,21 @@ class GoogleLogin {
 			if ( is_email( $email ) ) {
 				$userinfo = get_user_by( 'email', $email );
 				if ( $userinfo ) {
-					if ( ! in_array( 'bdlms', $userinfo->roles, true ) ) {
+					if ( ! in_array( 'stlms', $userinfo->roles, true ) ) {
 						wp_safe_redirect(
 							add_query_arg(
 								array(
 									'email'   => $email,
 									'message' => 2,
 								),
-								\BD\Lms\get_page_url( 'login' )
+								\ST\Lms\get_page_url( 'login' )
 							)
 						);
 						exit;
 					}
 					wp_set_current_user( $userinfo->ID, $userinfo->user_login );
 					wp_set_auth_cookie( $userinfo->ID );
-					wp_safe_redirect( \BD\Lms\get_page_url( 'courses' ) );
+					wp_safe_redirect( \ST\Lms\get_page_url( 'courses' ) );
 					exit;
 				}
 				wp_safe_redirect(
@@ -129,7 +129,7 @@ class GoogleLogin {
 							'email'   => $email,
 							'message' => 3,
 						),
-						\BD\Lms\get_page_url( 'login' )
+						\ST\Lms\get_page_url( 'login' )
 					)
 				);
 			}

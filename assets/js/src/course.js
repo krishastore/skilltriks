@@ -40,11 +40,11 @@ window.wp = window.wp || {};
 		 * Custom tabs.
 		 */
 		tabs: function() {
-			const tabs = document.querySelectorAll('.bdlms-tab');
+			const tabs = document.querySelectorAll('.stlms-tab');
 
 			tabs.forEach((tab) => {
 				tab.addEventListener('click', function () {
-					const tabContents = this.parentNode.parentNode.querySelectorAll('.bdlms-tab-content');
+					const tabContents = this.parentNode.parentNode.querySelectorAll('.stlms-tab-content');
 					const tabId = this.getAttribute('data-tab');
 
 					// Hide all tab contents
@@ -59,7 +59,7 @@ window.wp = window.wp || {};
 
 					// Show the corresponding tab content with fade effect
 					const tabContent = document.querySelector(
-						`.bdlms-tab-content[data-tab='${tabId}']`,
+						`.stlms-tab-content[data-tab='${tabId}']`,
 					);
 					if (tabContent) {
 						tabContent.classList.add('active');
@@ -72,28 +72,28 @@ window.wp = window.wp || {};
 			$(document).on('click', '[data-accordion="true"]', function (e) {
 				e.preventDefault();
 				$(this)
-					.parents('.bdlms-quiz-qus-item')
-					.find('.bdlms-quiz-qus-toggle')
+					.parents('.stlms-quiz-qus-item')
+					.find('.stlms-quiz-qus-toggle')
 					.toggleClass('active');
 				$(this)
-					.parents('.bdlms-quiz-qus-item')
+					.parents('.stlms-quiz-qus-item')
 					.toggleClass('active');
 				$(this)
-					.parents('.bdlms-quiz-qus-item')
-					.find('.bdlms-quiz-qus-item__body')
+					.parents('.stlms-quiz-qus-item')
+					.find('.stlms-quiz-qus-item__body')
 					.slideToggle();
 				
-				$( '.bdlms-answer-type select' ).change();
+				$( '.stlms-answer-type select' ).change();
 			});
-			$(document).on('click', '.bdlms-curriculum-dd-button', function (e) {
+			$(document).on('click', '.stlms-curriculum-dd-button', function (e) {
 				e.preventDefault();
 				$(this).next('ul').slideToggle();
 			});
 
 			// trigger events.
-			$(document).on('click', '.bdlms-quiz-qus-item__footer .bdlms-delete-link', this.removeSection);
-			$(document).on('click', '.bdlms-curriculum-item .curriculum-remove-item', this.removeSectionItem);
-			$(document).on('click', '.bdlms-course-settings .bdlms-cs-action a', this.removeSettingItem);
+			$(document).on('click', '.stlms-quiz-qus-item__footer .stlms-delete-link', this.removeSection);
+			$(document).on('click', '.stlms-curriculum-item .curriculum-remove-item', this.removeSectionItem);
+			$(document).on('click', '.stlms-course-settings .stlms-cs-action a', this.removeSettingItem);
 			$(document).on('click', '.add-new-section', this.addNewSection);
 			$(document).on('change', '[data-tab="assessment"] input:radio', this.toggleAssessment );
 		},
@@ -102,9 +102,9 @@ window.wp = window.wp || {};
 		 */
 		snackbarNotice: function (message) {
 			var _t = this;
-			$('.bdlms-snackbar-notice').find('p').html(message);
-			$('.bdlms-snackbar-notice').toggleClass('open', 1000);
-			if ($('.bdlms-snackbar-notice').hasClass('open')) {
+			$('.stlms-snackbar-notice').find('p').html(message);
+			$('.stlms-snackbar-notice').toggleClass('open', 1000);
+			if ($('.stlms-snackbar-notice').hasClass('open')) {
 				setTimeout(function () {
 					_t.snackbarNotice('');
 				}, 3000);
@@ -116,13 +116,13 @@ window.wp = window.wp || {};
 		initSortable: function (obj) {
 			var _this = obj;
 			// Drag curriculum section.
-			$('ul.bdlms-quiz-qus-list', document)
+			$('ul.stlms-quiz-qus-list', document)
 			.sortable({
 				appendTo: 'parent',
 				axis: 'y',
 				containment: 'parent',
 				items: 'li',
-				handle: '.bdlms-options-drag',
+				handle: '.stlms-options-drag',
 				placeholder: 'sortable-placeholder',
 				forcePlaceholderSize: true,
 				stop: function () {
@@ -131,17 +131,17 @@ window.wp = window.wp || {};
 			.disableSelection();
 
 			// Drag curriculum section list item.
-			$('div.bdlms-curriculum-item-list', document)
+			$('div.stlms-curriculum-item-list', document)
 			.sortable({
 				appendTo: 'parent',
 				axis: 'y',
 				containment: 'parent',
-				items: '.bdlms-curriculum-item:not(:last)',
-				handle: '.bdlms-curriculum-item-drag',
+				items: '.stlms-curriculum-item:not(:last)',
+				handle: '.stlms-curriculum-item-drag',
 				placeholder: 'sortable-placeholder',
 				forcePlaceholderSize: true,
 				stop: function () {
-					this.inputRename('.bdlms-quiz-qus-list > li');
+					this.inputRename('.stlms-quiz-qus-list > li');
 				},
 			})
 			.disableSelection();
@@ -153,7 +153,7 @@ window.wp = window.wp || {};
 				axis: 'y',
 				containment: 'parent',
 				items: 'li',
-				handle: '.bdlms-options-drag',
+				handle: '.stlms-options-drag',
 				placeholder: 'sortable-placeholder',
 				forcePlaceholderSize: true,
 				stop: function () {
@@ -163,18 +163,18 @@ window.wp = window.wp || {};
 		},
 		removeSection: function() {
 			var parentItem = $(this).parents('li');
-			var totalCurriculum = $('> li', $(this).parents('ul.bdlms-quiz-qus-list'));
+			var totalCurriculum = $('> li', $(this).parents('ul.stlms-quiz-qus-list'));
 			if ( totalCurriculum.length > 1 ) {
 				parentItem.remove();
-				courseModule.inputRename('.bdlms-quiz-qus-list > li');
+				courseModule.inputRename('.stlms-quiz-qus-list > li');
 				return;
 			}
 			courseModule.resetCurriculum(parentItem);
 		},
 		removeSectionItem: function() {
-			var itemParent = $(this).parents('.bdlms-quiz-qus-item__body');
+			var itemParent = $(this).parents('.stlms-quiz-qus-item__body');
 			$(this)
-			.parents('.bdlms-curriculum-item')
+			.parents('.stlms-curriculum-item')
 			.remove();
 			courseModule.countCurriculum(itemParent);
 		},
@@ -187,15 +187,15 @@ window.wp = window.wp || {};
 			if ( parentGroup?.find('> li').length === 1 ) {
 				parentGroup
 				.find('li')
-				.find('.bdlms-cs-action')
+				.find('.stlms-cs-action')
 				.addClass('hidden');
 			}
 		},
 		addMoreSettingItem: function() {
 			$('button[data-add_more="true"]', document).on('click', function(e) {
 				var newItem = $(this)
-				.parents('.bdlms-cs-row')
-				.find('.bdlms-cs-action')
+				.parents('.stlms-cs-row')
+				.find('.stlms-cs-action')
 				.removeClass('hidden')
 				.parents('ul.cs-drag-list-group')
 				.find('> li:last')
@@ -215,7 +215,7 @@ window.wp = window.wp || {};
 		addMedia: function() {
 			var _this = this;
 			// On upload button click.
-			$( 'body' ).on( 'click', '.bdlms-open-media', function( e ) {
+			$( 'body' ).on( 'click', '.stlms-open-media', function( e ) {
 				e.preventDefault();
 				var libraryType = $(this).attr('data-library_type');
 				var allowedExt = $(this).attr('data-ext');
@@ -251,7 +251,7 @@ window.wp = window.wp || {};
 					button
 					.text(buttonText)
 					.parent()
-					.find('span.bdlms-media-name')
+					.find('span.stlms-media-name')
 					.html(mediaName);
 				} )
 				.on( 'selection:toggle', function() {
@@ -296,7 +296,7 @@ window.wp = window.wp || {};
 		 */
 		inputRename: function (selector) {
 			$(selector).each(function(index, item) {
-				$(item).find('input:not(.bdlms-curriculum-item-name), select, textarea').attr('name', function( i, val ) {
+				$(item).find('input:not(.stlms-curriculum-item-name), select, textarea').attr('name', function( i, val ) {
 					val = val.replace(/\[([0-9]+)\]/g, '[' + index + ']');
 					return val;
 				});
@@ -307,16 +307,16 @@ window.wp = window.wp || {};
 		 */
 		handleMaterials: function() {
 			var _this = this;
-			$(document).on('click', '.bdlms-materials-box__footer button', function(e) {
+			$(document).on('click', '.stlms-materials-box__footer button', function(e) {
 				var tmpl = $('#materials_item_tmpl').html();
-				var parentElement = $(this).parents('.bdlms-materials-box').find('.bdlms-materials-box__body .bdlms-materials-list');
+				var parentElement = $(this).parents('.stlms-materials-box').find('.stlms-materials-box__body .stlms-materials-list');
 				$(tmpl).appendTo(parentElement);
-				_this.inputRename('.bdlms-materials-item');
+				_this.inputRename('.stlms-materials-item');
 				e.preventDefault();
 			});
 			$(document).on('change', '.material-type select', function() {
 				var type = $(this).val();
-				var parentElement = $(this).parents('.bdlms-materials-item');
+				var parentElement = $(this).parents('.stlms-materials-item');
 				if ( 'external' === type ) {
 					$('[data-media_type="choose_file"]', parentElement).addClass('hidden');
 					$('[data-media_type="file_url"]', parentElement).removeClass('hidden');
@@ -325,28 +325,28 @@ window.wp = window.wp || {};
 				$('[data-media_type="file_url"]', parentElement).addClass('hidden');
 				$('[data-media_type="choose_file"]', parentElement).removeClass('hidden');
 			});
-			$(document).on('click', 'button.bdlms-remove-material, a.bdlms-delete-link', function(e) {
+			$(document).on('click', 'button.stlms-remove-material, a.stlms-delete-link', function(e) {
 				$(this)
-				.parents('.bdlms-materials-list-item')
+				.parents('.stlms-materials-list-item')
 				.remove();
-				_this.inputRename('.bdlms-materials-item');
+				_this.inputRename('.stlms-materials-item');
 				e.preventDefault();
 			});
 			// Edit Material
-			$(document).on('click', '.bdlms-materials-list-action .edit-material', function(e) {
-				$('.bdlms-materials-list-item:not(.material-add-new)').find('.bdlms-save-material').trigger('click');
+			$(document).on('click', '.stlms-materials-list-action .edit-material', function(e) {
+				$('.stlms-materials-list-item:not(.material-add-new)').find('.stlms-save-material').trigger('click');
 				$(this)
 				.parents('ul')
 				.addClass('hidden')
-				.parent('.bdlms-materials-list-item')
-				.find('.bdlms-materials-item')
+				.parent('.stlms-materials-list-item')
+				.find('.stlms-materials-item')
 				.removeClass('hidden');
 				e.preventDefault();
 			} );
 
 			// Save Material
-			$(document).on('click', '.bdlms-save-material', function(e) {
-				var parentElement = $(this).parents('.bdlms-materials-list-item');
+			$(document).on('click', '.stlms-save-material', function(e) {
+				var parentElement = $(this).parents('.stlms-materials-list-item');
 				var fileTitle = $('input.material-file-title', parentElement ).val();
 				var typeText = $('option:selected', $(parentElement).find('.material-type select') ).text();
 				parentElement
@@ -355,18 +355,18 @@ window.wp = window.wp || {};
 				.parent('ul')
 				.find('li.assignment-title')
 				.text(fileTitle)
-				.parents('.bdlms-materials-list-item')
+				.parents('.stlms-materials-list-item')
 				.removeClass('material-add-new')
 				.find('ul.hidden')
 				.removeClass('hidden')
-				.next('.bdlms-materials-item')
+				.next('.stlms-materials-item')
 				.addClass('hidden');
 				e.preventDefault();
 			} );
 		},
 		handleCurriculum: function() {
 			var _this = this;
-			$(document).on('keydown', '.bdlms-curriculum-item-name', function(e){ 
+			$(document).on('keydown', '.stlms-curriculum-item-name', function(e){ 
 				var id = e.which || 0;
 				if (id == 13) {
 					_this.createNewCurriculum(this);
@@ -374,29 +374,29 @@ window.wp = window.wp || {};
 					return false;
 				}
 			});
-			$(document).on('click', '.bdlms-curriculum-item .icon.plus-icon', function(e){
+			$(document).on('click', '.stlms-curriculum-item .icon.plus-icon', function(e){
 				_this.createNewCurriculum(this);
 				e.preventDefault();
 			});
-			$(document).on('click', '.bdlms-curriculum-type li', function(e){
+			$(document).on('click', '.stlms-curriculum-type li', function(e){
 				var selectedType = $(this).attr('data-type');
 				var iconSelector = '.icon.' + selectedType + '-icon';
 
 				$(this)
-				.parents('.bdlms-curriculum-dd')
-				.find('.bdlms-curriculum-dd-button')
+				.parents('.stlms-curriculum-dd')
+				.find('.stlms-curriculum-dd-button')
 				.find(iconSelector)
 				.removeClass('hidden')
 
 				$(this)
 				.addClass('active')
-				.parents('.bdlms-curriculum-dd')
-				.find('.bdlms-curriculum-dd-button')
+				.parents('.stlms-curriculum-dd')
+				.find('.stlms-curriculum-dd-button')
 				.find('.icon:not(.down-arrow-icon)')
 				.not(iconSelector)
 				.addClass('hidden')
-				.parents('.bdlms-curriculum-dd')
-				.find('.bdlms-curriculum-type')
+				.parents('.stlms-curriculum-dd')
+				.find('.stlms-curriculum-type')
 				.hide()
 				.find('li.active')
 				.not(this)
@@ -405,28 +405,28 @@ window.wp = window.wp || {};
 			});
 		},
 		createNewCurriculum: function(element) {
-			var currentItem = $(element).parents('.bdlms-curriculum-item');
-			var itemName = currentItem.find('.bdlms-curriculum-item-name').val().trim();
+			var currentItem = $(element).parents('.stlms-curriculum-item');
+			var itemName = currentItem.find('.stlms-curriculum-item-name').val().trim();
 			if ( '' === itemName ) {
 				return;
 			}
-			currentItem.addClass('searching').find('.bdlms-curriculum-item-name').addClass('ui-autocomplete-loading');
+			currentItem.addClass('searching').find('.stlms-curriculum-item-name').addClass('ui-autocomplete-loading');
 
 			$.post(
 				courseObject.ajaxurl,
 				{
-					action: 'bdlms_create_course_curriculum',
+					action: 'stlms_create_course_curriculum',
 					_nonce: courseObject.nonce,
 					title: itemName,
-					type: currentItem.find('.bdlms-curriculum-type li.active').attr('data-type')
+					type: currentItem.find('.stlms-curriculum-type li.active').attr('data-type')
 				},
 				function(response) {
 					if ( response.post_id > 0 ) {
 						currentItem
-						.find('.bdlms-curriculum-item-name')
+						.find('.stlms-curriculum-item-name')
 						.prev('input:hidden')
 						.val(response.post_id)
-						.parents('.bdlms-curriculum-item')
+						.parents('.stlms-curriculum-item')
 						.removeClass('searching')
 						.find('.curriculum-view-item')
 						.attr('href', response.view_link)
@@ -435,18 +435,18 @@ window.wp = window.wp || {};
 
 						newItemHtml = currentItem.clone();
 						// Clear input data.
-						currentItem.find('.bdlms-curriculum-item-name').removeClass('ui-autocomplete-loading').val('');
-						currentItem.find('.bdlms-curriculum-item-name').prev('input:hidden').val('');
-						currentItem.find('.bdlms-curriculum-type li.active').removeClass('active');
-						currentItem.find('.bdlms-curriculum-type li:first').trigger('click');
+						currentItem.find('.stlms-curriculum-item-name').removeClass('ui-autocomplete-loading').val('');
+						currentItem.find('.stlms-curriculum-item-name').prev('input:hidden').val('');
+						currentItem.find('.stlms-curriculum-type li.active').removeClass('active');
+						currentItem.find('.stlms-curriculum-type li:first').trigger('click');
 						// Insert new item.
-						$(newItemHtml).find('.bdlms-curriculum-type').remove();
-						$(newItemHtml).find('.bdlms-curriculum-dd-button .icon.hidden').remove();
-						$(newItemHtml).find('.bdlms-curriculum-dd-button .icon.down-arrow-icon').remove();
-						$(newItemHtml).find('.bdlms-curriculum-item-name').attr('readonly', true);
-						$(newItemHtml).find('.bdlms-curriculum-item-drag').find('.plus-icon').addClass('hidden');
-						$(newItemHtml).find('.bdlms-curriculum-item-drag').find('.drag-icon').removeClass('hidden');
-						$(newItemHtml).find('.bdlms-curriculum-item-action.hidden').removeClass('hidden');
+						$(newItemHtml).find('.stlms-curriculum-type').remove();
+						$(newItemHtml).find('.stlms-curriculum-dd-button .icon.hidden').remove();
+						$(newItemHtml).find('.stlms-curriculum-dd-button .icon.down-arrow-icon').remove();
+						$(newItemHtml).find('.stlms-curriculum-item-name').attr('readonly', true);
+						$(newItemHtml).find('.stlms-curriculum-item-drag').find('.plus-icon').addClass('hidden');
+						$(newItemHtml).find('.stlms-curriculum-item-drag').find('.drag-icon').removeClass('hidden');
+						$(newItemHtml).find('.stlms-curriculum-item-action.hidden').removeClass('hidden');
 						$(newItemHtml).insertBefore(currentItem);
 						courseModule.countCurriculum(currentItem);
 						courseModule.snackbarNotice(response.message);
@@ -457,9 +457,9 @@ window.wp = window.wp || {};
 		},
 		countCurriculum: function(element) {
 			var totalLesson = 0, totalQuiz = 0;
-			$('.bdlms-quiz-qus-item', element.parents('li')).find('.bdlms-curriculum-item:not(:last)').each(function(){
-				var mainItemWrap = $(this).parents('.bdlms-quiz-qus-item');
-				var headerPoints = mainItemWrap.find('.bdlms-quiz-qus-point');
+			$('.stlms-quiz-qus-item', element.parents('li')).find('.stlms-curriculum-item:not(:last)').each(function(){
+				var mainItemWrap = $(this).parents('.stlms-quiz-qus-item');
+				var headerPoints = mainItemWrap.find('.stlms-quiz-qus-point');
 				var selectedType = $(this).find('svg.quiz-icon:not(.hidden)').length ? 'quiz' : 'lesson';
 				if ( 'lesson' === selectedType ) {
 					totalLesson++;
@@ -484,32 +484,32 @@ window.wp = window.wp || {};
 			.val('')
 			.removeAttr('value')
 			.parents('li')
-			.find('.bdlms-quiz-qus-point li span')
+			.find('.stlms-quiz-qus-point li span')
 			.text('0')
-			.parents('.bdlms-quiz-qus-item')
+			.parents('.stlms-quiz-qus-item')
 			.removeClass('active')
-			.find('.bdlms-quiz-qus-item__body')
+			.find('.stlms-quiz-qus-item__body')
 			.hide()
-			.find('.bdlms-curriculum-item-list .bdlms-curriculum-item:not(:last)')
+			.find('.stlms-curriculum-item-list .stlms-curriculum-item:not(:last)')
 			.remove();
-			courseModule.inputRename('.bdlms-quiz-qus-list > li');
+			courseModule.inputRename('.stlms-quiz-qus-list > li');
 		},
 		addNewSection: function() {
-			var cloneItem = $(this).parent('.bdlms-quiz-qus-footer').prev('ul.bdlms-quiz-qus-list').find('> li:last').clone();
+			var cloneItem = $(this).parent('.stlms-quiz-qus-footer').prev('ul.stlms-quiz-qus-list').find('> li:last').clone();
 			courseModule.resetCurriculum(cloneItem);
-			$(this).parent('.bdlms-quiz-qus-footer').prev('ul.bdlms-quiz-qus-list').append(cloneItem);
-			courseModule.inputRename('.bdlms-quiz-qus-list > li');
+			$(this).parent('.stlms-quiz-qus-footer').prev('ul.stlms-quiz-qus-list').append(cloneItem);
+			courseModule.inputRename('.stlms-quiz-qus-list > li');
 		},
 		toggleAssessment: function() {
 			if ( '2' === $(this).val() ) {
 				$(this)
-				.parents('.bdlms-tab-content.active')
+				.parents('.stlms-tab-content.active')
 				.find('.cs-passing-grade')
 				.addClass('hidden');
 				return;
 			}
 			$(this)
-			.parents('.bdlms-tab-content.active')
+			.parents('.stlms-tab-content.active')
 			.find('.cs-passing-grade')
 			.removeClass('hidden');
 		},
@@ -519,7 +519,7 @@ window.wp = window.wp || {};
 		dialogInit: function () {
 			$('#select_items').dialog({
 				title: courseObject.i18n.PopupTitle,
-				dialogClass: "wp-dialog bdlms-modal",
+				dialogClass: "wp-dialog stlms-modal",
 				autoOpen: false,
 				draggable: false,
 				width: "auto",
@@ -532,8 +532,8 @@ window.wp = window.wp || {};
 					of: window,
 				},
 				open: function (event, ui) {
-					$('.bdlms-qus-bank-modal .bdlms-tab').removeClass('active');
-					$('.bdlms-qus-bank-modal .bdlms-tab:first').click();
+					$('.stlms-qus-bank-modal .stlms-tab').removeClass('active');
+					$('.stlms-qus-bank-modal .stlms-tab:first').click();
 				},
 				create: function () {
 				},
@@ -543,8 +543,8 @@ window.wp = window.wp || {};
 			});
 			// Select Items.
 			$(document).on('click', '.select-items', function(e) {
-				var parentElement = $(this).parents('.bdlms-quiz-qus-item.active').addClass('opened-item');
-				window.courseModule.addedItemsArray = $('input:hidden[name^="_bdlms_course"]:not(:last)', parentElement)
+				var parentElement = $(this).parents('.stlms-quiz-qus-item.active').addClass('opened-item');
+				window.courseModule.addedItemsArray = $('input:hidden[name^="_stlms_course"]:not(:last)', parentElement)
 				.map(
 				function(){
 					return $(this).val();
@@ -554,16 +554,16 @@ window.wp = window.wp || {};
 				e.preventDefault();
 			});
 
-			$(document).on('input', 'input.bdlms-qus-bank-search', function () {
+			$(document).on('input', 'input.stlms-qus-bank-search', function () {
 				var searchBox = $(this);
 				var searchKeyword = searchBox.val();
 				clearTimeout($.data(this, "timer"));
 				$(this).data( 'timer', setTimeout(function() {
 					searchBox
 					.addClass("ui-autocomplete-loading")
-					.parents('.bdlms-qus-bank-modal')
+					.parents('.stlms-qus-bank-modal')
 					.addClass("searching")
-					.find('.bdlms-qus-list-scroll li')
+					.find('.stlms-qus-list-scroll li')
 					.each(function(i, e) {
 						var text = jQuery(e).find('label').text().toLowerCase();
 						var matched = text.indexOf(searchKeyword.toLowerCase());
@@ -573,7 +573,7 @@ window.wp = window.wp || {};
 						}
 						$(e).addClass('hidden');
 					})
-					.parent('.bdlms-qus-list-scroll')
+					.parent('.stlms-qus-list-scroll')
 					.after(function() {
 						$(this).next('p').remove();
 						if( 0 === $(this).find('li:not(.hidden)').length ) {
@@ -581,7 +581,7 @@ window.wp = window.wp || {};
 						}
 						return '';
 					})
-					.parents('.bdlms-qus-bank-modal')
+					.parents('.stlms-qus-bank-modal')
 					.removeClass("searching")
 					.find('.ui-autocomplete-loading')
 					.removeClass('ui-autocomplete-loading');
@@ -591,9 +591,9 @@ window.wp = window.wp || {};
 			$(document).on('click', 'button[data-tab="assign-quiz-list"]', function() {
 				var currentTab = $(this);
 				currentTab
-				.parents('.bdlms-qus-bank-modal')
+				.parents('.stlms-qus-bank-modal')
 				.addClass("searching")
-				.find('.bdlms-add-item')
+				.find('.stlms-add-item')
 				.attr('disabled', function () {
 					return true;
 				});
@@ -606,29 +606,29 @@ window.wp = window.wp || {};
 					},
 					function () {
 						currentTab
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.removeClass('searching');
 					},
 				);
 			} );
 
-			$(document).on('change', '.bdlms-choose-item', function () {
+			$(document).on('change', '.stlms-choose-item', function () {
 				var totalChecked = $('input:checkbox:checked', $(this).parents('ul'));
 				$(this)
-				.parents('.bdlms-qus-bank-modal')
-				.find('.bdlms-add-item')
+				.parents('.stlms-qus-bank-modal')
+				.find('.stlms-add-item')
 				.attr('disabled', function () {
 					return totalChecked.length === 0;;
 				})
-				.next('.bdlms-qus-selected')
+				.next('.stlms-qus-selected')
 				.text(function (i, txt) {
 					return txt.replace(/\d+/, totalChecked.length);
 				});
 			});
 
-			$(document).on('click', '.bdlms-add-item', function (e) {
+			$(document).on('click', '.stlms-add-item', function (e) {
 				var _btn = $(this);
-				$('.bdlms-choose-item:visible').attr('disabled', true);
+				$('.stlms-choose-item:visible').attr('disabled', true);
 				_btn
 				.parent('div')
 				.find('span.spinner')
@@ -637,37 +637,37 @@ window.wp = window.wp || {};
 				.find('button')
 				.attr('disabled', true);
 
-				var selectType = $('.bdlms-qus-bank-modal .bdlms-tab.active').data('filter_type').replace('bdlms_', '');
-				$('#curriculums_list ul li:not(.disabled-choose-item) .bdlms-choose-item:checked').each(function(index, element){
+				var selectType = $('.stlms-qus-bank-modal .stlms-tab.active').data('filter_type').replace('stlms_', '');
+				$('#curriculums_list ul li:not(.disabled-choose-item) .stlms-choose-item:checked').each(function(index, element){
 					var itemId = $(this).val();
 					var itemText = $(this).next('label').text();
 					// Insert new item.
-					var lastItem = $('.opened-item .bdlms-curriculum-item:visible:last');
+					var lastItem = $('.opened-item .stlms-curriculum-item:visible:last');
 					var newItemHtml = lastItem.clone();
 					$(newItemHtml)
-					.find('.bdlms-curriculum-item-name')
+					.find('.stlms-curriculum-item-name')
 					.val(itemText)
 					.prev('input:hidden')
 					.val(itemId)
-					.parents('.bdlms-curriculum-item')
+					.parents('.stlms-curriculum-item')
 					.removeClass('searching')
 					.find('.curriculum-view-item')
 					.attr('href', '#link-view')
 					.next('.curriculum-edit-item')
 					.attr('href', '#link-edit');
-					$(newItemHtml).find('.bdlms-curriculum-type').remove();
-					$(newItemHtml).find('.bdlms-curriculum-dd-button .icon').removeClass('hidden');
-					$(newItemHtml).find('.bdlms-curriculum-dd-button .icon:not(.' + selectType + '-icon)').remove();
-					$(newItemHtml).find('.bdlms-curriculum-item-name').attr('readonly', true);
-					$(newItemHtml).find('.bdlms-curriculum-item-drag').find('.plus-icon').addClass('hidden');
-					$(newItemHtml).find('.bdlms-curriculum-item-drag').find('.drag-icon').removeClass('hidden');
-					$(newItemHtml).find('.bdlms-curriculum-item-action.hidden').removeClass('hidden');
+					$(newItemHtml).find('.stlms-curriculum-type').remove();
+					$(newItemHtml).find('.stlms-curriculum-dd-button .icon').removeClass('hidden');
+					$(newItemHtml).find('.stlms-curriculum-dd-button .icon:not(.' + selectType + '-icon)').remove();
+					$(newItemHtml).find('.stlms-curriculum-item-name').attr('readonly', true);
+					$(newItemHtml).find('.stlms-curriculum-item-drag').find('.plus-icon').addClass('hidden');
+					$(newItemHtml).find('.stlms-curriculum-item-drag').find('.drag-icon').removeClass('hidden');
+					$(newItemHtml).find('.stlms-curriculum-item-action.hidden').removeClass('hidden');
 					$(newItemHtml).insertBefore(lastItem);
 					courseModule.countCurriculum(lastItem);
 				});
 				courseModule.snackbarNotice(courseObject?.i18n?.itemAddedMessage.replace('%s', selectType));
 				
-				$('.bdlms-choose-item:visible').attr('disabled', false);
+				$('.stlms-choose-item:visible').attr('disabled', false);
 				$('#select_items').dialog('close');
 
 				_btn

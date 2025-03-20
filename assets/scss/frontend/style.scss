@@ -27,7 +27,7 @@ body {
 		padding: 0;
 	}
 }
-.bdlms-wrap {
+.stlms-wrap {
 	font-family: $primary_font;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
@@ -67,13 +67,13 @@ body {
 		box-shadow: none;
 		outline: 0;
 	}
-	.bdlms-error-message {
+	.stlms-error-message {
 		&.hidden {
 			display: none;
 		}
 	}
 }
-.bdlms-container {
+.stlms-container {
 	padding: 0 112px;
 	@include breakpoint(max, $xxl) {
 		padding: 0px 32px;
@@ -88,7 +88,7 @@ body {
 		transform: rotate(360deg);
 	}
 }
-.bdlms-loader {
+.stlms-loader {
 	display: none;
 	width: 16px;
 	height: 16px;
@@ -98,10 +98,10 @@ body {
 	border-right-color: transparent;
 	animation: 0.75s linear infinite spinner-border;
 }
-.bdlms-loader.is-active {
+.stlms-loader.is-active {
 	display: inline-block;
 }
-.bdlms-lesson-note {
+.stlms-lesson-note {
 	max-width: 980px;
 	margin: 0 auto;
 	padding: 24px 12px;

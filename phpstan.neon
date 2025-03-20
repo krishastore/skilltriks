@@ -6,8 +6,8 @@ parameters:
     bootstrapFiles:
         - %currentWorkingDirectory%/tests/php/phpstan/bootstrap.php
     dynamicConstantNames:
-        - BDLMS_VERSION
-        - BDLMS_LOCAL_DEBUG
+        - STLMS_VERSION
+        - STLMS_LOCAL_DEBUG
         - COOKIEHASH
         - WPINC
         - COOKIE_DOMAIN
@@ -24,7 +24,7 @@ parameters:
         - %currentWorkingDirectory%/templates
         - %currentWorkingDirectory%/tests
     scanFiles:
-        - bluedolphin-lms.php
+        - skilltriks-lms.php
         - uninstall.php
 includes:
     - %currentWorkingDirectory%/vendor/szepeviktor/phpstan-wordpress/extension.neon

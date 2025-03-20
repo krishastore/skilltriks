@@ -5,18 +5,18 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BD\Lms;
+namespace ST\Lms;
 
-use BD\Lms\Collections\PostTypes as RegisterPostType;
-use BD\Lms\Collections\Taxonomies as RegisterTaxonomies;
+use ST\Lms\Collections\PostTypes as RegisterPostType;
+use ST\Lms\Collections\Taxonomies as RegisterTaxonomies;
 
 /**
  * The core plugin class.
@@ -32,10 +32,10 @@ final class Core {
 	/**
 	 * Plugin version.
 	 *
-	 * @var int|string Plugin version. Default `BDLMS_VERSION`
+	 * @var int|string Plugin version. Default `STLMS_VERSION`
 	 * @since 1.0.0
 	 */
-	private $version = BDLMS_VERSION;
+	private $version = STLMS_VERSION;
 
 	/**
 	 * The main instance var.
@@ -77,14 +77,14 @@ final class Core {
 	 */
 	public function init() {
 		$this->collections = apply_filters(
-			'bdlms/collections',
+			'stlms/collections',
 			array(
 				new RegisterPostType(),
 				new RegisterTaxonomies(),
 			)
 		);
 		$this->load_collections();
-		$admin_instance = new \BD\Lms\Admin\Core( $this->version, self::instance() );
+		$admin_instance = new \ST\Lms\Admin\Core( $this->version, self::instance() );
 	}
 
 	/**

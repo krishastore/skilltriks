@@ -16,7 +16,7 @@ player.on('ended', function() {
 	return false;
 });
 
-var key = btoa(window.location.pathname).substring(70);
+var key = btoa(window.location.pathname).substring(0,70);
 
 // Function to save the current time
 const saveCurrentTime = () => {

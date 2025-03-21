@@ -106,3 +106,9 @@ list( $passing_grade, $grade_percentage, $completed_on ) = $completed_results;
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	if(localStorage) { // Check if the localStorage object exists
+		localStorage.clear()  //clears the localstorage
+	}
+</script>

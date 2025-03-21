@@ -271,7 +271,8 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks-lms' ),
 					'MediaButtonTitle'      => __( 'Change File', 'skilltriks-lms' ),
 					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks-lms' ),
-					'errorMediaMessage'     => __( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ),
+					'errorMediaMessage'     => __( 'skilltriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ),
+					'RoleTitle'             => __( 'User Role', 'skilltriks-lms' ),
 				),
 			)
 		);

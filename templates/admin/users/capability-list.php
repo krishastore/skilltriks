@@ -8,7 +8,7 @@
 $options     = get_option( 'stlms_settings' );
 $user_role   = isset( $_GET['role'] ) ? sanitize_text_field( wp_unslash( $_GET['role'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $user_role   = preg_replace( '/-/', '_', $user_role );
-$role_exists = array_key_exists( $user_role, $options['user_role'] );
+$role_exists = ! empty( $options['user_role'] ) ? array_key_exists( $user_role, $options['user_role'] ) : false;
 
 if ( ! $role_exists ) {
 	?>
@@ -45,5 +45,5 @@ if ( ! $role_exists ) {
 	</div>
 	<?php
 } else {
-	require_once stlms_TEMPLATEPATH . '/admin/users/capability-edit.php';
+	require_once STLMS_TEMPLATEPATH . '/admin/users/capability-edit.php';
 }

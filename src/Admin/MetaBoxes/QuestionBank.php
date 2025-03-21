@@ -2,40 +2,40 @@
 /**
  * The file that register metabox for question bank.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BD\Lms\Admin\MetaBoxes;
+namespace ST\Lms\Admin\MetaBoxes;
 
-use BD\Lms\ErrorLog as EL;
-use function BD\Lms\column_post_author as postAuthor;
-use const BD\Lms\BDLMS_QUESTION_CPT;
-use const BD\Lms\BDLMS_QUESTION_TAXONOMY_TAG;
-use const BD\Lms\META_KEY_QUESTION_TYPE;
-use const BD\Lms\META_KEY_QUESTION_SETTINGS;
-use const BD\Lms\META_KEY_QUESTION_GROUPS;
-use const BD\Lms\META_KEY_RIGHT_ANSWERS;
-use const BD\Lms\META_KEY_ANSWERS_LIST;
-use const BD\Lms\META_KEY_MANDATORY_ANSWERS;
-use const BD\Lms\META_KEY_OPTIONAL_ANSWERS;
-use const BD\Lms\META_KEY_QUIZ_QUESTION_IDS;
+use ST\Lms\ErrorLog as EL;
+use function ST\Lms\column_post_author as postAuthor;
+use const ST\Lms\STLMS_QUESTION_CPT;
+use const ST\Lms\STLMS_QUESTION_TAXONOMY_TAG;
+use const ST\Lms\META_KEY_QUESTION_TYPE;
+use const ST\Lms\META_KEY_QUESTION_SETTINGS;
+use const ST\Lms\META_KEY_QUESTION_GROUPS;
+use const ST\Lms\META_KEY_RIGHT_ANSWERS;
+use const ST\Lms\META_KEY_ANSWERS_LIST;
+use const ST\Lms\META_KEY_MANDATORY_ANSWERS;
+use const ST\Lms\META_KEY_OPTIONAL_ANSWERS;
+use const ST\Lms\META_KEY_QUIZ_QUESTION_IDS;
 
 /**
  * Register metaboxes for question bank.
  */
-class QuestionBank extends \BD\Lms\Collections\PostTypes {
+class QuestionBank extends \ST\Lms\Collections\PostTypes {
 
 	/**
 	 * Meta key prefix.
 	 *
 	 * @var string $meta_key_prefix
 	 */
-	public $meta_key_prefix = \BD\Lms\META_KEY_QUESTION_PREFIX;
+	public $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 
 	/**
 	 * Question alphabets.
@@ -49,18 +49,18 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 */
 	public function __construct() {
 		$this->set_metaboxes( $this->meta_boxes_list() );
-		$this->alphabets = \BD\Lms\question_series();
+		$this->alphabets = \ST\Lms\question_series();
 
 		// Hooks.
-		add_action( 'save_post_' . BDLMS_QUESTION_CPT, array( $this, 'save_metadata' ) );
-		add_filter( 'manage_edit-' . BDLMS_QUESTION_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
-		add_filter( 'manage_' . BDLMS_QUESTION_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
+		add_action( 'save_post_' . STLMS_QUESTION_CPT, array( $this, 'save_metadata' ) );
+		add_filter( 'manage_edit-' . STLMS_QUESTION_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
+		add_filter( 'manage_' . STLMS_QUESTION_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
 		add_filter( 'post_row_actions', array( $this, 'quick_actions' ), 10, 2 );
-		add_action( 'manage_' . BDLMS_QUESTION_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'manage_' . STLMS_QUESTION_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
 		add_action( 'bulk_edit_custom_box', array( $this, 'bulk_edit_custom_box' ), 10, 2 );
 		add_action( 'bulk_edit_posts', array( $this, 'bulk_edit_posts' ), 10, 2 );
-		add_action( 'wp_ajax_bdlms_assign_to_quiz', array( $this, 'assign_to_quiz' ) );
+		add_action( 'wp_ajax_stlms_assign_to_quiz', array( $this, 'assign_to_quiz' ) );
 		add_action( 'admin_action_load_quiz_list', array( $this, 'load_quiz_list' ) );
 	}
 
@@ -71,21 +71,21 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 */
 	private function meta_boxes_list() {
 		$list = apply_filters(
-			'bdlms/questions/meta_boxes',
+			'stlms/questions/meta_boxes',
 			array(
 				array(
 					'id'       => 'answer-options',
-					'title'    => __( 'Answer Options', 'bluedolphin-lms' ),
+					'title'    => __( 'Answer Options', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_answer_options' ),
 				),
 				array(
 					'id'       => 'question-settings',
-					'title'    => __( 'Question Settings', 'bluedolphin-lms' ),
+					'title'    => __( 'Question Settings', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_question_settings' ),
 				),
 				array(
 					'id'       => 'assign-to-quiz',
-					'title'    => __( 'Assign to Quiz', 'bluedolphin-lms' ),
+					'title'    => __( 'Assign to Quiz', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_assign_to_quiz' ),
 					'screen'   => null,
 					'context'  => 'side',
@@ -103,8 +103,8 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 		$type    = get_post_meta( $post_id, META_KEY_QUESTION_TYPE, true );
 		$type    = ! empty( $type ) ? $type : 'true_or_false';
-		$data    = \BD\Lms\get_question_by_type( $post_id, $type );
-		require_once BDLMS_TEMPLATEPATH . '/admin/question/metabox-answer-options.php';
+		$data    = \ST\Lms\get_question_by_type( $post_id, $type );
+		require_once STLMS_TEMPLATEPATH . '/admin/question/metabox-answer-options.php';
 	}
 
 	/**
@@ -117,7 +117,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		$settings = ! empty( $settings ) ? $settings : array();
 		$levels   = isset( $settings['levels'] ) ? $settings['levels'] : '';
 		$status   = isset( $settings['status'] ) ? $settings['status'] : 0;
-		require_once BDLMS_TEMPLATEPATH . '/admin/question/metabox-question-settings.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/question/metabox-question-settings.php';
 	}
 
 	/**
@@ -126,12 +126,12 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	public function render_assign_to_quiz() {
 		global $post;
 		?>
-			<div class="bdlms-assign-quiz">
-				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_quiz"><?php esc_html_e( 'Click to assign quiz', 'bluedolphin-lms' ); ?></a>
+			<div class="stlms-assign-quiz">
+				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_quiz"><?php esc_html_e( 'Click to assign quiz', 'skilltriks-lms' ); ?></a>
 			</div>
-			<div class="bdlms-snackbar-notice"><p></p></div>
+			<div class="stlms-snackbar-notice"><p></p></div>
 		<?php
-		require_once BDLMS_TEMPLATEPATH . '/admin/question/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/question/modal-popup.php';
 	}
 
 	/**
@@ -145,7 +145,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 			'type'     => '',
 		);
 
-		if ( ! isset( $_POST['bdlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms_nonce'] ) ), BDLMS_BASEFILE ) ) {
+		if ( ! isset( $_POST['stlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms_nonce'] ) ), STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			return;
 		}
@@ -163,7 +163,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 			}
 		}
 
-		do_action( 'bdlms_save_question_before', $post_id, $post_data );
+		do_action( 'stlms_save_question_before', $post_id, $post_data );
 
 		if ( isset( $_POST[ $this->meta_key_prefix ][ $type ] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
@@ -221,7 +221,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		if ( ! empty( $type ) ) {
 			$post_data['type'] = $type;
 		}
-		$post_data = apply_filters( 'bdlms_question_post_data', $post_data, $post_id );
+		$post_data = apply_filters( 'stlms_question_post_data', $post_data, $post_id );
 
 		$meta_groups = array();
 		foreach ( $post_data as $key => $data ) {
@@ -233,7 +233,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		EL::add( sprintf( 'Question updated: %s, Post ID: %d', print_r( $post_data, true ), $post_id ), 'info', __FILE__, __LINE__ );
 
 		update_post_meta( $post_id, META_KEY_QUESTION_GROUPS, $meta_groups );
-		do_action( 'bdlms_save_question_after', $post_id, $post_data );
+		do_action( 'stlms_save_question_after', $post_id, $post_data );
 	}
 
 	/**
@@ -246,15 +246,15 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		$date = $columns['date'];
 		unset( $columns['date'] );
 
-		$topic_key = 'taxonomy-' . BDLMS_QUESTION_TAXONOMY_TAG;
+		$topic_key = 'taxonomy-' . STLMS_QUESTION_TAXONOMY_TAG;
 		$topic     = $columns[ $topic_key ];
 		unset( $columns[ $topic_key ] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Author', 'bluedolphin-lms' );
-		$columns['quiz']        = __( 'Quiz', 'bluedolphin-lms' );
-		$columns['levels']      = __( 'Levels', 'bluedolphin-lms' );
-		$columns['type']        = __( 'Type', 'bluedolphin-lms' );
-		$columns[ $topic_key ]  = __( 'Topic', 'bluedolphin-lms' );
+		$columns['post_author'] = __( 'Author', 'skilltriks-lms' );
+		$columns['quiz']        = __( 'Quiz', 'skilltriks-lms' );
+		$columns['levels']      = __( 'Levels', 'skilltriks-lms' );
+		$columns['type']        = __( 'Type', 'skilltriks-lms' );
+		$columns[ $topic_key ]  = __( 'Topic', 'skilltriks-lms' );
 		$columns['date']        = $date;
 		return $columns;
 	}
@@ -274,7 +274,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 			case 'quiz':
 				$connected = get_posts(
 					array(
-						'post_type'  => \BD\Lms\BDLMS_QUIZ_CPT,
+						'post_type'  => \ST\Lms\STLMS_QUIZ_CPT,
 						'fields'     => 'ids',
 						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 						'meta_query' => array(
@@ -351,20 +351,20 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 * @param string $post_type Post Type.
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
-		if ( BDLMS_QUESTION_CPT !== $post_type ) {
+		if ( STLMS_QUESTION_CPT !== $post_type ) {
 			return;
 		}
 		switch ( $column_name ) {
 			case 'levels':
 				?>
 			<fieldset class="inline-edit-col-right inline-edit-levels">
-				<?php wp_nonce_field( BDLMS_BASEFILE, 'bdlms_nonce', false ); ?>
+				<?php wp_nonce_field( STLMS_BASEFILE, 'stlms_nonce', false ); ?>
 				<div class="inline-edit-col inline-edit-<?php echo esc_attr( $column_name ); ?>">
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Difficulty Level', 'bluedolphin-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Difficulty Level', 'skilltriks-lms' ); ?></span>
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][levels]">
 								<?php
-								foreach ( \BD\Lms\question_levels() as $key => $level ) {
+								foreach ( \ST\Lms\question_levels() as $key => $level ) {
 									?>
 										<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $level ); ?></option>
 									<?php
@@ -377,7 +377,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 				<?php
 				break;
 		}
-		do_action( 'bdlms_inline_question_edit_field', $column_name, $post_type, $this );
+		do_action( 'stlms_inline_question_edit_field', $column_name, $post_type, $this );
 	}
 
 	/**
@@ -388,7 +388,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 * @return array
 	 */
 	public function quick_actions( $actions, $post ) {
-		if ( BDLMS_QUESTION_CPT === $post->post_type ) {
+		if ( STLMS_QUESTION_CPT === $post->post_type ) {
 			$settings = get_post_meta( $post->ID, META_KEY_QUESTION_SETTINGS, true );
 			$type     = get_post_meta( $post->ID, META_KEY_QUESTION_TYPE, true );
 			$answers  = get_post_meta( $post->ID, sprintf( META_KEY_RIGHT_ANSWERS, $type ), true );
@@ -420,23 +420,23 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 				$data['optional']  = ! empty( $optional ) ? $optional : '';
 			}
 			$data['status']         = $post->post_status;
-			$actions['show_answer'] = '<a href="javascript:;" data-inline_edit="' . esc_attr( wp_json_encode( $data ) ) . '" aria-expanded="false">' . __( 'Show Answer', 'bluedolphin-lms' ) . '<a>';
+			$actions['show_answer'] = '<a href="javascript:;" data-inline_edit="' . esc_attr( wp_json_encode( $data ) ) . '" aria-expanded="false">' . __( 'Show Answer', 'skilltriks-lms' ) . '<a>';
 		}
 
 		// Clone action.
-		if ( in_array( $post->post_type, array( \BD\Lms\BDLMS_QUESTION_CPT ), true ) ) {
+		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUESTION_CPT ), true ) ) {
 			$url                   = wp_nonce_url(
 				add_query_arg(
 					array(
-						'action' => 'bdlms_clone',
+						'action' => 'stlms_clone',
 						'post'   => $post->ID,
 					),
 					'admin.php'
 				),
-				BDLMS_BASEFILE,
-				'bdlms_nonce'
+				STLMS_BASEFILE,
+				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_attr__( 'Clone', 'bluedolphin-lms' ) . ' </a>';
+			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_attr__( 'Clone', 'skilltriks-lms' ) . ' </a>';
 		}
 		return $actions;
 	}
@@ -448,7 +448,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 * @param string $post_type Post Type.
 	 */
 	public function bulk_edit_custom_box( $column_name, $post_type ) {
-		if ( BDLMS_QUESTION_CPT !== $post_type ) {
+		if ( STLMS_QUESTION_CPT !== $post_type ) {
 			return;
 		}
 		?>
@@ -459,10 +459,10 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 			<fieldset class="inline-edit-col-right bulk-inline-edit-levels">
 				<div class="inline-edit-col inline-edit-<?php echo esc_attr( $column_name ); ?>">
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Level', 'bluedolphin-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Level', 'skilltriks-lms' ); ?></span>
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][levels]">
 								<?php
-								foreach ( \BD\Lms\question_levels() as $key => $level ) {
+								foreach ( \ST\Lms\question_levels() as $key => $level ) {
 									?>
 										<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $level ); ?></option>
 									<?php
@@ -471,10 +471,10 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 							</select>
 					</label>
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Marks', 'bluedolphin-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Marks', 'skilltriks-lms' ); ?></span>
 						<input type="number" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][points]" step="1" min="1">
 					</label>
-					<label class="inline-edit-group"><span class="title"><?php esc_html_e( 'Hide Question? ', 'bluedolphin-lms' ); ?></span><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][status]" value="1"></label>
+					<label class="inline-edit-group"><span class="title"><?php esc_html_e( 'Hide Question? ', 'skilltriks-lms' ); ?></span><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][status]" value="1"></label>
 				</div>
 			</fieldset>
 				<?php
@@ -493,7 +493,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	public function bulk_edit_posts( $updated, $post_data ) {
 		global $current_screen;
 		$post_data = isset( $post_data[ $this->meta_key_prefix ] ) ? $post_data[ $this->meta_key_prefix ] : array();
-		if ( ! isset( $current_screen->post_type ) || BDLMS_QUESTION_CPT !== $current_screen->post_type ) {
+		if ( ! isset( $current_screen->post_type ) || STLMS_QUESTION_CPT !== $current_screen->post_type ) {
 			return;
 		}
 		foreach ( $updated as $qid ) {
@@ -516,20 +516,20 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 	 * Assign to quiz.
 	 */
 	public function assign_to_quiz() {
-		check_ajax_referer( BDLMS_BASEFILE, 'bdlms_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
 		$post_id  = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
 		$selected = isset( $_POST['selected'] ) ? map_deep( $_POST['selected'], 'intval' ) : array();
 		// Question unassigned.
 		$quiz_ids     = get_posts(
 			array(
-				'post_type'  => \BD\Lms\BDLMS_QUIZ_CPT,
+				'post_type'  => \ST\Lms\STLMS_QUIZ_CPT,
 				'fields'     => 'ids',
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				'meta_query' => array(
 					array(
 						'value'   => array( $post_id ),
 						'compare' => 'REGEXP',
-						'key'     => \BD\Lms\META_KEY_QUIZ_QUESTION_IDS,
+						'key'     => \ST\Lms\META_KEY_QUIZ_QUESTION_IDS,
 					),
 				),
 			)
@@ -561,7 +561,7 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		wp_send_json(
 			array(
 				'status'  => true,
-				'message' => __( 'Saved.', 'bluedolphin-lms' ),
+				'message' => __( 'Saved.', 'skilltriks-lms' ),
 			)
 		);
 	}
@@ -574,10 +574,10 @@ class QuestionBank extends \BD\Lms\Collections\PostTypes {
 		$type          = isset( $_REQUEST['type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['type'] ) ) : 'all';
 		$fetch_request = isset( $_REQUEST['fetch_quizzes'] ) ? (int) $_REQUEST['fetch_quizzes'] : 0;
 		$question_id   = isset( $_REQUEST['post_id'] ) ? (int) $_REQUEST['post_id'] : 0;
-		if ( ! wp_verify_nonce( $nonce, BDLMS_BASEFILE ) ) {
+		if ( ! wp_verify_nonce( $nonce, STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 		}
-		require_once BDLMS_TEMPLATEPATH . '/admin/question/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/question/modal-popup.php';
 		exit;
 	}
 }

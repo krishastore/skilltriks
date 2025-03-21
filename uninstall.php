@@ -12,10 +12,10 @@
  * - Repeat with other user roles. Best directly by using the links/query string parameters.
  * - Repeat things for multisite. Once for a single site in the network, once sitewide.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package     BD\Lms
+ * @package     ST\Lms
  */
 
 // If uninstall not called from WordPress, then exit.

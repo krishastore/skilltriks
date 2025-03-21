@@ -2,36 +2,36 @@
 /**
  * The file that manage the import course.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Import;
+namespace ST\Lms\Import;
 
-use function BD\Lms\explode_import_data as explodeData;
-use const BD\Lms\BDLMS_COURSE_CATEGORY_TAX;
-use const BD\Lms\META_KEY_COURSE_CURRICULUM;
-use const BD\Lms\META_KEY_COURSE_ASSESSMENT;
-use const BD\Lms\META_KEY_COURSE_MATERIAL;
-use const BD\Lms\META_KEY_COURSE_INFORMATION;
-use const BD\Lms\BDLMS_COURSE_TAXONOMY_TAG;
-use const BD\Lms\BDLMS_QUIZ_CPT;
-use const BD\Lms\BDLMS_LESSON_CPT;
+use function ST\Lms\explode_import_data as explodeData;
+use const ST\Lms\STLMS_COURSE_CATEGORY_TAX;
+use const ST\Lms\META_KEY_COURSE_CURRICULUM;
+use const ST\Lms\META_KEY_COURSE_ASSESSMENT;
+use const ST\Lms\META_KEY_COURSE_MATERIAL;
+use const ST\Lms\META_KEY_COURSE_INFORMATION;
+use const ST\Lms\STLMS_COURSE_TAXONOMY_TAG;
+use const ST\Lms\STLMS_QUIZ_CPT;
+use const ST\Lms\STLMS_LESSON_CPT;
 
 
 /**
  * Import lesson class
  */
-class CourseImport extends \BD\Lms\Helpers\FileImport {
+class CourseImport extends \ST\Lms\Helpers\FileImport {
 
 	/**
 	 * Class construct.
 	 */
 	public function __construct() {
 		$this->import_type  = 3;
-		$this->taxonomy_tag = BDLMS_COURSE_CATEGORY_TAX;
+		$this->taxonomy_tag = STLMS_COURSE_CATEGORY_TAX;
 		$this->init();
 	}
 
@@ -65,18 +65,18 @@ class CourseImport extends \BD\Lms\Helpers\FileImport {
 			'post_excerpt' => ! empty( $value[1] ) ? $value[1] : '',
 			'post_content' => ! empty( $value[2] ) ? $value[2] : '',
 			'post_status'  => 'publish',
-			'post_type'    => \BD\Lms\BDLMS_COURSE_CPT,
+			'post_type'    => \ST\Lms\STLMS_COURSE_CPT,
 			'post_author'  => 1,
 		);
 
 		$terms = ! empty( $value[3] ) ? explodeData( $value[3] ) : array();
 
 		foreach ( $terms as $_term ) {
-			if ( term_exists( $_term, BDLMS_COURSE_TAXONOMY_TAG ) ) {
-				$existing_term = get_term_by( 'name', $_term, BDLMS_COURSE_TAXONOMY_TAG );
+			if ( term_exists( $_term, STLMS_COURSE_TAXONOMY_TAG ) ) {
+				$existing_term = get_term_by( 'name', $_term, STLMS_COURSE_TAXONOMY_TAG );
 				$terms_id[]    = $existing_term->term_id;
 			} else {
-				$terms      = wp_insert_term( $_term, BDLMS_COURSE_TAXONOMY_TAG );
+				$terms      = wp_insert_term( $_term, STLMS_COURSE_TAXONOMY_TAG );
 				$terms_id[] = $terms['term_id'];
 			}
 		}
@@ -91,12 +91,12 @@ class CourseImport extends \BD\Lms\Helpers\FileImport {
 				$item_id = get_post( (int) $item ) ? (int) $item : 0;
 			} else {
 				$item_id = 0;
-				if ( str_contains( $item, 'Quiz:' ) ) {
+				if ( str_contains( $item, 'Quiz:' ) ) {  // @phpstan-ignore-line
 					$item      = ltrim( $item, 'Quiz:' );
 					$quiz_data = get_posts(
 						array(
 							'title'       => $item,
-							'post_type'   => BDLMS_QUIZ_CPT,
+							'post_type'   => STLMS_QUIZ_CPT,
 							'numberposts' => 1,
 							'fields'      => 'ids',
 						)
@@ -108,7 +108,7 @@ class CourseImport extends \BD\Lms\Helpers\FileImport {
 					$lesson_data = get_posts(
 						array(
 							'title'       => $item,
-							'post_type'   => BDLMS_LESSON_CPT,
+							'post_type'   => STLMS_LESSON_CPT,
 							'numberposts' => 1,
 							'fields'      => 'ids',
 						)
@@ -121,7 +121,7 @@ class CourseImport extends \BD\Lms\Helpers\FileImport {
 						$quiz_data = get_posts(
 							array(
 								'title'       => $item,
-								'post_type'   => BDLMS_QUIZ_CPT,
+								'post_type'   => STLMS_QUIZ_CPT,
 								'numberposts' => 1,
 								'fields'      => 'ids',
 							)
@@ -171,7 +171,7 @@ class CourseImport extends \BD\Lms\Helpers\FileImport {
 
 		// create course.
 		$course_id = wp_insert_post( $course );
-		wp_set_post_terms( $course_id, $terms_id, BDLMS_COURSE_TAXONOMY_TAG );
+		wp_set_post_terms( $course_id, $terms_id, STLMS_COURSE_TAXONOMY_TAG );
 		return $course_id;
 	}
 }

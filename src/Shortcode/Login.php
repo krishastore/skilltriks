@@ -2,29 +2,29 @@
 /**
  * The file that defines the login shortcode functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms\Shortcode
+ * @package    ST\Lms\Shortcode
  */
 
-namespace BD\Lms\Shortcode;
+namespace ST\Lms\Shortcode;
 
-use BD\Lms\ErrorLog as EL;
-use BD\Lms\Login\GoogleLogin as GL;
+use ST\Lms\ErrorLog as EL;
+use ST\Lms\Login\GoogleLogin as GL;
 
 /**
  * Shortcode register manage class.
  */
-class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Login {
+class Login extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\Login {
 
 	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
 		$this->set_shortcode_tag( 'login' );
-		add_action( 'wp_ajax_bdlms_login', array( $this, 'login_process' ) );
-		add_action( 'wp_ajax_nopriv_bdlms_login', array( $this, 'login_process' ) );
+		add_action( 'wp_ajax_stlms_login', array( $this, 'login_process' ) );
+		add_action( 'wp_ajax_nopriv_stlms_login', array( $this, 'login_process' ) );
 		add_action( 'wp_logout', array( $this, 'redirect_after_logout' ) );
 		add_action( 'template_redirect', array( GL::instance(), 'google_sso_verify' ) );
 		add_filter( 'show_admin_bar', array( $this, 'show_admin_bar' ) );
@@ -41,7 +41,7 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 		wp_enqueue_script( $this->handler );
 		wp_enqueue_style( $this->handler );
 		ob_start();
-		load_template( \BD\Lms\locate_template( 'login.php' ), false, array() );
+		load_template( \ST\Lms\locate_template( 'login.php' ), false, array() );
 		$content = ob_get_clean();
 		return $content;
 	}
@@ -50,7 +50,7 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 	 * Login process.
 	 */
 	public function login_process() {
-		check_ajax_referer( \BD\Lms\BDLMS_LOGIN_NONCE, '_bdlms_nonce' );
+		check_ajax_referer( \ST\Lms\STLMS_LOGIN_NONCE, '_stlms_nonce' );
 		$username = isset( $_POST['username'] ) ? sanitize_text_field( wp_unslash( $_POST['username'] ) ) : '';
 		$password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
 
@@ -69,11 +69,11 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 			EL::add( 'User singon error: ' . $user_verify->get_error_message(), 'error', __FILE__, __LINE__ );
 			wp_send_json( $response );
 		}
-		if ( ! in_array( 'bdlms', $user_verify->roles, true ) ) {
+		if ( ! in_array( 'stlms', $user_verify->roles, true ) ) {
 			wp_logout();
 			$response = array(
 				'status'  => 0,
-				'message' => __( 'Your account role is different, please contact to administration', 'bluedolphin-lms' ),
+				'message' => __( 'Your account role is different, please contact to administration', 'skilltriks-lms' ),
 			);
 			EL::add( $response['message'], 'error', __FILE__, __LINE__ );
 			wp_send_json( $response );
@@ -82,7 +82,7 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 		wp_set_auth_cookie( $user_verify->ID );
 		$response = array(
 			'status'   => 1,
-			'redirect' => \BD\Lms\get_page_url( 'courses' ),
+			'redirect' => \ST\Lms\get_page_url( 'courses' ),
 		);
 		EL::add( sprintf( 'User Logged, User ID: %d', $user_verify->ID ), 'info', __FILE__, __LINE__ );
 		wp_send_json( $response );
@@ -95,7 +95,7 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 	 * @return bool
 	 */
 	public function show_admin_bar( $show ) {
-		if ( \BD\Lms\is_lms_user() ) {
+		if ( \ST\Lms\is_lms_user() ) {
 			return $show;
 		}
 		return $show;
@@ -110,8 +110,8 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 	 * @return string
 	 */
 	public function logout_url( $logout_url ) {
-		if ( \BD\Lms\is_lms_user() ) {
-			$logout_url = add_query_arg( 'is_bdlms_user', 1, $logout_url );
+		if ( \ST\Lms\is_lms_user() ) {
+			$logout_url = add_query_arg( 'is_stlms_user', 1, $logout_url );
 		}
 		return $logout_url;
 	}
@@ -121,8 +121,8 @@ class Login extends \BD\Lms\Shortcode\Register implements \BD\Lms\Interfaces\Log
 	 */
 	public function redirect_after_logout() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! empty( $_GET['is_bdlms_user'] ) ) {
-			wp_safe_redirect( \BD\Lms\get_page_url( 'login' ) );
+		if ( ! empty( $_GET['is_stlms_user'] ) ) {
+			wp_safe_redirect( \ST\Lms\get_page_url( 'login' ) );
 			exit;
 		}
 	}

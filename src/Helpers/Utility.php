@@ -2,20 +2,20 @@
 /**
  * The file that manage the database related events.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Helpers;
+namespace ST\Lms\Helpers;
 
-use BD\Lms\ErrorLog as EL;
+use ST\Lms\ErrorLog as EL;
 
 /**
  * Helpers utility class.
  */
-class Utility implements \BD\Lms\Interfaces\Helpers {
+class Utility implements \ST\Lms\Interfaces\Helpers {
 
 	/**
 	 * Default pages used by LP
@@ -38,7 +38,7 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 	public static function activation_hook() {
 		self::create_default_roles();
 		self::create_pages();
-		self::bdlms_custom_table();
+		self::stlms_custom_table();
 		self::activate_default_layout();
 	}
 
@@ -52,7 +52,7 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 		$pages = self::$pages;
 		try {
 			foreach ( $pages as $page ) {
-				$option_key = "bdlms_{$page}_page_id";
+				$option_key = "stlms_{$page}_page_id";
 				$page_id    = (int) get_option( $option_key, false );
 				if ( empty( $page_id ) ) {
 					continue;
@@ -60,7 +60,7 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 				wp_delete_post( $page_id, true );
 				delete_option( $option_key );
 			}
-			delete_option( 'bdlms_permalinks_flushed' );
+			delete_option( 'stlms_permalinks_flushed' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}
@@ -77,7 +77,7 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 		try {
 			foreach ( $pages as $page ) {
 				// Check if page has already existed.
-				$page_id = get_option( "bdlms_{$page}_page_id", false );
+				$page_id = get_option( "stlms_{$page}_page_id", false );
 
 				if ( $page_id && 'page' === get_post_type( $page_id ) && 'publish' === get_post_status( $page_id ) ) {
 					continue;
@@ -88,14 +88,14 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 					$page_slug  = $page;
 				} else {
 					$page_title = ucwords( str_replace( '_', ' ', $page ) );
-					$page_slug  = 'bdlms-' . str_replace( '_', '-', $page );
+					$page_slug  = 'stlms-' . str_replace( '_', '-', $page );
 				}
 
 				$data_create_page = array(
 					'post_title' => $page_title,
 					'post_name'  => $page_slug,
 				);
-				self::create_page( $data_create_page, "bdlms_{$page}_page_id" );
+				self::create_page( $data_create_page, "stlms_{$page}_page_id" );
 			}
 
 			flush_rewrite_rules();
@@ -118,15 +118,15 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 
 		try {
 			if ( ! isset( $args['post_title'] ) ) {
-				throw new \Exception( __( 'Missing post title', 'bluedolphin-lms' ) );
+				throw new \Exception( __( 'Missing post title', 'skilltriks-lms' ) );
 			}
 
-			if ( preg_match( '#^bdlms_login_page_id.*#', $key_option ) ) {
-				$args['post_content'] = '<!-- wp:shortcode -->[bdlms_login]<!-- /wp:shortcode -->';
-			} elseif ( preg_match( '#^bdlms_courses_page_id.*#', $key_option ) ) {
-				$args['post_content'] = '<!-- wp:shortcode -->[bdlms_courses filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
-			} elseif ( preg_match( '#^bdlms_my_learning_page_id.*#', $key_option ) ) {
-				$args['post_content'] = '<!-- wp:shortcode -->[bdlms_my_learning filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
+			if ( preg_match( '#^stlms_login_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_login]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_courses_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_courses filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_my_learning_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_my_learning filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
 			}
 
 			$args = array_merge(
@@ -165,8 +165,8 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 	public static function create_default_roles() {
 		$capabilities = get_role( 'subscriber' );
 		add_role(
-			'bdlms',
-			esc_html__( 'BlueDolphin LMS', 'bluedolphin-lms' ),
+			'stlms',
+			esc_html__( 'SkillTriks LMS', 'skilltriks-lms' ),
 			$capabilities->capabilities
 		);
 	}
@@ -176,11 +176,11 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 	 *
 	 * @throws \Exception Errors.
 	 */
-	public static function bdlms_custom_table() {
+	public static function stlms_custom_table() {
 		global $wpdb;
 
 		// Define the custom table name.
-		$table_name = $wpdb->prefix . \BD\Lms\BDLMS_CRON_TABLE;
+		$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
 
 		// Check if the table already exists.
 		if ( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) {
@@ -216,8 +216,8 @@ class Utility implements \BD\Lms\Interfaces\Helpers {
 	 * @return void
 	 */
 	public static function activate_default_layout() {
-		$bdlms_settings          = get_option( 'bdlms_settings', array() );
-		$bdlms_settings['theme'] = 'layout-default';
-		update_option( 'bdlms_settings', $bdlms_settings );
+		$stlms_settings          = get_option( 'stlms_settings', array() );
+		$stlms_settings['theme'] = 'layout-default';
+		update_option( 'stlms_settings', $stlms_settings );
 	}
 }

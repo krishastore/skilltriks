@@ -2,7 +2,7 @@
 /**
  * Class CollectionTest
  *
- * @package BD\Lms\Admin\Users
+ * @package ST\Lms\Admin\Users
  */
 
 /**
@@ -23,18 +23,18 @@ class CollectionTest extends WP_UnitTestCase {
 	 * Verify whether the CPT is registered or not.
 	 */
 	public function test_verify_types() {
-		$this->assertTrue( post_type_exists( 'bdlms_course' ) );
-		$this->assertTrue( post_type_exists( 'bdlms_lesson' ) );
-		$this->assertTrue( post_type_exists( 'bdlms_question' ) );
-		$this->assertTrue( post_type_exists( 'bdlms_quiz' ) );
-		$this->assertTrue( post_type_exists( 'bdlms_results' ) );
+		$this->assertTrue( post_type_exists( 'stlms_course' ) );
+		$this->assertTrue( post_type_exists( 'stlms_lesson' ) );
+		$this->assertTrue( post_type_exists( 'stlms_question' ) );
+		$this->assertTrue( post_type_exists( 'stlms_quiz' ) );
+		$this->assertTrue( post_type_exists( 'stlms_results' ) );
 	}
 
 	/**
 	 * Verify whether the taxonomy is registered or not.
 	 */
 	public function test_verify_taxonomy() {
-		$this->assertTrue( taxonomy_exists( 'bdlms_course_category' ) );
-		$this->assertTrue( taxonomy_exists( 'bdlms_course_tag' ) );
+		$this->assertTrue( taxonomy_exists( 'stlms_course_category' ) );
+		$this->assertTrue( taxonomy_exists( 'stlms_course_tag' ) );
 	}
 }

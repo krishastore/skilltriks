@@ -2,27 +2,27 @@
 /**
  * The file that manage the import lesson.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Import;
+namespace ST\Lms\Import;
 
-use function BD\Lms\explode_import_data as explodeData;
+use function ST\Lms\explode_import_data as explodeData;
 
 /**
  * Import lesson class
  */
-class LessonImport extends \BD\Lms\Helpers\FileImport {
+class LessonImport extends \ST\Lms\Helpers\FileImport {
 
 	/**
 	 * Class construct.
 	 */
 	public function __construct() {
 		$this->import_type  = 2;
-		$this->taxonomy_tag = \BD\Lms\BDLMS_LESSON_TAXONOMY_TAG;
+		$this->taxonomy_tag = \ST\Lms\STLMS_LESSON_TAXONOMY_TAG;
 		$this->init();
 	}
 
@@ -50,7 +50,7 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 		$lesson = array(
 			'post_title'  => $value[0],
 			'post_status' => 'publish',
-			'post_type'   => \BD\Lms\BDLMS_LESSON_CPT,
+			'post_type'   => \ST\Lms\STLMS_LESSON_CPT,
 			'post_author' => 1,
 		);
 
@@ -87,9 +87,9 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 			$material[ $key ]['external_url'] = isset( $material_url[ $key ] ) ? $material_url[ $key ] : '';
 		}
 
-		$lesson['meta_input'][ \BD\Lms\META_KEY_LESSON_MEDIA ]    = $lesson_media;
-		$lesson['meta_input'][ \BD\Lms\META_KEY_LESSON_SETTINGS ] = $lesson_setting;
-		$lesson['meta_input'][ \BD\Lms\META_KEY_LESSON_MATERIAL ] = $material;
+		$lesson['meta_input'][ \ST\Lms\META_KEY_LESSON_MEDIA ]    = $lesson_media;
+		$lesson['meta_input'][ \ST\Lms\META_KEY_LESSON_SETTINGS ] = $lesson_setting;
+		$lesson['meta_input'][ \ST\Lms\META_KEY_LESSON_MATERIAL ] = $material;
 
 		// create lesson.
 		$lesson_id = wp_insert_post( $lesson );
@@ -105,7 +105,7 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 				$course_data = get_posts(
 					array(
 						'title'       => $course,
-						'post_type'   => \BD\Lms\BDLMS_COURSE_CPT,
+						'post_type'   => \ST\Lms\STLMS_COURSE_CPT,
 						'numberposts' => 1,
 						'fields'      => 'ids',
 					)
@@ -114,12 +114,12 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 					$course_id = reset( $course_data );
 				}
 
-				$create_course = apply_filters( 'bdlms_create_new_course', true );
+				$create_course = apply_filters( 'stlms_create_new_course', true );
 				if ( ! $course_id && $create_course ) {
 					$new_course = array(
 						'post_title'  => $course,
 						'post_status' => 'publish',
-						'post_type'   => \BD\Lms\BDLMS_COURSE_CPT,
+						'post_type'   => \ST\Lms\STLMS_COURSE_CPT,
 					);
 
 					// create course.
@@ -128,7 +128,7 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 			}
 
 			if ( $course_id ) {
-				$curriculums = get_post_meta( $course_id, \BD\Lms\META_KEY_COURSE_CURRICULUM, true );
+				$curriculums = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 				$curriculums = ! empty( $curriculums ) ? $curriculums : array(
 					array(
 						'section_name' => '',
@@ -140,7 +140,7 @@ class LessonImport extends \BD\Lms\Helpers\FileImport {
 				if ( isset( $curriculums[ $last_index ]['items'] ) && ! in_array( $lesson_id, $curriculums[ $last_index ]['items'], true ) ) {
 					$curriculums[ $last_index ]['items'][] = $lesson_id;
 				}
-				update_post_meta( $course_id, \BD\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
+				update_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
 			}
 		}
 

@@ -2,7 +2,7 @@
 /**
  * Template: Course Details Page - Block Theme
  *
- * @package BD\Lms
+ * @package ST\Lms
  *
  * phpcs:disable WordPress.Security.NonceVerification.Recommended
  */
@@ -47,32 +47,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 *
 		 * @param int $course_id Course ID
 		 */
-		do_action( 'bdlms_before_single_course', $course_id );
+		do_action( 'stlms_before_single_course', $course_id );
 	?>
-		<div class="bdlms-wrap">
-			<div class="bdlms-lesson-view active">
+		<div class="stlms-wrap">
+			<div class="stlms-lesson-view active">
 				<?php
 				/**
 				 * Action bar.
 				 *
 				 * @param int $course_id Course ID
 				 */
-				do_action( 'bdlms_single_course_action_bar', $course_id );
+				do_action( 'stlms_single_course_action_bar', $course_id );
 				?>
 				<?php
-				global $bdlms_course_data;
-				if ( ! empty( $bdlms_course_data['current_curriculum'] ) ) {
+				global $stlms_course_data;
+				if ( ! empty( $stlms_course_data['current_curriculum'] ) ) {
 					load_template(
-						\BD\Lms\locate_template( 'course-content.php' ),
+						\ST\Lms\locate_template( 'course-content.php' ),
 						true,
 						array(
 							'course_id'   => $course_id,
-							'course_data' => $bdlms_course_data,
+							'course_data' => $stlms_course_data,
 						)
 					);
 				} else {
 					load_template(
-						\BD\Lms\locate_template( 'content-none.php' ),
+						\ST\Lms\locate_template( 'content-none.php' ),
 						true
 					);
 				}
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 *
 		 * @param int $course_id Course ID
 		 */
-		do_action( 'bdlms_after_single_course', $course_id );
+		do_action( 'stlms_after_single_course', $course_id );
 		?>
 	<footer class="wp-block-template-part site-footer">
 		<?php

@@ -1,14 +1,14 @@
 <?php
 /**
- * Declare the interface for `BD\Lms\PostTypes` class.
+ * Declare the interface for `ST\Lms\PostTypes` class.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  */
 
-namespace BD\Lms\Interfaces;
+namespace ST\Lms\Interfaces;
 
 interface PostTypes {
 

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://bluedolphinlms.krishaweb.com/
+      url: https://lms.krishaweb.com/
 
     steps:
       - name: Checkout Repository

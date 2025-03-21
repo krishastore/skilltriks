@@ -2,20 +2,20 @@
 /**
  * The file that defines the user management functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms\Admin\Users
+ * @package    ST\Lms\Admin\Users
  */
 
-namespace BD\Lms\Admin\Users;
+namespace ST\Lms\Admin\Users;
 
-use const BD\Lms\PARENT_MENU_SLUG;
+use const ST\Lms\PARENT_MENU_SLUG;
 
 /**
  * Users manage class.
  */
-class Users extends \BD\Lms\Admin\Core implements \BD\Lms\Interfaces\AdminCore {
+class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 
 	/**
 	 * Init hooks.

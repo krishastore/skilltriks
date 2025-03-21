@@ -31,9 +31,9 @@ window.wp = window.wp || {};
 			 */
 			snackbarNotice : function( message ) {
 				var _t = this;
-				$( '.bdlms-snackbar-notice' ).find('p').html(message);
-				$( '.bdlms-snackbar-notice' ).toggleClass( 'open', 1000 );
-				if ( $( '.bdlms-snackbar-notice' ).hasClass( 'open' ) ) {
+				$( '.stlms-snackbar-notice' ).find('p').html(message);
+				$( '.stlms-snackbar-notice' ).toggleClass( 'open', 1000 );
+				if ( $( '.stlms-snackbar-notice' ).hasClass( 'open' ) ) {
 					setTimeout( function() {
 						_t.snackbarNotice('');
 					}, 3000 );
@@ -50,16 +50,16 @@ window.wp = window.wp || {};
 				_this.initSortable(_this);
 
 				// Show / Hide answers.
-				$( document ).on( 'change', '.bdlms-answer-type select', function() {
+				$( document ).on( 'change', '.stlms-answer-type select', function() {
 					var type = $( this ).val();
 					var questionGroup = $(this).parents('li');
 					var questionBox = $( '.' + type, questionGroup );
 					if ( 'true_or_false' === type ) {
-						$( '.bdlms-answer-wrap .bdlms-add-option', questionGroup ).addClass( 'hidden' );
+						$( '.stlms-answer-wrap .stlms-add-option', questionGroup ).addClass( 'hidden' );
 					} else {
-						$( '.bdlms-answer-wrap .bdlms-add-option', questionGroup ).removeClass( 'hidden' );
+						$( '.stlms-answer-wrap .stlms-add-option', questionGroup ).removeClass( 'hidden' );
 					}
-					$( '.bdlms-answer-group', questionGroup ).addClass( 'hidden' );
+					$( '.stlms-answer-group', questionGroup ).addClass( 'hidden' );
 					questionBox.removeClass( 'hidden' );
 				} );
 
@@ -72,39 +72,39 @@ window.wp = window.wp || {};
 					var rightCustomBox = $(".inline-edit-col-right:not(.inline-edit-quiz):visible", editRow);
 					var passingMarks = $("td.passing_marks.column-passing_marks", currentRow).text();
 					rightCustomBox.remove();
-					$(".inline-edit-quiz-item.bdlms-passing-marks:visible input", editRow ).val(passingMarks);
-					$( '.bdlms-answer-type select' ).change();
+					$(".inline-edit-quiz-item.stlms-passing-marks:visible input", editRow ).val(passingMarks);
+					$( '.stlms-answer-type select' ).change();
 				});
 
 				$(document).on('click', '[data-accordion="true"]', function (e) {
 					e.preventDefault();
 					$(this)
-						.parents(".bdlms-quiz-qus-item")
-						.find(".bdlms-quiz-qus-toggle")
+						.parents(".stlms-quiz-qus-item")
+						.find(".stlms-quiz-qus-toggle")
 						.toggleClass("active");
 					$(this)
-						.parents(".bdlms-quiz-qus-item")
+						.parents(".stlms-quiz-qus-item")
 						.toggleClass("active");
 					$(this)
-						.parents(".bdlms-quiz-qus-item")
-						.find(".bdlms-quiz-qus-item__body")
+						.parents(".stlms-quiz-qus-item")
+						.find(".stlms-quiz-qus-item__body")
 						.slideToggle();
 					
-					$( '.bdlms-answer-type select' ).change();
+					$( '.stlms-answer-type select' ).change();
 				});
 
-				$(document).on('click', '.bdlms-cancel-edit', function(e) {
+				$(document).on('click', '.stlms-cancel-edit', function(e) {
 					e.preventDefault();
 					$(this)
-					.parents('.bdlms-quiz-qus-item__body')
+					.parents('.stlms-quiz-qus-item__body')
 					.slideToggle();	
 				} );
 
-				$(document).on('click', '.bdlms-save-questions', function(e) {
+				$(document).on('click', '.stlms-save-questions', function(e) {
 					e.preventDefault();
 					var saveButton = $(this);
 					var postId = saveButton.attr('data-post_id') || 0;
-					var parentGroup = saveButton.parents('.bdlms-quiz-qus-item__body');
+					var parentGroup = saveButton.parents('.stlms-quiz-qus-item__body');
 					var formData = $('input:visible, select:visible, textarea:visible', parentGroup ).serializeArray();
 					formData = formData.filter(function(obj) {
 						obj.name = obj.name.replace(/[0-9]/g, '').replace( '[]', '');
@@ -117,17 +117,17 @@ window.wp = window.wp || {};
 						},
 						{
 							name: 'action',
-							value: 'bdlms_quiz_question'
+							value: 'stlms_quiz_question'
 						},
 						{
-							name: 'bdlms_nonce',
+							name: 'stlms_nonce',
 							value: quizModules.nonce
 						}
 					);
 
 					saveButton
 					.attr('disabled', true)
-					.parent('.bdlms-add-option')
+					.parent('.stlms-add-option')
 					.find('span.spinner')
 					.addClass('is-active');
 
@@ -137,7 +137,7 @@ window.wp = window.wp || {};
 						function( res ) {
 							saveButton
 							.removeAttr('disabled')
-							.parent('.bdlms-add-option')
+							.parent('.stlms-add-option')
 							.find('span.spinner')
 							.removeClass('is-active');
 
@@ -148,11 +148,11 @@ window.wp = window.wp || {};
 				} );
 
 				// Delete project.
-				$( document ).on( 'click', '.bdlms-delete-link', this.deleteProject );
+				$( document ).on( 'click', '.stlms-delete-link', this.deleteProject );
 				// Insert `Add More Question` button.
 				$(quizModules.addMoreButton).insertAfter('#quiz-questions h2.ui-sortable-handle');
 				// Click to duplicate.
-				$( document ).on( 'click', '.bdlms-duplicate-link:not(.in-queue)', this.duplicateProject );
+				$( document ).on( 'click', '.stlms-duplicate-link:not(.in-queue)', this.duplicateProject );
 			},
 
 			/**
@@ -161,7 +161,7 @@ window.wp = window.wp || {};
 			dialogInit: function () {
 				$('#add_new_question').dialog({
 					title: quizModules.i18n.addNewPopupTitle,
-					dialogClass: 'wp-dialog bdlms-modal',
+					dialogClass: 'wp-dialog stlms-modal',
 					autoOpen: false,
 					draggable: false,
 					width: 'auto',
@@ -179,7 +179,7 @@ window.wp = window.wp || {};
 
 				$('#questions_bank').dialog({
 					title: quizModules.i18n.existingPopupTitle,
-					dialogClass: 'wp-dialog bdlms-modal',
+					dialogClass: 'wp-dialog stlms-modal',
 					autoOpen: false,
 					draggable: false,
 					width: 'auto',
@@ -192,18 +192,18 @@ window.wp = window.wp || {};
 						of: window,
 					},
 					open: function (event, ui) {
-						$('#bdlms_qus_list').load(
-							quizModules.contentLoadUrl + ' #bdlms_qus_list > *',
+						$('#stlms_qus_list').load(
+							quizModules.contentLoadUrl + ' #stlms_qus_list > *',
 							{
 								fetch_question: 1,
 								questionIds: function() {
-									return $('input.bdlms-qid').map(function() {
+									return $('input.stlms-qid').map(function() {
 										return $(this).val();
 									}).get();
 								}
 							},
 							function () {
-								$('.bdlms-choose-existing').trigger('change');
+								$('.stlms-choose-existing').trigger('change');
 							}
 						);
 					},
@@ -219,22 +219,22 @@ window.wp = window.wp || {};
 					$('#add_new_question').dialog('close');
 					$('#questions_bank').dialog('open');
 				});
-				$(document).on('change', '.bdlms-choose-existing', function() {
-					var totalChecked = $('.bdlms-choose-existing:checked');
+				$(document).on('change', '.stlms-choose-existing', function() {
+					var totalChecked = $('.stlms-choose-existing:checked');
 					$(this)
-					.parents('.bdlms-qus-bank-modal')
-					.find('.bdlms-add-question')
+					.parents('.stlms-qus-bank-modal')
+					.find('.stlms-add-question')
 					.attr('disabled', function() {
 						return totalChecked.length === 0;
 					})
-					.next('.bdlms-qus-selected')
+					.next('.stlms-qus-selected')
 					.text( function(i,txt) {
 						return txt.replace(/\d+/, totalChecked.length);
 					} );
 				});
-				$(document).on('click', '.bdlms-add-question, .create-your-own', function(e) {
+				$(document).on('click', '.stlms-add-question, .create-your-own', function(e) {
 					var _btn = $(this);
-					var qIds = $('.bdlms-choose-existing:checked:not(:disabled)').map(function() {
+					var qIds = $('.stlms-choose-existing:checked:not(:disabled)').map(function() {
 						return $(this).val();
 					}).get();
 					
@@ -244,7 +244,7 @@ window.wp = window.wp || {};
 						return;
 					}
 
-					$('.bdlms-choose-existing:visible').attr('disabled', true);
+					$('.stlms-choose-existing:visible').attr('disabled', true);
 					_btn
 					.parent('div')
 					.find('span.spinner')
@@ -256,13 +256,13 @@ window.wp = window.wp || {};
 					$.post(
 						quizModules.ajaxurl,
 						{
-							action: 'bdlms_add_new_question',
-							bdlms_nonce: quizModules.nonce,
+							action: 'stlms_add_new_question',
+							stlms_nonce: quizModules.nonce,
 							selected: qIds,
 							_action: _btn.hasClass('create-your-own') ? 'create_new' : 'update_existing',
 						},
 						function(data) {
-							$('.bdlms-choose-existing:visible').removeAttr('disabled');
+							$('.stlms-choose-existing:visible').removeAttr('disabled');
 							_btn
 							.parent('div')
 							.find('span.spinner')
@@ -272,9 +272,9 @@ window.wp = window.wp || {};
 							.removeAttr('disabled');
 							$('#questions_bank, #add_new_question').dialog('close');
 							if ( '' !== data.html ) {
-								$(data.html).appendTo('ul.bdlms-quiz-qus-list');
+								$(data.html).appendTo('ul.stlms-quiz-qus-list');
 								if ( _btn.hasClass('create-your-own') ) {
-									$('ul.bdlms-quiz-qus-list > li:last').find('a[data-accordion]').trigger('click');
+									$('ul.stlms-quiz-qus-list > li:last').find('a[data-accordion]').trigger('click');
 								}
 								quizModule.snackbarNotice(data.message);
 							}
@@ -283,16 +283,16 @@ window.wp = window.wp || {};
 					);
 					e.preventDefault();
 				});
-				$(document).on('input', 'input.bdlms-qus-bank-search', function () {
+				$(document).on('input', 'input.stlms-qus-bank-search', function () {
 					var searchBox = $(this);
 					var searchKeyword = searchBox.val();
 					clearTimeout($.data(this, "timer"));
 					$(this).data( 'timer', setTimeout(function() {
 						searchBox
 						.addClass("ui-autocomplete-loading")
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.addClass("searching")
-						.find('.bdlms-qus-list-scroll li')
+						.find('.stlms-qus-list-scroll li')
 						.each(function(i, e) {
 							var text = jQuery(e).find('label').text().toLowerCase();
 							var matched = text.indexOf(searchKeyword.toLowerCase());
@@ -302,7 +302,7 @@ window.wp = window.wp || {};
 							}
 							$(e).addClass('hidden');
 						})
-						.parent('.bdlms-qus-list-scroll')
+						.parent('.stlms-qus-list-scroll')
 						.after(function() {
 							$(this).next('p').remove();
 							if( 0 === $(this).find('li:not(.hidden)').length ) {
@@ -310,7 +310,7 @@ window.wp = window.wp || {};
 							}
 							return '';
 						})
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.removeClass("searching")
 						.find('.ui-autocomplete-loading')
 						.removeClass('ui-autocomplete-loading');
@@ -322,20 +322,20 @@ window.wp = window.wp || {};
 			 * Live preview.
 			 */
 			livePreview: function() {
-				$( document ).on('input', '.bdlms-quiz-name input:text', function(e) {
+				$( document ).on('input', '.stlms-quiz-name input:text', function(e) {
 					var updatedVal = $(this).val();
 					$(this)
 					.parents('li')
-					.find('.bdlms-quiz-qus-name span:not(.bdlms-quiz-qus-point)')
+					.find('.stlms-quiz-qus-name span:not(.stlms-quiz-qus-point)')
 					.text(updatedVal);
 					e.preventDefault();
 				} );
 
-				$( document ).on('input', '.bdlms-question-points', function(e) {
+				$( document ).on('input', '.stlms-question-points', function(e) {
 					var updatedVal = $(this).val();
 					var previewElement = $(this)
 					.parents('li')
-					.find('.bdlms-quiz-qus-name span.bdlms-quiz-qus-point');
+					.find('.stlms-quiz-qus-name span.stlms-quiz-qus-point');
 					
 					previewElement.text( function(i,txt) {
 						return txt.replace(/\d+/, updatedVal);
@@ -357,7 +357,7 @@ window.wp = window.wp || {};
              */
 			initSortable: function(obj) {
 				var _this = obj;
-				$( '.bdlms-quiz-qus-list.bdlms-sortable-answers', document ).sortable( {
+				$( '.stlms-quiz-qus-list.stlms-sortable-answers', document ).sortable( {
 					appendTo: 'parent',
 					axis: 'y',
 					containment: 'parent',
@@ -375,21 +375,21 @@ window.wp = window.wp || {};
 				e.preventDefault();
 				var cloneButton = $(this);
 				var newItem = cloneButton.parents('li').clone(true);
-				var postId = newItem.find('input.bdlms-qid').val();
+				var postId = newItem.find('input.stlms-qid').val();
 				
 				cloneButton.addClass('in-queue');
 				$.post(
 					quizModules.ajaxurl,
 					{
-						action: 'bdlms_inline_duplicate_question',
+						action: 'stlms_inline_duplicate_question',
 						post: postId,
-						bdlms_nonce: quizModules.nonce,
+						stlms_nonce: quizModules.nonce,
 						post_status: 'auto-draft'
 					},
 					function(res) {
 						if ( res.status ) {
-							newItem.find('input.bdlms-qid').val(res.post_id);
-							newItem.find('.bdlms-save-questions').attr('data-post_id', res.post_id);
+							newItem.find('input.stlms-qid').val(res.post_id);
+							newItem.find('.stlms-save-questions').attr('data-post_id', res.post_id);
 							newItem.find('input, select, textarea').attr('name', function( i, val ) {
 								val = val.replace(/\[([0-9]+)\]/g, '[' + res.post_id + ']');
 								return val;

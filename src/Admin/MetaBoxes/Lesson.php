@@ -2,36 +2,36 @@
 /**
  * The file that register metabox for lesson.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BD\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BD\Lms\Admin\MetaBoxes;
+namespace ST\Lms\Admin\MetaBoxes;
 
-use BD\Lms\ErrorLog as EL;
-use function BD\Lms\column_post_author as postAuthor;
-use const BD\Lms\BDLMS_LESSON_CPT;
-use const BD\Lms\BDLMS_LESSON_TAXONOMY_TAG;
-use const BD\Lms\META_KEY_LESSON_SETTINGS;
-use const BD\Lms\META_KEY_LESSON_MEDIA;
-use const BD\Lms\META_KEY_LESSON_MATERIAL;
-use const BD\Lms\META_KEY_LESSON_COURSE_IDS;
+use ST\Lms\ErrorLog as EL;
+use function ST\Lms\column_post_author as postAuthor;
+use const ST\Lms\STLMS_LESSON_CPT;
+use const ST\Lms\STLMS_LESSON_TAXONOMY_TAG;
+use const ST\Lms\META_KEY_LESSON_SETTINGS;
+use const ST\Lms\META_KEY_LESSON_MEDIA;
+use const ST\Lms\META_KEY_LESSON_MATERIAL;
+use const ST\Lms\META_KEY_LESSON_COURSE_IDS;
 
 /**
  * Register metaboxes for lesson.
  */
-class Lesson extends \BD\Lms\Collections\PostTypes {
+class Lesson extends \ST\Lms\Collections\PostTypes {
 
 	/**
 	 * Meta key prefix.
 	 *
 	 * @var string $meta_key_prefix
 	 */
-	public $meta_key_prefix = \BD\Lms\META_KEY_LESSON_PREFIX;
+	public $meta_key_prefix = \ST\Lms\META_KEY_LESSON_PREFIX;
 
 	/**
 	 * Class construct.
@@ -40,15 +40,15 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		$this->set_metaboxes( $this->meta_boxes_list() );
 
 		// Hooks.
-		add_action( 'save_post_' . BDLMS_LESSON_CPT, array( $this, 'save_metadata' ) );
-		add_filter( 'manage_edit-' . BDLMS_LESSON_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
-		add_filter( 'manage_' . BDLMS_LESSON_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
-		add_action( 'manage_' . BDLMS_LESSON_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'save_post_' . STLMS_LESSON_CPT, array( $this, 'save_metadata' ) );
+		add_filter( 'manage_edit-' . STLMS_LESSON_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
+		add_filter( 'manage_' . STLMS_LESSON_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
+		add_action( 'manage_' . STLMS_LESSON_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 		add_action( 'admin_action_load_course_list', array( $this, 'load_course_list' ) );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
 		add_action( 'bulk_edit_custom_box', array( $this, 'bulk_edit_custom_box' ), 10, 2 );
 		add_action( 'bulk_edit_posts', array( $this, 'bulk_edit_posts' ), 10, 2 );
-		add_action( 'wp_ajax_bdlms_assign_to_course', array( $this, 'assign_to_course' ) );
+		add_action( 'wp_ajax_stlms_assign_to_course', array( $this, 'assign_to_course' ) );
 	}
 
 	/**
@@ -58,21 +58,21 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	 */
 	private function meta_boxes_list() {
 		$list = apply_filters(
-			'bdlms/lessons/meta_boxes',
+			'stlms/lessons/meta_boxes',
 			array(
 				array(
 					'id'       => 'add-media',
-					'title'    => __( 'Add Media', 'bluedolphin-lms' ),
+					'title'    => __( 'Add Media', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_add_media' ),
 				),
 				array(
 					'id'       => 'lessons-settings',
-					'title'    => __( 'Lesson Settings', 'bluedolphin-lms' ),
+					'title'    => __( 'Lesson Settings', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_lesson_settings' ),
 				),
 				array(
 					'id'       => 'assign-to-course',
-					'title'    => __( 'Assign to course', 'bluedolphin-lms' ),
+					'title'    => __( 'Assign to course', 'skilltriks-lms' ),
 					'callback' => array( $this, 'render_assign_to_course' ),
 					'screen'   => null,
 					'context'  => 'side',
@@ -100,7 +100,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 				'file_url'        => '',
 			)
 		);
-		require_once BDLMS_TEMPLATEPATH . '/admin/lesson/add-media.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/lesson/add-media.php';
 	}
 
 	/**
@@ -125,7 +125,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		if ( ! $max_upload_size ) {
 			$max_upload_size = 0;
 		}
-		require_once BDLMS_TEMPLATEPATH . '/admin/lesson/lesson-settings.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/lesson/lesson-settings.php';
 	}
 
 	/**
@@ -134,12 +134,12 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	public function render_assign_to_course() {
 		global $post;
 		?>
-			<div class="bdlms-assign-quiz">
-				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_lesson"><?php esc_html_e( 'Click to assign course', 'bluedolphin-lms' ); ?></a>
+			<div class="stlms-assign-quiz">
+				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_lesson"><?php esc_html_e( 'Click to assign course', 'skilltriks-lms' ); ?></a>
 			</div>
-			<div class="bdlms-snackbar-notice"><p></p></div>
+			<div class="stlms-snackbar-notice"><p></p></div>
 		<?php
-		require_once BDLMS_TEMPLATEPATH . '/admin/lesson/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/lesson/modal-popup.php';
 	}
 
 	/**
@@ -154,11 +154,11 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 			'material' => array(),
 		);
 
-		if ( ! isset( $_POST['bdlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms_nonce'] ) ), BDLMS_BASEFILE ) ) {
+		if ( ! isset( $_POST['stlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms_nonce'] ) ), STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			return;
 		}
-		do_action( 'bdlms_save_lesson_before', $post_id, $post_data );
+		do_action( 'stlms_save_lesson_before', $post_id, $post_data );
 		// Quick edit action.
 		if ( isset( $_POST['action'] ) && 'inline-save' === $_POST['action'] ) {
 			$post_id   = isset( $_POST['post_ID'] ) ? (int) $_POST['post_ID'] : $post_id;
@@ -202,7 +202,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 			$materials             = array_map( 'array_filter', $materials );
 			$post_data['material'] = $materials;
 		}
-		$post_data = apply_filters( 'bdlms_lesson_post_data', $post_data, $post_id );
+		$post_data = apply_filters( 'stlms_lesson_post_data', $post_data, $post_id );
 
 		foreach ( $post_data as $key => $data ) {
 			$key = $this->meta_key_prefix . '_' . $key;
@@ -215,7 +215,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		EL::add( sprintf( 'Lesson updated: %s, Post ID: %d', print_r( $post_data, true ), $post_id ), 'info', __FILE__, __LINE__ );
 
-		do_action( 'bdlms_save_lesson_after', $post_id, $post_data );
+		do_action( 'stlms_save_lesson_after', $post_id, $post_data );
 	}
 
 	/**
@@ -240,14 +240,14 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		$date = $columns['date'];
 		unset( $columns['date'] );
 
-		$topic_key = 'taxonomy-' . BDLMS_LESSON_TAXONOMY_TAG;
+		$topic_key = 'taxonomy-' . STLMS_LESSON_TAXONOMY_TAG;
 		$topic     = $columns[ $topic_key ];
 		unset( $columns[ $topic_key ] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Author', 'bluedolphin-lms' );
-		$columns['course']      = __( 'Course', 'bluedolphin-lms' );
-		$columns['lesson_type'] = __( 'Lesson Type', 'bluedolphin-lms' );
-		$columns['duration']    = __( 'Duration', 'bluedolphin-lms' );
+		$columns['post_author'] = __( 'Author', 'skilltriks-lms' );
+		$columns['course']      = __( 'Course', 'skilltriks-lms' );
+		$columns['lesson_type'] = __( 'Lesson Type', 'skilltriks-lms' );
+		$columns['duration']    = __( 'Duration', 'skilltriks-lms' );
 		$columns['date']        = $date;
 		return $columns;
 	}
@@ -270,7 +270,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 			case 'course':
 				$connected = get_posts(
 					array(
-						'post_type'      => \BD\Lms\BDLMS_COURSE_CPT,
+						'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 						'posts_per_page' => -1,
 						'fields'         => 'ids',
 						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
@@ -278,13 +278,13 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 							array(
 								'value'   => array( 'items' => $post_id ),
 								'compare' => 'REGEXP',
-								'key'     => \BD\Lms\META_KEY_COURSE_CURRICULUM,
+								'key'     => \ST\Lms\META_KEY_COURSE_CURRICULUM,
 							),
 						),
 					)
 				);
 				if ( empty( $connected ) ) {
-					esc_html_e( 'Not Assigned Yet', 'bluedolphin-lms' );
+					esc_html_e( 'Not Assigned Yet', 'skilltriks-lms' );
 					break;
 				}
 				$connected = array_map(
@@ -313,11 +313,11 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 				break;
 			case 'lesson_type':
 				if ( isset( $media['media_type'] ) && 'video' === $media['media_type'] ) {
-					esc_html_e( 'Video', 'bluedolphin-lms' );
+					esc_html_e( 'Video', 'skilltriks-lms' );
 				} elseif ( isset( $media['media_type'] ) && 'text' === $media['media_type'] ) {
-					esc_html_e( 'Text', 'bluedolphin-lms' );
+					esc_html_e( 'Text', 'skilltriks-lms' );
 				} elseif ( isset( $media['media_type'] ) && 'file' === $media['media_type'] ) {
-					esc_html_e( 'File', 'bluedolphin-lms' );
+					esc_html_e( 'File', 'skilltriks-lms' );
 				} else {
 					echo '—';
 				}
@@ -345,11 +345,11 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		$nonce         = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : '';
 		$fetch_request = isset( $_REQUEST['fetch_courses'] ) ? (int) $_REQUEST['fetch_courses'] : 0;
 		$lesson_id     = isset( $_REQUEST['post_id'] ) ? (int) $_REQUEST['post_id'] : 0;
-		if ( ! wp_verify_nonce( $nonce, BDLMS_BASEFILE ) ) {
+		if ( ! wp_verify_nonce( $nonce, STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			exit;
 		}
-		require_once BDLMS_TEMPLATEPATH . '/admin/lesson/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/lesson/modal-popup.php';
 		exit;
 	}
 
@@ -357,12 +357,12 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	 * Assign to course.
 	 */
 	public function assign_to_course() {
-		check_ajax_referer( BDLMS_BASEFILE, 'bdlms_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
 		$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
 		$courses = isset( $_POST['selected'] ) ? map_deep( $_POST['selected'], 'intval' ) : array();
 
 		foreach ( $courses as $course ) {
-			$curriculums = get_post_meta( $course, \BD\Lms\META_KEY_COURSE_CURRICULUM, true );
+			$curriculums = get_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 			$curriculums = ! empty( $curriculums ) ? $curriculums : array(
 				array(
 					'section_name' => '',
@@ -374,7 +374,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 			if ( isset( $curriculums[ $last_index ]['items'] ) && ! in_array( $post_id, $curriculums[ $last_index ]['items'], true ) ) {
 				$curriculums[ $last_index ]['items'][] = $post_id;
 			}
-			update_post_meta( $course, \BD\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
+			update_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
 		}
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		EL::add( sprintf( 'Assigned to course: %s, Post ID: %d', print_r( array_unique( $courses ), true ), $post_id ), 'info', __FILE__, __LINE__ );
@@ -382,7 +382,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 		wp_send_json(
 			array(
 				'status'  => true,
-				'message' => __( 'Saved.', 'bluedolphin-lms' ),
+				'message' => __( 'Saved.', 'skilltriks-lms' ),
 			)
 		);
 	}
@@ -394,44 +394,44 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	 * @param string $post_type Post Type.
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
-		if ( BDLMS_LESSON_CPT !== $post_type || 'duration' !== $column_name ) {
+		if ( STLMS_LESSON_CPT !== $post_type || 'duration' !== $column_name ) {
 			return;
 		}
 		?>
 		<fieldset class="inline-edit-col-right inline-edit-lesson">
-			<?php wp_nonce_field( BDLMS_BASEFILE, 'bdlms_nonce', false ); ?>
+			<?php wp_nonce_field( STLMS_BASEFILE, 'stlms_nonce', false ); ?>
 			<div class="inline-edit-col inline-edit-duration">
-				<span class="title"><?php esc_html_e( 'Duration', 'bluedolphin-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Duration', 'skilltriks-lms' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
 							<input type="number" step="1" min="0" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][duration]">
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][duration_type]">
-								<option value="minute"><?php esc_html_e( 'Minute(s)', 'bluedolphin-lms' ); ?></option>
-								<option value="hour"><?php esc_html_e( 'Hour(s)', 'bluedolphin-lms' ); ?></option>
-								<option value="day"><?php esc_html_e( 'Day(s)', 'bluedolphin-lms' ); ?></option>
-								<option value="week"><?php esc_html_e( 'Week(s)', 'bluedolphin-lms' ); ?></option>
+								<option value="minute"><?php esc_html_e( 'Minute(s)', 'skilltriks-lms' ); ?></option>
+								<option value="hour"><?php esc_html_e( 'Hour(s)', 'skilltriks-lms' ); ?></option>
+								<option value="day"><?php esc_html_e( 'Day(s)', 'skilltriks-lms' ); ?></option>
+								<option value="week"><?php esc_html_e( 'Week(s)', 'skilltriks-lms' ); ?></option>
 							</select>
 						</label>
 					</div>
 				</div>
 			</div>
 			<div class="inline-edit-col inline-edit-courses">
-				<span class="title"><?php esc_html_e( 'Courses', 'bluedolphin-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
 							<?php
 								$courses = get_posts(
 									array(
-										'post_type'      => \BD\Lms\BDLMS_COURSE_CPT,
+										'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 										'posts_per_page' => -1,
 										'fields'         => 'ids',
 									)
 								);
 							if ( ! empty( $courses ) ) :
 								?>
-							<ul class="cat-checklist <?php echo esc_attr( \BD\Lms\BDLMS_COURSE_CPT ); ?>-checklist">
+							<ul class="cat-checklist <?php echo esc_attr( \ST\Lms\STLMS_COURSE_CPT ); ?>-checklist">
 								<?php foreach ( $courses as $course ) : ?>
 									<li class="popular-category">
 										<label class="selectit">
@@ -441,14 +441,14 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 								<?php endforeach; ?>
 							</ul>
 							<?php else : ?>
-								<p><?php esc_html_e( 'No course found.', 'bluedolphin-lms' ); ?></p>
+								<p><?php esc_html_e( 'No course found.', 'skilltriks-lms' ); ?></p>
 							<?php endif; ?>
 						</label>
 					</div>
 				</div>
 			</div>
 		</fieldset>
-		<?php do_action( 'bdlms_inline_lessons_edit_field', $column_name, $post_type, $this ); ?>
+		<?php do_action( 'stlms_inline_lessons_edit_field', $column_name, $post_type, $this ); ?>
 		<?php
 	}
 
@@ -459,27 +459,27 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	 * @param string $post_type Post Type.
 	 */
 	public function bulk_edit_custom_box( $column_name, $post_type ) {
-		if ( BDLMS_LESSON_CPT !== $post_type || 'duration' !== $column_name ) {
+		if ( STLMS_LESSON_CPT !== $post_type || 'duration' !== $column_name ) {
 			return;
 		}
 		?>
 		<fieldset class="inline-edit-col-right inline-edit-lesson">
 			<div class="inline-edit-col inline-edit-courses">
-				<span class="title"><?php esc_html_e( 'Courses', 'bluedolphin-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
 							<?php
 								$courses = get_posts(
 									array(
-										'post_type'      => \BD\Lms\BDLMS_COURSE_CPT,
+										'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 										'posts_per_page' => -1,
 										'fields'         => 'ids',
 									)
 								);
 							if ( ! empty( $courses ) ) :
 								?>
-							<ul class="cat-checklist <?php echo esc_attr( \BD\Lms\BDLMS_COURSE_CPT ); ?>-checklist">
+							<ul class="cat-checklist <?php echo esc_attr( \ST\Lms\STLMS_COURSE_CPT ); ?>-checklist">
 								<?php foreach ( $courses as $course ) : ?>
 									<li class="popular-category">
 										<label class="selectit">
@@ -489,7 +489,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 								<?php endforeach; ?>
 							</ul>
 							<?php else : ?>
-								<p><?php esc_html_e( 'No course found.', 'bluedolphin-lms' ); ?></p>
+								<p><?php esc_html_e( 'No course found.', 'skilltriks-lms' ); ?></p>
 							<?php endif; ?>
 						</label>
 					</div>
@@ -509,7 +509,7 @@ class Lesson extends \BD\Lms\Collections\PostTypes {
 	 */
 	public function bulk_edit_posts( $updated, $post_data ) {
 		global $current_screen;
-		if ( ! isset( $current_screen->post_type ) || BDLMS_LESSON_CPT !== $current_screen->post_type ) {
+		if ( ! isset( $current_screen->post_type ) || STLMS_LESSON_CPT !== $current_screen->post_type ) {
 			return;
 		}
 		foreach ( $updated as $lesson_id ) {

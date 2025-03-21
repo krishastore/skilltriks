@@ -7,11 +7,11 @@ const player = new Plyr(".lesson-video", {
 		controls: true,
 	},
 	captions: { active: true },
-	iconUrl: BdlmsObject.iconUrl,
-	blankVideo: BdlmsObject.blankVideo
+	iconUrl: StlmsObject.iconUrl,
+	blankVideo: StlmsObject.blankVideo
 });
 player.on('ended', function() {
-	var nextPageLink = jQuery('.bdlms-next-btn').attr('href');
+	var nextPageLink = jQuery('.stlms-next-btn').attr('href');
 	window.location.href = nextPageLink;
 	return false;
 });

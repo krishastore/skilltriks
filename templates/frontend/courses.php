@@ -16,7 +16,7 @@ $category       = ! empty( $_GET['category'] ) ? explode( ',', sanitize_text_fie
 $category       = array_map( 'intval', $category );
 $levels         = ! empty( $_GET['levels'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_GET['levels'] ) ) ) : array();
 $levels         = array_map( 'intval', $levels );
-$_orderby       = ! empty( $_GET['order_by'] ) ? sanitize_text_field( wp_unslash( $_GET['order_by'] ) ) : 'menu_order';
+$_orderby       = ! empty( $_GET['order_by'] ) ? sanitize_text_field( wp_unslash( $_GET['order_by'] ) ) : '';
 
 $course_args = array(
 	'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
@@ -45,7 +45,7 @@ if ( in_array( $_orderby, array( 'asc', 'desc' ), true ) ) {
 } elseif ( 'newest' === $_orderby ) {
 	$course_args['order'] = 'DESC';
 } else {
-	$course_args['orderby'] = 'menu_order';
+	$course_args['orderby'] = 'post_date';
 }
 if ( ! empty( $category ) ) {
 	// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query

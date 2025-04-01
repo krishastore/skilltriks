@@ -437,14 +437,11 @@ class SettingOptions {
 				$role_name = sanitize_text_field( wp_unslash( $_POST['user_role'] ) );
 				$role_key  = preg_replace( '/\s+/', '_', strtolower( $role_name ) );
 				if ( ! isset( $this->options['user_role'] ) || ! array_key_exists( $role_key, $this->options['user_role'] ) ) :
-					$user_role                  = get_option( 'user_role', array() );
-					$user_role[ $role_key ]     = ucwords( $role_name );
-					$this->options['user_role'] = $user_role;
+					$this->options['user_role'][ $role_key ] = ucwords( $role_name );
 					update_option( 'stlms_settings', $this->options );
-
-					// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-					wp_redirect( add_query_arg( 'role', sanitize_title( $role_name ), wp_get_referer() ) );
 				endif;
+				// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+				wp_redirect( add_query_arg( 'role', sanitize_title( $role_name ), wp_get_referer() ) );
 			endif;
 		} else {
 			wp_die(

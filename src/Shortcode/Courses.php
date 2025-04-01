@@ -206,9 +206,10 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	 * @param int $course_id Course ID.
 	 */
 	public function update_user_course_view_status( $course_id ) {
-		$meta_key        = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
-		$curriculum_type = get_query_var( 'curriculum_type' );
-		$item_id         = $curriculum_type ? get_query_var( 'item_id' ) : 0;
+		$meta_key             = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
+		$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
+		$curriculum_type      = get_query_var( 'curriculum_type' );
+		$item_id              = $curriculum_type ? get_query_var( 'item_id' ) : 0;
 		if ( is_user_logged_in() && $item_id ) {
 			$user_id        = get_current_user_id();
 			$current_status = get_user_meta( $user_id, $meta_key, true );
@@ -221,8 +222,14 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			if ( $current_status === $item_id ) {
 				return;
 			}
-			$section_id = get_query_var( 'section' ) ? get_query_var( 'section' ) : 1;
-			$item_id    = $section_id . '_' . $item_id;
+			$section_id     = get_query_var( 'section' ) ? get_query_var( 'section' ) : 1;
+			$item_id        = $section_id . '_' . $item_id;
+			$restart_course = \ST\Lms\restart_course( $course_id );
+			// when restart course again.
+			if ( $restart_course ) {
+				delete_user_meta( $user_id, $course_completed_key );
+				$current_status = array();
+			}
 			if ( ! in_array( $item_id, $current_status, true ) ) {
 				$current_status[] = $item_id;
 			}

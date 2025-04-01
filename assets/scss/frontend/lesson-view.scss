@@ -1,7 +1,8 @@
 .stlms-lesson-view {
+  --header-height: 78px;
   position: relative;
   overflow: hidden;
-  height: 100vh;
+  height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
   @include transition(all 0.3s ease-in-out);
@@ -597,6 +598,15 @@
         top: 0;
         color: currentColor;
       }
+    }
+  }
+  img {
+    display: block;
+    &.aligncenter {
+      margin: 0 auto;
+    }
+    &.alignright {
+      margin-left: auto;
     }
   }
 }

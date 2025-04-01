@@ -50,7 +50,17 @@ jQuery(function ($) {
   $(".stlms-filter-toggle").on("click", function () {
     $(".stlms-course-filter").toggleClass("active");
   });
+  // Close Sidebar on Search Button Click
+  $(".stlms-search button").on("click", function () {
+    $(".stlms-course-filter").removeClass("active");
+  });
 
+  // Close Sidebar on Search Enter
+  $(".stlms-form-control").on("keypress", function (e) {
+    if (e.which == 13) {
+      $(".stlms-course-filter").removeClass("active");
+    }
+  });
   // Lesson Sidebar Toggle.
   $(".stlms-lesson-toggle").on("click", '.icon', function () {
     $(".stlms-lesson-view").addClass("active");
@@ -133,7 +143,7 @@ jQuery(function ($) {
   $(document).on('change', '.stlms-filter-list input:checkbox:not(#stlms_category_all)', function() {
     sendFilterItemRequest();
   });
-  $(document).on('change', '.stlms-filter-list input:checkbox#stlms_category_all, .stlms-filter-list input:checkbox#stlms_level_all', function() {
+  $(document).on('change', '.stlms-filter-list input:checkbox#stlms_category_all, .stlms-filter-list input:checkbox#stlms_level_all, .stlms-filter-list input:checkbox#stlms_progress_all', function() {
 	var isChecked = $(this).is(':checked');
 	$(this)
 	.parents('ul')
@@ -203,7 +213,7 @@ jQuery(window).on('load', function() {
   /*==============================================================*/
   jQuery(".goto-section").on("click", function (e) {
     e.preventDefault();
-    var target = jQuery(this).data("id");
+    var target = jQuery(this).data("id") || jQuery(this).attr("id");
     jQuery("html, body")
       .stop()
       .animate(

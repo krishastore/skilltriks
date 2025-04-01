@@ -107,8 +107,9 @@ class CourseTest extends WP_UnitTestCase {
 				),
 			),
 			'signature'   => array(
-				'text'     => 'Test signature',
-				'image_id' => $signature->ID,
+				'text'        => 'Test signature',
+				'image_id'    => $signature->ID,
+				'certificate' => 1,
 			),
 			'assessment'  => array(
 				'evaluation'    => 2,

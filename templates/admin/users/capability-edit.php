@@ -34,5 +34,5 @@ printf(
 			</fieldset>
 		<?php endforeach; ?>
 	<?php endforeach; ?>
-	<input type="submit" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks-lms' ); ?>" />
+	<input type="submit" style="margin-top: 1em;" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks-lms' ); ?>" />
 </form>

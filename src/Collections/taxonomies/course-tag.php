@@ -49,7 +49,7 @@ function stlms_course_tag_init() {
 				'separate_items_with_commas' => __( 'Separate Course Levels with commas', 'skilltriks-lms' ),
 				'add_or_remove_items'        => __( 'Add or remove Course Levels', 'skilltriks-lms' ),
 				'choose_from_most_used'      => __( 'Choose from the most used Course Levels', 'skilltriks-lms' ),
-				'not_found'                  => __( 'No Levels found.', 'skilltriks-lms' ),
+				'not_found'                  => __( 'No levels found.', 'skilltriks-lms' ),
 				'no_terms'                   => __( 'No Levels', 'skilltriks-lms' ),
 				'menu_name'                  => __( 'Tags', 'skilltriks-lms' ),
 				'items_list_navigation'      => __( 'Course Levels list navigation', 'skilltriks-lms' ),

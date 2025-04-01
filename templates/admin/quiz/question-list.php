@@ -38,7 +38,7 @@ foreach ( $questions as $question_id ) :
 				</div>
 				<div class="stlms-quiz-qus-name">
 					<span><?php echo esc_html( $question_title ); ?></span>
-					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( __( '%d Point', 'skilltriks-lms' ), (int) $point ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( _n( '%s Point', '%s Points', $point, 'skilltriks-lms' ), number_format_i18n( $point ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 				</div>
 				<div class="stlms-quiz-qus-toggle" data-accordion="true">
 					<svg class="icon" width="18" height="18">
@@ -105,7 +105,7 @@ foreach ( $questions as $question_id ) :
 
 					<div class="stlms-answer-group multi_choice<?php echo 'multi_choice' !== $qtype ? ' hidden' : ''; ?>">
 						<?php
-							$corret_answers = isset( $data['multi_choice_answers'] ) ? $data['multi_choice_answers'] : array();
+							$corret_answers = ! empty( $data['multi_choice_answers'] ) ? $data['multi_choice_answers'] : array();
 							$answers        = isset( $data['multi_choice'] ) ? $data['multi_choice'] : array_fill( 0, 4, '' );
 						?>
 							<div class="stlms-options-table">

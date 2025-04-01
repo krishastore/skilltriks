@@ -49,7 +49,7 @@ function stlms_course_category_init() {
 				'separate_items_with_commas' => __( 'Separate Course Categories with commas', 'skilltriks-lms' ),
 				'add_or_remove_items'        => __( 'Add or remove Course Categories', 'skilltriks-lms' ),
 				'choose_from_most_used'      => __( 'Choose from the most used Course Categories', 'skilltriks-lms' ),
-				'not_found'                  => __( 'No Course Categories found.', 'skilltriks-lms' ),
+				'not_found'                  => __( 'No course Categories found.', 'skilltriks-lms' ),
 				'no_terms'                   => __( 'No Course Categories', 'skilltriks-lms' ),
 				'menu_name'                  => __( 'Categories', 'skilltriks-lms' ),
 				'items_list_navigation'      => __( 'Course Categories list navigation', 'skilltriks-lms' ),

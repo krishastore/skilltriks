@@ -20,10 +20,10 @@ jQuery(function ($) {
 	});
 	$(wizardId).on("showStep", function (e, anchorObject, stepIndex, stepDirection, stepPosition) {
 		if ( 'first' === stepPosition) {
-			$(".stlms-lesson-view__footer").addClass("hidden");
+			$(".stlms-lesson-view__footer,.stlms-quiz-header").addClass("hidden");
 		} else {
 			if ( ! showQuizResult ) {
-				$(".stlms-lesson-view__footer").removeClass("hidden");
+				$(".stlms-lesson-view__footer,.stlms-quiz-header").removeClass("hidden");
 			}
 		}
 		$('body').trigger('stlms:show:step', {currentStepIndex: stepIndex, currentStepPosition: stepPosition});

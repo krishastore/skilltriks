@@ -440,7 +440,7 @@ $current_user_email = $current_user->user_email;
 																		</span>
 																		<?php if ( ( $current_section_id === $item_key && $current_item_id === $item_id ) && ! $course_completed ) : ?>
 																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks-lms' ); ?></a>
-																		<?php elseif ( empty( $current_section_id ) && 1 === $item_key && 1 === $key ) : ?>
+																		<?php elseif ( empty( $current_section_id ) && 1 === $item_key && 1 === $key && $is_enrol ) : ?>
 																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks-lms' ); ?></a>
 																		<?php elseif ( $inactive && ! $course_completed ) : ?>
 																			<svg class="lock-icon" width="16" height="16">

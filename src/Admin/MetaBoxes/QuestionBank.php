@@ -274,10 +274,11 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 			case 'quiz':
 				$connected = get_posts(
 					array(
-						'post_type'  => \ST\Lms\STLMS_QUIZ_CPT,
-						'fields'     => 'ids',
+						'post_type'   => \ST\Lms\STLMS_QUIZ_CPT,
+						'post_status' => array( 'publish', 'draft' ),
+						'fields'      => 'ids',
 						// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-						'meta_query' => array(
+						'meta_query'  => array(
 							array(
 								'value'   => array( $post_id ),
 								'compare' => 'REGEXP',
@@ -339,7 +340,6 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 	 * @return array
 	 */
 	public function sortable_columns( $columns ) {
-		$columns['quiz']        = 'quiz';
 		$columns['post_author'] = 'author';
 		return $columns;
 	}

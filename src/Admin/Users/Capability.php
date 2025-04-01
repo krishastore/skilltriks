@@ -92,9 +92,9 @@ class Capability extends \WP_List_Table {
 			if ( ! empty( $role_id ) && array_key_exists( $role_id, $role_exists['user_role'] ) ) {
 				if ( ! empty( get_role( $role_id ) ) ) {
 					remove_role( $role_id );
-					unset( $role_exists['user_role'][ $role_id ] );
-					update_option( 'stlms_settings', $role_exists );
 				}
+				unset( $role_exists['user_role'][ $role_id ] );
+				update_option( 'stlms_settings', $role_exists );
 			}
 
 			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect

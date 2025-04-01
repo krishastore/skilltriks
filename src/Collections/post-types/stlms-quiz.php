@@ -34,12 +34,12 @@ function stlms_quiz_init() {
 				'items_list'            => __( 'Quizzes list', 'skilltriks-lms' ),
 				'new_item'              => __( 'New quiz', 'skilltriks-lms' ),
 				'add_new'               => __( 'Add New', 'skilltriks-lms' ),
-				'add_new_item'          => __( 'Add New quiz', 'skilltriks-lms' ),
+				'add_new_item'          => __( 'Add New Quiz', 'skilltriks-lms' ),
 				'edit_item'             => __( 'Edit quiz', 'skilltriks-lms' ),
 				'view_item'             => '',
 				'view_items'            => '',
 				'search_items'          => __( 'Search Quizzes', 'skilltriks-lms' ),
-				'not_found'             => __( 'No Quizzes found', 'skilltriks-lms' ),
+				'not_found'             => __( 'No quizzes found', 'skilltriks-lms' ),
 				'not_found_in_trash'    => __( 'No Quizzes found in trash', 'skilltriks-lms' ),
 				'parent_item_colon'     => __( 'Parent quiz:', 'skilltriks-lms' ),
 				'menu_name'             => __( 'Quizzes', 'skilltriks-lms' ),
@@ -118,11 +118,11 @@ function stlms_quiz_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 						/* translators: %s: Number of Quizzes. */
 						_n( '%s Quiz not updated, somebody is editing it.', '%s Quizzes not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Quizzes. */
-		'deleted'   => _n( '%s Quiz permanently deleted.', '%s Quizzes permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
+		'deleted'   => _n( '%s quiz permanently deleted.', '%s Quizzes permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Quizzes. */
-		'trashed'   => _n( '%s Quiz moved to the Trash.', '%s Quizzes moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
+		'trashed'   => _n( '%s quiz moved to the Trash.', '%s Quizzes moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Quizzes. */
-		'untrashed' => _n( '%s Quiz restored from the Trash.', '%s Quizzes restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
+		'untrashed' => _n( '%s quiz restored from the Trash.', '%s Quizzes restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
 	);
 
 	return $bulk_messages;

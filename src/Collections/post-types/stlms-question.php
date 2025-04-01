@@ -34,7 +34,7 @@ function stlms_question_init() {
 				'items_list'            => __( 'Questions list', 'skilltriks-lms' ),
 				'new_item'              => __( 'New question', 'skilltriks-lms' ),
 				'add_new'               => __( 'Add New', 'skilltriks-lms' ),
-				'add_new_item'          => __( 'Add New question', 'skilltriks-lms' ),
+				'add_new_item'          => __( 'Add New Question', 'skilltriks-lms' ),
 				'edit_item'             => __( 'Edit question', 'skilltriks-lms' ),
 				'view_item'             => '',
 				'view_items'            => '',
@@ -118,11 +118,11 @@ function stlms_question_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 						/* translators: %s: Number of Questions. */
 						_n( '%s Question not updated, somebody is editing it.', '%s Questions not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Questions. */
-		'deleted'   => _n( '%s Question permanently deleted.', '%s Questions permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
+		'deleted'   => _n( '%s question permanently deleted.', '%s Questions permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Questions. */
-		'trashed'   => _n( '%s Question moved to the Trash.', '%s Questions moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
+		'trashed'   => _n( '%s question moved to the Trash.', '%s Questions moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
 		/* translators: %s: Number of Questions. */
-		'untrashed' => _n( '%s Question restored from the Trash.', '%s Questions restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
+		'untrashed' => _n( '%s question restored from the Trash.', '%s Questions restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
 	);
 
 	return $bulk_messages;

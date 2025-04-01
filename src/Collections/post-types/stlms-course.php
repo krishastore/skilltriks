@@ -39,7 +39,7 @@ function stlms_course_init() {
 				'view_item'             => __( 'View Course', 'skilltriks-lms' ),
 				'view_items'            => __( 'View Courses', 'skilltriks-lms' ),
 				'search_items'          => __( 'Search Courses', 'skilltriks-lms' ),
-				'not_found'             => __( 'No Courses found', 'skilltriks-lms' ),
+				'not_found'             => __( 'No courses found', 'skilltriks-lms' ),
 				'not_found_in_trash'    => __( 'No Courses found in trash', 'skilltriks-lms' ),
 				'parent_item_colon'     => __( 'Parent Course:', 'skilltriks-lms' ),
 				'menu_name'             => __( 'Courses', 'skilltriks-lms' ),

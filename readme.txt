@@ -16,7 +16,7 @@ Transform your WordPress site into a dynamic Learning Management System (LMS) us
 
 ## BECOME A CONTRIBUTOR ##
 
-SkillTriks LMS plugin is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [GITHUB LINK](https://github.com/krishastore/bluedolphin-lms)
+SkillTriks LMS plugin is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [GITHUB LINK](https://github.com/krishastore/skilltriks)
 
 == Installation ==
 From the admin panel, Go to your WordPress Admin -> Plugins -> Add New. Search for SkillTriks LMS. Install and Activate.

@@ -61,11 +61,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           artifacts-branch: artifacts
           artifacts: |
-            artifact/bluedolphin-lms.zip
+            artifact/skilltriks.zip
       - name: Run WP plugin checker
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './dist/bluedolphin-lms'
+          build-dir: './dist/skilltriks'
           exclude-directories: 'vendor'
           categories: |
             general

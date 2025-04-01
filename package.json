@@ -4,7 +4,7 @@
   "description": "SkilTriks LMS",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/krishastore/bluedolphin-lms.git"
+    "url": "git+https://github.com/krishastore/skilltriks.git"
   },
   "keywords": [
     "wordpress-plugin"
@@ -14,7 +14,7 @@
   "author": "KrishaWeb <support@krishaweb.com>",
   "license": "GPL-2.0+",
   "bugs": {
-    "url": "https://github.com/krishastore/bluedolphin-lms/issues"
+    "url": "https://github.com/krishastore/skilltriks/issues"
   },
   "scripts": {
     "dev": "wp-scripts start --mode=development",

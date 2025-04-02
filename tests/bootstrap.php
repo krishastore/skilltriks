@@ -35,7 +35,7 @@ require_once "{$_tests_dir}/includes/functions.php";
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( __DIR__ ) . '/skilltriks-lms.php';
+	require dirname( __DIR__ ) . '/skilltriks.php';
 	add_action( 'init', 'stlms_activation' );
 }
 
@@ -44,7 +44,7 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 // Start up the WP testing environment.
 require "{$_tests_dir}/includes/bootstrap.php";
 
-activate_plugin( 'skilltriks-lms/skilltriks-lms.php' );
+activate_plugin( 'skilltriks/skilltriks.php' );
 global $current_user;
 $current_user = new WP_User( 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $current_user->set_role( 'administrator' );

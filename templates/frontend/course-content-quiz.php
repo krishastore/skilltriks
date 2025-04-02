@@ -30,7 +30,7 @@ $total_questions = count( $questions );
 						<div class="num">1</div>
 						<?php
 							// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-							echo esc_html( sprintf( __( 'Step %d', 'skilltriks-lms' ), 1 ) );
+							echo esc_html( sprintf( __( 'Step %d', 'skilltriks' ), 1 ) );
 						?>
 					</a>
 				</li>
@@ -45,7 +45,7 @@ $total_questions = count( $questions );
 								<div class="num"><?php echo esc_html( (string) $question_index ); ?></div>
 								<?php
 								// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-								echo esc_html( sprintf( __( 'Step %s', 'skilltriks-lms' ), $question_index ) );
+								echo esc_html( sprintf( __( 'Step %s', 'skilltriks' ), $question_index ) );
 								?>
 							</a>
 						</li>
@@ -56,7 +56,7 @@ $total_questions = count( $questions );
 						<div class="num"><?php echo esc_html( (string) ( $question_index + 1 ) ); ?></div>
 						<?php
 							// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-							echo esc_html( sprintf( __( 'Step %s', 'skilltriks-lms' ), $question_index + 1 ) );
+							echo esc_html( sprintf( __( 'Step %s', 'skilltriks' ), $question_index + 1 ) );
 						?>
 					</a>
 				</li>
@@ -72,7 +72,7 @@ $total_questions = count( $questions );
 									echo esc_html(
 										sprintf(
 											// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment, WordPress.Security.EscapeOutput.OutputNotEscaped
-											_n( ' %s Question', ' %s Questions', (int) $total_questions, 'skilltriks-lms' ),
+											_n( ' %s Question', ' %s Questions', (int) $total_questions, 'skilltriks' ),
 											number_format_i18n( $total_questions ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 										)
 									);
@@ -80,7 +80,7 @@ $total_questions = count( $questions );
 								</span>
 								<span><?php echo esc_html( $duration_str ); ?></span>
 							</div>
-							<button class="stlms-btn stlms-next-wizard"<?php disabled( true, empty( $questions ) ); ?>><?php esc_html_e( 'Let’s Start', 'skilltriks-lms' ); ?></button>
+							<button class="stlms-btn stlms-next-wizard"<?php disabled( true, empty( $questions ) ); ?>><?php esc_html_e( 'Let’s Start', 'skilltriks' ); ?></button>
 						</div>
 					</div>
 				</div>
@@ -95,7 +95,7 @@ $total_questions = count( $questions );
 				<div id="step-<?php echo esc_attr( (string) $question_index ); ?>" class="tab-pane" role="tabpanel" aria-labelledby="step-<?php echo esc_attr( (string) $question_index ); ?>">
 					<div class="stlms-quiz-view-content">
 						<div class="stlms-quiz-question">
-							<div class="qus-no"><?php echo esc_html( sprintf( __( 'Question %1$s/%2$s', 'skilltriks-lms' ), $current_index + 1, $total_questions ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></div>
+							<div class="qus-no"><?php echo esc_html( sprintf( __( 'Question %1$s/%2$s', 'skilltriks' ), $current_index + 1, $total_questions ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></div>
 							<h3><?php echo esc_html( get_the_title( $question ) ); ?></h3>
 							<?php
 							if ( ! empty( $questions_list[ $question_type ] ) && is_array( $questions_list[ $question_type ] ) ) :
@@ -121,8 +121,8 @@ $total_questions = count( $questions );
 							<?php elseif ( 'fill_blank' === $question_type ) : ?>
 								<div class="stlms-quiz-input-ans">
 									<div class="stlms-form-group">
-										<label class="stlms-form-label"><?php esc_html_e( 'Your Answer', 'skilltriks-lms' ); ?></label>
-										<input type="text" name="stlms_written_answer[<?php echo esc_attr( (string) $question ); ?>]" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Enter Your thoughts here...', 'skilltriks-lms' ); ?>">
+										<label class="stlms-form-label"><?php esc_html_e( 'Your Answer', 'skilltriks' ); ?></label>
+										<input type="text" name="stlms_written_answer[<?php echo esc_attr( (string) $question ); ?>]" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Enter Your thoughts here...', 'skilltriks' ); ?>">
 									</div>
 								</div>
 							<?php endif; ?>
@@ -135,25 +135,25 @@ $total_questions = count( $questions );
 					<div class="stlms-quiz-complete">
 						<div class="quiz-passed-text" style="display: none;">
 							<img src="<?php echo esc_url( STLMS_ASSETS ); ?>/images/success-check.svg" alt="passed check">
-							<h3><?php esc_html_e( 'You have passed the quiz!', 'skilltriks-lms' ); ?></h3>
-							<p><?php esc_html_e( 'Great Job reaching your goal!', 'skilltriks-lms' ); ?></p>
+							<h3><?php esc_html_e( 'You have passed the quiz!', 'skilltriks' ); ?></h3>
+							<p><?php esc_html_e( 'Great Job reaching your goal!', 'skilltriks' ); ?></p>
 						</div>
 						<div class="quiz-failed-text" style="display: none;">
 							<img src="<?php echo esc_url( STLMS_ASSETS ); ?>/images/fail-icon.svg" alt="failed check">
-							<h3><?php esc_html_e( 'Unfortunately, you didn\'t pass the quiz.', 'skilltriks-lms' ); ?></h3>
-							<p><?php esc_html_e( 'Better luck next time.', 'skilltriks-lms' ); ?></p>
+							<h3><?php esc_html_e( 'Unfortunately, you didn\'t pass the quiz.', 'skilltriks' ); ?></h3>
+							<p><?php esc_html_e( 'Better luck next time.', 'skilltriks' ); ?></p>
 						</div>
 						<div class="stlms-quiz-result-list">
 							<div class="stlms-quiz-result-item">
-								<p><?php esc_html_e( 'Correct answers', 'skilltriks-lms' ); ?></p>
+								<p><?php esc_html_e( 'Correct answers', 'skilltriks' ); ?></p>
 								<span id="grade"></span>
 							</div>
 							<div class="stlms-quiz-result-item">
-								<p><?php esc_html_e( 'Attempted Questions', 'skilltriks-lms' ); ?></p>
+								<p><?php esc_html_e( 'Attempted Questions', 'skilltriks' ); ?></p>
 								<span id="accuracy"></span>
 							</div>
 							<div class="stlms-quiz-result-item">
-								<p><?php esc_html_e( 'Time taken', 'skilltriks-lms' ); ?></p>
+								<p><?php esc_html_e( 'Time taken', 'skilltriks' ); ?></p>
 								<span id="time"></span>
 							</div>
 						</div>
@@ -173,8 +173,8 @@ $total_questions = count( $questions );
 	</div>
 	<div class="right">
 		<?php if ( ! empty( $curriculum['settings']['show_correct_review'] ) ) : ?>
-			<button class="stlms-btn stlms-check-answer" disabled><?php esc_html_e( 'Check Answer', 'skilltriks-lms' ); ?></button>
+			<button class="stlms-btn stlms-check-answer" disabled><?php esc_html_e( 'Check Answer', 'skilltriks' ); ?></button>
 		<?php endif; ?>
-		<button class="stlms-btn stlms-next-wizard"><?php esc_html_e( 'Continue', 'skilltriks-lms' ); ?></button>
+		<button class="stlms-btn stlms-next-wizard"><?php esc_html_e( 'Continue', 'skilltriks' ); ?></button>
 	</div>
 </div>

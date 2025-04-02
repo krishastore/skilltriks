@@ -73,16 +73,16 @@ class Taxonomies {
 	public function register_submenu_page() {
 		add_submenu_page(
 			PARENT_MENU_SLUG,
-			__( 'Categories', 'skilltriks-lms' ),
-			__( 'Categories', 'skilltriks-lms' ),
+			__( 'Categories', 'skilltriks' ),
+			__( 'Categories', 'skilltriks' ),
 			apply_filters( 'stlms/menu/capability', 'manage_options' ),
 			'edit-tags.php?taxonomy=stlms_course_category',
 			'__return_null'
 		);
 		add_submenu_page(
 			PARENT_MENU_SLUG,
-			__( 'Tags', 'skilltriks-lms' ),
-			__( 'Tags', 'skilltriks-lms' ),
+			__( 'Tags', 'skilltriks' ),
+			__( 'Tags', 'skilltriks' ),
 			apply_filters( 'stlms/menu/capability', 'manage_options' ),
 			'edit-tags.php?taxonomy=stlms_course_tag',
 			'__return_null'

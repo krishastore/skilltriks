@@ -38,9 +38,9 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 */
 	public function register_admin_menu() {
 		$hook = add_submenu_page(
-			'skilltriks-lms',
-			__( 'User Role Editor', 'skilltriks-lms' ),
-			__( 'User Role Editor', 'skilltriks-lms' ),
+			'skilltriks',
+			__( 'User Role Editor', 'skilltriks' ),
+			__( 'User Role Editor', 'skilltriks' ),
 			apply_filters( 'skilltriks/menu/capability', 'manage_options' ),
 			'stlms_manage_roles',
 			array( $this, 'render_menu_page' )

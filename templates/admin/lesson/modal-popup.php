@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="course_list_modal" class="hidden" style="max-width:463px">
 	<div class="stlms-qus-bank-modal">
-		<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for the course', 'skilltriks-lms' ); ?>" class="stlms-qus-bank-search">
+		<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for the course', 'skilltriks' ); ?>" class="stlms-qus-bank-search">
 		<div class="stlms-qus-list" id="stlms_course_list">
 			<?php
 			if ( ! empty( $fetch_request ) ) :
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php endforeach; ?>
 					</ul>
 				<?php else : ?>
-					<p><?php esc_html_e( 'No course found.', 'skilltriks-lms' ); ?></p>
+					<p><?php esc_html_e( 'No course found.', 'skilltriks' ); ?></p>
 				<?php endif; ?>
 			<?php else : ?>
 				<span class="spinner is-active"></span>
@@ -47,10 +47,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="stlms-qus-bank-add">
-			<button class="button button-primary stlms-add-course" disabled><?php esc_html_e( 'Save', 'skilltriks-lms' ); ?></button>
-			<span class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks-lms' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+			<button class="button button-primary stlms-add-course" disabled><?php esc_html_e( 'Save', 'skilltriks' ); ?></button>
+			<span class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 			<span class="spinner"></span>
 		</div>
-		<p class="stlms-notice"><?php esc_html_e( 'Note: It will be added in the last curriculum section.', 'skilltriks-lms' ); ?></p>
+		<p class="stlms-notice"><?php esc_html_e( 'Note: It will be added in the last curriculum section.', 'skilltriks' ); ?></p>
 	</div>
 </div>

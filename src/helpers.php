@@ -62,9 +62,9 @@ function question_levels() {
 	return apply_filters(
 		'stlms_question_levels',
 		array(
-			'easy'   => __( 'Easy', 'skilltriks-lms' ),
-			'medium' => __( 'Medium', 'skilltriks-lms' ),
-			'hard'   => __( 'Hard', 'skilltriks-lms' ),
+			'easy'   => __( 'Easy', 'skilltriks' ),
+			'medium' => __( 'Medium', 'skilltriks' ),
+			'hard'   => __( 'Hard', 'skilltriks' ),
 		)
 	);
 }
@@ -125,15 +125,15 @@ function stlms_evaluation_list( $quiz_id = 0 ) {
 	}
 	return array(
 		1 => array(
-			'label' => __( 'Evaluate via lessons', 'skilltriks-lms' ),
+			'label' => __( 'Evaluate via lessons', 'skilltriks' ),
 		),
 		2 => array(
-			'label'  => __( 'Evaluate via results of the final quiz / last quiz', 'skilltriks-lms' ),
+			'label'  => __( 'Evaluate via results of the final quiz / last quiz', 'skilltriks' ),
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.MissingTranslatorsComment
-			'notice' => $quiz_id ? sprintf( __( 'Passing Grade: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'skilltriks-lms' ), $passing_marks . '%', esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'skilltriks-lms' ),
+			'notice' => $quiz_id ? sprintf( __( 'Passing Grade: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'skilltriks' ), $passing_marks . '%', esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'skilltriks' ),
 		),
 		3 => array(
-			'label' => __( 'Evaluate via passed quizzes', 'skilltriks-lms' ),
+			'label' => __( 'Evaluate via passed quizzes', 'skilltriks' ),
 		),
 	);
 }
@@ -307,7 +307,7 @@ function seconds_to_hours_str( $seconds ) {
 	if ( ! empty( $hours ) ) {
 		$duration_str .= sprintf(
 			// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-			_n( '%s Hour', '%s Hours', (int) $hours, 'skilltriks-lms' ),
+			_n( '%s Hour', '%s Hours', (int) $hours, 'skilltriks' ),
 			number_format_i18n( $hours )
 		);
 	}
@@ -317,7 +317,7 @@ function seconds_to_hours_str( $seconds ) {
 		$mins          = (int) gmdate( 'i', $mins );
 		$duration_str .= sprintf(
 			// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-			_n( ' %s Min', ' %s Mins', (int) $mins, 'skilltriks-lms' ),
+			_n( ' %s Min', ' %s Mins', (int) $mins, 'skilltriks' ),
 			number_format_i18n( $mins )
 		);
 	}
@@ -596,10 +596,10 @@ function fetch_import_data( $status = 0, $status_count = false ) {
 function import_job_status() {
 
 	return array(
-		1 => __( 'In-Progress', 'skilltriks-lms' ),
-		2 => __( 'Complete', 'skilltriks-lms' ),
-		3 => __( 'Cancelled', 'skilltriks-lms' ),
-		4 => __( 'Failed', 'skilltriks-lms' ),
+		1 => __( 'In-Progress', 'skilltriks' ),
+		2 => __( 'Complete', 'skilltriks' ),
+		3 => __( 'Cancelled', 'skilltriks' ),
+		4 => __( 'Failed', 'skilltriks' ),
 	);
 }
 
@@ -817,41 +817,41 @@ function user_capability_list() {
 		'stlms_user_capability_list',
 		array(
 			'course'   => array(
-				'create_course'          => __( 'Create Course', 'skilltriks-lms' ),
-				'view_course'            => __( 'View Course', 'skilltriks-lms' ),
-				'edit_course'            => __( 'Edit Course', 'skilltriks-lms' ),
-				'delete_course'          => __( 'Delete Course', 'skilltriks-lms' ),
-				'create_course_category' => __( 'Create Course Category', 'skilltriks-lms' ),
-				'edit_course_category'   => __( 'Edit Course Category', 'skilltriks-lms' ),
-				'delete_course_category' => __( 'Delete Course Category', 'skilltriks-lms' ),
-				'create_course_level'    => __( 'Create Course Level', 'skilltriks-lms' ),
-				'edit_course_level'      => __( 'Edit Course Level', 'skilltriks-lms' ),
-				'delete_course_level'    => __( 'Delete Course Level', 'skilltriks-lms' ),
+				'create_course'          => __( 'Create Course', 'skilltriks' ),
+				'view_course'            => __( 'View Course', 'skilltriks' ),
+				'edit_course'            => __( 'Edit Course', 'skilltriks' ),
+				'delete_course'          => __( 'Delete Course', 'skilltriks' ),
+				'create_course_category' => __( 'Create Course Category', 'skilltriks' ),
+				'edit_course_category'   => __( 'Edit Course Category', 'skilltriks' ),
+				'delete_course_category' => __( 'Delete Course Category', 'skilltriks' ),
+				'create_course_level'    => __( 'Create Course Level', 'skilltriks' ),
+				'edit_course_level'      => __( 'Edit Course Level', 'skilltriks' ),
+				'delete_course_level'    => __( 'Delete Course Level', 'skilltriks' ),
 			),
 			'lesson'   => array(
-				'create_lesson' => __( 'Create Lesson', 'skilltriks-lms' ),
-				'view_lesson'   => __( 'View Lesson', 'skilltriks-lms' ),
-				'edit_lesson'   => __( 'Edit Lesson', 'skilltriks-lms' ),
-				'delete_lesson' => __( 'Delete Lesson', 'skilltriks-lms' ),
+				'create_lesson' => __( 'Create Lesson', 'skilltriks' ),
+				'view_lesson'   => __( 'View Lesson', 'skilltriks' ),
+				'edit_lesson'   => __( 'Edit Lesson', 'skilltriks' ),
+				'delete_lesson' => __( 'Delete Lesson', 'skilltriks' ),
 			),
 			'question' => array(
-				'create_question' => __( 'Create Question', 'skilltriks-lms' ),
-				'view_question'   => __( 'View Question', 'skilltriks-lms' ),
-				'edit_question'   => __( 'Edit Question', 'skilltriks-lms' ),
-				'delete_question' => __( 'Delete Question', 'skilltriks-lms' ),
+				'create_question' => __( 'Create Question', 'skilltriks' ),
+				'view_question'   => __( 'View Question', 'skilltriks' ),
+				'edit_question'   => __( 'Edit Question', 'skilltriks' ),
+				'delete_question' => __( 'Delete Question', 'skilltriks' ),
 			),
 			'quiz'     => array(
-				'create_quiz' => __( 'Create Quiz', 'skilltriks-lms' ),
-				'view_quiz'   => __( 'View Quiz', 'skilltriks-lms' ),
-				'edit_quiz'   => __( 'Edit Quiz', 'skilltriks-lms' ),
-				'delete_quiz' => __( 'Delete Quiz', 'skilltriks-lms' ),
+				'create_quiz' => __( 'Create Quiz', 'skilltriks' ),
+				'view_quiz'   => __( 'View Quiz', 'skilltriks' ),
+				'edit_quiz'   => __( 'Edit Quiz', 'skilltriks' ),
+				'delete_quiz' => __( 'Delete Quiz', 'skilltriks' ),
 			),
 			'result'   => array(
-				'view_result'   => __( 'View Result', 'skilltriks-lms' ),
-				'delete_result' => __( 'Delete Result', 'skilltriks-lms' ),
+				'view_result'   => __( 'View Result', 'skilltriks' ),
+				'delete_result' => __( 'Delete Result', 'skilltriks' ),
 			),
 			'setting'  => array(
-				'view_setting' => __( 'View Setting', 'skilltriks-lms' ),
+				'view_setting' => __( 'View Setting', 'skilltriks' ),
 			),
 		)
 	);

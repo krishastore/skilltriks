@@ -73,7 +73,7 @@ abstract class FileImport {
 	public function check_extension() {
 		if ( ! extension_loaded( 'zip' ) && ! extension_loaded( 'gd' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			?>
-			<div class="notice notice-error inline is-dismissible"><p><?php esc_html_e( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ); ?></p></div>
+			<div class="notice notice-error inline is-dismissible"><p><?php esc_html_e( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks' ); ?></p></div>
 			<?php
 
 		}

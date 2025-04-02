@@ -75,17 +75,17 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 			array(
 				array(
 					'id'       => 'answer-options',
-					'title'    => __( 'Answer Options', 'skilltriks-lms' ),
+					'title'    => __( 'Answer Options', 'skilltriks' ),
 					'callback' => array( $this, 'render_answer_options' ),
 				),
 				array(
 					'id'       => 'question-settings',
-					'title'    => __( 'Question Settings', 'skilltriks-lms' ),
+					'title'    => __( 'Question Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_question_settings' ),
 				),
 				array(
 					'id'       => 'assign-to-quiz',
-					'title'    => __( 'Assign to Quiz', 'skilltriks-lms' ),
+					'title'    => __( 'Assign to Quiz', 'skilltriks' ),
 					'callback' => array( $this, 'render_assign_to_quiz' ),
 					'screen'   => null,
 					'context'  => 'side',
@@ -127,7 +127,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 		global $post;
 		?>
 			<div class="stlms-assign-quiz">
-				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_quiz"><?php esc_html_e( 'Click to assign quiz', 'skilltriks-lms' ); ?></a>
+				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_quiz"><?php esc_html_e( 'Click to assign quiz', 'skilltriks' ); ?></a>
 			</div>
 			<div class="stlms-snackbar-notice"><p></p></div>
 		<?php
@@ -250,11 +250,11 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 		$topic     = $columns[ $topic_key ];
 		unset( $columns[ $topic_key ] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Author', 'skilltriks-lms' );
-		$columns['quiz']        = __( 'Quiz', 'skilltriks-lms' );
-		$columns['levels']      = __( 'Levels', 'skilltriks-lms' );
-		$columns['type']        = __( 'Type', 'skilltriks-lms' );
-		$columns[ $topic_key ]  = __( 'Topic', 'skilltriks-lms' );
+		$columns['post_author'] = __( 'Author', 'skilltriks' );
+		$columns['quiz']        = __( 'Quiz', 'skilltriks' );
+		$columns['levels']      = __( 'Levels', 'skilltriks' );
+		$columns['type']        = __( 'Type', 'skilltriks' );
+		$columns[ $topic_key ]  = __( 'Topic', 'skilltriks' );
 		$columns['date']        = $date;
 		return $columns;
 	}
@@ -361,7 +361,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 				<?php wp_nonce_field( STLMS_BASEFILE, 'stlms_nonce', false ); ?>
 				<div class="inline-edit-col inline-edit-<?php echo esc_attr( $column_name ); ?>">
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Difficulty Level', 'skilltriks-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Difficulty Level', 'skilltriks' ); ?></span>
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][levels]">
 								<?php
 								foreach ( \ST\Lms\question_levels() as $key => $level ) {
@@ -420,7 +420,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 				$data['optional']  = ! empty( $optional ) ? $optional : '';
 			}
 			$data['status']         = $post->post_status;
-			$actions['show_answer'] = '<a href="javascript:;" data-inline_edit="' . esc_attr( wp_json_encode( $data ) ) . '" aria-expanded="false">' . __( 'Show Answer', 'skilltriks-lms' ) . '<a>';
+			$actions['show_answer'] = '<a href="javascript:;" data-inline_edit="' . esc_attr( wp_json_encode( $data ) ) . '" aria-expanded="false">' . __( 'Show Answer', 'skilltriks' ) . '<a>';
 		}
 
 		// Clone action.
@@ -436,7 +436,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 				STLMS_BASEFILE,
 				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_attr__( 'Clone', 'skilltriks-lms' ) . ' </a>';
+			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_attr__( 'Clone', 'skilltriks' ) . ' </a>';
 		}
 		return $actions;
 	}
@@ -459,7 +459,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 			<fieldset class="inline-edit-col-right bulk-inline-edit-levels">
 				<div class="inline-edit-col inline-edit-<?php echo esc_attr( $column_name ); ?>">
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Level', 'skilltriks-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Level', 'skilltriks' ); ?></span>
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][levels]">
 								<?php
 								foreach ( \ST\Lms\question_levels() as $key => $level ) {
@@ -471,10 +471,10 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 							</select>
 					</label>
 					<label class="inline-edit-group">
-						<span class="title"><?php esc_html_e( 'Marks', 'skilltriks-lms' ); ?></span>
+						<span class="title"><?php esc_html_e( 'Marks', 'skilltriks' ); ?></span>
 						<input type="number" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][points]" step="1" min="1">
 					</label>
-					<label class="inline-edit-group"><span class="title"><?php esc_html_e( 'Hide Question? ', 'skilltriks-lms' ); ?></span><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][status]" value="1"></label>
+					<label class="inline-edit-group"><span class="title"><?php esc_html_e( 'Hide Question? ', 'skilltriks' ); ?></span><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][status]" value="1"></label>
 				</div>
 			</fieldset>
 				<?php
@@ -561,7 +561,7 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 		wp_send_json(
 			array(
 				'status'  => true,
-				'message' => __( 'Saved.', 'skilltriks-lms' ),
+				'message' => __( 'Saved.', 'skilltriks' ),
 			)
 		);
 	}

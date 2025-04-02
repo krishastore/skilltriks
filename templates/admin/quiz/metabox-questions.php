@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php require_once STLMS_TEMPLATEPATH . '/admin/quiz/question-list.php'; ?>
 	</ul>
 	<div class="stlms-quiz-qus-footer">
-		<a href="javascript:;" class="add-new-question button button-secondary"><?php esc_html_e( 'Add More Question', 'skilltriks-lms' ); ?></a>
+		<a href="javascript:;" class="add-new-question button button-secondary"><?php esc_html_e( 'Add More Question', 'skilltriks' ); ?></a>
 	</div>
 </div>
 <?php require_once STLMS_TEMPLATEPATH . '/admin/quiz/modal-popup.php'; ?>

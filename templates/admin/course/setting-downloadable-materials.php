@@ -13,17 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="stlms-cs-download">
 		<div class="stlms-materials-box brd-0">
 			<div class="stlms-materials-box__header">
-				<h3><?php esc_html_e( 'Materials', 'skilltriks-lms' ); ?></h3>
-				<p><?php echo esc_html( sprintf( __( 'Max Size: %s   |   Format: .PDF, .TXT', 'skilltriks-lms' ), esc_html( size_format( $max_upload_size ) ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></p>
+				<h3><?php esc_html_e( 'Materials', 'skilltriks' ); ?></h3>
+				<p><?php echo esc_html( sprintf( __( 'Max Size: %s   |   Format: .PDF, .TXT', 'skilltriks' ), esc_html( size_format( $max_upload_size ) ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></p>
 			</div>
 		</div>
 		<div class="stlms-materials-box">
 			<div class="stlms-materials-box__body">
 				<div class="stlms-materials-list">
 					<ul>
-						<li><strong><?php esc_html_e( 'File Title', 'skilltriks-lms' ); ?></strong></li>
-						<li><strong><?php esc_html_e( 'Method', 'skilltriks-lms' ); ?></strong></li>
-						<li><strong><?php esc_html_e( 'Action', 'skilltriks-lms' ); ?></strong></li>
+						<li><strong><?php esc_html_e( 'File Title', 'skilltriks' ); ?></strong></li>
+						<li><strong><?php esc_html_e( 'Method', 'skilltriks' ); ?></strong></li>
+						<li><strong><?php esc_html_e( 'Action', 'skilltriks' ); ?></strong></li>
 					</ul>
 					<?php
 						require_once STLMS_TEMPLATEPATH . '/admin/course/materials-item.php';
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 			<div class="stlms-materials-box__footer">
-				<button type="button" class="button"><?php esc_html_e( 'Add More Materials', 'skilltriks-lms' ); ?></button>
+				<button type="button" class="button"><?php esc_html_e( 'Add More Materials', 'skilltriks' ); ?></button>
 			</div>
 		</div>				
 	</div>

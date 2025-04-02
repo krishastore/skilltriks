@@ -20,16 +20,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				if ( current_user_can( 'edit_post', get_the_ID() ) ) {
 					printf(
 						/* translators: %s is Link to new post */
-						esc_html__( 'Ready to publish your first curriculum? %s.', 'skilltriks-lms' ),
+						esc_html__( 'Ready to publish your first curriculum? %s.', 'skilltriks' ),
 						sprintf(
 							/* translators: %1$s is Link to new post, %2$s is Get started here */
 							'<a href="%1$s" target="_blank">%2$s</a>',
 							esc_url( get_edit_post_link( get_the_ID() ) ),
-							esc_html__( 'Get started here', 'skilltriks-lms' )
+							esc_html__( 'Get started here', 'skilltriks' )
 						)
 					);
 				} else {
-					esc_html_e( 'No attached curriculum was found in this course.', 'skilltriks-lms' );
+					esc_html_e( 'No attached curriculum was found in this course.', 'skilltriks' );
 				}
 				?>
 			</div>

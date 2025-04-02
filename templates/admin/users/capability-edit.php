@@ -12,7 +12,7 @@ $role_name       = preg_replace( '/_/', ' ', $user_role );
 $capability_list = \ST\Lms\user_capability_list();
 ?>
 
-<h1><?php esc_html_e( 'Edit User Capability', 'skilltriks-lms' ); ?></h1>
+<h1><?php esc_html_e( 'Edit User Capability', 'skilltriks' ); ?></h1>
 <?php
 printf(
 	'<h3>Add Capability to this new role:- <span>%s</span></h3>',
@@ -34,5 +34,5 @@ printf(
 			</fieldset>
 		<?php endforeach; ?>
 	<?php endforeach; ?>
-	<input type="submit" style="margin-top: 1em;" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks-lms' ); ?>" />
+	<input type="submit" style="margin-top: 1em;" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks' ); ?>" />
 </form>

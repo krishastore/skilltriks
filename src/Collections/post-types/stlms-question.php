@@ -18,31 +18,31 @@ function stlms_question_init() {
 		STLMS_QUESTION_CPT,
 		array(
 			'labels'                => array(
-				'name'                  => __( 'Question Bank', 'skilltriks-lms' ),
-				'singular_name'         => __( 'Question', 'skilltriks-lms' ),
-				'all_items'             => __( 'Questions', 'skilltriks-lms' ),
-				'archives'              => __( 'Question Archives', 'skilltriks-lms' ),
-				'attributes'            => __( 'Question Attributes', 'skilltriks-lms' ),
-				'insert_into_item'      => __( 'Insert into question', 'skilltriks-lms' ),
-				'uploaded_to_this_item' => __( 'Uploaded to this question', 'skilltriks-lms' ),
-				'featured_image'        => _x( 'Featured Image', 'stlms_question', 'skilltriks-lms' ),
-				'set_featured_image'    => _x( 'Set featured image', 'stlms_question', 'skilltriks-lms' ),
-				'remove_featured_image' => _x( 'Remove featured image', 'stlms_question', 'skilltriks-lms' ),
-				'use_featured_image'    => _x( 'Use as featured image', 'stlms_question', 'skilltriks-lms' ),
-				'filter_items_list'     => __( 'Filter question list', 'skilltriks-lms' ),
-				'items_list_navigation' => __( 'Questions list navigation', 'skilltriks-lms' ),
-				'items_list'            => __( 'Questions list', 'skilltriks-lms' ),
-				'new_item'              => __( 'New question', 'skilltriks-lms' ),
-				'add_new'               => __( 'Add New', 'skilltriks-lms' ),
-				'add_new_item'          => __( 'Add New Question', 'skilltriks-lms' ),
-				'edit_item'             => __( 'Edit question', 'skilltriks-lms' ),
+				'name'                  => __( 'Question Bank', 'skilltriks' ),
+				'singular_name'         => __( 'Question', 'skilltriks' ),
+				'all_items'             => __( 'Questions', 'skilltriks' ),
+				'archives'              => __( 'Question Archives', 'skilltriks' ),
+				'attributes'            => __( 'Question Attributes', 'skilltriks' ),
+				'insert_into_item'      => __( 'Insert into question', 'skilltriks' ),
+				'uploaded_to_this_item' => __( 'Uploaded to this question', 'skilltriks' ),
+				'featured_image'        => _x( 'Featured Image', 'stlms_question', 'skilltriks' ),
+				'set_featured_image'    => _x( 'Set featured image', 'stlms_question', 'skilltriks' ),
+				'remove_featured_image' => _x( 'Remove featured image', 'stlms_question', 'skilltriks' ),
+				'use_featured_image'    => _x( 'Use as featured image', 'stlms_question', 'skilltriks' ),
+				'filter_items_list'     => __( 'Filter question list', 'skilltriks' ),
+				'items_list_navigation' => __( 'Questions list navigation', 'skilltriks' ),
+				'items_list'            => __( 'Questions list', 'skilltriks' ),
+				'new_item'              => __( 'New question', 'skilltriks' ),
+				'add_new'               => __( 'Add New', 'skilltriks' ),
+				'add_new_item'          => __( 'Add New Question', 'skilltriks' ),
+				'edit_item'             => __( 'Edit question', 'skilltriks' ),
 				'view_item'             => '',
 				'view_items'            => '',
-				'search_items'          => __( 'Search questions', 'skilltriks-lms' ),
-				'not_found'             => __( 'No questions found', 'skilltriks-lms' ),
-				'not_found_in_trash'    => __( 'No questions found in trash', 'skilltriks-lms' ),
-				'parent_item_colon'     => __( 'Parent question:', 'skilltriks-lms' ),
-				'menu_name'             => __( 'Questions', 'skilltriks-lms' ),
+				'search_items'          => __( 'Search questions', 'skilltriks' ),
+				'not_found'             => __( 'No questions found', 'skilltriks' ),
+				'not_found_in_trash'    => __( 'No questions found in trash', 'skilltriks' ),
+				'parent_item_colon'     => __( 'Parent question:', 'skilltriks' ),
+				'menu_name'             => __( 'Questions', 'skilltriks' ),
 			),
 			'publicly_queryable'    => false,
 			'public'                => true,
@@ -78,21 +78,21 @@ function stlms_question_updated_messages( $messages ) {
 	$messages[ STLMS_QUESTION_CPT ] = array(
 		0  => '', // Unused. Messages start at index 1.
 		/* translators: %s: post permalink */
-		1  => __( 'Question updated.', 'skilltriks-lms' ),
-		2  => __( 'Custom field updated.', 'skilltriks-lms' ),
-		3  => __( 'Custom field deleted.', 'skilltriks-lms' ),
-		4  => __( 'Question updated.', 'skilltriks-lms' ),
+		1  => __( 'Question updated.', 'skilltriks' ),
+		2  => __( 'Custom field updated.', 'skilltriks' ),
+		3  => __( 'Custom field deleted.', 'skilltriks' ),
+		4  => __( 'Question updated.', 'skilltriks' ),
 		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Question restored to revision from %s', 'skilltriks-lms' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Question restored to revision from %s', 'skilltriks' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		/* translators: %s: post permalink */
-		6  => __( 'Question published.', 'skilltriks-lms' ),
-		7  => __( 'Question saved.', 'skilltriks-lms' ),
+		6  => __( 'Question published.', 'skilltriks' ),
+		7  => __( 'Question saved.', 'skilltriks' ),
 		/* translators: %s: post permalink */
-		8  => __( 'Question submitted.', 'skilltriks-lms' ),
+		8  => __( 'Question submitted.', 'skilltriks' ),
 		/* translators: 1: Publish box date format, see https://secure.php.net/date 2: Post permalink */
-		9  => sprintf( __( 'Question scheduled for: <strong>%1$s</strong>.', 'skilltriks-lms' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks-lms' ), strtotime( $post->post_date ) ) ),
+		9  => sprintf( __( 'Question scheduled for: <strong>%1$s</strong>.', 'skilltriks' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks' ), strtotime( $post->post_date ) ) ),
 		/* translators: %s: post permalink */
-		10 => sprintf( __( 'Question draft updated.', 'skilltriks-lms' ) ),
+		10 => sprintf( __( 'Question draft updated.', 'skilltriks' ) ),
 	);
 
 	return $messages;
@@ -113,16 +113,16 @@ function stlms_question_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 
 	$bulk_messages[ STLMS_QUESTION_CPT ] = array(
 		/* translators: %s: Number of Questions. */
-		'updated'   => _n( '%s Question updated.', '%s Questions updated.', $bulk_counts['updated'], 'skilltriks-lms' ),
-		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 Question not updated, somebody is editing it.', 'skilltriks-lms' ) :
+		'updated'   => _n( '%s Question updated.', '%s Questions updated.', $bulk_counts['updated'], 'skilltriks' ),
+		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 Question not updated, somebody is editing it.', 'skilltriks' ) :
 						/* translators: %s: Number of Questions. */
-						_n( '%s Question not updated, somebody is editing it.', '%s Questions not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks-lms' ),
+						_n( '%s Question not updated, somebody is editing it.', '%s Questions not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks' ),
 		/* translators: %s: Number of Questions. */
-		'deleted'   => _n( '%s question permanently deleted.', '%s Questions permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
+		'deleted'   => _n( '%s question permanently deleted.', '%s Questions permanently deleted.', $bulk_counts['deleted'], 'skilltriks' ),
 		/* translators: %s: Number of Questions. */
-		'trashed'   => _n( '%s question moved to the Trash.', '%s Questions moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
+		'trashed'   => _n( '%s question moved to the Trash.', '%s Questions moved to the Trash.', $bulk_counts['trashed'], 'skilltriks' ),
 		/* translators: %s: Number of Questions. */
-		'untrashed' => _n( '%s question restored from the Trash.', '%s Questions restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
+		'untrashed' => _n( '%s question restored from the Trash.', '%s Questions restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks' ),
 	);
 
 	return $bulk_messages;

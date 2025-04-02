@@ -22,24 +22,24 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 			<fieldset class="inline-edit-col-left">
 				<div class="stlms-show-ans-wrap">
 					<div class="stlms-show-ans-header">
-						<legend class="inline-edit-legend"><?php esc_html_e( 'Show Answers', 'skilltriks-lms' ); ?></legend>
+						<legend class="inline-edit-legend"><?php esc_html_e( 'Show Answers', 'skilltriks' ); ?></legend>
 						<div>
-							<label><?php esc_html_e( 'Type:', 'skilltriks-lms' ); ?></label>
+							<label><?php esc_html_e( 'Type:', 'skilltriks' ); ?></label>
 							<select name="<?php echo esc_attr( $meta_key_prefix ); ?>[type]" id="stlms_answer_type">
-								<option value="true_or_false"><?php esc_html_e( 'True Or False ', 'skilltriks-lms' ); ?></option>
-								<option value="multi_choice"><?php esc_html_e( 'Multi Choice ', 'skilltriks-lms' ); ?></option>
-								<option value="single_choice"><?php esc_html_e( 'Single Choice ', 'skilltriks-lms' ); ?></option>
-								<option value="fill_blank"><?php esc_html_e( 'Fill In Blanks ', 'skilltriks-lms' ); ?></option>
+								<option value="true_or_false"><?php esc_html_e( 'True Or False ', 'skilltriks' ); ?></option>
+								<option value="multi_choice"><?php esc_html_e( 'Multi Choice ', 'skilltriks' ); ?></option>
+								<option value="single_choice"><?php esc_html_e( 'Single Choice ', 'skilltriks' ); ?></option>
+								<option value="fill_blank"><?php esc_html_e( 'Fill In Blanks ', 'skilltriks' ); ?></option>
 							</select>
 						</div>
 					</div>
 					<div class="stlms-show-ans-title-marks">
 						<div>
-							<label><?php esc_html_e( 'Title', 'skilltriks-lms' ); ?></label>
+							<label><?php esc_html_e( 'Title', 'skilltriks' ); ?></label>
 							<input type="text" name="post_title">
 						</div>
 						<div class="marks-input">
-							<label><?php esc_html_e( 'Marks', 'skilltriks-lms' ); ?></label>
+							<label><?php esc_html_e( 'Marks', 'skilltriks' ); ?></label>
 							<input type="number" name="<?php echo esc_attr( $meta_key_prefix ); ?>[settings][points]" step="1" min="0">
 						</div>
 					</div>
@@ -47,8 +47,8 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 					<div class="stlms-options-table hidden" id="multi_choice">
 						<div class="stlms-options-table__header">
 							<ul class="stlms-options-table__list">
-								<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+								<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 								<li class="stlms-option-action"></li>
 							</ul>
 						</div>
@@ -91,16 +91,16 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 					<div class="stlms-options-table hidden" id="true_or_false">
 						<div class="stlms-options-table__header">
 							<ul class="stlms-options-table__list">
-								<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+								<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 							</ul>
 						</div>
 						<div class="stlms-options-table__body stlms-sortable-answers">
 							<div class="stlms-options-table__list-wrap">
 								<?php
 								$answers = array(
-									0 => __( 'True', 'skilltriks-lms' ),
-									1 => __( 'False', 'skilltriks-lms' ),
+									0 => __( 'True', 'skilltriks' ),
+									1 => __( 'False', 'skilltriks' ),
 								);
 								?>
 								<?php foreach ( $answers as $key => $answer ) : ?>
@@ -127,8 +127,8 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 					<div class="stlms-options-table hidden" id="single_choice">
 						<div class="stlms-options-table__header">
 							<ul class="stlms-options-table__list">
-								<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+								<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+								<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 								<li class="stlms-option-action"></li>
 							</ul>
 						</div>
@@ -169,35 +169,35 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 					</div>
 
 					<div class="stlms-add-accepted-answers hidden" id="fill_blank">
-						<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks-lms' ); ?></h3>
+						<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks' ); ?></h3>
 						<ul>
 							<li>
-								<label><?php esc_html_e( 'Mandatory', 'skilltriks-lms' ); ?></label>
+								<label><?php esc_html_e( 'Mandatory', 'skilltriks' ); ?></label>
 								<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[mandatory_answers]" value="">
 							</li>
 							<li>
-								<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+								<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 								<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[optional_answers]" value="">
 							</li>
 							<li>
-								<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+								<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 								<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[optional_answers]" value="">
 							</li>
 							<li>
-								<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+								<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 								<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[optional_answers]" value="">
 							</li>
 							<li>
-								<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+								<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 								<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[optional_answers]" value="">
 							</li>
 						</ul>
 					</div>
 
 					<div class="stlms-show-ans-action">
-						<button type="button" class="button stlms-add-answer"><?php esc_html_e( 'Add a New Answer', 'skilltriks-lms' ); ?></button>
-						<button type="button" class="button stlms-cancel-answer"><?php esc_html_e( 'Cancel', 'skilltriks-lms' ); ?></button>
-						<button type="button" class="button button-primary stlms-save-answer"><?php esc_html_e( 'Save', 'skilltriks-lms' ); ?></button>
+						<button type="button" class="button stlms-add-answer"><?php esc_html_e( 'Add a New Answer', 'skilltriks' ); ?></button>
+						<button type="button" class="button stlms-cancel-answer"><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
+						<button type="button" class="button button-primary stlms-save-answer"><?php esc_html_e( 'Save', 'skilltriks' ); ?></button>
 						<span class="spinner"></span>
 					</div>
 				</div>
@@ -278,14 +278,14 @@ $meta_key_prefix = \ST\Lms\META_KEY_QUESTION_PREFIX;
 
 <script type="text/template" id="fill_blank_mandatory">
 	<li>
-		<label><?php esc_html_e( 'Mandatory', 'skilltriks-lms' ); ?></label>
+		<label><?php esc_html_e( 'Mandatory', 'skilltriks' ); ?></label>
 		<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[mandatory_answers]" value="{{VALUE}}">
 	</li>
 </script>
 
 <script type="text/template" id="fill_blank_optional">
 	<li>
-		<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+		<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 		<input type="text" name="<?php echo esc_attr( $meta_key_prefix ); ?>[optional_answers][]" value="{{VALUE}}">
 	</li>
 </script>

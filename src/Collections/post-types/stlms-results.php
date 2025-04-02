@@ -18,31 +18,31 @@ function stlms_results_init() {
 		STLMS_RESULTS_CPT,
 		array(
 			'labels'                => array(
-				'name'                  => __( 'Results', 'skilltriks-lms' ),
-				'singular_name'         => __( 'Result', 'skilltriks-lms' ),
-				'all_items'             => __( 'Results', 'skilltriks-lms' ),
-				'archives'              => __( 'Result Archives', 'skilltriks-lms' ),
-				'attributes'            => __( 'Result Attributes', 'skilltriks-lms' ),
-				'insert_into_item'      => __( 'Insert into result', 'skilltriks-lms' ),
-				'uploaded_to_this_item' => __( 'Uploaded to this result', 'skilltriks-lms' ),
-				'featured_image'        => _x( 'Featured Image', 'stlms_results', 'skilltriks-lms' ),
-				'set_featured_image'    => _x( 'Set featured image', 'stlms_results', 'skilltriks-lms' ),
-				'remove_featured_image' => _x( 'Remove featured image', 'stlms_results', 'skilltriks-lms' ),
-				'use_featured_image'    => _x( 'Use as featured image', 'stlms_results', 'skilltriks-lms' ),
-				'filter_items_list'     => __( 'Filter results list', 'skilltriks-lms' ),
-				'items_list_navigation' => __( 'Results list navigation', 'skilltriks-lms' ),
-				'items_list'            => __( 'Results list', 'skilltriks-lms' ),
+				'name'                  => __( 'Results', 'skilltriks' ),
+				'singular_name'         => __( 'Result', 'skilltriks' ),
+				'all_items'             => __( 'Results', 'skilltriks' ),
+				'archives'              => __( 'Result Archives', 'skilltriks' ),
+				'attributes'            => __( 'Result Attributes', 'skilltriks' ),
+				'insert_into_item'      => __( 'Insert into result', 'skilltriks' ),
+				'uploaded_to_this_item' => __( 'Uploaded to this result', 'skilltriks' ),
+				'featured_image'        => _x( 'Featured Image', 'stlms_results', 'skilltriks' ),
+				'set_featured_image'    => _x( 'Set featured image', 'stlms_results', 'skilltriks' ),
+				'remove_featured_image' => _x( 'Remove featured image', 'stlms_results', 'skilltriks' ),
+				'use_featured_image'    => _x( 'Use as featured image', 'stlms_results', 'skilltriks' ),
+				'filter_items_list'     => __( 'Filter results list', 'skilltriks' ),
+				'items_list_navigation' => __( 'Results list navigation', 'skilltriks' ),
+				'items_list'            => __( 'Results list', 'skilltriks' ),
 				'new_item'              => '',
 				'add_new'               => '',
 				'add_new_item'          => '',
 				'edit_item'             => '',
 				'view_item'             => '',
 				'view_items'            => '',
-				'search_items'          => __( 'Search results', 'skilltriks-lms' ),
-				'not_found'             => __( 'No results found', 'skilltriks-lms' ),
-				'not_found_in_trash'    => __( 'No results found in trash', 'skilltriks-lms' ),
-				'parent_item_colon'     => __( 'Parent result:', 'skilltriks-lms' ),
-				'menu_name'             => __( 'Results', 'skilltriks-lms' ),
+				'search_items'          => __( 'Search results', 'skilltriks' ),
+				'not_found'             => __( 'No results found', 'skilltriks' ),
+				'not_found_in_trash'    => __( 'No results found in trash', 'skilltriks' ),
+				'parent_item_colon'     => __( 'Parent result:', 'skilltriks' ),
+				'menu_name'             => __( 'Results', 'skilltriks' ),
 			),
 			'capabilities'          => array(
 				'create_posts' => 'do_not_allow',
@@ -82,21 +82,21 @@ function stlms_results_updated_messages( $messages ) {
 	$messages[ STLMS_RESULTS_CPT ] = array(
 		0  => '', // Unused. Messages start at index 1.
 		/* translators: %s: post permalink */
-		1  => sprintf( __( 'Result updated. <a target="_blank" href="%s">View result</a>', 'skilltriks-lms' ), esc_url( $permalink ) ),
-		2  => __( 'Custom field updated.', 'skilltriks-lms' ),
-		3  => __( 'Custom field deleted.', 'skilltriks-lms' ),
-		4  => __( 'Result updated.', 'skilltriks-lms' ),
+		1  => sprintf( __( 'Result updated. <a target="_blank" href="%s">View result</a>', 'skilltriks' ), esc_url( $permalink ) ),
+		2  => __( 'Custom field updated.', 'skilltriks' ),
+		3  => __( 'Custom field deleted.', 'skilltriks' ),
+		4  => __( 'Result updated.', 'skilltriks' ),
 		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Result restored to revision from %s', 'skilltriks-lms' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		5  => isset( $_GET['revision'] ) ? sprintf( __( 'Result restored to revision from %s', 'skilltriks' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		/* translators: %s: post permalink */
-		6  => sprintf( __( 'Result published. <a href="%s">View result</a>', 'skilltriks-lms' ), esc_url( $permalink ) ),
-		7  => __( 'Result saved.', 'skilltriks-lms' ),
+		6  => sprintf( __( 'Result published. <a href="%s">View result</a>', 'skilltriks' ), esc_url( $permalink ) ),
+		7  => __( 'Result saved.', 'skilltriks' ),
 		/* translators: %s: post permalink */
-		8  => sprintf( __( 'Result submitted. <a target="_blank" href="%s">Preview result</a>', 'skilltriks-lms' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+		8  => sprintf( __( 'Result submitted. <a target="_blank" href="%s">Preview result</a>', 'skilltriks' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 		/* translators: 1: Publish box date format, see https://secure.php.net/date 2: Post permalink */
-		9  => sprintf( __( 'Result scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview result</a>', 'skilltriks-lms' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks-lms' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
+		9  => sprintf( __( 'Result scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview result</a>', 'skilltriks' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
 		/* translators: %s: post permalink */
-		10 => sprintf( __( 'Result draft updated. <a target="_blank" href="%s">Preview result</a>', 'skilltriks-lms' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+		10 => sprintf( __( 'Result draft updated. <a target="_blank" href="%s">Preview result</a>', 'skilltriks' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 	);
 
 	return $messages;
@@ -117,16 +117,16 @@ function stlms_results_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 
 	$bulk_messages[ STLMS_RESULTS_CPT ] = array(
 		/* translators: %s: Number of results. */
-		'updated'   => _n( '%s Result updated.', '%s Results updated.', $bulk_counts['updated'], 'skilltriks-lms' ),
-		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 Result not updated, somebody is editing it.', 'skilltriks-lms' ) :
+		'updated'   => _n( '%s Result updated.', '%s Results updated.', $bulk_counts['updated'], 'skilltriks' ),
+		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 Result not updated, somebody is editing it.', 'skilltriks' ) :
 						/* translators: %s: Number of results. */
-						_n( '%s Result not updated, somebody is editing it.', '%s Results not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks-lms' ),
+						_n( '%s Result not updated, somebody is editing it.', '%s Results not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks' ),
 		/* translators: %s: Number of results. */
-		'deleted'   => _n( '%s Result permanently deleted.', '%s Results permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
+		'deleted'   => _n( '%s Result permanently deleted.', '%s Results permanently deleted.', $bulk_counts['deleted'], 'skilltriks' ),
 		/* translators: %s: Number of results. */
-		'trashed'   => _n( '%s Result moved to the Trash.', '%s Results moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
+		'trashed'   => _n( '%s Result moved to the Trash.', '%s Results moved to the Trash.', $bulk_counts['trashed'], 'skilltriks' ),
 		/* translators: %s: Number of results. */
-		'untrashed' => _n( '%s Result restored from the Trash.', '%s Results restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
+		'untrashed' => _n( '%s Result restored from the Trash.', '%s Results restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks' ),
 	);
 
 	return $bulk_messages;

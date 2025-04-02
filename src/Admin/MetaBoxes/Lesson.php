@@ -62,17 +62,17 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 			array(
 				array(
 					'id'       => 'add-media',
-					'title'    => __( 'Add Media', 'skilltriks-lms' ),
+					'title'    => __( 'Add Media', 'skilltriks' ),
 					'callback' => array( $this, 'render_add_media' ),
 				),
 				array(
 					'id'       => 'lessons-settings',
-					'title'    => __( 'Lesson Settings', 'skilltriks-lms' ),
+					'title'    => __( 'Lesson Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_lesson_settings' ),
 				),
 				array(
 					'id'       => 'assign-to-course',
-					'title'    => __( 'Assign to course', 'skilltriks-lms' ),
+					'title'    => __( 'Assign to course', 'skilltriks' ),
 					'callback' => array( $this, 'render_assign_to_course' ),
 					'screen'   => null,
 					'context'  => 'side',
@@ -135,7 +135,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		global $post;
 		?>
 			<div class="stlms-assign-quiz">
-				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_lesson"><?php esc_html_e( 'Click to assign course', 'skilltriks-lms' ); ?></a>
+				<a href="javascript:;" class="button button-primary button-large" data-modal="assign_lesson"><?php esc_html_e( 'Click to assign course', 'skilltriks' ); ?></a>
 			</div>
 			<div class="stlms-snackbar-notice"><p></p></div>
 		<?php
@@ -244,10 +244,10 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		$topic     = $columns[ $topic_key ];
 		unset( $columns[ $topic_key ] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Author', 'skilltriks-lms' );
-		$columns['course']      = __( 'Course', 'skilltriks-lms' );
-		$columns['lesson_type'] = __( 'Lesson Type', 'skilltriks-lms' );
-		$columns['duration']    = __( 'Duration', 'skilltriks-lms' );
+		$columns['post_author'] = __( 'Author', 'skilltriks' );
+		$columns['course']      = __( 'Course', 'skilltriks' );
+		$columns['lesson_type'] = __( 'Lesson Type', 'skilltriks' );
+		$columns['duration']    = __( 'Duration', 'skilltriks' );
 		$columns['date']        = $date;
 		return $columns;
 	}
@@ -284,7 +284,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 					)
 				);
 				if ( empty( $connected ) ) {
-					esc_html_e( 'Not Assigned Yet', 'skilltriks-lms' );
+					esc_html_e( 'Not Assigned Yet', 'skilltriks' );
 					break;
 				}
 				$connected = array_map(
@@ -313,11 +313,11 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 				break;
 			case 'lesson_type':
 				if ( isset( $media['media_type'] ) && 'video' === $media['media_type'] ) {
-					esc_html_e( 'Video', 'skilltriks-lms' );
+					esc_html_e( 'Video', 'skilltriks' );
 				} elseif ( isset( $media['media_type'] ) && 'text' === $media['media_type'] ) {
-					esc_html_e( 'Text', 'skilltriks-lms' );
+					esc_html_e( 'Text', 'skilltriks' );
 				} elseif ( isset( $media['media_type'] ) && 'file' === $media['media_type'] ) {
-					esc_html_e( 'File', 'skilltriks-lms' );
+					esc_html_e( 'File', 'skilltriks' );
 				} else {
 					echo '—';
 				}
@@ -382,7 +382,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		wp_send_json(
 			array(
 				'status'  => true,
-				'message' => __( 'Saved.', 'skilltriks-lms' ),
+				'message' => __( 'Saved.', 'skilltriks' ),
 			)
 		);
 	}
@@ -401,23 +401,23 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		<fieldset class="inline-edit-col-right inline-edit-lesson">
 			<?php wp_nonce_field( STLMS_BASEFILE, 'stlms_nonce', false ); ?>
 			<div class="inline-edit-col inline-edit-duration">
-				<span class="title"><?php esc_html_e( 'Duration', 'skilltriks-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Duration', 'skilltriks' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
 							<input type="number" step="1" min="0" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][duration]">
 							<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][duration_type]">
-								<option value="minute"><?php esc_html_e( 'Minute(s)', 'skilltriks-lms' ); ?></option>
-								<option value="hour"><?php esc_html_e( 'Hour(s)', 'skilltriks-lms' ); ?></option>
-								<option value="day"><?php esc_html_e( 'Day(s)', 'skilltriks-lms' ); ?></option>
-								<option value="week"><?php esc_html_e( 'Week(s)', 'skilltriks-lms' ); ?></option>
+								<option value="minute"><?php esc_html_e( 'Minute(s)', 'skilltriks' ); ?></option>
+								<option value="hour"><?php esc_html_e( 'Hour(s)', 'skilltriks' ); ?></option>
+								<option value="day"><?php esc_html_e( 'Day(s)', 'skilltriks' ); ?></option>
+								<option value="week"><?php esc_html_e( 'Week(s)', 'skilltriks' ); ?></option>
 							</select>
 						</label>
 					</div>
 				</div>
 			</div>
 			<div class="inline-edit-col inline-edit-courses">
-				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
@@ -441,7 +441,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 								<?php endforeach; ?>
 							</ul>
 							<?php else : ?>
-								<p><?php esc_html_e( 'No course found.', 'skilltriks-lms' ); ?></p>
+								<p><?php esc_html_e( 'No course found.', 'skilltriks' ); ?></p>
 							<?php endif; ?>
 						</label>
 					</div>
@@ -465,7 +465,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		?>
 		<fieldset class="inline-edit-col-right inline-edit-lesson">
 			<div class="inline-edit-col inline-edit-courses">
-				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></span>
+				<span class="title"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></span>
 				<div class="inline-edit-lesson">
 					<div class="inline-edit-lesson-item">
 						<label>
@@ -489,7 +489,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 								<?php endforeach; ?>
 							</ul>
 							<?php else : ?>
-								<p><?php esc_html_e( 'No course found.', 'skilltriks-lms' ); ?></p>
+								<p><?php esc_html_e( 'No course found.', 'skilltriks' ); ?></p>
 							<?php endif; ?>
 						</label>
 					</div>

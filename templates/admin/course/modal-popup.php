@@ -14,12 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="stlms-qus-bank-modal">
 		<div class="stlms-tab-container">
 			<div class="stlms-tabs-nav">
-				<button class="stlms-tab active" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_LESSON_CPT ); ?>"><?php esc_html_e( 'Lesson', 'skilltriks-lms' ); ?></button>
-				<button class="stlms-tab" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_QUIZ_CPT ); ?>"><?php esc_html_e( 'Quiz', 'skilltriks-lms' ); ?></button>
+				<button class="stlms-tab active" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_LESSON_CPT ); ?>"><?php esc_html_e( 'Lesson', 'skilltriks' ); ?></button>
+				<button class="stlms-tab" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_QUIZ_CPT ); ?>"><?php esc_html_e( 'Quiz', 'skilltriks' ); ?></button>
 			</div>
 
 			<div class="stlms-tab-content active" data-tab="assign-quiz-list">
-				<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for items', 'skilltriks-lms' ); ?>" class="stlms-qus-bank-search">
+				<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for items', 'skilltriks' ); ?>" class="stlms-qus-bank-search">
 				<div class="stlms-qus-list" id="curriculums_list">
 				<?php
 				if ( ! empty( $fetch_request ) ) :
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php endforeach; ?>
 					</ul>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No items found.', 'skilltriks-lms' ); ?></p>
+						<p><?php esc_html_e( 'No items found.', 'skilltriks' ); ?></p>
 					<?php endif; ?>
 				<?php else : ?>
 					<span class="spinner is-active"></span>
@@ -54,9 +54,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 		<div class="stlms-qus-bank-add">
-			<button class="button button-primary stlms-add-item" disabled><?php esc_html_e( 'Add', 'skilltriks-lms' ); ?></button>
+			<button class="button button-primary stlms-add-item" disabled><?php esc_html_e( 'Add', 'skilltriks' ); ?></button>
 			<span
-				class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks-lms' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+				class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 			<span class="spinner"></span>
 		</div>
 	</div>

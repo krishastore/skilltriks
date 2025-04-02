@@ -51,8 +51,8 @@ class ImportTable extends \WP_List_Table {
 		// Set parent defaults.
 		parent::__construct(
 			array(
-				'singular' => __( 'Import', 'skilltriks-lms' ),
-				'plural'   => __( 'Imports', 'skilltriks-lms' ),
+				'singular' => __( 'Import', 'skilltriks' ),
+				'plural'   => __( 'Imports', 'skilltriks' ),
 				'ajax'     => false,
 			)
 		);
@@ -66,7 +66,7 @@ class ImportTable extends \WP_List_Table {
 	 * Shows the text when import log table has no data.
 	 */
 	public function no_items() {
-		esc_html_e( 'No Import Log found.', 'skilltriks-lms' );
+		esc_html_e( 'No Import Log found.', 'skilltriks' );
 	}
 
 	/**
@@ -92,12 +92,12 @@ class ImportTable extends \WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'       => '<input type="checkbox" />',
-			'title'    => __( 'Log Name', 'skilltriks-lms' ),
-			'type'     => __( 'Import Type', 'skilltriks-lms' ),
-			'progress' => __( 'Progress', 'skilltriks-lms' ),
-			'status'   => __( 'Status', 'skilltriks-lms' ),
-			'date'     => __( 'Date', 'skilltriks-lms' ),
-			'action'   => __( 'Actions', 'skilltriks-lms' ),
+			'title'    => __( 'Log Name', 'skilltriks' ),
+			'type'     => __( 'Import Type', 'skilltriks' ),
+			'progress' => __( 'Progress', 'skilltriks' ),
+			'status'   => __( 'Status', 'skilltriks' ),
+			'date'     => __( 'Date', 'skilltriks' ),
+			'action'   => __( 'Actions', 'skilltriks' ),
 		);
 		return $columns;
 	}
@@ -111,9 +111,9 @@ class ImportTable extends \WP_List_Table {
 	 */
 	public function column_action( $item ) {
 		if ( 1 === (int) $item['import_status'] ) {
-			$item = '<a href="javascript:;" data-id="' . (int) $item['id'] . '" data-fileId="' . (int) $item['attachment_id'] . '" data-import="' . $item['import_type'] . '" class="stlms-bulk-import-cancel">' . __( 'Cancel', 'skilltriks-lms' ) . '</a> | <a href="javascript:;" data-id="' . (int) $item['id'] . '" data-status="' . (int) $item['import_status'] . '"  data-file="' . esc_html( $item['file_name'] ) . '" data-path="' . wp_get_attachment_url( $item['attachment_id'] ) . '" data-date="' . date_i18n( 'Y-m-d', strtotime( $item['import_date'] ) ) . '" data-progress="' . (int) $item['progress'] . '" data-total="' . (int) $item['total_rows'] . '" data-success="' . (int) $item['success_rows'] . '" data-fail="' . (int) $item['fail_rows'] . '" class="stlms-bulk-import">' . __( 'View', 'skilltriks-lms' ) . '</a>';
+			$item = '<a href="javascript:;" data-id="' . (int) $item['id'] . '" data-fileId="' . (int) $item['attachment_id'] . '" data-import="' . $item['import_type'] . '" class="stlms-bulk-import-cancel">' . __( 'Cancel', 'skilltriks' ) . '</a> | <a href="javascript:;" data-id="' . (int) $item['id'] . '" data-status="' . (int) $item['import_status'] . '"  data-file="' . esc_html( $item['file_name'] ) . '" data-path="' . wp_get_attachment_url( $item['attachment_id'] ) . '" data-date="' . date_i18n( 'Y-m-d', strtotime( $item['import_date'] ) ) . '" data-progress="' . (int) $item['progress'] . '" data-total="' . (int) $item['total_rows'] . '" data-success="' . (int) $item['success_rows'] . '" data-fail="' . (int) $item['fail_rows'] . '" class="stlms-bulk-import">' . __( 'View', 'skilltriks' ) . '</a>';
 		} else {
-			$item = '<a href="javascript:;" data-id="' . (int) $item['id'] . '" data-status="' . (int) $item['import_status'] . '" data-import="' . $item['import_type'] . '" data-file="' . esc_html( $item['file_name'] ) . '" data-path="' . wp_get_attachment_url( $item['attachment_id'] ) . '" data-date="' . date_i18n( 'Y-m-d', strtotime( $item['import_date'] ) ) . '" data-progress="' . (int) $item['progress'] . '" data-total="' . (int) $item['total_rows'] . '" data-success="' . (int) $item['success_rows'] . '" data-fail="' . (int) $item['fail_rows'] . '" class="stlms-bulk-import">' . __( 'View', 'skilltriks-lms' ) . '</a>';
+			$item = '<a href="javascript:;" data-id="' . (int) $item['id'] . '" data-status="' . (int) $item['import_status'] . '" data-import="' . $item['import_type'] . '" data-file="' . esc_html( $item['file_name'] ) . '" data-path="' . wp_get_attachment_url( $item['attachment_id'] ) . '" data-date="' . date_i18n( 'Y-m-d', strtotime( $item['import_date'] ) ) . '" data-progress="' . (int) $item['progress'] . '" data-total="' . (int) $item['total_rows'] . '" data-success="' . (int) $item['success_rows'] . '" data-fail="' . (int) $item['fail_rows'] . '" class="stlms-bulk-import">' . __( 'View', 'skilltriks' ) . '</a>';
 		}
 		return $item;
 	}
@@ -146,7 +146,7 @@ class ImportTable extends \WP_List_Table {
 	 */
 	protected function get_bulk_actions() {
 		$actions = array(
-			'delete' => __( 'Delete', 'skilltriks-lms' ),
+			'delete' => __( 'Delete', 'skilltriks' ),
 		);
 		return $actions;
 	}
@@ -225,7 +225,7 @@ class ImportTable extends \WP_List_Table {
 		$all_url = remove_query_arg( 'status' );
 
 		$views['all'] = sprintf(
-			__( '<a href="%1$s" class="%2$s">All <span class="%3$s">(%4$s)</span></a>', 'skilltriks-lms' ), //phpcs:ignore.
+			__( '<a href="%1$s" class="%2$s">All <span class="%3$s">(%4$s)</span></a>', 'skilltriks' ), //phpcs:ignore.
 			esc_url( $all_url ),
 			esc_attr( $class ),
 			esc_attr( $cnt_class ),
@@ -237,7 +237,7 @@ class ImportTable extends \WP_List_Table {
 			$url             = add_query_arg( 'status', $key );
 			$class           = ( $key === $current ? 'current' : '' );
 			$views[ $value ] = sprintf(
-				__( '<a href="%1$s" class="%2$s">%3$s <span class="%4$s">(%5$d)</span></a>', 'skilltriks-lms' ), //phpcs:ignore.
+				__( '<a href="%1$s" class="%2$s">%3$s <span class="%4$s">(%5$d)</span></a>', 'skilltriks' ), //phpcs:ignore.
 				esc_url( $url ),
 				esc_attr( $class ),
 				esc_html( $value ),

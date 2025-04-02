@@ -74,8 +74,8 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 	 */
 	public function register_admin_menu() {
 		$hook = add_menu_page(
-			__( 'SkillTriks LMS', 'skilltriks-lms' ),
-			__( 'SkillTriks LMS', 'skilltriks-lms' ),
+			__( 'SkillTriks LMS', 'skilltriks' ),
+			__( 'SkillTriks LMS', 'skilltriks' ),
 			apply_filters( 'stlms/menu/capability', 'manage_options' ),
 			PARENT_MENU_SLUG,
 			'__return_empty_string',
@@ -119,8 +119,8 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 			'alphabets'      => \ST\Lms\question_series(),
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'i18n'           => array(
-				'PopupTitle'        => __( 'Assign to Quiz', 'skilltriks-lms' ),
-				'emptySearchResult' => __( 'No results found', 'skilltriks-lms' ),
+				'PopupTitle'        => __( 'Assign to Quiz', 'skilltriks' ),
+				'emptySearchResult' => __( 'No results found', 'skilltriks' ),
 			),
 			'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 			'contentLoadUrl' => esc_url(
@@ -148,10 +148,10 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 			array(
 				'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
-				'addMoreButton'  => '<a href="javascript:;" class="add-new-question button button-primary">' . __( 'Add More Question', 'skilltriks-lms' ) . '</a>',
+				'addMoreButton'  => '<a href="javascript:;" class="add-new-question button button-primary">' . __( 'Add More Question', 'skilltriks' ) . '</a>',
 				'i18n'           => array(
-					'addNewPopupTitle'   => __( 'From where you want to add a new Question?', 'skilltriks-lms' ),
-					'existingPopupTitle' => __( 'Questions Bank', 'skilltriks-lms' ),
+					'addNewPopupTitle'   => __( 'From where you want to add a new Question?', 'skilltriks' ),
+					'existingPopupTitle' => __( 'Questions Bank', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
@@ -180,13 +180,13 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 				'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 				'i18n'           => array(
-					'PopupTitle'            => __( 'Select Course', 'skilltriks-lms' ),
-					'media_iframe_title'    => __( 'Select file', 'skilltriks-lms' ),
-					'media_iframe_button'   => __( 'Set default file', 'skilltriks-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'skilltriks-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks-lms' ),
-					'emptySearchResult'     => __( 'No results found', 'skilltriks-lms' ),
+					'PopupTitle'            => __( 'Select Course', 'skilltriks' ),
+					'media_iframe_title'    => __( 'Select file', 'skilltriks' ),
+					'media_iframe_button'   => __( 'Set default file', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'emptySearchResult'     => __( 'No results found', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
@@ -215,16 +215,16 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 				'HasGdLibrary'   => extension_loaded( 'gd' ),
 				'i18n'           => array(
-					'PopupTitle'            => __( 'Select Item', 'skilltriks-lms' ),
-					'media_iframe_title'    => __( 'Select file', 'skilltriks-lms' ),
-					'media_iframe_button'   => __( 'Set default file', 'skilltriks-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'skilltriks-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks-lms' ),
-					'emptySearchResult'     => __( 'No results found', 'skilltriks-lms' ),
-					'errorMediaMessage'     => __( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ),
+					'PopupTitle'            => __( 'Select Item', 'skilltriks' ),
+					'media_iframe_title'    => __( 'Select file', 'skilltriks' ),
+					'media_iframe_button'   => __( 'Set default file', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'emptySearchResult'     => __( 'No results found', 'skilltriks' ),
+					'errorMediaMessage'     => __( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks' ),
 					// Translators: %s to selected item type.
-					'itemAddedMessage'      => __( '%s added', 'skilltriks-lms' ),
+					'itemAddedMessage'      => __( '%s added', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
@@ -256,23 +256,23 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 				'LessonCsvPath'   => STLMS_ASSETS . '/csv/lesson.csv',
 				'CourseCsvPath'   => STLMS_ASSETS . '/csv/course.csv',
 				'i18n'            => array(
-					'PopupTitle'            => __( 'Import file', 'skilltriks-lms' ),
-					'CancelPopupTitle'      => __( 'Cancel Import', 'skilltriks-lms' ),
-					'ImportRows'            => __( 'Rows', 'skilltriks-lms' ),
-					'ImportColumns'         => __( 'Columns', 'skilltriks-lms' ),
-					'ImportQuestionMsgText' => __( 'Imported Questions to Question Bank', 'skilltriks-lms' ),
-					'ImportLessonMsgText'   => __( 'Imported Lessons', 'skilltriks-lms' ),
-					'ImportCourseMsgText'   => __( 'Imported Courses', 'skilltriks-lms' ),
-					'DemoFileTitle'         => __( 'Demo CSV', 'skilltriks-lms' ),
-					'SuccessTitle'          => __( 'Successful Import', 'skilltriks-lms' ),
-					'FailTitle'             => __( 'Failed Import', 'skilltriks-lms' ),
-					'CancelTitle'           => __( 'Cancelled Import', 'skilltriks-lms' ),
-					'UploadTitle'           => __( 'Upload in Progress', 'skilltriks-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'skilltriks-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks-lms' ),
-					'errorMediaMessage'     => __( 'skilltriks required PHP `zip` and `GD` extension for external library.', 'skilltriks-lms' ),
-					'RoleTitle'             => __( 'User Role', 'skilltriks-lms' ),
+					'PopupTitle'            => __( 'Import file', 'skilltriks' ),
+					'CancelPopupTitle'      => __( 'Cancel Import', 'skilltriks' ),
+					'ImportRows'            => __( 'Rows', 'skilltriks' ),
+					'ImportColumns'         => __( 'Columns', 'skilltriks' ),
+					'ImportQuestionMsgText' => __( 'Imported Questions to Question Bank', 'skilltriks' ),
+					'ImportLessonMsgText'   => __( 'Imported Lessons', 'skilltriks' ),
+					'ImportCourseMsgText'   => __( 'Imported Courses', 'skilltriks' ),
+					'DemoFileTitle'         => __( 'Demo CSV', 'skilltriks' ),
+					'SuccessTitle'          => __( 'Successful Import', 'skilltriks' ),
+					'FailTitle'             => __( 'Failed Import', 'skilltriks' ),
+					'CancelTitle'           => __( 'Cancelled Import', 'skilltriks' ),
+					'UploadTitle'           => __( 'Upload in Progress', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'errorMediaMessage'     => __( 'skilltriks required PHP `zip` and `GD` extension for external library.', 'skilltriks' ),
+					'RoleTitle'             => __( 'User Role', 'skilltriks' ),
 				),
 			)
 		);

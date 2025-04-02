@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</svg>
 						</div>
 						<div class="stlms-quiz-qus-name">
-							<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[curriculum][<?php echo (int) $key; ?>][section_name]" placeholder="<?php esc_attr_e( 'Create New Section Name', 'skilltriks-lms' ); ?>" value="<?php echo isset( $curriculum['section_name'] ) ? esc_attr( $curriculum['section_name'] ) : ''; ?>">
+							<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[curriculum][<?php echo (int) $key; ?>][section_name]" placeholder="<?php esc_attr_e( 'Create New Section Name', 'skilltriks' ); ?>" value="<?php echo isset( $curriculum['section_name'] ) ? esc_attr( $curriculum['section_name'] ) : ''; ?>">
 							<div class="stlms-quiz-qus-point">
 								<ul>
 									<li class="lesson-count">
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="stlms-quiz-qus-item__body">
 						<div class="stlms-curriculum-desc">
-							<textarea name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[curriculum][<?php echo (int) $key; ?>][section_desc]" placeholder="<?php esc_attr_e( 'Section description..', 'skilltriks-lms' ); ?>"><?php echo isset( $curriculum['section_desc'] ) ? esc_textarea( $curriculum['section_desc'] ) : ''; ?></textarea>
+							<textarea name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[curriculum][<?php echo (int) $key; ?>][section_desc]" placeholder="<?php esc_attr_e( 'Section description..', 'skilltriks' ); ?>"><?php echo isset( $curriculum['section_desc'] ) ? esc_textarea( $curriculum['section_desc'] ) : ''; ?></textarea>
 						</div>
 						<?php do_action( 'stlms_course_curriculum_section_field', $key, $this ); ?>
 						<div class="stlms-curriculum-item-list">
@@ -102,19 +102,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 													<svg class="icon" width="16" height="16">
 														<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#book-bookmark"></use>
 													</svg>
-													<span><?php esc_html_e( 'Lesson', 'skilltriks-lms' ); ?></span>
+													<span><?php esc_html_e( 'Lesson', 'skilltriks' ); ?></span>
 												</li>
 												<li data-type="quiz">
 													<svg class="icon" width="16" height="16">
 														<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#clock"></use>
 													</svg>
-													<span><?php esc_html_e( 'Quiz', 'skilltriks-lms' ); ?></span>
+													<span><?php esc_html_e( 'Quiz', 'skilltriks' ); ?></span>
 												</li>
 											</ul>
 										<?php endif; ?>
 									</div>
 									<input type="hidden" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[curriculum][<?php echo (int) $key; ?>][items][]" value="<?php echo (int) $item_id; ?>">
-									<input type="text" class="stlms-curriculum-item-name" placeholder="<?php esc_attr_e( 'Add A New Item', 'skilltriks-lms' ); ?>" value="<?php echo ! empty( $item_title ) ? esc_attr( $item_title ) : ''; ?>"<?php echo '' !== $attached_id ? ' readonly' : ''; ?>>
+									<input type="text" class="stlms-curriculum-item-name" placeholder="<?php esc_attr_e( 'Add A New Item', 'skilltriks' ); ?>" value="<?php echo ! empty( $item_title ) ? esc_attr( $item_title ) : ''; ?>"<?php echo '' !== $attached_id ? ' readonly' : ''; ?>>
 									<div class="stlms-curriculum-item-action<?php echo empty( $attached_id ) ? ' hidden' : ''; ?>">
 										<?php if ( ! empty( $item_id ) && \is_post_type_viewable( get_post_type( $item_id ) ) ) : ?>
 											<a href="<?php echo esc_url( get_the_permalink( $item_id ) ); ?>" class="curriculum-view-item" target="_blank">
@@ -138,12 +138,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php endforeach ?>
 						</div>
 						<div class="stlms-quiz-qus-item__footer">
-							<a href="javascript:;" class="button select-items"><?php esc_html_e( 'Select Items', 'skilltriks-lms' ); ?></a>
+							<a href="javascript:;" class="button select-items"><?php esc_html_e( 'Select Items', 'skilltriks' ); ?></a>
 							<a href="javascript:;" class="stlms-delete-link">
 								<svg class="icon" width="12" height="12">
 									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
 								</svg>
-								<?php esc_html_e( 'Delete', 'skilltriks-lms' ); ?>
+								<?php esc_html_e( 'Delete', 'skilltriks' ); ?>
 							</a>
 						</div>
 					</div>
@@ -152,7 +152,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endforeach; ?>
 	</ul>
 	<div class="stlms-quiz-qus-footer">
-		<a href="javascript:;" class="button button-primary add-new-section"><?php esc_html_e( 'Add New Section', 'skilltriks-lms' ); ?></a>
+		<a href="javascript:;" class="button button-primary add-new-section"><?php esc_html_e( 'Add New Section', 'skilltriks' ); ?></a>
 	</div>
 	<?php do_action( 'stlms_course_curriculum_after', $this->curriculums, $this ); ?>
 </div>

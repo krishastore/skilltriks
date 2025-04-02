@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					type="video/<?php echo esc_attr( $fileformat ); ?>" size="<?php echo (int) $filesize; ?>">
 
 				<a href="<?php echo esc_url( $media_url ); ?>"
-					download><?php esc_html_e( 'Download', 'skilltriks-lms' ); ?></a>
+					download><?php esc_html_e( 'Download', 'skilltriks' ); ?></a>
 			</video>
 			<?php
 		elseif ( ! empty( $args['curriculum']['media']['embed_video_url'] ) ) :

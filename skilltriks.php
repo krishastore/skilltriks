@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:     SkillTriks LMS
+ * Plugin Name:     SkillTriks
  * Plugin URI:
  * Description:     A Comprehensive Solution For Training Management. Contact Us For More Details On Training Management System.
  * Author:          KrishaWeb

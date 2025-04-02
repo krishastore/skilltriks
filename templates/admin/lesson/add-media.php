@@ -19,59 +19,59 @@ $file_url   = $media['file_url'];
 <?php do_action( 'stlms_lesson_media_before', $media, $this ); ?>
 <input type="hidden" name="stlms_nonce" value="<?php echo esc_attr( wp_create_nonce( STLMS_BASEFILE ) ); ?>">
 <div class="media-type-select">
-	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="video"<?php checked( 'video', $media_type ); ?>> <?php esc_html_e( 'Video', 'skilltriks-lms' ); ?></label>
-	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="text"<?php checked( 'text', $media_type ); ?>> <?php esc_html_e( 'Text', 'skilltriks-lms' ); ?></label></label>
-	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="file"<?php checked( 'file', $media_type ); ?>> <?php esc_html_e( 'File', 'skilltriks-lms' ); ?></label></label>
+	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="video"<?php checked( 'video', $media_type ); ?>> <?php esc_html_e( 'Video', 'skilltriks' ); ?></label>
+	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="text"<?php checked( 'text', $media_type ); ?>> <?php esc_html_e( 'Text', 'skilltriks' ); ?></label></label>
+	<label><input type="radio" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][media_type]" value="file"<?php checked( 'file', $media_type ); ?>> <?php esc_html_e( 'File', 'skilltriks' ); ?></label></label>
 	<?php do_action( 'stlms_lesson_after_media_type', $media, $this ); ?>
 </div>
 <div id="media_video" class="stlms-video-type-box<?php echo in_array( $media_type, array( 'text', 'file' ), true ) ? ' hidden' : ''; ?>">
 	<div class="stlms-media-choose">
-		<label><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></label>
+		<label><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></label>
 		<div class="stlms-media-file">
 			<?php
 			if ( $video_id ) :
 				$fileurl = wp_get_attachment_url( $video_id );
 				?>
-				<a href="javascript:;" class="stlms-open-media button" data-library_type="video" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_video_types', 'mp4, m4v, mpg, mov, vtt, avi, ogv, wmv, 3gp, 3g2' ) ); ?>"><?php esc_html_e( 'Change File', 'skilltriks-lms' ); ?></a>
+				<a href="javascript:;" class="stlms-open-media button" data-library_type="video" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_video_types', 'mp4, m4v, mpg, mov, vtt, avi, ogv, wmv, 3gp, 3g2' ) ); ?>"><?php esc_html_e( 'Change File', 'skilltriks' ); ?></a>
 				<span class="stlms-media-name"><a href="<?php echo esc_url( $fileurl ); ?>" target="_blank"><?php echo esc_html( basename( $fileurl ) ); ?></a></span>
 			<?php else : ?>
-				<a href="javascript:;" class="stlms-open-media button" data-library_type="video" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_video_types', 'mp4, m4v, mpg, mov, vtt, avi, ogv, wmv, 3gp, 3g2' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></a>
-				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks-lms' ); ?></span>
+				<a href="javascript:;" class="stlms-open-media button" data-library_type="video" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_video_types', 'mp4, m4v, mpg, mov, vtt, avi, ogv, wmv, 3gp, 3g2' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></a>
+				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks' ); ?></span>
 			<?php endif; ?>
 			<input type="hidden" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][video_id]" value="<?php echo (int) $video_id; ?>">
 		</div>
 	</div>
 	<div class="stlms-or">
-		<span><?php esc_html_e( 'OR', 'skilltriks-lms' ); ?></span>
+		<span><?php esc_html_e( 'OR', 'skilltriks' ); ?></span>
 	</div>
 	<div class="stlms-media-choose">
-		<label><?php esc_html_e( 'Add Embed Video URL', 'skilltriks-lms' ); ?></label>
-		<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][embed_video_url]" placeholder="<?php esc_attr_e( 'Link', 'skilltriks-lms' ); ?>" value="<?php echo esc_url( $video_url ); ?>">
+		<label><?php esc_html_e( 'Add Embed Video URL', 'skilltriks' ); ?></label>
+		<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][embed_video_url]" placeholder="<?php esc_attr_e( 'Link', 'skilltriks' ); ?>" value="<?php echo esc_url( $video_url ); ?>">
 	</div>
 </div>
 <div id="media_file" class="stlms-video-type-box<?php echo in_array( $media_type, array( 'video', 'file' ), true ) ? ' hidden' : ''; ?>">
 	<div class="stlms-media-choose">
-		<label><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></label>
+		<label><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></label>
 		<div class="stlms-media-file">
 			<?php
 			if ( $file_id ) :
 				$fileurl = wp_get_attachment_url( $file_id );
 				?>
-				<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_file_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Change File', 'skilltriks-lms' ); ?></a>
+				<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_file_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Change File', 'skilltriks' ); ?></a>
 				<span class="stlms-media-name"><a href="<?php echo esc_url( $fileurl ); ?>" target="_blank"><?php echo esc_html( basename( $fileurl ) ); ?></a></span>
 			<?php else : ?>
-				<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_file_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></a>
-				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks-lms' ); ?></span>
+				<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_file_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></a>
+				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks' ); ?></span>
 			<?php endif; ?>
 			<input type="hidden" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][file_id]" value="<?php echo (int) $file_id; ?>">
 		</div>
 	</div>
 	<div class="stlms-or">
-		<span><?php esc_html_e( 'OR', 'skilltriks-lms' ); ?></span>
+		<span><?php esc_html_e( 'OR', 'skilltriks' ); ?></span>
 	</div>
 	<div class="stlms-media-choose">
-		<label><?php esc_html_e( 'Add File URL', 'skilltriks-lms' ); ?></label>
-		<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][file_url]" placeholder="<?php esc_attr_e( 'File URL', 'skilltriks-lms' ); ?>" value="<?php echo esc_url( $file_url ); ?>">
+		<label><?php esc_html_e( 'Add File URL', 'skilltriks' ); ?></label>
+		<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][file_url]" placeholder="<?php esc_attr_e( 'File URL', 'skilltriks' ); ?>" value="<?php echo esc_url( $file_url ); ?>">
 	</div>
 </div>
 <div id="media_text" class="lesson-media-editor">

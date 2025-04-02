@@ -38,7 +38,7 @@ foreach ( $questions as $question_id ) :
 				</div>
 				<div class="stlms-quiz-qus-name">
 					<span><?php echo esc_html( $question_title ); ?></span>
-					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( _n( '%s Point', '%s Points', $point, 'skilltriks-lms' ), number_format_i18n( $point ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( _n( '%s Point', '%s Points', $point, 'skilltriks' ), number_format_i18n( $point ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 				</div>
 				<div class="stlms-quiz-qus-toggle" data-accordion="true">
 					<svg class="icon" width="18" height="18">
@@ -49,17 +49,17 @@ foreach ( $questions as $question_id ) :
 			<div class="stlms-quiz-qus-item__body">
 				<div class="stlms-answer-wrap">
 					<div class="stlms-quiz-name">
-						<input type="text" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][post_title]" value="<?php echo esc_attr( $question_title ); ?>" placeholder="<?php esc_attr_e( 'Enter Your Question Name ', 'skilltriks-lms' ); ?>">
+						<input type="text" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][post_title]" value="<?php echo esc_attr( $question_title ); ?>" placeholder="<?php esc_attr_e( 'Enter Your Question Name ', 'skilltriks' ); ?>">
 					</div>
 					<div class="stlms-answer-type">
 						<label for="answers_field">
-							<?php esc_html_e( 'Select Answer Type', 'skilltriks-lms' ); ?>
+							<?php esc_html_e( 'Select Answer Type', 'skilltriks' ); ?>
 						</label>
 						<select name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][type]">
-							<option value="true_or_false"<?php selected( 'true_or_false', $qtype ); ?>><?php esc_html_e( 'True Or False ', 'skilltriks-lms' ); ?></option>
-							<option value="multi_choice"<?php selected( 'multi_choice', $qtype ); ?>><?php esc_html_e( 'Multi Choice ', 'skilltriks-lms' ); ?></option>
-							<option value="single_choice"<?php selected( 'single_choice', $qtype ); ?>><?php esc_html_e( 'Single Choice ', 'skilltriks-lms' ); ?></option>
-							<option value="fill_blank"<?php selected( 'fill_blank', $qtype ); ?>><?php esc_html_e( 'Fill In Blanks ', 'skilltriks-lms' ); ?></option>
+							<option value="true_or_false"<?php selected( 'true_or_false', $qtype ); ?>><?php esc_html_e( 'True Or False ', 'skilltriks' ); ?></option>
+							<option value="multi_choice"<?php selected( 'multi_choice', $qtype ); ?>><?php esc_html_e( 'Multi Choice ', 'skilltriks' ); ?></option>
+							<option value="single_choice"<?php selected( 'single_choice', $qtype ); ?>><?php esc_html_e( 'Single Choice ', 'skilltriks' ); ?></option>
+							<option value="fill_blank"<?php selected( 'fill_blank', $qtype ); ?>><?php esc_html_e( 'Fill In Blanks ', 'skilltriks' ); ?></option>
 						</select>
 					</div>
 
@@ -68,15 +68,15 @@ foreach ( $questions as $question_id ) :
 							$corret_answers = isset( $data['true_or_false_answers'] ) ? $data['true_or_false_answers'] : '';
 							$answers        = isset( $data['true_or_false'] ) ? $data['true_or_false'] :
 							array(
-								0 => __( 'True', 'skilltriks-lms' ),
-								1 => __( 'False', 'skilltriks-lms' ),
+								0 => __( 'True', 'skilltriks' ),
+								1 => __( 'False', 'skilltriks' ),
 							);
 							?>
 							<div class="stlms-options-table">
 								<div class="stlms-options-table__header">
 									<ul class="stlms-options-table__list">
-										<li><?php esc_html_e( 'Options ', 'skilltriks-lms' ); ?></li>
-										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+										<li><?php esc_html_e( 'Options ', 'skilltriks' ); ?></li>
+										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 									</ul>
 								</div>
 								<div class="stlms-options-table__body stlms-sortable-answers">
@@ -111,8 +111,8 @@ foreach ( $questions as $question_id ) :
 							<div class="stlms-options-table">
 								<div class="stlms-options-table__header">
 									<ul class="stlms-options-table__list">
-										<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+										<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 										<li class="stlms-option-action"></li>
 									</ul>
 								</div>
@@ -158,8 +158,8 @@ foreach ( $questions as $question_id ) :
 							<div class="stlms-options-table">
 								<div class="stlms-options-table__header">
 									<ul class="stlms-options-table__list">
-										<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+										<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+										<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 										<li class="stlms-option-action"></li>
 									</ul>
 								</div>
@@ -203,15 +203,15 @@ foreach ( $questions as $question_id ) :
 							$optional_answers  = ! empty( $data['optional_answers'] ) ? $data['optional_answers'] : array_fill( 0, 4, '' );
 						?>
 						<div class="stlms-add-accepted-answers">
-							<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks-lms' ); ?></h3>
+							<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks' ); ?></h3>
 							<ul>
 								<li>
-									<label><?php esc_html_e( 'Mandatory', 'skilltriks-lms' ); ?></label>
+									<label><?php esc_html_e( 'Mandatory', 'skilltriks' ); ?></label>
 									<input type="text" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][mandatory_answers]" value="<?php echo esc_attr( $mandatory_answers ); ?>">
 								</li>
 								<?php foreach ( $optional_answers as $optional_answer ) : ?>
 									<li>
-										<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+										<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 										<input type="text" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][optional_answers][]" value="<?php echo esc_attr( $optional_answer ); ?>">
 									</li>
 								<?php endforeach; ?>
@@ -221,26 +221,26 @@ foreach ( $questions as $question_id ) :
 
 					<div class="stlms-add-option hidden">
 						<button type="button"
-							class="button stlms-add-answer"><?php esc_html_e( 'Add More Options', 'skilltriks-lms' ); ?></button>
+							class="button stlms-add-answer"><?php esc_html_e( 'Add More Options', 'skilltriks' ); ?></button>
 					</div>
 				</div>
 				<div class="stlms-qus-setting-wrap">
 					<div class="stlms-answer-type">
 						<label for="answers_field">
-							<?php esc_html_e( 'Question Settings', 'skilltriks-lms' ); ?>
+							<?php esc_html_e( 'Question Settings', 'skilltriks' ); ?>
 						</label>
 					</div>
 					<?php do_action( 'stlms_question_setting_fields_before', $settings, $question_id, $this ); ?>
 					<div class="stlms-qus-setting-header">
 						<div>
 							<label for="points_field">
-								<?php esc_html_e( 'Marks/Points: ', 'skilltriks-lms' ); ?>
+								<?php esc_html_e( 'Marks/Points: ', 'skilltriks' ); ?>
 							</label>
 							<input type="number" class="stlms-question-points" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][settings][points]" value="<?php echo isset( $settings['points'] ) ? (int) $settings['points'] : 0; ?>" step="1" min="0">
 						</div>
 						<div>
 							<label for="levels_field">
-								<?php esc_html_e( 'Difficulty Level', 'skilltriks-lms' ); ?>
+								<?php esc_html_e( 'Difficulty Level', 'skilltriks' ); ?>
 							</label>
 							<select name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][settings][levels]">
 								<?php
@@ -254,15 +254,15 @@ foreach ( $questions as $question_id ) :
 							</select>
 						</div>
 						<div>
-							<label><input type="checkbox" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][settings][status]" value="1"<?php checked( $qstatus, 1 ); ?>><?php esc_html_e( 'Hide Question? ', 'skilltriks-lms' ); ?> </label>
+							<label><input type="checkbox" name="<?php echo esc_attr( $this->question_meta_key ); ?>[<?php echo (int) $question_id; ?>][settings][status]" value="1"<?php checked( $qstatus, 1 ); ?>><?php esc_html_e( 'Hide Question? ', 'skilltriks' ); ?> </label>
 						</div>
 					</div>
 					<div class="stlms-qus-setting-body">
-						<h3><?php esc_html_e( 'Show Feedback/Hint ', 'skilltriks-lms' ); ?></h3>
+						<h3><?php esc_html_e( 'Show Feedback/Hint ', 'skilltriks' ); ?></h3>
 
 						<div class="stlms-hint-box">
 							<label for="hint_field">
-								<?php esc_html_e( 'Correctly Answered Feedback: ', 'skilltriks-lms' ); ?>
+								<?php esc_html_e( 'Correctly Answered Feedback: ', 'skilltriks' ); ?>
 								<div class="stlms-tooltip">
 									<svg class="icon" width="12" height="12">
 										<use
@@ -270,7 +270,7 @@ foreach ( $questions as $question_id ) :
 										</use>
 									</svg>
 									<span class="stlms-tooltiptext">
-										<?php esc_html_e( 'The instructions for the user to select the right answer. The text will be shown when users click the \'Hint\' button.', 'skilltriks-lms' ); ?>
+										<?php esc_html_e( 'The instructions for the user to select the right answer. The text will be shown when users click the \'Hint\' button.', 'skilltriks' ); ?>
 									</span>
 								</div>
 							</label>
@@ -278,7 +278,7 @@ foreach ( $questions as $question_id ) :
 						</div>
 						<div class="stlms-hint-box">
 							<label for="explanation_field" style="color: #B20000;">
-								<?php esc_html_e( 'Incorrectly Answered Feedback: ', 'skilltriks-lms' ); ?>
+								<?php esc_html_e( 'Incorrectly Answered Feedback: ', 'skilltriks' ); ?>
 								<div class="stlms-tooltip">
 									<svg class="icon" width="12" height="12">
 										<use
@@ -286,7 +286,7 @@ foreach ( $questions as $question_id ) :
 										</use>
 									</svg>
 									<span class="stlms-tooltiptext">
-										<?php esc_html_e( 'The explanation will be displayed when students click the "Check Answer" button.', 'skilltriks-lms' ); ?>
+										<?php esc_html_e( 'The explanation will be displayed when students click the "Check Answer" button.', 'skilltriks' ); ?>
 									</span>
 								</div>
 							</label>
@@ -294,8 +294,8 @@ foreach ( $questions as $question_id ) :
 						</div>
 
 						<div class="stlms-add-option">
-							<button type="button" class="button button-primary stlms-save-questions" data-post_id="<?php echo (int) $question_id; ?>"><?php esc_html_e( 'Save', 'skilltriks-lms' ); ?></button>
-							<button type="button" class="button stlms-cancel-edit"><?php esc_html_e( 'Cancel', 'skilltriks-lms' ); ?></button>
+							<button type="button" class="button button-primary stlms-save-questions" data-post_id="<?php echo (int) $question_id; ?>"><?php esc_html_e( 'Save', 'skilltriks' ); ?></button>
+							<button type="button" class="button stlms-cancel-edit"><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
 							<span class="spinner"></span>
 						</div>
 					</div>
@@ -307,19 +307,19 @@ foreach ( $questions as $question_id ) :
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#edit"></use>
 					</svg>
-					<?php esc_html_e( 'Edit', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'Edit', 'skilltriks' ); ?>
 				</a>
 				<a href="javascript:;" class="stlms-duplicate-link">
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#duplicate"></use>
 					</svg>
-					<?php esc_html_e( 'Duplicate', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'Duplicate', 'skilltriks' ); ?>
 				</a>
 				<a href="javascript:;" class="stlms-delete-link">
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
 					</svg>
-					<?php esc_html_e( 'Remove', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'Remove', 'skilltriks' ); ?>
 				</a>
 			</div>
 		</div>

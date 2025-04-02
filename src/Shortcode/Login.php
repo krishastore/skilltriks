@@ -73,7 +73,7 @@ class Login extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\Log
 			wp_logout();
 			$response = array(
 				'status'  => 0,
-				'message' => __( 'Your account role is different, please contact to administration', 'skilltriks-lms' ),
+				'message' => __( 'Your account role is different, please contact to administration', 'skilltriks' ),
 			);
 			EL::add( $response['message'], 'error', __FILE__, __LINE__ );
 			wp_send_json( $response );

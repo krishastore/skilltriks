@@ -47,7 +47,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 	public function get_columns() {
 		$columns = array(
 			'cb'   => '<input type="checkbox" />',
-			'name' => __( 'Role Name', 'skilltriks-lms' ),
+			'name' => __( 'Role Name', 'skilltriks' ),
 		);
 		return $columns;
 	}
@@ -65,7 +65,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 			case 'name':
 				return $item->$column_name;
 			default:
-				return __( 'No Data Found', 'skilltriks-lms' );
+				return __( 'No Data Found', 'skilltriks' );
 		}
 	}
 
@@ -88,7 +88,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 						admin_url( 'admin.php' )
 					)
 				),
-				esc_html__( 'Edit', 'skilltriks-lms' )
+				esc_html__( 'Edit', 'skilltriks' )
 			),
 			'delete' => sprintf(
 				'<a href="%s" onclick="return confirm(\'%s\');">%s</a>',
@@ -103,8 +103,8 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 						admin_url( 'admin.php' )
 					)
 				),
-				esc_html__( 'Are you sure you want to delete this role?', 'skilltriks-lms' ),
-				esc_html__( 'Delete', 'skilltriks-lms' )
+				esc_html__( 'Are you sure you want to delete this role?', 'skilltriks' ),
+				esc_html__( 'Delete', 'skilltriks' )
 			),
 		);
 		return sprintf( '%1$s %2$s', $item, $this->row_actions( $action ) );
@@ -124,7 +124,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 	 * No roles found.
 	 */
 	public function no_items() {
-		esc_html_e( 'No roles found.', 'skilltriks-lms' );
+		esc_html_e( 'No roles found.', 'skilltriks' );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 			static $cb_counter = 1;
 			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' .
 				/* translators: Hidden accessibility text. */
-				__( 'Select All', 'skilltriks-lms' ) .
+				__( 'Select All', 'skilltriks' ) .
 			'</label>' .
 			'<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			++$cb_counter;

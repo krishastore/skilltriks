@@ -118,7 +118,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 
 		try {
 			if ( ! isset( $args['post_title'] ) ) {
-				throw new \Exception( __( 'Missing post title', 'skilltriks-lms' ) );
+				throw new \Exception( __( 'Missing post title', 'skilltriks' ) );
 			}
 
 			if ( preg_match( '#^stlms_login_page_id.*#', $key_option ) ) {
@@ -166,7 +166,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		$capabilities = get_role( 'subscriber' );
 		add_role(
 			'stlms',
-			esc_html__( 'SkillTriks LMS', 'skilltriks-lms' ),
+			esc_html__( 'SkillTriks LMS', 'skilltriks' ),
 			$capabilities->capabilities
 		);
 	}

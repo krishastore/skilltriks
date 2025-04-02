@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	wp_nonce_field( 'stlms_setting', 'stlms-setting-nonce' );
 	do_settings_sections( $this->option_group ); // @phpstan-ignore variable.undefined
-	submit_button( esc_html__( 'Save', 'skilltriks-lms' ) );
+	submit_button( esc_html__( 'Save', 'skilltriks' ) );
 	?>
 </form>
 

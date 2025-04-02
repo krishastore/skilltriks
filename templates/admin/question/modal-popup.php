@@ -14,13 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="stlms-qus-bank-modal">
 		<div class="stlms-tab-container">
 			<div class="stlms-tabs-nav">
-				<button class="stlms-tab active" data-tab="assign-quiz-list" data-filter_type="all"><?php esc_html_e( 'All', 'skilltriks-lms' ); ?></button>
-				<button class="stlms-tab" data-tab="assign-quiz-list" data-filter_type="most_used"><?php esc_html_e( 'Most Used', 'skilltriks-lms' ); ?></button>
+				<button class="stlms-tab active" data-tab="assign-quiz-list" data-filter_type="all"><?php esc_html_e( 'All', 'skilltriks' ); ?></button>
+				<button class="stlms-tab" data-tab="assign-quiz-list" data-filter_type="most_used"><?php esc_html_e( 'Most Used', 'skilltriks' ); ?></button>
 			</div>
 
 			<div class="stlms-tab-content active" data-tab="assign-quiz-list">
 				<input type="text"
-					placeholder="<?php esc_attr_e( 'Type here to search for the quiz', 'skilltriks-lms' ); ?>"
+					placeholder="<?php esc_attr_e( 'Type here to search for the quiz', 'skilltriks' ); ?>"
 					class="stlms-qus-bank-search">
 				<div class="stlms-qus-list" id="stlms_quiz_list">
 				<?php
@@ -68,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php endforeach; ?>
 					</ul>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No quiz found.', 'skilltriks-lms' ); ?></p>
+						<p><?php esc_html_e( 'No quiz found.', 'skilltriks' ); ?></p>
 					<?php endif; ?>
 				<?php else : ?>
 					<span class="spinner is-active"></span>
@@ -78,9 +78,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<div class="stlms-qus-bank-add">
 			<button class="button button-primary stlms-add-quiz"
-				disabled><?php esc_html_e( 'Save', 'skilltriks-lms' ); ?></button>
+				disabled><?php esc_html_e( 'Save', 'skilltriks' ); ?></button>
 			<span
-				class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks-lms' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+				class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 			<span class="spinner"></span>
 		</div>
 	</div>

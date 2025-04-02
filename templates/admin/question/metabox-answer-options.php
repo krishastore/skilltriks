@@ -14,13 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="stlms-answer-wrap">
 	<div class="stlms-answer-type">
 		<label for="answers_field">
-			<?php esc_html_e( 'Select Answer Type', 'skilltriks-lms' ); ?>
+			<?php esc_html_e( 'Select Answer Type', 'skilltriks' ); ?>
 		</label>
 		<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[type]" id="stlms_answer_type">
-			<option value="true_or_false"<?php selected( 'true_or_false', $type ); ?>><?php esc_html_e( 'True Or False ', 'skilltriks-lms' ); ?></option>
-			<option value="multi_choice"<?php selected( 'multi_choice', $type ); ?>><?php esc_html_e( 'Multi Choice ', 'skilltriks-lms' ); ?></option>
-			<option value="single_choice"<?php selected( 'single_choice', $type ); ?>><?php esc_html_e( 'Single Choice ', 'skilltriks-lms' ); ?></option>
-			<option value="fill_blank"<?php selected( 'fill_blank', $type ); ?>><?php esc_html_e( 'Fill In Blanks ', 'skilltriks-lms' ); ?></option>
+			<option value="true_or_false"<?php selected( 'true_or_false', $type ); ?>><?php esc_html_e( 'True Or False ', 'skilltriks' ); ?></option>
+			<option value="multi_choice"<?php selected( 'multi_choice', $type ); ?>><?php esc_html_e( 'Multi Choice ', 'skilltriks' ); ?></option>
+			<option value="single_choice"<?php selected( 'single_choice', $type ); ?>><?php esc_html_e( 'Single Choice ', 'skilltriks' ); ?></option>
+			<option value="fill_blank"<?php selected( 'fill_blank', $type ); ?>><?php esc_html_e( 'Fill In Blanks ', 'skilltriks' ); ?></option>
 		</select>
 	</div>
 
@@ -29,15 +29,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$corret_answers = isset( $data['true_or_false_answers'] ) ? $data['true_or_false_answers'] : '';
 			$answers        = isset( $data['true_or_false'] ) ? $data['true_or_false'] :
 			array(
-				0 => __( 'True', 'skilltriks-lms' ),
-				1 => __( 'False', 'skilltriks-lms' ),
+				0 => __( 'True', 'skilltriks' ),
+				1 => __( 'False', 'skilltriks' ),
 			);
 			?>
 			<div class="stlms-options-table">
 				<div class="stlms-options-table__header">
 					<ul class="stlms-options-table__list">
-						<li><?php esc_html_e( 'Options ', 'skilltriks-lms' ); ?></li>
-						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+						<li><?php esc_html_e( 'Options ', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 					</ul>
 				</div>
 				<div class="stlms-options-table__body stlms-sortable-answers">
@@ -72,8 +72,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="stlms-options-table">
 				<div class="stlms-options-table__header">
 					<ul class="stlms-options-table__list">
-						<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+						<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 						<li class="stlms-option-action"></li>
 					</ul>
 				</div>
@@ -119,8 +119,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="stlms-options-table">
 				<div class="stlms-options-table__header">
 					<ul class="stlms-options-table__list">
-						<li><?php esc_html_e( 'Options', 'skilltriks-lms' ); ?></li>
-						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks-lms' ); ?></li>
+						<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 						<li class="stlms-option-action"></li>
 					</ul>
 				</div>
@@ -164,15 +164,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$optional_answers  = ! empty( $data['optional_answers'] ) ? $data['optional_answers'] : array_fill( 0, 4, '' );
 		?>
 		<div class="stlms-add-accepted-answers">
-			<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks-lms' ); ?></h3>
+			<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks' ); ?></h3>
 			<ul>
 				<li>
-					<label><?php esc_html_e( 'Mandatory', 'skilltriks-lms' ); ?></label>
+					<label><?php esc_html_e( 'Mandatory', 'skilltriks' ); ?></label>
 					<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[mandatory_answers]" value="<?php echo esc_attr( $mandatory_answers ); ?>">
 				</li>
 				<?php foreach ( $optional_answers as $optional_answer ) : ?>
 					<li>
-						<label><?php esc_html_e( 'Optional', 'skilltriks-lms' ); ?></label>
+						<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 						<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[optional_answers][]" value="<?php echo esc_attr( $optional_answer ); ?>">
 					</li>
 				<?php endforeach; ?>
@@ -181,6 +181,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="stlms-add-option hidden">
-		<button type="button" class="button stlms-add-answer"><?php esc_html_e( 'Add More Options', 'skilltriks-lms' ); ?></button>
+		<button type="button" class="button stlms-add-answer"><?php esc_html_e( 'Add More Options', 'skilltriks' ); ?></button>
 	</div>
 </div>

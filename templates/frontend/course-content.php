@@ -34,7 +34,7 @@ load_template(
 		<svg class="icon" width="20" height="20">
 			<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#menu-burger"></use>
 		</svg>
-		<span><?php esc_html_e( 'Course Content', 'skilltriks-lms' ); ?></span>
+		<span><?php esc_html_e( 'Course Content', 'skilltriks' ); ?></span>
 		<svg class="icon-cross" width="20" height="20">
 			<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 		</svg>
@@ -109,7 +109,7 @@ load_template(
 													$duration_type .= $duration > 1 ? 's' : '';
 													echo esc_html( sprintf( '%d %s', $duration, ucfirst( $duration_type ) ) );
 												} else {
-													echo esc_html__( 'No duration', 'skilltriks-lms' );
+													echo esc_html__( 'No duration', 'skilltriks' );
 												}
 												?>
 											</span>
@@ -127,7 +127,7 @@ load_template(
 					<div class="stlms-lesson-title">
 						<div class="no"><?php echo esc_html( ++$item_key ); ?>.</div>
 						<div class="stlms-lesson-name">
-							<div class="name"><?php esc_html_e( 'Conclusion', 'skilltriks-lms' ); ?></div>
+							<div class="name"><?php esc_html_e( 'Conclusion', 'skilltriks' ); ?></div>
 						</div>
 					</div>
 				</div>

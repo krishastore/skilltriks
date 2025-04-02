@@ -14,18 +14,18 @@ use ST\Lms\Helpers\ImportTable as Table;
  * Renders all the Data to be displayed in import log table.
  */
 ?>
-	</pre><div class="wrap"><div class="import-wrap"><h1><?php esc_html_e( 'Bulk Import Log', 'skilltriks-lms' ); ?></h1>
+	</pre><div class="wrap"><div class="import-wrap"><h1><?php esc_html_e( 'Bulk Import Log', 'skilltriks' ); ?></h1>
 		<div class="stlms-media-choose">
 			<div class="stlms-media-file">
-				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks-lms' ); ?></span>
+				<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks' ); ?></span>
 				<div class="filter-wrap">
 					<select name="filter" id="filter-import-type">
-						<option selected="selected" value="1"><?php esc_html_e( 'Questions', 'skilltriks-lms' ); ?></option>
-						<option value="2"><?php esc_html_e( 'Lessons', 'skilltriks-lms' ); ?></option>
-						<option value="3"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></option>
+						<option selected="selected" value="1"><?php esc_html_e( 'Questions', 'skilltriks' ); ?></option>
+						<option value="2"><?php esc_html_e( 'Lessons', 'skilltriks' ); ?></option>
+						<option value="3"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></option>
 					</select>
 				</div>
-				<a href="javascript:;" class="stlms-open-media button button-primary" data-library_type="text/csv" data-ext="csv"><?php esc_html_e( 'Import', 'skilltriks-lms' ); ?></a>
+				<a href="javascript:;" class="stlms-open-media button button-primary" data-library_type="text/csv" data-ext="csv"><?php esc_html_e( 'Import', 'skilltriks' ); ?></a>
 			</div>
 		</div>
 	</div>
@@ -52,7 +52,7 @@ use ST\Lms\Helpers\ImportTable as Table;
 				</div>				
 			</div>
 			<div class="_right">
-				<a href="#"><?php esc_html_e( 'View Log', 'skilltriks-lms' ); ?></a>
+				<a href="#"><?php esc_html_e( 'View Log', 'skilltriks' ); ?></a>
 			</div>
 		</div>
 		<div class="stlms-fileupload-progress">
@@ -80,13 +80,13 @@ use ST\Lms\Helpers\ImportTable as Table;
 			</div>
 		</div>
 		<div class="stlms-imported-qus">
-			<h3><?php esc_html_e( 'Imported Questions to Question Bank', 'skilltriks-lms' ); ?></h3>
+			<h3><?php esc_html_e( 'Imported Questions to Question Bank', 'skilltriks' ); ?></h3>
 			<ul>
 				<li>
 					<div>
 						<svg width="14" height="14">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#tick"></use>
-					</svg> <?php esc_html_e( 'Successful Import', 'skilltriks-lms' ); ?> 
+					</svg> <?php esc_html_e( 'Successful Import', 'skilltriks' ); ?> 
 					</div>
 					<span class="success-count"></span>
 				</li>
@@ -95,29 +95,29 @@ use ST\Lms\Helpers\ImportTable as Table;
 						<svg width="14" height="14">
 							<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#error"></use>
 						</svg>
-						<?php esc_html_e( 'Fail to Import', 'skilltriks-lms' ); ?> 
+						<?php esc_html_e( 'Fail to Import', 'skilltriks' ); ?> 
 					</div>
 					<span class="fail-count"></span>
 				</li>
 				<li>
-					<div><?php esc_html_e( 'Total Items Imported', 'skilltriks-lms' ); ?></div>
+					<div><?php esc_html_e( 'Total Items Imported', 'skilltriks' ); ?></div>
 					<span class="total-count"></span>
 				</li>
 			</ul>
 		</div>
 		<div class="stlms-import-action">
-			<button class="button button-primary"><?php esc_html_e( 'Done', 'skilltriks-lms' ); ?></button>
+			<button class="button button-primary"><?php esc_html_e( 'Done', 'skilltriks' ); ?></button>
 		</div>
 	</div>
 </div>
 <div id="bulk-import-cancel-modal" class="hidden" style="max-width:400px">
 	<div class="stlms-import-data">
 		<div class="stlms-imported-qus">
-			<div><?php esc_html_e( 'Do you want to keep the Data or Remove it.', 'skilltriks-lms' ); ?></div>
+			<div><?php esc_html_e( 'Do you want to keep the Data or Remove it.', 'skilltriks' ); ?></div>
 		</div>
 		<div class="stlms-import-action">
-			<button id="remove" class="button"><?php esc_html_e( 'Remove', 'skilltriks-lms' ); ?></button>
-			<button id="keep-data" class="button button-primary"><?php esc_html_e( 'Keep Data', 'skilltriks-lms' ); ?></button>
+			<button id="remove" class="button"><?php esc_html_e( 'Remove', 'skilltriks' ); ?></button>
+			<button id="keep-data" class="button button-primary"><?php esc_html_e( 'Keep Data', 'skilltriks' ); ?></button>
 		</div>
 	</div>
 </div>

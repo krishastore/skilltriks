@@ -13,19 +13,19 @@ $setting_tags = apply_filters(
 	'stlms_course_setting_tabs',
 	array(
 		'course-info'            => array(
-			'name'     => esc_html__( 'Course Information', 'skilltriks-lms' ),
+			'name'     => esc_html__( 'Course Information', 'skilltriks' ),
 			'template' => STLMS_TEMPLATEPATH . '/admin/course/setting-course-info.php',
 		),
 		'assessment'             => array(
-			'name'     => esc_html__( 'Assessment', 'skilltriks-lms' ),
+			'name'     => esc_html__( 'Assessment', 'skilltriks' ),
 			'template' => STLMS_TEMPLATEPATH . '/admin/course/setting-assessment.php',
 		),
 		'author'                 => array(
-			'name'     => esc_html__( 'Author', 'skilltriks-lms' ),
+			'name'     => esc_html__( 'Author', 'skilltriks' ),
 			'template' => STLMS_TEMPLATEPATH . '/admin/course/setting-author.php',
 		),
 		'downloadable-materials' => array(
-			'name'     => esc_html__( 'Downloadable Materials', 'skilltriks-lms' ),
+			'name'     => esc_html__( 'Downloadable Materials', 'skilltriks' ),
 			'template' => STLMS_TEMPLATEPATH . '/admin/course/setting-downloadable-materials.php',
 		),
 	)
@@ -62,47 +62,47 @@ $setting_tags = apply_filters(
 	<div class="stlms-materials-list-item material-add-new">
 		<ul class="hidden">
 			<li class="assignment-title"></li>
-			<li class="assignment-type"><?php esc_html_e( 'Upload', 'skilltriks-lms' ); ?></li>
+			<li class="assignment-type"><?php esc_html_e( 'Upload', 'skilltriks' ); ?></li>
 			<li>
 				<div class="stlms-materials-list-action">
 					<a href="javascript:;" class="edit-material">
 						<svg class="icon" width="12" height="12">
 							<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#edit"></use>
 						</svg>
-						<?php esc_html_e( 'Edit', 'skilltriks-lms' ); ?>
+						<?php esc_html_e( 'Edit', 'skilltriks' ); ?>
 					</a>
 					<a href="javascript:;" class="stlms-delete-link">
 						<svg class="icon" width="12" height="12">
 							<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
 						</svg>
-						<?php esc_html_e( 'Remove', 'skilltriks-lms' ); ?>
+						<?php esc_html_e( 'Remove', 'skilltriks' ); ?>
 					</a>
 				</div>
 			</li>
 		</ul>
 		<div class="stlms-materials-item">
 			<div class="stlms-media-choose">
-				<label><?php esc_html_e( 'File Title', 'skilltriks-lms' ); ?></label>
-				<input type="text" class="material-file-title" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][title]" placeholder="<?php esc_attr_e( 'Enter File Title', 'skilltriks-lms' ); ?>">
+				<label><?php esc_html_e( 'File Title', 'skilltriks' ); ?></label>
+				<input type="text" class="material-file-title" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][title]" placeholder="<?php esc_attr_e( 'Enter File Title', 'skilltriks' ); ?>">
 			</div>
 			<div class="stlms-media-choose material-type">
-				<label><?php esc_html_e( 'Method', 'skilltriks-lms' ); ?></label>
+				<label><?php esc_html_e( 'Method', 'skilltriks' ); ?></label>
 				<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][method]">
-					<option value="upload"><?php esc_html_e( 'Upload', 'skilltriks-lms' ); ?></option>
-					<option value="external"><?php esc_html_e( 'External', 'skilltriks-lms' ); ?></option>
+					<option value="upload"><?php esc_html_e( 'Upload', 'skilltriks' ); ?></option>
+					<option value="external"><?php esc_html_e( 'External', 'skilltriks' ); ?></option>
 				</select>
 			</div>
 			<div class="stlms-media-choose" data-media_type="choose_file">
-				<label><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></label>
+				<label><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></label>
 				<div class="stlms-media-file">
-					<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_material_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks-lms' ); ?></a>
-					<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks-lms' ); ?></span>
+					<a href="javascript:;" class="stlms-open-media button" data-library_type="application/pdf, text/plain" data-ext="<?php echo esc_attr( apply_filters( 'stlms_lesson_allowed_material_types', 'pdf,txt' ) ); ?>"><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></a>
+					<span class="stlms-media-name"><?php esc_html_e( 'No File Chosen', 'skilltriks' ); ?></span>
 					<input type="hidden" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][media_id]">
 				</div>
 			</div>
 			<div class="stlms-media-choose hidden" data-media_type="file_url">
-				<label><?php esc_html_e( 'File URL', 'skilltriks-lms' ); ?></label>
-				<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][external_url]" placeholder="<?php esc_attr_e( 'Enter File URL', 'skilltriks-lms' ); ?>">
+				<label><?php esc_html_e( 'File URL', 'skilltriks' ); ?></label>
+				<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[material][0][external_url]" placeholder="<?php esc_attr_e( 'Enter File URL', 'skilltriks' ); ?>">
 			</div>
 			<?php
 			do_action(
@@ -118,13 +118,13 @@ $setting_tags = apply_filters(
 			?>
 			<div class="stlms-media-choose">
 				<button type="button" class="button button-primary stlms-save-material">
-					<?php esc_html_e( 'Done', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'Done', 'skilltriks' ); ?>
 				</button>
 				<button type="button" class="stlms-remove-material">
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
 					</svg>
-					<?php esc_html_e( 'Delete', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'Delete', 'skilltriks' ); ?>
 				</button>
 			</div>
 		</div>

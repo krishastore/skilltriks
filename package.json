@@ -1,5 +1,5 @@
 {
-  "name": "skilltriks-lms",
+  "name": "skilltriks",
   "version": "1.0.0",
   "description": "SkilTriks LMS",
   "repository": {
@@ -9,7 +9,7 @@
   "keywords": [
     "wordpress-plugin"
   ],
-  "textdomain": "skilltriks-lms",
+  "textdomain": "skilltriks",
   "category": "plugins",
   "author": "KrishaWeb <support@krishaweb.com>",
   "license": "GPL-2.0+",

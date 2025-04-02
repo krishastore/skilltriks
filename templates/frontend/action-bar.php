@@ -50,19 +50,19 @@ $result_page_url = sprintf( '%s/%s/%d/', untrailingslashit( home_url() ), $cours
 				<svg class="icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-left"></use>
 				</svg>
-				<?php esc_html_e( 'Previous', 'skilltriks-lms' ); ?>
+				<?php esc_html_e( 'Previous', 'skilltriks' ); ?>
 			</a>
 		<?php endif; ?>
 		<?php if ( $next_key >= 1 && isset( $curriculums_keys[ $next_key ] ) ) : ?>
 			<a href="<?php echo esc_url( \ST\Lms\get_curriculum_link( $curriculums_keys[ $next_key ] ) ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn">
-				<?php esc_html_e( 'Next', 'skilltriks-lms' ); ?>
+				<?php esc_html_e( 'Next', 'skilltriks' ); ?>
 				<svg class="icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-right"></use>
 				</svg>
 			</a>
 		<?php else : ?>
 			<a href="<?php echo esc_url( $result_page_url ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn<?php echo 'video' === $curriculum_type ? ' hidden' : ''; ?>">
-				<?php esc_html_e( 'Next', 'skilltriks-lms' ); ?>
+				<?php esc_html_e( 'Next', 'skilltriks' ); ?>
 				<svg class="icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-right"></use>
 				</svg>

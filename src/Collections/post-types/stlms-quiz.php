@@ -18,31 +18,31 @@ function stlms_quiz_init() {
 		STLMS_QUIZ_CPT,
 		array(
 			'labels'                => array(
-				'name'                  => __( 'Quizzes', 'skilltriks-lms' ),
-				'singular_name'         => __( 'Quiz', 'skilltriks-lms' ),
-				'all_items'             => __( 'Quizzes', 'skilltriks-lms' ),
-				'archives'              => __( 'Quiz Archives', 'skilltriks-lms' ),
-				'attributes'            => __( 'Quiz Attributes', 'skilltriks-lms' ),
-				'insert_into_item'      => __( 'Insert into quiz', 'skilltriks-lms' ),
-				'uploaded_to_this_item' => __( 'Uploaded to this quiz', 'skilltriks-lms' ),
-				'featured_image'        => _x( 'Featured Image', 'stlms_quiz', 'skilltriks-lms' ),
-				'set_featured_image'    => _x( 'Set featured image', 'stlms_quiz', 'skilltriks-lms' ),
-				'remove_featured_image' => _x( 'Remove featured image', 'stlms_quiz', 'skilltriks-lms' ),
-				'use_featured_image'    => _x( 'Use as featured image', 'stlms_quiz', 'skilltriks-lms' ),
-				'filter_items_list'     => __( 'Filter Quizzes list', 'skilltriks-lms' ),
-				'items_list_navigation' => __( 'Quizzes list navigation', 'skilltriks-lms' ),
-				'items_list'            => __( 'Quizzes list', 'skilltriks-lms' ),
-				'new_item'              => __( 'New quiz', 'skilltriks-lms' ),
-				'add_new'               => __( 'Add New', 'skilltriks-lms' ),
-				'add_new_item'          => __( 'Add New Quiz', 'skilltriks-lms' ),
-				'edit_item'             => __( 'Edit quiz', 'skilltriks-lms' ),
+				'name'                  => __( 'Quizzes', 'skilltriks' ),
+				'singular_name'         => __( 'Quiz', 'skilltriks' ),
+				'all_items'             => __( 'Quizzes', 'skilltriks' ),
+				'archives'              => __( 'Quiz Archives', 'skilltriks' ),
+				'attributes'            => __( 'Quiz Attributes', 'skilltriks' ),
+				'insert_into_item'      => __( 'Insert into quiz', 'skilltriks' ),
+				'uploaded_to_this_item' => __( 'Uploaded to this quiz', 'skilltriks' ),
+				'featured_image'        => _x( 'Featured Image', 'stlms_quiz', 'skilltriks' ),
+				'set_featured_image'    => _x( 'Set featured image', 'stlms_quiz', 'skilltriks' ),
+				'remove_featured_image' => _x( 'Remove featured image', 'stlms_quiz', 'skilltriks' ),
+				'use_featured_image'    => _x( 'Use as featured image', 'stlms_quiz', 'skilltriks' ),
+				'filter_items_list'     => __( 'Filter Quizzes list', 'skilltriks' ),
+				'items_list_navigation' => __( 'Quizzes list navigation', 'skilltriks' ),
+				'items_list'            => __( 'Quizzes list', 'skilltriks' ),
+				'new_item'              => __( 'New quiz', 'skilltriks' ),
+				'add_new'               => __( 'Add New', 'skilltriks' ),
+				'add_new_item'          => __( 'Add New Quiz', 'skilltriks' ),
+				'edit_item'             => __( 'Edit quiz', 'skilltriks' ),
 				'view_item'             => '',
 				'view_items'            => '',
-				'search_items'          => __( 'Search Quizzes', 'skilltriks-lms' ),
-				'not_found'             => __( 'No quizzes found', 'skilltriks-lms' ),
-				'not_found_in_trash'    => __( 'No Quizzes found in trash', 'skilltriks-lms' ),
-				'parent_item_colon'     => __( 'Parent quiz:', 'skilltriks-lms' ),
-				'menu_name'             => __( 'Quizzes', 'skilltriks-lms' ),
+				'search_items'          => __( 'Search Quizzes', 'skilltriks' ),
+				'not_found'             => __( 'No quizzes found', 'skilltriks' ),
+				'not_found_in_trash'    => __( 'No Quizzes found in trash', 'skilltriks' ),
+				'parent_item_colon'     => __( 'Parent quiz:', 'skilltriks' ),
+				'menu_name'             => __( 'Quizzes', 'skilltriks' ),
 			),
 			'publicly_queryable'    => false,
 			'public'                => true,
@@ -78,21 +78,21 @@ function stlms_quiz_updated_messages( $messages ) {
 	$messages[ STLMS_QUIZ_CPT ] = array(
 		0  => '', // Unused. Messages start at index 1.
 		/* translators: %s: post permalink */
-		1  => sprintf( __( 'Quiz updated. <a target="_blank" href="%s">View quiz</a>', 'skilltriks-lms' ), esc_url( $permalink ) ),
-		2  => __( 'Custom field updated.', 'skilltriks-lms' ),
-		3  => __( 'Custom field deleted.', 'skilltriks-lms' ),
-		4  => __( 'Quiz updated.', 'skilltriks-lms' ),
+		1  => sprintf( __( 'Quiz updated. <a target="_blank" href="%s">View quiz</a>', 'skilltriks' ), esc_url( $permalink ) ),
+		2  => __( 'Custom field updated.', 'skilltriks' ),
+		3  => __( 'Custom field deleted.', 'skilltriks' ),
+		4  => __( 'Quiz updated.', 'skilltriks' ),
 		/* translators: %s: date and time of the revision */
-		5  => isset( $_GET['revision'] ) ? sprintf( __( 'quiz restored to revision from %s', 'skilltriks-lms' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		5  => isset( $_GET['revision'] ) ? sprintf( __( 'quiz restored to revision from %s', 'skilltriks' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		/* translators: %s: post permalink */
-		6  => sprintf( __( 'Quiz published. <a href="%s">View quiz</a>', 'skilltriks-lms' ), esc_url( $permalink ) ),
-		7  => __( 'Quiz saved.', 'skilltriks-lms' ),
+		6  => sprintf( __( 'Quiz published. <a href="%s">View quiz</a>', 'skilltriks' ), esc_url( $permalink ) ),
+		7  => __( 'Quiz saved.', 'skilltriks' ),
 		/* translators: %s: post permalink */
-		8  => sprintf( __( 'Quiz submitted. <a target="_blank" href="%s">Preview quiz</a>', 'skilltriks-lms' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+		8  => sprintf( __( 'Quiz submitted. <a target="_blank" href="%s">Preview quiz</a>', 'skilltriks' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 		/* translators: 1: Publish box date format, see https://secure.php.net/date 2: Post permalink */
-		9  => sprintf( __( 'Quiz scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview quiz</a>', 'skilltriks-lms' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks-lms' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
+		9  => sprintf( __( 'Quiz scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview quiz</a>', 'skilltriks' ), date_i18n( __( 'M j, Y @ G:i', 'skilltriks' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
 		/* translators: %s: post permalink */
-		10 => sprintf( __( 'Quiz draft updated. <a target="_blank" href="%s">Preview quiz</a>', 'skilltriks-lms' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
+		10 => sprintf( __( 'Quiz draft updated. <a target="_blank" href="%s">Preview quiz</a>', 'skilltriks' ), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 	);
 
 	return $messages;
@@ -113,16 +113,16 @@ function stlms_quiz_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 
 	$bulk_messages[ STLMS_QUIZ_CPT ] = array(
 		/* translators: %s: Number of Quizzes. */
-		'updated'   => _n( '%s Quiz updated.', '%s Quizzes updated.', $bulk_counts['updated'], 'skilltriks-lms' ),
-		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 quiz not updated, somebody is editing it.', 'skilltriks-lms' ) :
+		'updated'   => _n( '%s Quiz updated.', '%s Quizzes updated.', $bulk_counts['updated'], 'skilltriks' ),
+		'locked'    => ( 1 === $bulk_counts['locked'] ) ? __( '1 quiz not updated, somebody is editing it.', 'skilltriks' ) :
 						/* translators: %s: Number of Quizzes. */
-						_n( '%s Quiz not updated, somebody is editing it.', '%s Quizzes not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks-lms' ),
+						_n( '%s Quiz not updated, somebody is editing it.', '%s Quizzes not updated, somebody is editing them.', $bulk_counts['locked'], 'skilltriks' ),
 		/* translators: %s: Number of Quizzes. */
-		'deleted'   => _n( '%s quiz permanently deleted.', '%s Quizzes permanently deleted.', $bulk_counts['deleted'], 'skilltriks-lms' ),
+		'deleted'   => _n( '%s quiz permanently deleted.', '%s Quizzes permanently deleted.', $bulk_counts['deleted'], 'skilltriks' ),
 		/* translators: %s: Number of Quizzes. */
-		'trashed'   => _n( '%s quiz moved to the Trash.', '%s Quizzes moved to the Trash.', $bulk_counts['trashed'], 'skilltriks-lms' ),
+		'trashed'   => _n( '%s quiz moved to the Trash.', '%s Quizzes moved to the Trash.', $bulk_counts['trashed'], 'skilltriks' ),
 		/* translators: %s: Number of Quizzes. */
-		'untrashed' => _n( '%s quiz restored from the Trash.', '%s Quizzes restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks-lms' ),
+		'untrashed' => _n( '%s quiz restored from the Trash.', '%s Quizzes restored from the Trash.', $bulk_counts['untrashed'], 'skilltriks' ),
 	);
 
 	return $bulk_messages;

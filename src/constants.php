@@ -13,7 +13,7 @@
 namespace ST\Lms;
 
 const STLMS_SCRIPT_HANDLE = 'stlms-';
-const PARENT_MENU_SLUG    = 'skilltriks-lms';
+const PARENT_MENU_SLUG    = 'skilltriks';
 // Define constants for custom post types.
 const STLMS_COURSE_CPT   = 'stlms_course';
 const STLMS_LESSON_CPT   = 'stlms_lesson';

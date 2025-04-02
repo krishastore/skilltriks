@@ -69,12 +69,12 @@ class Course extends \ST\Lms\Collections\PostTypes {
 			array(
 				array(
 					'id'       => 'curriculum',
-					'title'    => __( 'Curriculum', 'skilltriks-lms' ),
+					'title'    => __( 'Curriculum', 'skilltriks' ),
 					'callback' => array( $this, 'render_curriculum' ),
 				),
 				array(
 					'id'       => 'course-settings',
-					'title'    => __( 'Course Settings', 'skilltriks-lms' ),
+					'title'    => __( 'Course Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_course_settings' ),
 				),
 			)
@@ -288,16 +288,16 @@ class Course extends \ST\Lms\Collections\PostTypes {
 		unset( $columns['author'] );
 		unset( $columns['comments'] );
 		unset( $columns['cb'] );
-		$columns['post_author']   = __( 'Author', 'skilltriks-lms' );
-		$columns['content']       = __( 'Content', 'skilltriks-lms' );
-		$columns['category_list'] = __( 'Categories', 'skilltriks-lms' );
-		$columns['comments_list'] = __( 'Comments', 'skilltriks-lms' );
+		$columns['post_author']   = __( 'Author', 'skilltriks' );
+		$columns['content']       = __( 'Content', 'skilltriks' );
+		$columns['category_list'] = __( 'Categories', 'skilltriks' );
+		$columns['comments_list'] = __( 'Comments', 'skilltriks' );
 		$columns['date']          = $date;
 
 		$columns = array_merge(
 			array(
 				'cb'        => $checkbox,
-				'thumbnail' => __( 'Thumbnail', 'skilltriks-lms' ),
+				'thumbnail' => __( 'Thumbnail', 'skilltriks' ),
 			),
 			$columns
 		);
@@ -333,17 +333,17 @@ class Course extends \ST\Lms\Collections\PostTypes {
 
 					$content = sprintf(
 						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-						_n( '%s Lesson', '%s Lessons', (int) $total_lessons, 'skilltriks-lms' ),
+						_n( '%s Lesson', '%s Lessons', (int) $total_lessons, 'skilltriks' ),
 						number_format_i18n( $total_lessons )
 					);
 					$content .= sprintf(
 						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-						_n( ' | %s Quiz', ' | %s Quizzes', (int) $total_quizzes, 'skilltriks-lms' ),
+						_n( ' | %s Quiz', ' | %s Quizzes', (int) $total_quizzes, 'skilltriks' ),
 						number_format_i18n( $total_quizzes )
 					);
 					echo esc_html( $content );
 				} else {
-					echo esc_html__( 'No Content', 'skilltriks-lms' );
+					echo esc_html__( 'No Content', 'skilltriks' );
 				}
 				break;
 			case 'category_list':
@@ -380,7 +380,7 @@ class Course extends \ST\Lms\Collections\PostTypes {
 				}
 				break;
 			case 'comments_list':
-				echo '<a href="' . esc_url( add_query_arg( 'p', $post_id, admin_url( 'edit-comments.php' ) ) ) . '">' . esc_html__( 'View', 'skilltriks-lms' ) . '</a>';
+				echo '<a href="' . esc_url( add_query_arg( 'p', $post_id, admin_url( 'edit-comments.php' ) ) ) . '">' . esc_html__( 'View', 'skilltriks' ) . '</a>';
 				break;
 			default:
 				break;
@@ -401,9 +401,9 @@ class Course extends \ST\Lms\Collections\PostTypes {
 			?>
 			<div class="stlms-course-wrap">
 				<nav class="nav-tab-wrapper">
-					<a href="<?php echo esc_url( add_query_arg( 'post_type', STLMS_COURSE_CPT, admin_url( 'edit.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CPT === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></a>
-					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_CATEGORY_TAX, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CATEGORY_TAX === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Categories', 'skilltriks-lms' ); ?></a>
-					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_TAXONOMY_TAG, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_TAXONOMY_TAG === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Tags', 'skilltriks-lms' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'post_type', STLMS_COURSE_CPT, admin_url( 'edit.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CPT === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_CATEGORY_TAX, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CATEGORY_TAX === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Categories', 'skilltriks' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_TAXONOMY_TAG, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_TAXONOMY_TAG === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Tags', 'skilltriks' ); ?></a>
 				</nav>
 			</div>
 			<?php
@@ -456,7 +456,7 @@ class Course extends \ST\Lms\Collections\PostTypes {
 				'post_id'   => $post_id,
 				'edit_link' => get_edit_post_link( $post_id ),
 				'view_link' => get_the_permalink( $post_id ),
-				'message'   => sprintf( __( '%s added', 'skilltriks-lms' ), ucfirst( $type ) ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+				'message'   => sprintf( __( '%s added', 'skilltriks' ), ucfirst( $type ) ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
 			)
 		);
 	}

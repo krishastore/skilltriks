@@ -13,16 +13,16 @@ $role_exists = ! empty( $options['user_role'] ) ? array_key_exists( $user_role, 
 if ( ! $role_exists ) {
 	?>
 	<div class="wrap">
-		<h2 style="display:inline-block; margin-right: 5px;"><?php esc_html_e( 'User capability roles', 'skilltriks-lms' ); ?></h2>
-		<a href="javascript:;" class="page-title-action stlms-add-new-role"><?php esc_html_e( 'Add New Role', 'skilltriks-lms' ); ?></a>
+		<h2 style="display:inline-block; margin-right: 5px;"><?php esc_html_e( 'User capability roles', 'skilltriks' ); ?></h2>
+		<a href="javascript:;" class="page-title-action stlms-add-new-role"><?php esc_html_e( 'Add New Role', 'skilltriks' ); ?></a>
 		<hr class="wp-header-end">
 		<form method="get">
 			<?php $this->capability_list->prepare_items(); ?>
 			<p class="search-box">
 				<input type="hidden" name="page" value="stlms_manage_roles">
-				<label class="screen-reader-text" for="search_email-search-input"><?php esc_html_e( 'Search:', 'skilltriks-lms' ); ?></label>
-				<input type="search" id="search_email-search-input" name="s" value="<?php echo isset( $_GET['s'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification ?>" placeholder="<?php esc_attr_e( 'Search by role name', 'skilltriks-lms' ); ?>">
-				<input type="submit" id="search-submit" class="button" value="<?php esc_attr_e( 'Search', 'skilltriks-lms' ); ?>">
+				<label class="screen-reader-text" for="search_email-search-input"><?php esc_html_e( 'Search:', 'skilltriks' ); ?></label>
+				<input type="search" id="search_email-search-input" name="s" value="<?php echo isset( $_GET['s'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification ?>" placeholder="<?php esc_attr_e( 'Search by role name', 'skilltriks' ); ?>">
+				<input type="submit" id="search-submit" class="button" value="<?php esc_attr_e( 'Search', 'skilltriks' ); ?>">
 			</p>
 			<?php $this->capability_list->display(); ?>
 		</form>
@@ -34,11 +34,11 @@ if ( ! $role_exists ) {
 				<input type="hidden" name="action" value="user_role" />
 				<?php wp_nonce_field( 'user_role', 'user-role-nonce' ); ?>
 				<div class="stlms-role-input">
-					<label for="user-role"><?php esc_html_e( 'Add New Role:', 'skilltriks-lms' ); ?></label>
+					<label for="user-role"><?php esc_html_e( 'Add New Role:', 'skilltriks' ); ?></label>
 					<input type="text" id="user-role" name="user_role" class="regular-text" required>
 				</div>
 				<div class="stlms-role-action">
-					<input type="submit" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks-lms' ); ?>" />
+					<input type="submit" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks' ); ?>" />
 				</div>
 			</form>
 		</div>

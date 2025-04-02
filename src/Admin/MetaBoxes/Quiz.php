@@ -68,12 +68,12 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				array(
 					'id'       => 'quiz-questions',
-					'title'    => __( 'Questions', 'skilltriks-lms' ),
+					'title'    => __( 'Questions', 'skilltriks' ),
 					'callback' => array( $this, 'render_questions' ),
 				),
 				array(
 					'id'       => 'quiz-settings',
-					'title'    => __( 'Quiz Settings', 'skilltriks-lms' ),
+					'title'    => __( 'Quiz Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_quiz_settings' ),
 				),
 			)
@@ -217,9 +217,9 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 	public function add_new_table_columns( $columns ) {
 		unset( $columns['date'] );
 		unset( $columns['author'] );
-		$columns['total_questions'] = __( 'Total Questions', 'skilltriks-lms' );
-		$columns['total_marks']     = __( 'Total Marks', 'skilltriks-lms' );
-		$columns['passing_marks']   = __( 'Passing Marks', 'skilltriks-lms' );
+		$columns['total_questions'] = __( 'Total Questions', 'skilltriks' );
+		$columns['total_marks']     = __( 'Total Marks', 'skilltriks' );
+		$columns['passing_marks']   = __( 'Passing Marks', 'skilltriks' );
 		return $columns;
 	}
 
@@ -284,17 +284,17 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 				<div class="inline-edit-quiz">
 					<div class="inline-edit-quiz-item stlms-passing-marks">
 						<label>
-							<span class="title"><?php esc_html_e( 'Passing Marks', 'skilltriks-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Passing Marks', 'skilltriks' ); ?></span>
 							<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][passing_marks]">
 						</label>
 					</div>
 					<div class="inline-edit-quiz-item">
 						<label>
-							<span class="title"><?php esc_html_e( 'Status', 'skilltriks-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Status', 'skilltriks' ); ?></span>
 							<select name="_status">
-								<option value="publish"><?php esc_html_e( 'Published', 'skilltriks-lms' ); ?></option>
-								<option value="pending"><?php esc_html_e( 'Pending Review', 'skilltriks-lms' ); ?></option>
-								<option value="draft"><?php esc_html_e( 'Draft', 'skilltriks-lms' ); ?></option>
+								<option value="publish"><?php esc_html_e( 'Published', 'skilltriks' ); ?></option>
+								<option value="pending"><?php esc_html_e( 'Pending Review', 'skilltriks' ); ?></option>
+								<option value="draft"><?php esc_html_e( 'Draft', 'skilltriks' ); ?></option>
 							</select>
 						</label>
 					</div>
@@ -303,7 +303,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 							<?php
 								$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_1;
 							?>
-							<span class="title"><?php esc_html_e( 'Category (Level 1)', 'skilltriks-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Category (Level 1)', 'skilltriks' ); ?></span>
 							<ul class="cat-checklist <?php echo esc_attr( $taxonomy ); ?>-checklist">
 								<?php wp_terms_checklist( 0, array( 'taxonomy' => $taxonomy ) ); ?>
 							</ul>
@@ -314,7 +314,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 							<?php
 								$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_2;
 							?>
-							<span class="title"><?php esc_html_e( 'Category (Level 2)', 'skilltriks-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Category (Level 2)', 'skilltriks' ); ?></span>
 							<ul class="cat-checklist <?php echo esc_attr( $taxonomy ); ?>-checklist">
 								<?php wp_terms_checklist( 0, array( 'taxonomy' => $taxonomy ) ); ?>
 							</ul>
@@ -351,7 +351,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 				array(
 					'post_id' => 0,
 					'status'  => false,
-					'message' => __( 'Error', 'skilltriks-lms' ),
+					'message' => __( 'Error', 'skilltriks' ),
 				)
 			);
 		}
@@ -360,7 +360,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				'post_id' => $post_id,
 				'status'  => true,
-				'message' => __( 'Question updated.', 'skilltriks-lms' ),
+				'message' => __( 'Question updated.', 'skilltriks' ),
 			)
 		);
 	}
@@ -377,7 +377,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 				array(
 					'post_id' => $post_id,
 					'status'  => false,
-					'message' => __( 'Error', 'skilltriks-lms' ),
+					'message' => __( 'Error', 'skilltriks' ),
 				)
 			);
 		}
@@ -386,7 +386,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				'post_id' => $post_id,
 				'status'  => true,
-				'message' => __( 'Successfully duplicated.', 'skilltriks-lms' ),
+				'message' => __( 'Successfully duplicated.', 'skilltriks' ),
 			)
 		);
 	}
@@ -398,7 +398,7 @@ class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
 		$questions = isset( $_POST['selected'] ) ? array_map( 'intval', $_POST['selected'] ) : array();
 		$action    = isset( $_POST['_action'] ) ? sanitize_text_field( wp_unslash( $_POST['_action'] ) ) : '';
-		$message   = __( 'Question Added.', 'skilltriks-lms' );
+		$message   = __( 'Question Added.', 'skilltriks' );
 
 		if ( 'create_new' === $action ) {
 			$post_id = wp_insert_post(

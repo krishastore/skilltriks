@@ -134,7 +134,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 		$screen = get_current_screen();
 		if ( $screen && in_array( $screen->post_type, array( \ST\Lms\STLMS_QUESTION_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
 			$query_args = array(
-				'show_option_all'  => __( 'Search by user', 'skilltriks-lms' ),
+				'show_option_all'  => __( 'Search by user', 'skilltriks' ),
 				'orderby'          => 'display_name',
 				'order'            => 'ASC',
 				'name'             => 'author',
@@ -150,7 +150,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 			if ( \ST\Lms\STLMS_QUESTION_CPT === $screen->post_type ) {
 				$taxonomy = \ST\Lms\STLMS_QUESTION_TAXONOMY_TAG;
 				$args     = array(
-					'show_option_none'  => __( 'All Question', 'skilltriks-lms' ),
+					'show_option_none'  => __( 'All Question', 'skilltriks' ),
 					'show_count'        => 0,
 					'orderby'           => 'name',
 					'taxonomy'          => $taxonomy,
@@ -170,7 +170,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 		if ( $screen && in_array( $screen->post_type, array( \ST\Lms\STLMS_QUIZ_CPT ), true ) ) {
 			$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_1;
 			$args     = array(
-				'show_option_none'  => __( 'All Quiz', 'skilltriks-lms' ),
+				'show_option_none'  => __( 'All Quiz', 'skilltriks' ),
 				'show_count'        => 0,
 				'orderby'           => 'name',
 				'taxonomy'          => $taxonomy,
@@ -227,7 +227,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 				'stlms_nonce'
 			);
 			?>
-			<a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_attr_e( 'Clone', 'skilltriks-lms' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_attr_e( 'Clone', 'skilltriks' ); ?></a>
 			<?php
 		}
 		?>
@@ -253,7 +253,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 			return;
 		}
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$new_title = $duplicate_only ? $post->post_title : wp_sprintf( esc_html__( 'Copy of %1$s', 'skilltriks-lms' ), $post->post_title );
+		$new_title = $duplicate_only ? $post->post_title : wp_sprintf( esc_html__( 'Copy of %1$s', 'skilltriks' ), $post->post_title );
 		$args      = array(
 			'comment_status' => $post->comment_status,
 			'ping_status'    => $post->ping_status,
@@ -351,7 +351,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 				STLMS_BASEFILE,
 				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks-lms' ) . ' </a>';
+			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
 		}
 		return $actions;
 	}

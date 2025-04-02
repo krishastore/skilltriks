@@ -5,7 +5,7 @@
  * Description:     A Comprehensive Solution For Training Management. Contact Us For More Details On Training Management System.
  * Author:          KrishaWeb
  * Author URI:      https://www.skilltriks.com/
- * Text Domain:     skilltriks-lms
+ * Text Domain:     skilltriks
  * License:         GPL v2 or later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:     /languages
@@ -36,7 +36,7 @@ define( 'STLMS_ASSETS', STLMS_ABSURL . 'assets' );
  * Plugin textdomain.
  */
 function stlms_textdomain() {
-	load_plugin_textdomain( 'skilltriks-lms', false, basename( __DIR__ ) . '/languages' );
+	load_plugin_textdomain( 'skilltriks', false, basename( __DIR__ ) . '/languages' );
 }
 add_action( 'plugins_loaded', 'stlms_textdomain', 20 );
 

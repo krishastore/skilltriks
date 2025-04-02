@@ -89,7 +89,7 @@ $courses     = new \WP_Query( $course_args );
 									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#search"></use>
 								</svg>
 							</span>
-							<input type="text" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Search', 'skilltriks-lms' ); ?>" value="<?php echo esc_attr( $search_keyword ); ?>">
+							<input type="text" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Search', 'skilltriks' ); ?>" value="<?php echo esc_attr( $search_keyword ); ?>">
 							<button type="submit" class="stlms-search-submit">
 								<svg width="22" height="22">
 									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#angle-circle-right"></use>
@@ -102,7 +102,7 @@ $courses     = new \WP_Query( $course_args );
 					<div class="stlms-accordion stlms-pb-20">
 						<div class="stlms-accordion-item" data-expanded="true">
 							<div class="stlms-accordion-header">
-								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course category', 'skilltriks-lms' ); ?></div>
+								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course category', 'skilltriks' ); ?></div>
 							</div>
 							<?php
 							$terms_list  = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
@@ -114,7 +114,7 @@ $courses     = new \WP_Query( $course_args );
 										<li>
 											<div class="stlms-check-wrap">
 												<input type="checkbox" class="stlms-check" id="stlms_category_all">
-												<label for="stlms_category_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks-lms' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
+												<label for="stlms_category_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
 											</div>
 										</li>
 										<?php foreach ( $terms_list as $key => $course_term ) : ?>
@@ -136,7 +136,7 @@ $courses     = new \WP_Query( $course_args );
 					<div class="stlms-accordion stlms-pb-20">
 						<div class="stlms-accordion-item" data-expanded="true">
 							<div class="stlms-accordion-header">
-								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course Level', 'skilltriks-lms' ); ?></div>
+								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course Level', 'skilltriks' ); ?></div>
 							</div>
 							<?php
 							$levels_list = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_TAXONOMY_TAG );
@@ -147,7 +147,7 @@ $courses     = new \WP_Query( $course_args );
 										<li>
 											<div class="stlms-check-wrap">
 												<input type="checkbox" class="stlms-check" id="stlms_level_all">
-												<label for="stlms_level_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks-lms' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
+												<label for="stlms_level_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
 											</div>
 										</li>
 										<?php foreach ( $levels_list as $key => $get_level ) : ?>
@@ -179,7 +179,7 @@ $courses     = new \WP_Query( $course_args );
 						echo esc_html(
 							sprintf(
 								// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment 
-								_n( 'Showing %s course', 'Showing %s courses', (int) $courses->post_count, 'skilltriks-lms' ),
+								_n( 'Showing %s course', 'Showing %s courses', (int) $courses->post_count, 'skilltriks' ),
 								number_format_i18n( $courses->post_count )
 							)
 						);
@@ -188,10 +188,10 @@ $courses     = new \WP_Query( $course_args );
 					<div class="stlms-sort-by">
 						<form onsubmit="return false;">
 							<select>
-								<option value=""><?php esc_html_e( 'Sort By', 'skilltriks-lms' ); ?></option>
-								<option value="asc"<?php selected( $_orderby, 'asc' ); ?>><?php esc_html_e( 'Alphabetically (A To Z)', 'skilltriks-lms' ); ?></option>
-								<option value="desc"<?php selected( $_orderby, 'desc' ); ?>><?php esc_html_e( 'Alphabetically (Z To A)', 'skilltriks-lms' ); ?></option>
-								<option value="newest"<?php selected( $_orderby, 'newest' ); ?>><?php esc_html_e( 'Newest', 'skilltriks-lms' ); ?></option>
+								<option value=""><?php esc_html_e( 'Sort By', 'skilltriks' ); ?></option>
+								<option value="asc"<?php selected( $_orderby, 'asc' ); ?>><?php esc_html_e( 'Alphabetically (A To Z)', 'skilltriks' ); ?></option>
+								<option value="desc"<?php selected( $_orderby, 'desc' ); ?>><?php esc_html_e( 'Alphabetically (Z To A)', 'skilltriks' ); ?></option>
+								<option value="newest"<?php selected( $_orderby, 'newest' ); ?>><?php esc_html_e( 'Newest', 'skilltriks' ); ?></option>
 							</select>
 						</form>
 						<button class="stlms-filter-toggle">
@@ -216,7 +216,7 @@ $courses     = new \WP_Query( $course_args );
 									$total_quizzes    = 0;
 									$course_view_link = get_the_permalink();
 									$course_link      = $course_view_link;
-									$button_text      = esc_html__( 'Enrol Now', 'skilltriks-lms' );
+									$button_text      = esc_html__( 'Enrol Now', 'skilltriks' );
 									$extra_class      = '';
 									$is_enrol         = false;
 									$total_duration   = 0;
@@ -238,14 +238,14 @@ $courses     = new \WP_Query( $course_args );
 											$user_id        = get_current_user_id();
 											$enrol_courses  = get_user_meta( $user_id, \ST\Lms\STLMS_ENROL_COURSES, true );
 											$is_enrol       = ! empty( $enrol_courses ) && in_array( get_the_ID(), $enrol_courses, true );
-											$button_text    = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks-lms' ) : $button_text;
+											$button_text    = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks' ) : $button_text;
 											$current_status = get_user_meta( $user_id, $meta_key, true );
 											if ( ! empty( $current_status ) ) {
 												$current_status  = ! is_string( $current_status ) ? end( $current_status ) : $current_status;
 												$current_status  = explode( '_', $current_status );
 												$section_id      = (int) reset( $current_status );
 												$item_id         = (int) end( $current_status );
-												$button_text     = esc_html__( 'Continue Learning', 'skilltriks-lms' );
+												$button_text     = esc_html__( 'Continue Learning', 'skilltriks' );
 												$extra_class     = ' stlms-btn-light';
 												$last_curriculum = end( $curriculums );
 												$last_curriculum = explode( '_', $last_curriculum );
@@ -258,7 +258,7 @@ $courses     = new \WP_Query( $course_args );
 														$first_curriculum = array_map( 'intval', $first_curriculum );
 														$section_id       = reset( $first_curriculum );
 														$item_id          = end( $first_curriculum );
-														$button_text      = esc_html__( 'Restart Course', 'skilltriks-lms' );
+														$button_text      = esc_html__( 'Restart Course', 'skilltriks' );
 														$extra_class      = ' stlms-btn-dark';
 													}
 												}
@@ -295,7 +295,7 @@ $courses     = new \WP_Query( $course_args );
 														echo wp_kses(
 															sprintf(
 																// Translators: %1$s to filter url, %2$s author name.
-																__( 'by <a href="%1$s">%2$s</a>', 'skilltriks-lms' ),
+																__( 'by <a href="%1$s">%2$s</a>', 'skilltriks' ),
 																add_query_arg(
 																	array(
 																		'filter_author' => get_the_author_meta( 'ID' ),
@@ -325,9 +325,9 @@ $courses     = new \WP_Query( $course_args );
 															$duration_str = \ST\Lms\seconds_to_decimal_hours( $total_duration );
 															if ( ! empty( $duration_str ) ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Hours', 'skilltriks-lms' ), $duration_str ) );
+																echo esc_html( sprintf( __( '%s Hours', 'skilltriks' ), $duration_str ) );
 															} else {
-																echo esc_html__( 'Lifetime', 'skilltriks-lms' );
+																echo esc_html__( 'Lifetime', 'skilltriks' );
 															}
 															?>
 														</li>
@@ -339,10 +339,10 @@ $courses     = new \WP_Query( $course_args );
 															<?php
 															if ( $total_lessons > 1 ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks-lms' ), $total_lessons ) );
+																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks' ), $total_lessons ) );
 															} else {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks-lms' ), $total_lessons ) );
+																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks' ), $total_lessons ) );
 															}
 															?>
 														</li>
@@ -354,10 +354,10 @@ $courses     = new \WP_Query( $course_args );
 															<?php
 															if ( $total_quizzes > 1 ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Quizzes', 'skilltriks-lms' ), $total_quizzes ) );
+																echo esc_html( sprintf( __( '%s Quizzes', 'skilltriks' ), $total_quizzes ) );
 															} else {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Quiz', 'skilltriks-lms' ), $total_quizzes ) );
+																echo esc_html( sprintf( __( '%s Quiz', 'skilltriks' ), $total_quizzes ) );
 															}
 															?>
 														</li>
@@ -373,9 +373,9 @@ $courses     = new \WP_Query( $course_args );
 							</ul>
 						</div>
 					<?php elseif ( ! empty( $search_keyword ) ) : ?>
-						<div class="stlms-text-xl stlms-p-16 stlms-bg-gray stlms-text-center stlms-text-primary-dark"><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'skilltriks-lms' ); ?> <a href="<?php echo esc_url( \ST\Lms\get_page_url( 'courses' ) ); ?>"><?php esc_html_e( 'Back to courses', 'skilltriks-lms' ); ?>.</a></div>
+						<div class="stlms-text-xl stlms-p-16 stlms-bg-gray stlms-text-center stlms-text-primary-dark"><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'skilltriks' ); ?> <a href="<?php echo esc_url( \ST\Lms\get_page_url( 'courses' ) ); ?>"><?php esc_html_e( 'Back to courses', 'skilltriks' ); ?>.</a></div>
 					<?php else : ?>
-						<div class="stlms-text-xl stlms-p-16 stlms-bg-gray stlms-text-center stlms-text-primary-dark"><?php esc_html_e( 'No courses were found.', 'skilltriks-lms' ); ?></div>
+						<div class="stlms-text-xl stlms-p-16 stlms-bg-gray stlms-text-center stlms-text-primary-dark"><?php esc_html_e( 'No courses were found.', 'skilltriks' ); ?></div>
 					<?php endif; ?>
 				</div>
 				<?php if ( isset( $args['pagination'] ) && 'yes' === $args['pagination'] ) : ?>

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="stlms-tab-content<?php echo esc_attr( $active_class ); ?>" data-tab="assessment">
 	<div class="stlms-cs-row">
-		<div class="stlms-cs-col-left"><?php esc_html_e( 'Evaluation', 'skilltriks-lms' ); ?></div>
+		<div class="stlms-cs-col-left"><?php esc_html_e( 'Evaluation', 'skilltriks' ); ?></div>
 		<div class="stlms-cs-col-right">
 			<div class="stlms-cs-drag-list">
 				<ul class="cs-drag-list">
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 	<div class="stlms-cs-row cs-passing-grade<?php echo 2 === $assessment['evaluation'] ? ' hidden' : ''; ?>">
-		<div class="stlms-cs-col-left"><?php esc_html_e( 'Passing Grade', 'skilltriks-lms' ); ?> (%)</div>
+		<div class="stlms-cs-col-left"><?php esc_html_e( 'Passing Grade', 'skilltriks' ); ?> (%)</div>
 		<div class="stlms-cs-col-right">
 			<div class="stlms-cs-drag-list">
 				<ul class="cs-drag-list">
 					<li>
 						<input type="number" value="<?php echo esc_attr( $assessment['passing_grade'] ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[assessment][passing_grade]" min="0" max="100" step="1">
 					</li>
-					<li><?php esc_html_e( 'The conditions that must be achieved to finish the course.', 'skilltriks-lms' ); ?></li>
+					<li><?php esc_html_e( 'The conditions that must be achieved to finish the course.', 'skilltriks' ); ?></li>
 				</ul>
 			</div>
 		</div>

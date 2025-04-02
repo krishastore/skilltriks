@@ -40,8 +40,8 @@ $current_user_email = $current_user->user_email;
 	<div class="stlms-course-banner" style="background-image: url('<?php echo esc_url( STLMS_ASSETS ) . '/images/course-detail-banner.jpg'; ?>')">
 		<div class="stlms-container">
 			<ul class="stlms-breadcrumb">
-				<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'skilltriks-lms' ); ?></a></li>
-				<li><a href="<?php echo esc_url( \ST\Lms\get_page_url( 'courses' ) ); ?>"><?php esc_html_e( 'Courses', 'skilltriks-lms' ); ?></a></li>
+				<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'skilltriks' ); ?></a></li>
+				<li><a href="<?php echo esc_url( \ST\Lms\get_page_url( 'courses' ) ); ?>"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></a></li>
 				<?php the_title( '<li class="active">', '</li>' ); ?>
 			</ul>
 			<?php
@@ -61,7 +61,7 @@ $current_user_email = $current_user->user_email;
 				echo wp_kses(
 					sprintf(
 						// Translators: %1$s to filter url, %2$s author name.
-						__( 'by: <a href="%1$s">%2$s</a>', 'skilltriks-lms' ),
+						__( 'by: <a href="%1$s">%2$s</a>', 'skilltriks' ),
 						add_query_arg(
 							array(
 								'filter_author' => $author_id,
@@ -97,13 +97,13 @@ $current_user_email = $current_user->user_email;
 		<div class="stlms-container">
 			<ul>
 				<?php if ( $content || $requirements || $what_you_learn || $skills_gain || $course_includes ) : ?>
-					<li><a href="javascript:;" class="goto-section" data-id="about"><?php echo esc_html_e( 'About Course', 'skilltriks-lms' ); ?></a></li>
+					<li><a href="javascript:;" class="goto-section" data-id="about"><?php echo esc_html_e( 'About Course', 'skilltriks' ); ?></a></li>
 				<?php endif; ?>
 				<?php if ( $has_curriculum ) : ?>
-					<li><a href="javascript:;" class="goto-section" data-id="course-content"><?php echo esc_html_e( 'Course Content', 'skilltriks-lms' ); ?></a></li>
+					<li><a href="javascript:;" class="goto-section" data-id="course-content"><?php echo esc_html_e( 'Course Content', 'skilltriks' ); ?></a></li>
 				<?php endif; ?>
 				<?php if ( $faq_questions && $faq_answers ) : ?>
-					<li><a href="javascript:;" class="goto-section" data-id="faq"><?php echo esc_html_e( 'FAQ', 'skilltriks-lms' ); ?></a></li>
+					<li><a href="javascript:;" class="goto-section" data-id="faq"><?php echo esc_html_e( 'FAQ', 'skilltriks' ); ?></a></li>
 				<?php endif; ?>
 			</ul>
 		</div>
@@ -140,7 +140,7 @@ $current_user_email = $current_user->user_email;
 							$is_enrol        = ! empty( $enrol_courses ) && in_array( get_the_ID(), $enrol_courses, true );
 							?>
 							<div class="stlms-course-info">
-								<h3><?php echo esc_html_e( 'Course Includes', 'skilltriks-lms' ); ?></h3>
+								<h3><?php echo esc_html_e( 'Course Includes', 'skilltriks' ); ?></h3>
 								<ul class="stlms-course-include">
 									<li>
 										<svg width="16" height="16">
@@ -152,7 +152,7 @@ $current_user_email = $current_user->user_email;
 											echo wp_kses(
 												sprintf(
 													// Translators: %s total course duration.
-													__( 'Hours <span>%s</span>', 'skilltriks-lms' ),
+													__( 'Hours <span>%s</span>', 'skilltriks' ),
 													$duration_str
 												),
 												array(
@@ -161,7 +161,7 @@ $current_user_email = $current_user->user_email;
 											);
 										} else {
 											echo wp_kses(
-												__( 'Hours <span>Lifetime</span>', 'skilltriks-lms' ),
+												__( 'Hours <span>Lifetime</span>', 'skilltriks' ),
 												array(
 													'span' => array(),
 												)
@@ -178,7 +178,7 @@ $current_user_email = $current_user->user_email;
 										echo wp_kses(
 											sprintf(
 												// Translators: %d total number of lesson.
-												__( 'Lesson <span>%d</span>', 'skilltriks-lms' ),
+												__( 'Lesson <span>%d</span>', 'skilltriks' ),
 												$total_lessons
 											),
 											array(
@@ -196,7 +196,7 @@ $current_user_email = $current_user->user_email;
 										echo wp_kses(
 											sprintf(
 												// Translators: %d total number of quiz.
-												__( 'Quiz<span>%d</span>', 'skilltriks-lms' ),
+												__( 'Quiz<span>%d</span>', 'skilltriks' ),
 												$total_quizzes
 											),
 											array(
@@ -214,7 +214,7 @@ $current_user_email = $current_user->user_email;
 										echo wp_kses(
 											sprintf(
 												// Translators: %s passing grade.
-												__( 'Passing Grade<span>%s</span>', 'skilltriks-lms' ),
+												__( 'Passing Grade<span>%s</span>', 'skilltriks' ),
 												esc_html( $passing_grade )
 											),
 											array(
@@ -228,7 +228,7 @@ $current_user_email = $current_user->user_email;
 											<div class="stlms-progress__label">
 												<?php
 													// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-													echo esc_html( sprintf( __( '%s Complete', 'skilltriks-lms' ), $course_progress ) );
+													echo esc_html( sprintf( __( '%s Complete', 'skilltriks' ), $course_progress ) );
 												?>
 											</div>
 											<div class="stlms-progress__bar">
@@ -246,17 +246,17 @@ $current_user_email = $current_user->user_email;
 								$section_id       = 1;
 								$item_id          = isset( $first_item['item_id'] ) ? $first_item['item_id'] : 0;
 								$course_link      = get_the_permalink();
-								$button_text      = esc_html__( 'Enrol Now', 'skilltriks-lms' );
+								$button_text      = esc_html__( 'Enrol Now', 'skilltriks' );
 								$extra_class      = '';
 								$meta_key         = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
-								$button_text      = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks-lms' ) : $button_text;
+								$button_text      = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks' ) : $button_text;
 								$current_status   = get_user_meta( $current_user_id, $meta_key, true );
 								if ( ! empty( $current_status ) ) {
 									$current_status  = ! is_string( $current_status ) ? end( $current_status ) : $current_status;
 									$current_status  = explode( '_', $current_status );
 									$section_id      = (int) reset( $current_status );
 									$item_id         = (int) end( $current_status );
-									$button_text     = esc_html__( 'Continue Learning', 'skilltriks-lms' );
+									$button_text     = esc_html__( 'Continue Learning', 'skilltriks' );
 									$extra_class     = ' stlms-btn-light';
 									$last_curriculum = end( $curriculums_list );
 									$items           = isset( $last_curriculum['items'] ) ? $last_curriculum['items'] : array();
@@ -268,7 +268,7 @@ $current_user_email = $current_user->user_email;
 										if ( $restart_course ) {
 											$section_id         = 1;
 											$item_id            = isset( $first_item['item_id'] ) ? $first_item['item_id'] : 0;
-											$button_text        = esc_html__( 'Restart Course', 'skilltriks-lms' );
+											$button_text        = esc_html__( 'Restart Course', 'skilltriks' );
 											$extra_class        = ' stlms-btn-dark';
 											$course_completed   = true;
 											$course_certificate = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_SIGNATURE, true );
@@ -283,7 +283,7 @@ $current_user_email = $current_user->user_email;
 								<div class="cta">
 									<a href="<?php echo ! $is_enrol && is_user_logged_in() ? 'javascript:;' : esc_url( $course_link ); ?>" class="stlms-btn stlms-btn-block <?php echo esc_attr( $extra_class ); ?>" id="<?php echo ! $is_enrol && is_user_logged_in() ? 'enrol-now' : ''; ?>" data-course="<?php echo esc_attr( $course_id ); ?>"><?php echo esc_html( $button_text ); ?><i class="stlms-loader"></i></a>
 									<?php if ( $has_certificate && '100%' === $course_progress ) : ?>
-										<a href="javascript:;" id="download-certificate" data-course="<?php echo esc_attr( $course_id ); ?>" class="stlms-btn stlms-btn-block download-certificate"><?php esc_html_e( 'Download certificate', 'skilltriks-lms' ); ?></a>
+										<a href="javascript:;" id="download-certificate" data-course="<?php echo esc_attr( $course_id ); ?>" class="stlms-btn stlms-btn-block download-certificate"><?php esc_html_e( 'Download certificate', 'skilltriks' ); ?></a>
 									<?php endif; ?>
 								</div>
 							</div>
@@ -293,7 +293,7 @@ $current_user_email = $current_user->user_email;
 				<div class="stlms-course-left">
 					<?php if ( $content ) : ?>
 						<div class="stlms-course-requirement-box" id="about">
-							<h3><?php echo esc_html_e( 'About Course', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'About Course', 'skilltriks' ); ?></h3>
 							<div class="stlms-quiz-content">
 								<?php echo wp_kses_post( wpautop( $content ) ); ?>
 							</div>
@@ -301,7 +301,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( $requirements ) : ?>
 						<div class="stlms-course-requirement-box">
-							<h3><?php echo esc_html_e( 'Course Requirement', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'Course Requirement', 'skilltriks' ); ?></h3>
 							<ul class="stlms-course-requirement-check">
 								<?php foreach ( $requirements as $requirement ) : ?>
 									<li><?php echo esc_html( $requirement ); ?></li>
@@ -311,7 +311,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( $what_you_learn ) : ?>
 						<div class="stlms-course-requirement-box learn-box">
-							<h3><?php echo esc_html_e( 'What We Learn', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'What We Learn', 'skilltriks' ); ?></h3>
 							<ul class="stlms-course-requirement-check">
 								<?php foreach ( $what_you_learn as $learn ) : ?>
 									<li><?php echo esc_html( $learn ); ?></li>
@@ -321,7 +321,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( $skills_gain ) : ?>
 						<div class="stlms-course-requirement-box skill-box">
-							<h3><?php echo esc_html_e( 'Skills you Gain', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'Skills you Gain', 'skilltriks' ); ?></h3>
 							<ul class="stlms-course-requirement-check">
 								<?php foreach ( $skills_gain as $skill ) : ?>
 									<li><?php echo esc_html( $skill ); ?></li>
@@ -331,7 +331,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( $course_includes ) : ?>
 						<div class="stlms-course-requirement-box include-box">
-							<h3><?php echo esc_html_e( 'Course Includes', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'Course Includes', 'skilltriks' ); ?></h3>
 							<ul class="stlms-course-requirement-check">
 								<?php foreach ( $course_includes as $course_include ) : ?>
 									<li><?php echo esc_html( $course_include ); ?></li>
@@ -341,7 +341,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( ! empty( $curriculums_list ) && $has_curriculum ) : ?>
 						<div class="stlms-course-requirement-box" id="course-content">
-							<h3><?php echo esc_html_e( 'Course Content', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'Course Content', 'skilltriks' ); ?></h3>
 							<div class="stlms-accordion-course-content">
 								<div class="stlms-accordion">
 									<?php
@@ -434,14 +434,14 @@ $current_user_email = $current_user->user_email;
 																			$duration_type .= $duration > 1 ? 's' : '';
 																			echo esc_html( sprintf( '%d %s', $duration, ucfirst( $duration_type ) ) );
 																		} else {
-																			echo esc_html_e( 'No duration', 'skilltriks-lms' );
+																			echo esc_html_e( 'No duration', 'skilltriks' );
 																		}
 																		?>
 																		</span>
 																		<?php if ( ( $current_section_id === $item_key && $current_item_id === $item_id ) && ! $course_completed ) : ?>
-																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks-lms' ); ?></a>
+																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks' ); ?></a>
 																		<?php elseif ( empty( $current_section_id ) && 1 === $item_key && 1 === $key && $is_enrol ) : ?>
-																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks-lms' ); ?></a>
+																			<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn"><?php echo esc_html_e( 'Continue', 'skilltriks' ); ?></a>
 																		<?php elseif ( $inactive && ! $course_completed ) : ?>
 																			<svg class="lock-icon" width="16" height="16">
 																				<use
@@ -465,7 +465,7 @@ $current_user_email = $current_user->user_email;
 					<?php endif; ?>
 					<?php if ( $faq_questions && $faq_answers ) : ?>
 						<div class="stlms-course-requirement-box" id="faq">
-							<h3><?php echo esc_html_e( 'FAQ', 'skilltriks-lms' ); ?></h3>
+							<h3><?php echo esc_html_e( 'FAQ', 'skilltriks' ); ?></h3>
 							<div class="stlms-accordion-faq">
 								<div class="stlms-accordion">
 									<?php
@@ -521,7 +521,7 @@ $current_user_email = $current_user->user_email;
 						?>
 						<div class="stlms-similar-course">
 							<div class="stlms-similar-course-title">
-								<h3><?php echo esc_html_e( 'Similar Courses', 'skilltriks-lms' ); ?></h3>
+								<h3><?php echo esc_html_e( 'Similar Courses', 'skilltriks' ); ?></h3>
 								<?php if ( $courses->post_count > 3 ) : ?>
 									<div class="stlms-slider-arrows">
 										<div class="stlms-slider-arrow stlms-sc-slider-prev">
@@ -550,7 +550,7 @@ $current_user_email = $current_user->user_email;
 										$total_lessons    = 0;
 										$total_quizzes    = 0;
 										$course_view_link = get_the_permalink();
-										$button_text      = esc_html__( 'Enrol Now', 'skilltriks-lms' );
+										$button_text      = esc_html__( 'Enrol Now', 'skilltriks' );
 										$extra_class      = '';
 										if ( ! empty( $curriculums ) ) {
 											$lessons          = \ST\Lms\get_curriculums( $curriculums, \ST\Lms\STLMS_LESSON_CPT );
@@ -570,14 +570,14 @@ $current_user_email = $current_user->user_email;
 												$user_id        = get_current_user_id();
 												$enrol_courses  = get_user_meta( $user_id, \ST\Lms\STLMS_ENROL_COURSES, true );
 												$is_enrol       = ! empty( $enrol_courses ) && in_array( get_the_ID(), $enrol_courses, true );
-												$button_text    = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks-lms' ) : $button_text;
+												$button_text    = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks' ) : $button_text;
 												$current_status = get_user_meta( $user_id, $meta_key, true );
 												if ( ! empty( $current_status ) ) {
 													$current_status  = ! is_string( $current_status ) ? end( $current_status ) : $current_status;
 													$current_status  = explode( '_', $current_status );
 													$section_id      = (int) reset( $current_status );
 													$item_id         = (int) end( $current_status );
-													$button_text     = esc_html__( 'Continue Learning', 'skilltriks-lms' );
+													$button_text     = esc_html__( 'Continue Learning', 'skilltriks' );
 													$extra_class     = ' stlms-btn-light';
 													$last_curriculum = end( $curriculums );
 													$last_curriculum = explode( '_', $last_curriculum );
@@ -590,7 +590,7 @@ $current_user_email = $current_user->user_email;
 															$first_curriculum = array_map( 'intval', $first_curriculum );
 															$section_id       = reset( $first_curriculum );
 															$item_id          = end( $first_curriculum );
-															$button_text      = esc_html__( 'Restart Course', 'skilltriks-lms' );
+															$button_text      = esc_html__( 'Restart Course', 'skilltriks' );
 															$extra_class      = ' stlms-btn-dark';
 														}
 													}
@@ -625,7 +625,7 @@ $current_user_email = $current_user->user_email;
 															echo wp_kses(
 																sprintf(
 																	// Translators: %1$s to filter url, %2$s author name.
-																	__( 'by <a href="%1$s">%2$s</a>', 'skilltriks-lms' ),
+																	__( 'by <a href="%1$s">%2$s</a>', 'skilltriks' ),
 																	add_query_arg(
 																		array(
 																			'filter_author' => get_the_author_meta( 'ID' ),
@@ -654,9 +654,9 @@ $current_user_email = $current_user->user_email;
 															$duration_str = \ST\Lms\seconds_to_decimal_hours( $total_duration );
 															if ( ! empty( $duration_str ) ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Hours', 'skilltriks-lms' ), $duration_str ) );
+																echo esc_html( sprintf( __( '%s Hours', 'skilltriks' ), $duration_str ) );
 															} else {
-																echo esc_html_e( 'Lifetime', 'skilltriks-lms' );
+																echo esc_html_e( 'Lifetime', 'skilltriks' );
 															}
 															?>
 														</li>
@@ -668,10 +668,10 @@ $current_user_email = $current_user->user_email;
 															<?php
 															if ( $total_lessons > 1 ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks-lms' ), $total_lessons ) );
+																echo esc_html( sprintf( __( '%s Lessons', 'skilltriks' ), $total_lessons ) );
 															} else {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Lesson', 'skilltriks-lms' ), $total_lessons ) );
+																echo esc_html( sprintf( __( '%s Lesson', 'skilltriks' ), $total_lessons ) );
 															}
 															?>
 														</li>
@@ -683,10 +683,10 @@ $current_user_email = $current_user->user_email;
 															<?php
 															if ( $total_quizzes > 1 ) {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Quizzes', 'skilltriks-lms' ), $total_quizzes ) );
+																echo esc_html( sprintf( __( '%s Quizzes', 'skilltriks' ), $total_quizzes ) );
 															} else {
 																// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-																echo esc_html( sprintf( __( '%s Quiz', 'skilltriks-lms' ), $total_quizzes ) );
+																echo esc_html( sprintf( __( '%s Quiz', 'skilltriks' ), $total_quizzes ) );
 															}
 															?>
 														</li>

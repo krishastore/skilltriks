@@ -41,7 +41,7 @@ class Results extends \ST\Lms\Collections\PostTypes {
 			array(
 				array(
 					'id'       => 'result-view',
-					'title'    => __( 'Quiz result', 'skilltriks-lms' ),
+					'title'    => __( 'Quiz result', 'skilltriks' ),
 					'callback' => array( $this, 'render_results' ),
 				),
 			)
@@ -64,23 +64,23 @@ class Results extends \ST\Lms\Collections\PostTypes {
 		<table class="wp-list-table widefat fixed striped posts" style="margin-top: 15px;">
 			<tbody>
 				<tr>
-					<th><?php esc_html_e( 'Course', 'skilltriks-lms' ); ?></th>
+					<th><?php esc_html_e( 'Course', 'skilltriks' ); ?></th>
 					<td><a href="<?php echo esc_url( get_edit_post_link( $course_id ) ); ?>"><?php echo esc_html( get_the_title( $course_id ) ); ?></a></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Quiz', 'skilltriks-lms' ); ?></th>
+					<th><?php esc_html_e( 'Quiz', 'skilltriks' ); ?></th>
 					<td><a href="<?php echo esc_url( get_edit_post_link( $quiz_id ) ); ?>"><?php echo esc_html( get_the_title( $quiz_id ) ); ?></a></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Grade', 'skilltriks-lms' ); ?></th>
+					<th><?php esc_html_e( 'Grade', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $grade_percentage ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Accuracy', 'skilltriks-lms' ); ?></th>
+					<th><?php esc_html_e( 'Accuracy', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $accuracy ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Time', 'skilltriks-lms' ); ?></th>
+					<th><?php esc_html_e( 'Time', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $time_str ); ?></td>
 				</tr>
 			</tbody>
@@ -97,10 +97,10 @@ class Results extends \ST\Lms\Collections\PostTypes {
 	public function add_new_table_columns( $columns ) {
 		unset( $columns['date'] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Employee', 'skilltriks-lms' );
-		$columns['grade']       = __( 'Corect answers', 'skilltriks-lms' );
-		$columns['accuracy']    = __( 'Attempted Questions', 'skilltriks-lms' );
-		$columns['time']        = __( 'Time taken', 'skilltriks-lms' );
+		$columns['post_author'] = __( 'Employee', 'skilltriks' );
+		$columns['grade']       = __( 'Corect answers', 'skilltriks' );
+		$columns['accuracy']    = __( 'Attempted Questions', 'skilltriks' );
+		$columns['time']        = __( 'Time taken', 'skilltriks' );
 		return $columns;
 	}
 
@@ -145,7 +145,7 @@ class Results extends \ST\Lms\Collections\PostTypes {
 	public function quick_actions( $actions, $post ) {
 		if ( STLMS_RESULTS_CPT === $post->post_type ) {
 			unset( $actions['inline hide-if-no-js'] );
-			$newtext = __( 'View More Details', 'skilltriks-lms' );
+			$newtext = __( 'View More Details', 'skilltriks' );
 			if ( isset( $actions['edit'] ) ) {
 				$actions['edit'] = preg_replace( '/(<a.*?>).*?(<\/a>)/', '$1' . $newtext . '$2', $actions['edit'] );
 			}

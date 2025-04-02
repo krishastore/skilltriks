@@ -14,7 +14,7 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 
 <div class="stlms-tab-title-wrap">
 	<h1 class="title">
-		<?php esc_html_e( 'Choose your theme', 'skilltriks-lms' ); ?>
+		<?php esc_html_e( 'Choose your theme', 'skilltriks' ); ?>
 	</h1>
 </div>
 
@@ -29,7 +29,7 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-default' === $theme_name ) { ?>
-								<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="button button-primary"><?php echo esc_html_e( 'Customize', 'skilltriks-lms' ); ?></a>
+								<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="button button-primary"><?php echo esc_html_e( 'Customize', 'skilltriks' ); ?></a>
 							<?php } else { ?>
 								<a href="
 								<?php
@@ -45,13 +45,13 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 										)
 									);
 								?>
-								" class="button button-primary"><?php esc_html_e( 'Activate', 'skilltriks-lms' ); ?></a>
+								" class="button button-primary"><?php esc_html_e( 'Activate', 'skilltriks' ); ?></a>
 							<?php } ?>
 						</div>
 					</div>
 				</div>
 				<div class="card-bottom <?php echo 'layout-default' === $theme_name ? 'active' : ''; ?>">
-					<div class="theme-title"><?php echo 'layout-default' === $theme_name ? esc_html_e( 'Active: ', 'skilltriks-lms' ) : ''; ?><?php esc_html_e( 'Default Theme', 'skilltriks-lms' ); ?></div>
+					<div class="theme-title"><?php echo 'layout-default' === $theme_name ? esc_html_e( 'Active: ', 'skilltriks' ) : ''; ?><?php esc_html_e( 'Default Theme', 'skilltriks' ); ?></div>
 				</div>
 			</div>
 		</li>
@@ -64,7 +64,7 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-2' === $theme_name ) { ?>
-							<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="button button-primary"><?php echo esc_html_e( 'Customize', 'skilltriks-lms' ); ?></a>
+							<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="button button-primary"><?php echo esc_html_e( 'Customize', 'skilltriks' ); ?></a>
 							<?php } else { ?>
 								<a href="
 								<?php
@@ -80,14 +80,14 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 									)
 								);
 								?>
-								" class="button button-primary"><?php esc_html_e( 'Activate', 'skilltriks-lms' ); ?></a>
+								" class="button button-primary"><?php esc_html_e( 'Activate', 'skilltriks' ); ?></a>
 							<?php } ?>
-							<button class="button button-primary stlms-bulk-import"><?php esc_html_e( 'Preview', 'skilltriks-lms' ); ?></button>
+							<button class="button button-primary stlms-bulk-import"><?php esc_html_e( 'Preview', 'skilltriks' ); ?></button>
 						</div>
 					</div>
 				</div>
 				<div class="card-bottom <?php echo 'layout-2' === $theme_name ? 'active' : ''; ?>">
-					<div class="theme-title"><?php echo 'layout-2' === $theme_name ? esc_html_e( 'Active: ', 'skilltriks-lms' ) : ''; ?><?php esc_html_e( 'Theme Layout 2', 'skilltriks-lms' ); ?></div>
+					<div class="theme-title"><?php echo 'layout-2' === $theme_name ? esc_html_e( 'Active: ', 'skilltriks' ) : ''; ?><?php esc_html_e( 'Theme Layout 2', 'skilltriks' ); ?></div>
 				</div>
 			</div>
 		</li>

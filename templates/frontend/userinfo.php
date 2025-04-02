@@ -25,18 +25,18 @@ if ( is_user_logged_in() ) :
 			<span class="stlms-user-name"><?php echo esc_html( $userinfo->display_name ); ?></span>
 			<div class="stlms-user-dd">
 				<div class="stlms-user-dd__toggle">
-					<?php esc_html_e( 'My Account', 'skilltriks-lms' ); ?>
+					<?php esc_html_e( 'My Account', 'skilltriks' ); ?>
 					<svg width="24" height="24">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-down"></use>
 					</svg>
 				</div>
 				<div class="stlms-user-dd__menu">
-					<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'my_learning' ) ); ?>" class="stlms-user-dd__link"><?php esc_html_e( 'My Learnings', 'skilltriks-lms' ); ?></a>
-					<a href="<?php echo esc_url( $logout_url ); ?>" class="stlms-user-dd__link"><?php esc_html_e( 'Logout', 'skilltriks-lms' ); ?></a>
+					<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'my_learning' ) ); ?>" class="stlms-user-dd__link"><?php esc_html_e( 'My Learnings', 'skilltriks' ); ?></a>
+					<a href="<?php echo esc_url( $logout_url ); ?>" class="stlms-user-dd__link"><?php esc_html_e( 'Logout', 'skilltriks' ); ?></a>
 				</div>
 			</div>
 		</div>
 	</div>
 <?php else : ?>
-	<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'login' ) ); ?>" class="stlms-btn stlms-btn-block"><?php esc_html_e( 'Login', 'skilltriks-lms' ); ?></a>
+	<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'login' ) ); ?>" class="stlms-btn stlms-btn-block"><?php esc_html_e( 'Login', 'skilltriks' ); ?></a>
 <?php endif; ?>

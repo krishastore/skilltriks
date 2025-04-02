@@ -292,7 +292,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 				</svg>
 			</div>
 			<div class="stlms-alert-text">
-				<div class="stlms-alert-title">' . esc_html__( 'Correct Answer', 'skilltriks-lms' ) . '</div>
+				<div class="stlms-alert-title">' . esc_html__( 'Correct Answer', 'skilltriks' ) . '</div>
 				<p>' . esc_html( $correct_msg ) . '</p>
 			</div>
 		</div>';
@@ -304,7 +304,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 				</svg>
 			</div>
 			<div class="stlms-alert-text">
-				<div class="stlms-alert-title">' . esc_html__( 'Incorrect Answer', 'skilltriks-lms' ) . '</div>
+				<div class="stlms-alert-title">' . esc_html__( 'Incorrect Answer', 'skilltriks' ) . '</div>
 				<p>' . $incorrect_msg . '</p>
 			</div>
 		</div>';
@@ -399,9 +399,9 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 
 		$diff_timestamp = abs( $quiz_timestamp - $timer_timestamp );
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$time_str = sprintf( esc_html__( '%s mins', 'skilltriks-lms' ), round( $diff_timestamp / 60, 2 ) );
+		$time_str = sprintf( esc_html__( '%s mins', 'skilltriks' ), round( $diff_timestamp / 60, 2 ) );
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$accuracy = sprintf( esc_html__( '%1$d/%2$d', 'skilltriks-lms' ), intval( count( $total_attend_questions ) ), $total_questions );
+		$accuracy = sprintf( esc_html__( '%1$d/%2$d', 'skilltriks' ), intval( count( $total_attend_questions ) ), $total_questions );
 
 		$grade_percentage = round( count( $correct_answers ) / $total_questions * 100, 2 );
 		// Quiz data.

@@ -90,36 +90,36 @@ class SettingOptions {
 	public function set_fields() {
 		$this->fields = array(
 			'client_id'             => array(
-				'title' => esc_html__( 'Client ID', 'skilltriks-lms' ),
+				'title' => esc_html__( 'Client ID', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'client_secret'         => array(
-				'title' => esc_html__( 'Client Secret', 'skilltriks-lms' ),
+				'title' => esc_html__( 'Client Secret', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'redirect_uri'          => array(
-				'title'    => esc_html__( 'Redirect URL', 'skilltriks-lms' ),
+				'title'    => esc_html__( 'Redirect URL', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'skilltriks-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
+				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
 				'type'     => 'url',
 				'value'    => home_url( \ST\Lms\get_page_url( 'login', true ) ),
 				'readonly' => true,
 			),
 			'company_logo'          => array(
-				'title' => esc_html__( 'Company Logo', 'skilltriks-lms' ),
-				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'skilltriks-lms' ),
+				'title' => esc_html__( 'Company Logo', 'skilltriks' ),
+				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'skilltriks' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['company_logo'] ) ? esc_url( $this->options['company_logo'] ) : '',
 			),
 			'certificate_signature' => array(
-				'title' => esc_html__( 'Certificate Signature', 'skilltriks-lms' ),
-				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'skilltriks-lms' ),
+				'title' => esc_html__( 'Certificate Signature', 'skilltriks' ),
+				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'skilltriks' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['certificate_signature'] ) ? esc_url( $this->options['certificate_signature'] ) : '',
 			),
@@ -155,7 +155,7 @@ class SettingOptions {
 	 * Option Page.
 	 */
 	public function register_settings() {
-		$setting_name = esc_html__( 'Settings', 'skilltriks-lms' );
+		$setting_name = esc_html__( 'Settings', 'skilltriks' );
 		// Add option page.
 		$hook = add_submenu_page( \ST\Lms\PARENT_MENU_SLUG, $setting_name, $setting_name, 'manage_options', 'stlms-settings', array( $this, 'view_admin_settings' ) );
 		// Add setting section.
@@ -210,7 +210,7 @@ class SettingOptions {
 		add_screen_option(
 			'per_page',
 			array(
-				'label'   => __( 'Number of items per page:', 'skilltriks-lms' ),
+				'label'   => __( 'Number of items per page:', 'skilltriks' ),
 				'default' => get_option( 'posts_per_page', 10 ),
 				'option'  => 'imports_per_page',
 			)
@@ -267,7 +267,7 @@ class SettingOptions {
 		$value       = ! empty( $value ) ? $value : $default_val;
 
 		if ( 'file' === $type ) {
-			$button_text = $value ? esc_html__( 'Change Image', 'skilltriks-lms' ) : esc_html__( 'Upload Image', 'skilltriks-lms' );
+			$button_text = $value ? esc_html__( 'Change Image', 'skilltriks' ) : esc_html__( 'Upload Image', 'skilltriks' );
 			echo '<input type="hidden" id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" />';
 			echo '<button type="button" id="upload_logo" class="button upload_image_button" data-target="#' . esc_attr( $id ) . '">' . $button_text . '</button>'; //phpcs:ignore
 			if ( $value ) {
@@ -300,11 +300,11 @@ class SettingOptions {
 		<div class="wrap stlms-settings">
 			<div id="icon-options-general" class="icon32"></div>
 			<nav class="nav-tab-wrapper">
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks' ); ?></a>
 				<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks' ); ?></a>
 				<?php endif; ?>
 			</nav>
 			<?php
@@ -421,8 +421,8 @@ class SettingOptions {
 			exit;
 		} else {
 			wp_die(
-				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
-				esc_html_e( 'Error', 'skilltriks-lms' ),
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
 				array( 'back_link' => true )
 			);
 		}
@@ -445,8 +445,8 @@ class SettingOptions {
 			endif;
 		} else {
 			wp_die(
-				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
-				esc_html_e( 'Error', 'skilltriks-lms' ),
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
 				array( 'back_link' => true )
 			);
 		}
@@ -487,8 +487,8 @@ class SettingOptions {
 			wp_redirect( add_query_arg( 'page', 'stlms_manage_roles', admin_url( 'admin.php' ) ) );
 		} else {
 			wp_die(
-				esc_html_e( 'Security check failed. Please try again.', 'skilltriks-lms' ),
-				esc_html_e( 'Error', 'skilltriks-lms' ),
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
 				array( 'back_link' => true )
 			);
 		}

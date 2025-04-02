@@ -15,20 +15,20 @@ $error_code = ! empty( $_GET['message'] ) ? (int) $_GET['message'] : 0;
 $email   = ! empty( $_GET['email'] ) && is_email( wp_unslash( $_GET['email'] ) ) ? sanitize_email( wp_unslash( $_GET['email'] ) ) : '';
 $message = '';
 if ( 1 === $error_code ) {
-	$message = __( 'something went wrong, Please try again', 'skilltriks-lms' );
+	$message = __( 'something went wrong, Please try again', 'skilltriks' );
 } elseif ( 2 === $error_code ) {
-	$message = __( 'Your account role is different, please contact to administration.', 'skilltriks-lms' );
+	$message = __( 'Your account role is different, please contact to administration.', 'skilltriks' );
 } elseif ( 3 === $error_code ) {
 	// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-	$message = sprintf( __( 'User %s not registered in system.', 'skilltriks-lms' ), $email );
+	$message = sprintf( __( 'User %s not registered in system.', 'skilltriks' ), $email );
 }
 ?>
 <div class="stlms-wrap alignfull">
 	<div class="stlms-login-wrap">
 		<div class="stlms-login">
 			<div class="stlms-login__header">
-				<div class="stlms-login__title"><?php esc_html_e( 'Login to SkillTriks', 'skilltriks-lms' ); ?></div>
-				<div class="stlms-login__text"><?php esc_html_e( 'Hey, Welcome back!', 'skilltriks-lms' ); ?><br> <?php esc_html_e( 'Please sign in to grow yourself', 'skilltriks-lms' ); ?></div>
+				<div class="stlms-login__title"><?php esc_html_e( 'Login to SkillTriks', 'skilltriks' ); ?></div>
+				<div class="stlms-login__text"><?php esc_html_e( 'Hey, Welcome back!', 'skilltriks' ); ?><br> <?php esc_html_e( 'Please sign in to grow yourself', 'skilltriks' ); ?></div>
 			</div>
 			<div class="stlms-login__body">
 				<?php if ( is_admin() || ! is_user_logged_in() ) : ?>
@@ -36,11 +36,11 @@ if ( 1 === $error_code ) {
 						<?php wp_nonce_field( \ST\Lms\STLMS_LOGIN_NONCE, '_stlms_nonce' ); ?>
 						<input type="hidden" name="action" value="stlms_login">
 						<div class="stlms-form-group">
-							<label class="stlms-form-label"><?php esc_html_e( 'Username', 'skilltriks-lms' ); ?></label>
-							<input type="text" name="username" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Username', 'skilltriks-lms' ); ?>" required>
+							<label class="stlms-form-label"><?php esc_html_e( 'Username', 'skilltriks' ); ?></label>
+							<input type="text" name="username" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Username', 'skilltriks' ); ?>" required>
 						</div>
 						<div class="stlms-form-group">
-							<label class="stlms-form-label"><?php esc_html_e( 'Password', 'skilltriks-lms' ); ?></label>
+							<label class="stlms-form-label"><?php esc_html_e( 'Password', 'skilltriks' ); ?></label>
 							<div class="stlms-password-field">
 								<input type="password" name="password" class="stlms-form-control" placeholder="********" id="password-field" required>
 								<div class="stlms-password-toggle" toggle="#password-field">
@@ -56,10 +56,10 @@ if ( 1 === $error_code ) {
 						<div class="stlms-keep-login stlms-form-group">
 							<div class="stlms-check-wrap">
 								<input type="checkbox" name="remember" class="stlms-check" id="remember">
-								<label for="remember" class="stlms-check-label text-sm"><?php esc_html_e( 'Keep me logged In', 'skilltriks-lms' ); ?></label>
+								<label for="remember" class="stlms-check-label text-sm"><?php esc_html_e( 'Keep me logged In', 'skilltriks' ); ?></label>
 							</div>
 							<div class="stlms-forgot-link">
-								<a href="<?php echo esc_url( wp_lostpassword_url( \ST\Lms\get_page_url( 'login' ) ) ); ?>" target="_blank"><?php esc_html_e( 'Forgot Password?', 'skilltriks-lms' ); ?></a>
+								<a href="<?php echo esc_url( wp_lostpassword_url( \ST\Lms\get_page_url( 'login' ) ) ); ?>" target="_blank"><?php esc_html_e( 'Forgot Password?', 'skilltriks' ); ?></a>
 							</div>
 						</div>
 						<div class="stlms-error-message<?php echo empty( $message ) ? ' hidden' : ''; ?>">
@@ -69,7 +69,7 @@ if ( 1 === $error_code ) {
 						$auth_url = \ST\Lms\Login\GoogleLogin::instance()->get_auth_url();
 						?>
 							<div class="stlms-form-footer">
-								<button type="submit" class="stlms-btn stlms-btn-block"><?php esc_html_e( 'Sign In', 'skilltriks-lms' ); ?><span class="stlms-loader"></span></button>
+								<button type="submit" class="stlms-btn stlms-btn-block"><?php esc_html_e( 'Sign In', 'skilltriks' ); ?><span class="stlms-loader"></span></button>
 								<?php if ( $auth_url ) : ?>
 								<span class="or-txt">OR</span>
 									<a class='stlms-btn google-sign-in-btn' href="<?php echo esc_url( $auth_url ); ?>">
@@ -79,7 +79,7 @@ if ( 1 === $error_code ) {
 											<path d="M13.0079 14.7382L13.0083 14.7386C11.6373 15.8406 9.89577 16.4999 7.99996 16.4999C4.95337 16.4999 2.30459 14.7971 0.953369 12.2911L3.5459 10.1689C4.22149 11.972 5.96084 13.2555 7.99996 13.2555C8.87643 13.2555 9.69756 13.0186 10.4022 12.605L13.0079 14.7382Z" fill="#28B446"/>
 											<path d="M13.1064 2.34175L10.5148 4.4635C9.78553 4.00769 8.92353 3.74437 8.00003 3.74437C5.91475 3.74437 4.14288 5.08678 3.50113 6.9545L0.894969 4.82087H0.894531C2.22597 2.25384 4.90816 0.5 8.00003 0.5C9.94112 0.5 11.7209 1.19144 13.1064 2.34175Z" fill="#F14336"/>
 										</svg>
-										<?php esc_html_e( 'Sign In with Google', 'skilltriks-lms' ); ?>
+										<?php esc_html_e( 'Sign In with Google', 'skilltriks' ); ?>
 									</a>
 								<?php endif; ?>
 							</div>

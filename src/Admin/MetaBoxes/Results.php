@@ -56,7 +56,7 @@ class Results extends \ST\Lms\Collections\PostTypes {
 		global $post;
 		$post_id          = isset( $post->ID ) ? $post->ID : 0;
 		$grade_percentage = get_post_meta( $post_id, 'grade_percentage', true );
-		$accuracy         = get_post_meta( $post_id, 'accuracy', true );
+		$accuracy         = get_post_meta( $post_id, 'attempted_questions', true );
 		$time_str         = get_post_meta( $post_id, 'time_str', true );
 		$quiz_id          = get_post_meta( $post_id, 'quiz_id', true );
 		$course_id        = get_post_meta( $post_id, 'course_id', true );
@@ -76,7 +76,7 @@ class Results extends \ST\Lms\Collections\PostTypes {
 					<td><?php echo esc_html( $grade_percentage ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Accuracy', 'skilltriks' ); ?></th>
+					<th><?php esc_html_e( 'Attempted Questions', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $accuracy ); ?></td>
 				</tr>
 				<tr>
@@ -98,7 +98,7 @@ class Results extends \ST\Lms\Collections\PostTypes {
 		unset( $columns['date'] );
 		unset( $columns['author'] );
 		$columns['post_author'] = __( 'Employee', 'skilltriks' );
-		$columns['grade']       = __( 'Corect answers', 'skilltriks' );
+		$columns['grade']       = __( 'Correct answers', 'skilltriks' );
 		$columns['accuracy']    = __( 'Attempted Questions', 'skilltriks' );
 		$columns['time']        = __( 'Time taken', 'skilltriks' );
 		return $columns;
@@ -144,7 +144,6 @@ class Results extends \ST\Lms\Collections\PostTypes {
 	 */
 	public function quick_actions( $actions, $post ) {
 		if ( STLMS_RESULTS_CPT === $post->post_type ) {
-			unset( $actions['inline hide-if-no-js'] );
 			$newtext = __( 'View More Details', 'skilltriks' );
 			if ( isset( $actions['edit'] ) ) {
 				$actions['edit'] = preg_replace( '/(<a.*?>).*?(<\/a>)/', '$1' . $newtext . '$2', $actions['edit'] );

@@ -133,11 +133,15 @@ $current_user_email = $current_user->user_email;
 							$lessons         = \ST\Lms\get_curriculums( $curriculums_list, \ST\Lms\STLMS_LESSON_CPT );
 							$total_lessons   = count( $lessons );
 							$quizzes         = \ST\Lms\get_curriculums( $curriculums_list, \ST\Lms\STLMS_QUIZ_CPT );
+							$last_quiz       = end( $quizzes );
 							$total_quizzes   = count( $quizzes );
 							$total_duration  = \ST\Lms\count_duration( array_merge( $lessons, $quizzes ) );
 							$duration_str    = \ST\Lms\seconds_to_decimal_hours( $total_duration );
 							$enrol_courses   = get_user_meta( $current_user_id, \ST\Lms\STLMS_ENROL_COURSES, true );
 							$is_enrol        = ! empty( $enrol_courses ) && in_array( get_the_ID(), $enrol_courses, true );
+							if ( 2 === $assessment['evaluation'] ) {
+								$passing_grade = isset( $last_quiz['settings']['passing_marks'] ) ? $last_quiz['settings']['passing_marks'] : '0';
+							}
 							?>
 							<div class="stlms-course-info">
 								<h3><?php echo esc_html_e( 'Course Includes', 'skilltriks' ); ?></h3>
@@ -211,14 +215,18 @@ $current_user_email = $current_user->user_email;
 											</use>
 										</svg>
 										<?php
+										$passing_text = 2 === $assessment['evaluation'] ? 'Marks' : 'Grade';
 										echo wp_kses(
 											sprintf(
 												// Translators: %s passing grade.
-												__( 'Passing Grade<span>%s</span>', 'skilltriks' ),
+												__( 'Passing %1$s<span class="stlms-tag secondary">%2$s</span>', 'skilltriks' ),
+												esc_html( $passing_text ),
 												esc_html( $passing_grade )
 											),
 											array(
-												'span' => array(),
+												'span' => array(
+													'class' => true,
+												),
 											)
 										);
 										?>

@@ -53,6 +53,14 @@ class QuestionImport extends \ST\Lms\Helpers\FileImport {
 			'meta_input'   => array(
 				\ST\Lms\META_KEY_QUESTION_TYPE     => in_array( $value[6], $question_types, true ) ? $value[6] : '',
 				\ST\Lms\META_KEY_QUESTION_SETTINGS => array(),
+				\ST\Lms\META_KEY_QUESTION_GROUPS   => array(
+					\ST\Lms\META_KEY_QUESTION_SETTINGS,
+					\ST\Lms\META_KEY_QUESTION_TYPE,
+					sprintf( \ST\Lms\META_KEY_ANSWERS_LIST, in_array( $value[6], $question_types, true ) ? $value[6] : '' ),
+					sprintf( \ST\Lms\META_KEY_RIGHT_ANSWERS, in_array( $value[6], $question_types, true ) ? $value[6] : '' ),
+					\ST\Lms\META_KEY_MANDATORY_ANSWERS,
+					\ST\Lms\META_KEY_OPTIONAL_ANSWERS,
+				),
 			),
 		);
 

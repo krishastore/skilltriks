@@ -130,7 +130,7 @@ function stlms_evaluation_list( $quiz_id = 0 ) {
 		2 => array(
 			'label'  => __( 'Evaluate via results of the final quiz / last quiz', 'skilltriks' ),
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.I18n.MissingTranslatorsComment
-			'notice' => $quiz_id ? sprintf( __( 'Passing Grade: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'skilltriks' ), $passing_marks . '%', esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'skilltriks' ),
+			'notice' => $quiz_id ? sprintf( __( 'Passing Marks: %1$s - Edit <a href="%2$s" target="_blank">%3$s</a>', 'skilltriks' ), $passing_marks, esc_url( get_edit_post_link( $quiz_id, '' ) ), get_the_title( $quiz_id ) ) : __( 'No Quiz in this course!	', 'skilltriks' ),
 		),
 		3 => array(
 			'label' => __( 'Evaluate via passed quizzes', 'skilltriks' ),

@@ -107,9 +107,11 @@ jQuery(function ($) {
   	var data = $('form.stlms-filter-form').serializeArray();
 		var url = new URL(window.location.href);
 		if ( data.length > 0 ) {
-			var getCurrentVal = [];
+			var getCatVal = [];
+			var getlevelVal = [];
 			url.searchParams.delete('category');
 			url.searchParams.delete('levels');
+			url.searchParams.delete('progress');
             var updateUrl = StlmsObject.currentUrl;
 			var url = new URL(updateUrl);
 			$.each(data, function(index, item){
@@ -119,8 +121,13 @@ jQuery(function ($) {
 						url.searchParams.set(inputName, item.value);
 					}
 				} else {
-					getCurrentVal.push(item.value);
-					url.searchParams.set(inputName, getCurrentVal.toString(','));
+					if( 'category' === inputName ){
+						getCatVal.push(item.value);
+						url.searchParams.set(inputName, getCatVal.toString(','));
+					} else {
+						getlevelVal.push(item.value);
+						url.searchParams.set(inputName, getlevelVal.toString(','));
+					}
 				}
 			});
 		} else {
@@ -140,10 +147,10 @@ jQuery(function ($) {
   };
 
   // Filter category.
-  $(document).on('change', '.stlms-filter-list input:checkbox:not(#stlms_category_all)', function() {
+  $(document).on('change', '.stlms-filter-list input:checkbox:not(#stlms_category_all), .stlms-filter-list input:checkbox:not(#stlms_level_all), .stlms-filter-list input:radio', function() {
     sendFilterItemRequest();
   });
-  $(document).on('change', '.stlms-filter-list input:checkbox#stlms_category_all, .stlms-filter-list input:checkbox#stlms_level_all, .stlms-filter-list input:checkbox#stlms_progress_all', function() {
+  $(document).on('change', '.stlms-filter-list input:checkbox#stlms_category_all, .stlms-filter-list input:checkbox#stlms_level_all', function() {
 	var isChecked = $(this).is(':checked');
 	$(this)
 	.parents('ul')
@@ -178,11 +185,13 @@ jQuery(function ($) {
     url.searchParams.delete('category');
     url.searchParams.delete('progress');
     url.searchParams.delete('_s');
+	url.searchParams.delete('levels');
     $('.stlms-filter-form input[name="category"]').val('');
-    $('.stlms-filter-form input[name="progress"]').val('');
     $('.stlms-filter-form input[name="_s"]').val('');
-    window.history.replaceState(null, null, url.toString());
+	$('.stlms-filter-list input:checkbox').removeAttr("checked");
+	$('.stlms-filter-list input:radio').removeAttr("checked");
     sendFilterItemRequest();
+    window.history.replaceState(null, null, url.toString());
     $('.stlms-form-group select.category, .stlms-form-group select.progress, .stlms-search input:text').val('');
   });
 	// var uri = window.location.toString();

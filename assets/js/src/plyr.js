@@ -16,7 +16,13 @@ player.on('ended', function() {
 	return false;
 });
 
-var key = btoa(window.location.pathname).substring(0,70);
+var key;
+jQuery(window).on("load", function () {
+    const activeLesson = jQuery(".stlms-lesson-list li.active");
+    if (activeLesson.length) {
+        key = activeLesson.find(".stlms-lesson-class").attr("data-key");
+    }
+});
 
 // Function to save the current time
 const saveCurrentTime = () => {

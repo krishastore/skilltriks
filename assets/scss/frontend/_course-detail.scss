@@ -409,8 +409,11 @@
               .stlms-lesson-class {
                 align-items: center;
                 flex-direction: row;
+
                 @include breakpoint(max, 767) {
                   flex-wrap: wrap;
+                  position: relative;
+                  padding-left: 24px;
                 }
                 .class-time-info {
                   margin-left: auto;
@@ -423,6 +426,7 @@
                   }
                   .class-time {
                     font-size: 14px;
+                    text-wrap: nowrap;
                   }
                   .lock-icon {
                     flex-shrink: 0;

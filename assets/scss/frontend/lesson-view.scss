@@ -298,8 +298,12 @@
             display: flex;
             font-size: 16px;
             font-weight: 500;
+            align-items: center;
             @include breakpoint(max, $md) {
               font-size: $font_size_sm;
+            }
+            @include breakpoint(max, $sm) {
+              align-items: flex-start;
             }
             span {
               flex-shrink: 0;
@@ -310,6 +314,12 @@
             display: flex;
             font-size: 14px;
             gap: 10px;
+
+            @include breakpoint(max, 767) {
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
             svg {
               flex-shrink: 0;
               width: 16px;
@@ -602,6 +612,7 @@
   }
   img {
     display: block;
+
     &.aligncenter {
       margin: 0 auto;
     }
@@ -651,4 +662,6 @@
   }
 }
 
-.stlms-lesson-list li.active {background: #eaeaea;}
+.stlms-lesson-list li.active {
+  background: #eaeaea;
+}

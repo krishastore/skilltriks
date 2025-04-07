@@ -54,7 +54,7 @@ function stlms_results_init() {
 			'show_in_menu'          => PARENT_MENU_SLUG,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => true,
-			'supports'              => array( 'title' ),
+			'supports'              => false,
 			'register_meta_box_cb'  => array( new \ST\Lms\Admin\MetaBoxes\Results(), 'register_boxes' ),
 			'has_archive'           => false,
 			'rewrite'               => false,

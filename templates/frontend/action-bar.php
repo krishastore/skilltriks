@@ -17,6 +17,7 @@ $current_item     = $args['current_item'];
 $curriculum_type  = $args['curriculum_type'];
 $curriculums_keys = array_keys( $curriculums );
 $current_index    = \ST\Lms\find_current_curriculum_index( $current_item, $curriculums, $section_id );
+$is_quiz          = \ST\Lms\STLMS_QUIZ_CPT === get_post_type( $current_item );
 
 $next_key = array_search( $current_index, $curriculums_keys, true );
 if ( false !== $next_key ) {
@@ -54,14 +55,14 @@ $result_page_url = sprintf( '%s/%s/%d/', untrailingslashit( home_url() ), $cours
 			</a>
 		<?php endif; ?>
 		<?php if ( $next_key >= 1 && isset( $curriculums_keys[ $next_key ] ) ) : ?>
-			<a href="<?php echo esc_url( \ST\Lms\get_curriculum_link( $curriculums_keys[ $next_key ] ) ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn">
+			<a href="<?php echo esc_url( \ST\Lms\get_curriculum_link( $curriculums_keys[ $next_key ] ) ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn <?php echo $is_quiz ? 'hidden' : ''; ?>">
 				<?php esc_html_e( 'Next', 'skilltriks' ); ?>
 				<svg class="icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-right"></use>
 				</svg>
 			</a>
 		<?php else : ?>
-			<a href="<?php echo esc_url( $result_page_url ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn<?php echo 'video' === $curriculum_type ? ' hidden' : ''; ?>">
+			<a href="<?php echo esc_url( $result_page_url ); ?>" class="stlms-btn stlms-btn-icon stlms-btn-flate stlms-next-btn<?php echo 'video' === $curriculum_type || $is_quiz ? ' hidden' : ''; ?>">
 				<?php esc_html_e( 'Next', 'skilltriks' ); ?>
 				<svg class="icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#arrow-right"></use>

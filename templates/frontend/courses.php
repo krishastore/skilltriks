@@ -73,7 +73,7 @@ $courses     = new \WP_Query( $course_args );
 <div class="stlms-wrap alignfull">
 	<div class="stlms-course-list-wrap">
 		<div class="stlms-container">
-			<?php if ( $courses->have_posts() && ( isset( $args['filter'] ) && 'yes' === $args['filter'] ) ) : ?>
+			<?php if ( isset( $args['filter'] ) && 'yes' === $args['filter'] ) : ?>
 			<div class="stlms-course-filter">
 				<button class="stlms-filter-toggle">
 					<svg width="24" height="24">

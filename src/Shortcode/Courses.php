@@ -23,6 +23,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	 */
 	public function __construct() {
 		$this->set_shortcode_tag( 'courses' );
+		add_action( 'template_redirect', array( $this, 'course_result_redirection' ), 1 );
 		add_filter( 'template_include', array( $this, 'template_include' ) );
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 		add_action( 'stlms_before_single_course', array( $this, 'fetch_course_data' ) );
@@ -196,6 +197,20 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	}
 
 	/**
+	 * Handle course result redirection.
+	 */
+	public function course_result_redirection() {
+		if ( get_query_var( 'show_result' ) ) {
+			$course_id     = ! empty( get_query_var( 'course_id' ) ) ? (int) get_query_var( 'course_id' ) : 0;
+			$has_completed = \ST\Lms\restart_course( $course_id );
+			if ( ! $has_completed ) {
+				$curriculums       = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+				$assessment        = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_ASSESSMENT, true );
+				$completed_results = \ST\Lms\calculate_assessment_result( $assessment, $curriculums, $course_id );
+			}
+		}
+	}
+	/**
 	 * Set 404 page.
 	 */
 	public function set_404_page() {
@@ -207,13 +222,16 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 				$wp_query->set_404();
 			}
 		}
-		$course_id = ! empty( get_query_var( 'course_id' ) ) ? (int) get_query_var( 'course_id' ) : 0;
-		$is_404    = ! get_post( $course_id );
-		if ( get_query_var( 'show_result' ) ) {
-			$is_404 = \ST\Lms\restart_course( $course_id );
-		}
-		if ( $is_404 ) {
-			$wp_query->set_404();
+		if ( ! empty( get_query_var( 'course_id' ) ) ) {
+			$course_id = (int) get_query_var( 'course_id' );
+			$course_id = \ST\Lms\STLMS_COURSE_CPT === get_post_type( $course_id ) ? $course_id : 0;
+			$is_404    = ! $course_id;
+			if ( get_query_var( 'show_result' ) && $course_id ) {
+				$is_404 = ! \ST\Lms\restart_course( $course_id );
+			}
+			if ( $is_404 ) {
+				$wp_query->set_404();
+			}
 		}
 	}
 
@@ -344,6 +362,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		$timer_timestamp = ! empty( $_POST['timer_timestamp'] ) ? (int) $_POST['timer_timestamp'] : 0;
 		$total_questions = ! empty( $_POST['total_questions'] ) ? (int) $_POST['total_questions'] : 0;
 		$points          = 0;
+		$total_points    = 0;
 
 		if ( ! $quiz_id ) {
 			wp_send_json(
@@ -363,6 +382,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			$question_settings = get_post_meta( $attend_question_id, \ST\Lms\META_KEY_QUESTION_SETTINGS, true );
 			$status            = false;
 			$selected_answer   = false;
+			$total_points     += $question_settings['points'];
 			if ( 'fill_blank' === $question_type ) {
 				$mandatory_answers = get_post_meta( $attend_question_id, \ST\Lms\META_KEY_MANDATORY_ANSWERS, true );
 				$right_answers     = ! empty( $mandatory_answers ) ? array( $mandatory_answers ) : array();
@@ -403,7 +423,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		$quiz_settings = get_post_meta( $quiz_id, \ST\Lms\META_KEY_QUIZ_SETTINGS, true );
 		$passing_mark  = 0;
 		if ( ! empty( $quiz_settings['passing_marks'] ) ) {
-			$passing_mark = (int) $quiz_settings['passing_marks'];
+			$passing_mark = round( $quiz_settings['passing_marks'] / $total_points * 100, 2 );
 		}
 		if ( is_user_logged_in() ) {
 			$user_info    = wp_get_current_user();
@@ -419,8 +439,9 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		$accuracy = sprintf( esc_html__( '%1$d/%2$d', 'skilltriks' ), intval( count( $total_attend_questions ) ), $total_questions );
 
 		if ( 2 === $assessment['evaluation'] ) {
-			$grade_percentage = $points;
+			$grade_percentage = round( $points / $total_points * 100, 2 );
 		} else {
+			$passing_mark     = $assessment['passing_grade'];
 			$grade_percentage = round( count( $correct_answers ) / $total_questions * 100, 2 );
 		}
 		// Quiz data.
@@ -436,6 +457,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			'correct_answers'     => $correct_answers,
 			'total_questions'     => $total_questions,
 			'grade_percentage'    => $grade_percentage,
+			'passing_grade'       => $passing_mark,
 		);
 
 		$result_id   = post_exists( $result_title, '', '', \ST\Lms\STLMS_RESULTS_CPT );

@@ -194,7 +194,7 @@ $enrol_courses = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURS
 						</form>
 						<button class="stlms-filter-toggle">
 							<svg width="24" height="24">
-								<use xlink:href="assets/images/sprite-front.svg#filters"></use>
+								<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#filters"></use>
 							</svg>
 						</button>
 					</div>

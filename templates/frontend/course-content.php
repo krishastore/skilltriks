@@ -89,6 +89,7 @@ load_template(
 									if ( $section_id === $item_key && $current_item_id === $item_id ) {
 										$inactive = true;
 									}
+									$course_link = get_permalink() . $item_key . '/' . rtrim( $curriculum_type, '_id' ) . '/' . $item_id;
 									?>
 								<li class="<?php echo $current_item_id === $item_id ? esc_attr( 'active' ) : ''; ?>">
 									<label>
@@ -97,7 +98,7 @@ load_template(
 										<?php else : ?>
 											<input type="checkbox" name="<?php echo esc_attr( $curriculum_type ); ?>[]" value="<?php echo esc_attr( $item_id ); ?>" class="stlms-check curriculum-progress-box"<?php echo $inactive ? ' readonly' : ''; ?><?php checked( true, ! $inactive ); ?> disabled>
 										<?php endif; ?>
-										<span class="stlms-lesson-class">
+										<span class="stlms-lesson-class" data-key="<?php echo esc_html( wp_hash( $course_link ) ); ?>">
 											<span class="class-name"><span><?php echo esc_html( sprintf( '%s.%s.', $item_key, $key ) ); ?></span> <?php echo esc_html( get_the_title( $item_id ) ); ?></span>
 											<span class="class-type">
 												<svg class="icon" width="16" height="16">

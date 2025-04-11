@@ -480,11 +480,18 @@ function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
  * @return array|float|int Results Ids.
  */
 function calculate_assessment_result( $assessment, $curriculums = array(), $course_id = 0, $curriculum_type = '' ) {
-	$passing_grade     = isset( $assessment['passing_grade'] ) ? (int) $assessment['passing_grade'] : 0;
-	$evaluation        = isset( $assessment['evaluation'] ) ? $assessment['evaluation'] : 1;
-	$user_id           = get_current_user_id();
-	$completed_grade   = 0;
-	$return_grade_only = true;
+	$passing_grade      = isset( $assessment['passing_grade'] ) ? (int) $assessment['passing_grade'] : 0;
+	$evaluation         = isset( $assessment['evaluation'] ) ? $assessment['evaluation'] : 1;
+	$user_id            = get_current_user_id();
+	$completed_grade    = 0;
+	$return_grade_only  = true;
+	$meta_key           = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
+	$current_status     = get_user_meta( $user_id, $meta_key, true );
+	$items              = \ST\Lms\get_curriculums( $curriculums, 'item_list' );
+	$is_course_complete = false;
+	if ( ! empty( $current_status ) && ! empty( $items ) ) {
+		$is_course_complete = count( $items ) === count( $current_status );
+	}
 	if ( empty( $curriculum_type ) ) {
 		$return_grade_only = false;
 		$curriculum_type   = 'quiz';
@@ -528,6 +535,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 		$result_id = ! empty( $results ) ? reset( $results ) : 0;
 		if ( $result_id ) {
 			$grade_percentage = get_post_meta( $result_id, 'grade_percentage', true );
+			$passing_grade    = get_post_meta( $result_id, 'passing_grade', true );
 			$completed_grade  = (float) str_replace( '%', '', $grade_percentage );
 		}
 	}
@@ -536,7 +544,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 	}
 	$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 	$completed_on         = get_user_meta( $user_id, $course_completed_key, true );
-	if ( empty( $completed_on ) ) {
+	if ( $is_course_complete && empty( $completed_on ) ) {
 		$completed_on = time();
 		update_user_meta( $user_id, $course_completed_key, $completed_on );
 	}

@@ -1,8 +1,8 @@
 
-![Logo](https://getbluedolphin.com/wp-content/uploads/2022/10/Asset-5.svg)
+![Logo](https://www.skilltriks.com/wp-content/uploads/2025/03/skilltriks-logo-1.png)
 
 
-# BlueDolphin(LMS)
+# SkillTriks
 
 Guiding organizations to transform their learning culture with digital learning experiences.
 

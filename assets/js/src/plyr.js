@@ -7,16 +7,22 @@ const player = new Plyr(".lesson-video", {
 		controls: true,
 	},
 	captions: { active: true },
-	iconUrl: BdlmsObject.iconUrl,
-	blankVideo: BdlmsObject.blankVideo
+	iconUrl: StlmsObject.iconUrl,
+	blankVideo: StlmsObject.blankVideo
 });
 player.on('ended', function() {
-	var nextPageLink = jQuery('.bdlms-next-btn').attr('href');
+	var nextPageLink = jQuery('.stlms-next-btn').attr('href');
 	window.location.href = nextPageLink;
 	return false;
 });
 
-var key = btoa(window.location.pathname).substring(70);
+var key;
+jQuery(window).on("load", function () {
+    const activeLesson = jQuery(".stlms-lesson-list li.active");
+    if (activeLesson.length) {
+        key = activeLesson.find(".stlms-lesson-class").attr("data-key");
+    }
+});
 
 // Function to save the current time
 const saveCurrentTime = () => {

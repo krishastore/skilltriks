@@ -1,4 +1,4 @@
-.bdlms-form {
+.stlms-form {
   &-group {
     padding-bottom: $spacing_20;
   }
@@ -46,7 +46,7 @@
     display: block;
   }
 }
-textarea.bdlms-form-control {
+textarea.stlms-form-control {
   height: 160px;
   padding-top: 12px;
   &:focus {
@@ -56,12 +56,12 @@ textarea.bdlms-form-control {
   }
 }
 
-.bdlms-password-field {
+.stlms-password-field {
   position: relative;
-  .bdlms-form-control {
+  .stlms-form-control {
     padding-right: 48px;
   }
-  .bdlms-password-toggle {
+  .stlms-password-toggle {
     position: absolute;
     right: 0;
     top: 0;
@@ -92,14 +92,14 @@ textarea.bdlms-form-control {
 }
 
 // Checkbox
-.bdlms-check-wrap {
+.stlms-check-wrap {
   display: flex;
   gap: 10px;
-  input[type="checkbox"].bdlms-check {
+  input[type="checkbox"].stlms-check {
     flex-shrink: 0;
   }
 }
-input[type="checkbox"].bdlms-check {
+input[type="checkbox"].stlms-check {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -131,16 +131,16 @@ input[type="checkbox"].bdlms-check {
     &::after {
       opacity: 1;
     }
-    & ~ .bdlms-check-label {
+    & ~ .stlms-check-label {
       color: $primary_dark;
     }
   }
-  & ~ .bdlms-check-label {
+  & ~ .stlms-check-label {
     color: $gray_light;
     @include transition(all 0.3s ease-in-out);
   }
 }
-input[type="radio"].bdlms-check {
+input[type="radio"].stlms-check {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -173,16 +173,16 @@ input[type="radio"].bdlms-check {
     &::after {
       opacity: 1;
     }
-    & ~ .bdlms-check-label {
+    & ~ .stlms-check-label {
       color: $primary_dark;
     }
   }
-  & ~ .bdlms-check-label {
+  & ~ .stlms-check-label {
     color: $gray_light;
     @include transition(all 0.3s ease-in-out);
   }
 }
-.bdlms-check-label {
+.stlms-check-label {
   font-size: $font_size_base;
   line-height: 20px;
   color: $primary_dark;
@@ -193,11 +193,11 @@ input[type="radio"].bdlms-check {
   }
 }
 
-.bdlms-keep-login {
+.stlms-keep-login {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .bdlms-forgot-link {
+  .stlms-forgot-link {
     a {
       text-decoration: none;
       font-size: $font_size_sm;
@@ -207,9 +207,9 @@ input[type="radio"].bdlms-check {
   }
 }
 
-.bdlms-search {
+.stlms-search {
   position: relative;
-  .bdlms-form-control {
+  .stlms-form-control {
     padding-left: 48px;
     padding-right: 48px;
     background: $gray;

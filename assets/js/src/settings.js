@@ -28,6 +28,7 @@ window.wp = window.wp || {};
 		 */
 		init: function() {
 			this.dialogInit();
+			this.newRoleModal();
             this.addMedia();
 			this.addLogo();
 			this.openTab();
@@ -39,7 +40,7 @@ window.wp = window.wp || {};
 		dialogInit: function () {
 			$('#bulk-import-modal').dialog({
 				title: settingObject.i18n.PopupTitle,
-				dialogClass: "wp-dialog bdlms-modal bulk-import-modal",
+				dialogClass: "wp-dialog stlms-modal bulk-import-modal",
 				autoOpen: false,
 				draggable: false,
 				width: "auto",
@@ -60,7 +61,7 @@ window.wp = window.wp || {};
 			});
 			$('#bulk-import-cancel-modal').dialog({
 				title: settingObject.i18n.CancelPopupTitle,
-				dialogClass: "wp-dialog bdlms-modal bulk-import-modal",
+				dialogClass: "wp-dialog stlms-modal bulk-import-modal",
 				autoOpen: false,
 				draggable: false,
 				width: "auto",
@@ -79,7 +80,28 @@ window.wp = window.wp || {};
 				beforeClose: function() {
 				}
 			});
-			$(document).on('click', '.bdlms-bulk-import', function(e) {
+			$('#add-new-role-modal').dialog({
+				title: settingObject.i18n.RoleTitle,
+				dialogClass: "wp-dialog stlms-modal bulk-import-modal",
+				autoOpen: false,
+				draggable: false,
+				width: "auto",
+				modal: true,
+				resizable: false,
+				closeOnEscape: true,
+				position: {
+					my: "center",
+					at: "center",
+					of: window,
+				},
+				open: function (event, ui) {
+				},
+				create: function () {
+				},
+				beforeClose: function() {
+				}
+			});
+			$(document).on('click', '.stlms-bulk-import', function(e) {
 				$('#bulk-import-modal').dialog('open');
 				e.preventDefault();
 
@@ -116,55 +138,55 @@ window.wp = window.wp || {};
 					}
 				}
 
-				modal.find('.bdlms-import-msg, .bdlms-fileupload-progress').addClass('import').removeClass('success-msg error-msg cancel-msg');
+				modal.find('.stlms-import-msg, .stlms-fileupload-progress').addClass('import').removeClass('success-msg error-msg cancel-msg');
 				if ( 2 === itemData.import_status ) {
-					modal.find('.bdlms-import-msg').addClass('success-msg').removeClass('import');
-					modal.find('.bdlms-import-msg ._left h3').text(settingObject.i18n.SuccessTitle);
+					modal.find('.stlms-import-msg').addClass('success-msg').removeClass('import');
+					modal.find('.stlms-import-msg ._left h3').text(settingObject.i18n.SuccessTitle);
 				} else if ( 4 === itemData.import_status ) {
-					modal.find('.bdlms-import-msg').addClass('error-msg').removeClass('import');
-					modal.find('.bdlms-import-msg ._left h3').text(settingObject.i18n.FailTitle);
+					modal.find('.stlms-import-msg').addClass('error-msg').removeClass('import');
+					modal.find('.stlms-import-msg ._left h3').text(settingObject.i18n.FailTitle);
 				} else if ( 3 === itemData.import_status ) {
-					modal.find('.bdlms-import-msg').addClass('cancel-msg').removeClass('import');
-					modal.find('.bdlms-import-msg ._left h3').text(settingObject.i18n.CancelTitle);
+					modal.find('.stlms-import-msg').addClass('cancel-msg').removeClass('import');
+					modal.find('.stlms-import-msg ._left h3').text(settingObject.i18n.CancelTitle);
 				} else if ( 1 === itemData.import_status ) {
-					modal.find('.bdlms-import-msg, .bdlms-fileupload-progress').removeClass('import');
-					modal.find('.bdlms-import-msg').addClass('upload-msg');
-					modal.find('.bdlms-import-msg ._left h3').text(settingObject.i18n.UploadTitle);
+					modal.find('.stlms-import-msg, .stlms-fileupload-progress').removeClass('import');
+					modal.find('.stlms-import-msg').addClass('upload-msg');
+					modal.find('.stlms-import-msg ._left h3').text(settingObject.i18n.UploadTitle);
 					modal.find('.fileupload-value').text(itemData.progress + '%');
-					modal.find('.bdlms-progress-bar').css('width', itemData.progress + '%');
+					modal.find('.stlms-progress-bar').css('width', itemData.progress + '%');
 				}
 
 				modal.find('.import-file-name .name').text(itemData.file_name);
 				modal.find('.import-file-name span').text(itemData.import_date);
-				modal.find('.bdlms-import-file .download a').attr("href", itemData.file_path);
+				modal.find('.stlms-import-file .download a').attr("href", itemData.file_path);
 				modal.find('.file-name').text(itemData.file_name);
 				modal.find('.file-row-column').text(`${itemData.total_rows} ${settingObject.i18n.ImportRows}, ${column} ${settingObject.i18n.ImportColumns}`);
-				modal.find('.bdlms-imported-qus h3').text(importMsg[itemData.import_type] || '');
-				modal.find('.bdlms-imported-qus .success-count').text(itemData.success_rows);
-				modal.find('.bdlms-imported-qus .fail-count').text(itemData.fail_rows);
-				modal.find('.bdlms-imported-qus .total-count').text(itemData.total_rows);
+				modal.find('.stlms-imported-qus h3').text(importMsg[itemData.import_type] || '');
+				modal.find('.stlms-imported-qus .success-count').text(itemData.success_rows);
+				modal.find('.stlms-imported-qus .fail-count').text(itemData.fail_rows);
+				modal.find('.stlms-imported-qus .total-count').text(itemData.total_rows);
 
 				// Show the modal
 				modal.removeClass('hidden').addClass('active');
 			});
 
     		// Hide the modal when clicking the "Done" button
-   		 	$('.bdlms-import-action .button-primary').on('click', function() {
+   		 	$('.stlms-import-action .button-primary').on('click', function() {
 				$('#bulk-import-modal').prev().find('.ui-dialog-titlebar-close').trigger('click');
 			});
-			$(document).on('click', '.bdlms-bulk-import-cancel', function(e) {
+			$(document).on('click', '.stlms-bulk-import-cancel', function(e) {
 				$('#bulk-import-cancel-modal').dialog('open');
 				e.preventDefault();
 				cancelId = $(this).data('id');
 				fileId = $(this).data('fileid');
 				importType = $(this).data('import');
 			});
-			$(document).on('click', '#bulk-import-cancel-modal .bdlms-import-action button', function(e) {
+			$(document).on('click', '#bulk-import-cancel-modal .stlms-import-action button', function(e) {
 				e.preventDefault();
 				$.post(
 					settingObject.ajaxurl,
 					{
-						action: 'bdlms_get_import_cancel_data',
+						action: 'stlms_get_import_cancel_data',
 						_nonce: settingObject.nonce,
 						status: this.id,
 						id : cancelId,
@@ -178,13 +200,23 @@ window.wp = window.wp || {};
 			});
 		},
 
+		/**
+		 * Add new role.
+		 */
+		newRoleModal: function() {
+			$(document).on('click', '.stlms-add-new-role', function(e) {
+				$('#add-new-role-modal').dialog('open');
+				e.preventDefault();
+			});
+		},
+
         /**
 		 * Add media.
 		 */
 		addMedia: function() {
 			var _this = this;
 			// On upload button click.
-			$( 'body' ).on( 'click', '.bdlms-open-media', function( e ) {
+			$( 'body' ).on( 'click', '.stlms-open-media', function( e ) {
 				e.preventDefault();
 				var libraryType = $(this).attr('data-library_type');
 				var allowedExt = $(this).attr('data-ext');
@@ -221,7 +253,7 @@ window.wp = window.wp || {};
 					button
 					.text(buttonText)
 					.parent()
-					.find('span.bdlms-media-name')
+					.find('span.stlms-media-name')
 					.html(mediaName);
 					button.parent().find( 'input:hidden' ).val( attachment.id ).trigger( 'change' );
 
@@ -229,7 +261,7 @@ window.wp = window.wp || {};
 						$.post(
 							settingObject.ajaxurl,
 							{
-								action: 'bdlms_get_file_attachment_id',
+								action: 'stlms_get_file_attachment_id',
 								_nonce: settingObject.nonce,
 								attachment_id: attachment.id,
 								import_type: importType,

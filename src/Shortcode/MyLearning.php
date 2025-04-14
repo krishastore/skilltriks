@@ -2,20 +2,20 @@
 /**
  * The file that defines the my learning shortcode functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms\Shortcode
+ * @package    ST\Lms\Shortcode
  */
 
-namespace BlueDolphin\Lms\Shortcode;
+namespace ST\Lms\Shortcode;
 
-use BlueDolphin\Lms\ErrorLog as EL;
+use ST\Lms\ErrorLog as EL;
 
 /**
  * Shortcode register manage class.
  */
-class MyLearning extends \BlueDolphin\Lms\Shortcode\Register implements \BlueDolphin\Lms\Interfaces\MyLearning {
+class MyLearning extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\MyLearning {
 
 	/**
 	 * Class constructor.
@@ -42,7 +42,7 @@ class MyLearning extends \BlueDolphin\Lms\Shortcode\Register implements \BlueDol
 			$this->shortcode_tag
 		);
 		ob_start();
-		load_template( \BlueDolphin\Lms\locate_template( 'mylearning.php' ), false, $args );
+		load_template( \ST\Lms\locate_template( 'mylearning.php' ), false, $args );
 		$content = ob_get_clean();
 		return $content;
 	}

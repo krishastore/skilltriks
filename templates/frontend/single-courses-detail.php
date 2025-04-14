@@ -2,7 +2,7 @@
 /**
  * Template: Course Details Page
  *
- * @package BlueDolphin\Lms
+ * @package ST\Lms
  *
  * phpcs:disable WordPress.Security.NonceVerification.Recommended
  */
@@ -19,15 +19,15 @@ $course_id = get_the_ID();
  *
  * @param int $course_id Course ID
  */
-do_action( 'bdlms_before_single_course', $course_id );
+do_action( 'stlms_before_single_course', $course_id );
 
-global $bdlms_course_data;
+global $stlms_course_data;
 load_template(
-	\BlueDolphin\Lms\locate_template( 'course-detail.php' ),
+	\ST\Lms\locate_template( 'course-detail.php' ),
 	true,
 	array(
 		'course_id'   => $course_id,
-		'course_data' => $bdlms_course_data,
+		'course_data' => $stlms_course_data,
 	)
 );
 
@@ -36,6 +36,6 @@ load_template(
  *
  * @param int $course_id Course ID
  */
-do_action( 'bdlms_after_single_course', $course_id );
+do_action( 'stlms_after_single_course', $course_id );
 
 get_footer();

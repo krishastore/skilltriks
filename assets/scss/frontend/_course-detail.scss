@@ -1,14 +1,14 @@
-.bdlms-course-banner {
+.stlms-course-banner {
   padding: 77px 0;
   background-size: cover;
   background-position: center center;
   @include breakpoint(max, 767) {
     padding: 32px 0;
   }
-  .bdlms-breadcrumb {
+  .stlms-breadcrumb {
     padding-bottom: 30px;
   }
-  .bdlms-course-title {
+  .stlms-course-title {
     font-size: 40px;
     font-weight: 500;
     color: $white;
@@ -19,7 +19,7 @@
       font-size: 28px;
     }
   }
-  .bdlms-course-text {
+  .stlms-course-text {
     color: $white;
     font-size: 18px;
     line-height: 1.7;
@@ -29,7 +29,7 @@
       font-size: 14px;
     }
   }
-  .bdlms-course-by-tag {
+  .stlms-course-by-tag {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -57,7 +57,7 @@
     }
   }
 }
-.bdlms-breadcrumb {
+.stlms-breadcrumb {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -87,7 +87,7 @@
   }
 }
 
-.bdlms-course-detail-nav {
+.stlms-course-detail-nav {
   border-bottom: 1px solid $gray;
   background: $white;
   padding: 30px 0;
@@ -135,26 +135,26 @@
   }
 }
 
-.bdlms-course-detail-wrap {
+.stlms-course-detail-wrap {
   padding: 60px 0;
   @include breakpoint(max, 767) {
     padding: 32px 0;
   }
-  .bdlms-course-detail-column {
+  .stlms-course-detail-column {
     display: flex;
     flex-direction: row-reverse;
     @include breakpoint(max, 1200) {
       flex-direction: column;
       gap: 30px;
     }
-    .bdlms-course-left {
+    .stlms-course-left {
       width: calc(100% - 460px);
       padding-right: 100px;
       @include breakpoint(max, 1200) {
         width: 100%;
         padding-right: 0;
       }
-      .bdlms-course-requirement-box {
+      .stlms-course-requirement-box {
         border: 1px solid $gray;
         border-radius: 10px;
         padding: 20px;
@@ -169,7 +169,7 @@
           margin: 0;
           padding-bottom: 20px;
         }
-        .bdlms-course-requirement-check {
+        .stlms-course-requirement-check {
           list-style: none;
           margin: 0;
           padding: 0;
@@ -195,7 +195,7 @@
           }
         }
         &.learn-box {
-          .bdlms-course-requirement-check {
+          .stlms-course-requirement-check {
             grid-template-columns: 1fr 1fr;
             @include breakpoint(max, 767) {
               grid-template-columns: 1fr;
@@ -215,7 +215,7 @@
           }
         }
         &.skill-box {
-          .bdlms-course-requirement-check {
+          .stlms-course-requirement-check {
             li {
               &:before {
                 width: 15px;
@@ -232,7 +232,7 @@
         }
       }
     }
-    .bdlms-course-right {
+    .stlms-course-right {
       width: 460px;
       flex-shrink: 0;
       @include breakpoint(max, 1200) {
@@ -240,7 +240,7 @@
       }
     }
   }
-  .bdlms-course-info-box {
+  .stlms-course-info-box {
     background: $white;
     border-radius: 6px;
     box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
@@ -251,7 +251,7 @@
     @include breakpoint(max, 1200) {
       margin-top: 0;
     }
-    .bdlms-course-info-img {
+    .stlms-course-info-img {
       position: relative;
       &:after {
         content: "";
@@ -284,7 +284,7 @@
         z-index: 12;
       }
     }
-    .bdlms-course-info {
+    .stlms-course-info {
       padding: 15px;
       border: 1px solid $gray;
       border-radius: 0 0 6px 6px;
@@ -295,7 +295,7 @@
         margin: 0;
         padding-bottom: 20px;
       }
-      .bdlms-course-include {
+      .stlms-course-include {
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -321,13 +321,13 @@
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 20px;
-          .bdlms-btn.bdlms-btn-block {
+          .stlms-btn.stlms-btn-block {
             padding-left: 4px;
             padding-right: 4px;
           }
         }
       }
-      .bdlms-course-share {
+      .stlms-course-share {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
@@ -354,20 +354,20 @@
   }
 }
 
-.bdlms-accordion-course-content {
-  .bdlms-accordion {
-    .bdlms-accordion-item {
+.stlms-accordion-course-content {
+  .stlms-accordion {
+    .stlms-accordion-item {
       border-bottom: 1px solid $gray;
       &:last-child {
         border-bottom: 0;
       }
-      .bdlms-accordion-header {
+      .stlms-accordion-header {
         padding: 30px 30px 30px 0;
         @include breakpoint(max, 767) {
           padding-top: 16px;
           padding-bottom: 16px;
         }
-        .bdlms-lesson-name {
+        .stlms-lesson-name {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -384,10 +384,10 @@
           }
         }
       }
-      .bdlms-accordion-collapse {
+      .stlms-accordion-collapse {
         border-top: 1px solid $gray;
       }
-      .bdlms-accordion-note {
+      .stlms-accordion-note {
         padding: 20px;
         background: $gray;
         border-radius: 6px;
@@ -396,21 +396,24 @@
         color: $gray_dark;
         margin: 20px 0;
       }
-      .bdlms-lesson-list {
+      .stlms-lesson-list {
         > ul {
           > li {
             label {
               position: relative;
-              .bdlms-check {
+              .stlms-check {
                 position: absolute;
                 opacity: 0;
                 visibility: hidden;
               }
-              .bdlms-lesson-class {
+              .stlms-lesson-class {
                 align-items: center;
                 flex-direction: row;
+
                 @include breakpoint(max, 767) {
                   flex-wrap: wrap;
+                  position: relative;
+                  padding-left: 24px;
                 }
                 .class-time-info {
                   margin-left: auto;
@@ -423,6 +426,7 @@
                   }
                   .class-time {
                     font-size: 14px;
+                    text-wrap: nowrap;
                   }
                   .lock-icon {
                     flex-shrink: 0;
@@ -437,14 +441,14 @@
   }
 }
 
-.bdlms-accordion-faq {
-  .bdlms-accordion-item {
+.stlms-accordion-faq {
+  .stlms-accordion-item {
     border-bottom: 1px solid $gray;
     &:last-child {
       border-bottom: 0;
     }
   }
-  .bdlms-accordion-header {
+  .stlms-accordion-header {
     padding: 30px 30px 30px 0;
     font-size: 18px;
     color: $primary_dark;
@@ -455,7 +459,7 @@
       font-size: 16px;
     }
   }
-  .bdlms-quiz-content {
+  .stlms-quiz-content {
     padding: 0;
     width: 90%;
     margin: 0;
@@ -465,8 +469,8 @@
   }
 }
 
-.bdlms-similar-course {
-  .bdlms-similar-course-title {
+.stlms-similar-course {
+  .stlms-similar-course-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -478,17 +482,17 @@
       margin: 0;
     }
   }
-  .bdlms-similar-course-slide {
+  .stlms-similar-course-slide {
     padding-top: 20px;
     padding-bottom: 10px;
     height: auto;
   }
 }
 
-.bdlms-slider-arrows {
+.stlms-slider-arrows {
   display: flex;
   gap: 16px;
-  .bdlms-slider-arrow {
+  .stlms-slider-arrow {
     cursor: pointer;
     width: 24px;
     height: 24px;

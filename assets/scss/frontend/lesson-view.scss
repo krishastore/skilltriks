@@ -1,10 +1,12 @@
-.bdlms-lesson-view {
+.stlms-lesson-view {
+  --header-height: 78px;
   position: relative;
   overflow: hidden;
-  height: 100vh;
+  height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
   @include transition(all 0.3s ease-in-out);
+
   &__header {
     display: flex;
     justify-content: space-between;
@@ -25,7 +27,7 @@
     @include breakpoint(max, 500) {
       flex-wrap: wrap;
     }
-    .bdlms-lesson-toggle {
+    .stlms-lesson-toggle {
       position: absolute;
       right: 0;
       top: 0;
@@ -84,7 +86,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    .bdlms-btn {
+    .stlms-btn {
       @include breakpoint(max, $sm) {
         font-size: 0;
         gap: 0;
@@ -98,12 +100,18 @@
     padding: 40px 112px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+
+    @include breakpoint(max, $sm) {
+      padding: 40px 20px;
+      justify-content: center;
+    }
     &.hidden {
       display: none;
     }
     .left {
-      width: 50%;
-      .bdlms-quiz-timer {
+      .stlms-quiz-timer {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -121,7 +129,9 @@
       }
     }
     .right {
-      width: 50%;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
       text-align: right;
     }
     &.no-steps {
@@ -140,18 +150,18 @@
     @include breakpoint(max, $md) {
       padding-right: 0;
     }
-    .bdlms-lesson-sidebar {
+    .stlms-lesson-sidebar {
       right: 0;
     }
-    .bdlms-lesson-view__header {
-      .bdlms-lesson-toggle {
+    .stlms-lesson-view__header {
+      .stlms-lesson-toggle {
         opacity: 0;
         visibility: hidden;
       }
     }
-    // .bdlms-lesson-video-box {
+    // .stlms-lesson-video-box {
     //   padding-bottom: 56.25%;
-    //   &.bdlms-pdf-view {
+    //   &.stlms-pdf-view {
     //     @include breakpoint(max, $sm) {
     //       padding-bottom: 140.25%;
     //     }
@@ -160,7 +170,7 @@
   }
 }
 
-.bdlms-lesson-video-box {
+.stlms-lesson-video-box {
   --plyr-color-main: #0f5aa7;
   position: relative;
   width: 100%;
@@ -178,14 +188,14 @@
     height: 100%;
     display: block;
   }
-  // &.bdlms-pdf-view {
+  // &.stlms-pdf-view {
   //   @include breakpoint(max, $sm) {
   //     padding-bottom: 140.25%;
   //   }
   // }
 }
 
-.bdlms-lesson-sidebar {
+.stlms-lesson-sidebar {
   position: absolute;
   right: -430px;
   top: 0;
@@ -203,7 +213,7 @@
     position: fixed;
     width: 300px;
   }
-  .bdlms-lesson-toggle {
+  .stlms-lesson-toggle {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -220,20 +230,20 @@
       color: $gray_light;
     }
   }
-  .bdlms-lesson-accordion {
+  .stlms-lesson-accordion {
     height: 100%;
     overflow: auto;
   }
 }
 
-.bdlms-lesson-accordion {
-  .bdlms-accordion-item {
+.stlms-lesson-accordion {
+  .stlms-accordion-item {
     border-bottom: 1px solid $gray;
-    .bdlms-accordion-collapse {
+    .stlms-accordion-collapse {
       border-top: 1px solid $gray;
     }
   }
-  .bdlms-lesson-title {
+  .stlms-lesson-title {
     display: flex;
     font-size: 18px;
     font-weight: 500;
@@ -246,7 +256,7 @@
       width: 24px;
       flex-shrink: 0;
     }
-    .bdlms-lesson-name {
+    .stlms-lesson-name {
       width: 100%;
       .name {
         padding-bottom: 10px;
@@ -275,7 +285,7 @@
   }
 }
 
-.bdlms-lesson-list {
+.stlms-lesson-list {
   > ul {
     > li {
       label {
@@ -284,11 +294,11 @@
         gap: 10px;
         padding: 16px 12px;
         color: $primary_dark;
-        .bdlms-check {
+        .stlms-check {
           flex-shrink: 0;
           margin-top: 4px;
         }
-        .bdlms-lesson-class {
+        .stlms-lesson-class {
           width: 100%;
           display: flex;
           flex-direction: column;
@@ -297,8 +307,12 @@
             display: flex;
             font-size: 16px;
             font-weight: 500;
+            align-items: center;
             @include breakpoint(max, $md) {
               font-size: $font_size_sm;
+            }
+            @include breakpoint(max, $sm) {
+              align-items: flex-start;
             }
             span {
               flex-shrink: 0;
@@ -309,6 +323,7 @@
             display: flex;
             font-size: 14px;
             gap: 10px;
+
             svg {
               flex-shrink: 0;
               width: 16px;
@@ -317,17 +332,17 @@
         }
         &.in-progress {
           color: $gray_dark;
-          .bdlms-check:checked {
+          .stlms-check:checked {
             background-color: $gray_dark;
             border-color: $gray_dark;
           }
         }
-        &:has(.bdlms-check[readonly]),
-        &:has(.bdlms-check[disable]),
-        &:has(.bdlms-check[disabled]) {
+        &:has(.stlms-check[readonly]),
+        &:has(.stlms-check[disable]),
+        &:has(.stlms-check[disabled]) {
           color: $gray_light;
           pointer-events: none;
-          .bdlms-check {
+          .stlms-check {
             border-color: $gray_light;
           }
         }
@@ -336,7 +351,15 @@
   }
 }
 
-.bdlms-quiz-view {
+.stlms-course-requirement-box .class-type {
+  @include breakpoint(max, 767) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.stlms-quiz-view {
   position: relative;
   height: 100%;
   display: grid;
@@ -350,7 +373,7 @@
   }
 }
 
-.bdlms-quiz-start {
+.stlms-quiz-start {
   text-align: center;
   h3 {
     color: $primary_dark;
@@ -381,7 +404,7 @@
   }
 }
 
-.bdlms-quiz-question {
+.stlms-quiz-question {
   padding: 24px 0;
   > .qus-no {
     text-align: center;
@@ -396,13 +419,17 @@
     font-weight: 500;
     padding-bottom: 10px;
     text-align: center;
+
+    @include breakpoint(max, $sm) {
+      font-size: 20px;
+    }
   }
-  .bdlms-quiz-input-ans {
+  .stlms-quiz-input-ans {
     max-width: 640px;
     margin: 0 auto;
     padding-top: 30px;
   }
-  .bdlms-quiz-option-list {
+  .stlms-quiz-option-list {
     max-width: 320px;
     margin: 0 auto;
     padding-top: 30px;
@@ -421,33 +448,33 @@
           font-size: 16px;
           color: $gray_light;
           cursor: pointer;
-          .bdlms-check {
+          .stlms-check {
             flex-shrink: 0;
           }
-          &:has(.bdlms-check:checked) {
+          &:has(.stlms-check:checked) {
             border-color: $primary;
             color: $primary;
           }
-          &:has(.bdlms-check.invalid) {
+          &:has(.stlms-check.invalid) {
             border-color: $red;
             color: $red;
-            input[type="checkbox"].bdlms-check:checked {
+            input[type="checkbox"].stlms-check:checked {
               background-color: $red;
               border-color: $red;
             }
-            input[type="radio"].bdlms-check:checked {
+            input[type="radio"].stlms-check:checked {
               background-color: $red;
               border-color: $red;
             }
           }
-          &:has(.bdlms-check.valid) {
+          &:has(.stlms-check.valid) {
             border-color: $green;
             color: $green;
-            input[type="checkbox"].bdlms-check:checked {
+            input[type="checkbox"].stlms-check:checked {
               background-color: $green;
               border-color: $green;
             }
-            input[type="radio"].bdlms-check:checked {
+            input[type="radio"].stlms-check:checked {
               background-color: $green;
               border-color: $green;
             }
@@ -473,7 +500,7 @@
   }
 }
 
-.bdlms-alert {
+.stlms-alert {
   max-width: 658px;
   margin: 0 auto;
   padding: 20px 40px;
@@ -501,17 +528,17 @@
     font-weight: 600;
     padding-bottom: 12px;
   }
-  &.bdlms-alert-error {
+  &.stlms-alert-error {
     background: rgba($red, 0.05);
     border-color: $red;
   }
-  &.bdlms-alert-success {
+  &.stlms-alert-success {
     background: rgba($green, 0.05);
     border-color: $green;
   }
 }
 
-.bdlms-quiz-content {
+.stlms-quiz-content {
   padding: 0 20px;
   max-width: 1140px;
   margin: 0 auto;
@@ -599,9 +626,19 @@
       }
     }
   }
+  img {
+    display: block;
+
+    &.aligncenter {
+      margin: 0 auto;
+    }
+    &.alignright {
+      margin-left: auto;
+    }
+  }
 }
 
-.bdlms-quiz-complete {
+.stlms-quiz-complete {
   max-width: 470px;
   margin: 0 auto;
   text-align: center;
@@ -616,11 +653,15 @@
     color: $gray_dark;
     margin: 0;
   }
-  .bdlms-quiz-result-list {
+  .stlms-quiz-result-list {
     display: flex;
     gap: 30px;
     padding-top: 40px;
-    .bdlms-quiz-result-item {
+
+    @include breakpoint(max, $sm) {
+      gap: 8px;
+    }
+    .stlms-quiz-result-item {
       width: 100%;
       border: 1px solid $gray;
       border-radius: 6px;
@@ -631,14 +672,24 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+
+      @include breakpoint(max, $sm) {
+        padding: 20px 08px;
+        font-size: 14px;
+      }
       p {
         margin: 0;
         font-size: 18px;
         color: $primary_dark;
         font-weight: 600;
+        @include breakpoint(max, $sm) {
+          font-size: 16px;
+        }
       }
     }
   }
 }
 
-.bdlms-lesson-list li.active {background: #eaeaea;}
+.stlms-lesson-list li.active {
+  background: #eaeaea;
+}

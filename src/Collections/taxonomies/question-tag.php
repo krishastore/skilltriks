@@ -2,22 +2,22 @@
 /**
  * Question tag taxonomy.
  *
- * @package BlueDolphin\Lms
+ * @package ST\Lms
  */
 
-namespace BlueDolphin\Lms\Collections\Taxonomies;
+namespace ST\Lms\Collections\Taxonomies;
 
-use const BlueDolphin\Lms\BDLMS_QUESTION_TAXONOMY_TAG;
-use const BlueDolphin\Lms\BDLMS_QUESTION_CPT;
+use const ST\Lms\STLMS_QUESTION_TAXONOMY_TAG;
+use const ST\Lms\STLMS_QUESTION_CPT;
 
 /**
- * Registers the `bdlms_quesion_tag` taxonomy,
- * for use with 'bdlms_question'.
+ * Registers the `stlms_quesion_tag` taxonomy,
+ * for use with 'stlms_question'.
  */
-function bdlms_quesion_tag_init() {
+function stlms_quesion_tag_init() {
 	register_taxonomy(
-		BDLMS_QUESTION_TAXONOMY_TAG,
-		array( BDLMS_QUESTION_CPT ),
+		STLMS_QUESTION_TAXONOMY_TAG,
+		array( STLMS_QUESTION_CPT ),
 		array(
 			'hierarchical'          => true,
 			'public'                => true,
@@ -34,56 +34,56 @@ function bdlms_quesion_tag_init() {
 				'assign_terms' => 'edit_posts',
 			),
 			'labels'                => array(
-				'name'                       => __( 'Topic', 'bluedolphin-lms' ),
-				'singular_name'              => _x( 'Topic', 'taxonomy general name', 'bluedolphin-lms' ),
-				'search_items'               => __( 'Search topic', 'bluedolphin-lms' ),
-				'popular_items'              => __( 'Popular topic', 'bluedolphin-lms' ),
-				'all_items'                  => __( 'All Topic', 'bluedolphin-lms' ),
-				'parent_item'                => __( 'Parent Topic', 'bluedolphin-lms' ),
-				'parent_item_colon'          => __( 'Parent Topic:', 'bluedolphin-lms' ),
-				'edit_item'                  => __( 'Edit Topic', 'bluedolphin-lms' ),
-				'update_item'                => __( 'Update Topic', 'bluedolphin-lms' ),
-				'view_item'                  => __( 'View Topic', 'bluedolphin-lms' ),
-				'add_new_item'               => __( 'Add New Topic', 'bluedolphin-lms' ),
-				'new_item_name'              => __( 'New Topic', 'bluedolphin-lms' ),
-				'separate_items_with_commas' => __( 'Separate topic with commas', 'bluedolphin-lms' ),
-				'add_or_remove_items'        => __( 'Add or remove topic', 'bluedolphin-lms' ),
-				'choose_from_most_used'      => __( 'Choose from the most used topic', 'bluedolphin-lms' ),
-				'not_found'                  => __( 'No topics found.', 'bluedolphin-lms' ),
-				'no_terms'                   => __( 'No topics', 'bluedolphin-lms' ),
-				'menu_name'                  => __( 'Topics', 'bluedolphin-lms' ),
-				'items_list_navigation'      => __( 'Topic list navigation', 'bluedolphin-lms' ),
-				'items_list'                 => __( 'Topic list', 'bluedolphin-lms' ),
-				'most_used'                  => _x( 'Most Used', 'bdlms_quesion_tag', 'bluedolphin-lms' ),
-				'back_to_items'              => __( '&larr; Back to topic', 'bluedolphin-lms' ),
+				'name'                       => __( 'Topic', 'skilltriks' ),
+				'singular_name'              => _x( 'Topic', 'taxonomy general name', 'skilltriks' ),
+				'search_items'               => __( 'Search topic', 'skilltriks' ),
+				'popular_items'              => __( 'Popular topic', 'skilltriks' ),
+				'all_items'                  => __( 'All Topic', 'skilltriks' ),
+				'parent_item'                => __( 'Parent Topic', 'skilltriks' ),
+				'parent_item_colon'          => __( 'Parent Topic:', 'skilltriks' ),
+				'edit_item'                  => __( 'Edit Topic', 'skilltriks' ),
+				'update_item'                => __( 'Update Topic', 'skilltriks' ),
+				'view_item'                  => __( 'View Topic', 'skilltriks' ),
+				'add_new_item'               => __( 'Add New Topic', 'skilltriks' ),
+				'new_item_name'              => __( 'New Topic', 'skilltriks' ),
+				'separate_items_with_commas' => __( 'Separate topic with commas', 'skilltriks' ),
+				'add_or_remove_items'        => __( 'Add or remove topic', 'skilltriks' ),
+				'choose_from_most_used'      => __( 'Choose from the most used topic', 'skilltriks' ),
+				'not_found'                  => __( 'No topics found.', 'skilltriks' ),
+				'no_terms'                   => __( 'No topics', 'skilltriks' ),
+				'menu_name'                  => __( 'Topics', 'skilltriks' ),
+				'items_list_navigation'      => __( 'Topic list navigation', 'skilltriks' ),
+				'items_list'                 => __( 'Topic list', 'skilltriks' ),
+				'most_used'                  => _x( 'Most Used', 'stlms_quesion_tag', 'skilltriks' ),
+				'back_to_items'              => __( '&larr; Back to topic', 'skilltriks' ),
 			),
 			'show_in_rest'          => true,
-			'rest_base'             => BDLMS_QUESTION_TAXONOMY_TAG,
+			'rest_base'             => STLMS_QUESTION_TAXONOMY_TAG,
 			'rest_controller_class' => 'WP_REST_Terms_Controller',
 		)
 	);
 }
 
-add_action( 'init', __NAMESPACE__ . '\\bdlms_quesion_tag_init' );
+add_action( 'init', __NAMESPACE__ . '\\stlms_quesion_tag_init' );
 
 /**
- * Sets the post updated messages for the `bdlms_quesion_tag` taxonomy.
+ * Sets the post updated messages for the `stlms_quesion_tag` taxonomy.
  *
  * @param  array $messages Post updated messages.
- * @return array Messages for the `bdlms_quesion_tag` taxonomy.
+ * @return array Messages for the `stlms_quesion_tag` taxonomy.
  */
-function bdlms_quesion_tag_updated_messages( $messages ) {
+function stlms_quesion_tag_updated_messages( $messages ) {
 
-	$messages[ BDLMS_QUESTION_TAXONOMY_TAG ] = array(
+	$messages[ STLMS_QUESTION_TAXONOMY_TAG ] = array(
 		0 => '', // Unused. Messages start at index 1.
-		1 => __( 'Topic added.', 'bluedolphin-lms' ),
-		2 => __( 'Topic deleted.', 'bluedolphin-lms' ),
-		3 => __( 'Topic updated.', 'bluedolphin-lms' ),
-		4 => __( 'Topic not added.', 'bluedolphin-lms' ),
-		5 => __( 'Topic not updated.', 'bluedolphin-lms' ),
-		6 => __( 'Topic deleted.', 'bluedolphin-lms' ),
+		1 => __( 'Topic added.', 'skilltriks' ),
+		2 => __( 'Topic deleted.', 'skilltriks' ),
+		3 => __( 'Topic updated.', 'skilltriks' ),
+		4 => __( 'Topic not added.', 'skilltriks' ),
+		5 => __( 'Topic not updated.', 'skilltriks' ),
+		6 => __( 'Topic deleted.', 'skilltriks' ),
 	);
 	return $messages;
 }
 
-add_filter( 'term_updated_messages', __NAMESPACE__ . '\\bdlms_quesion_tag_updated_messages' );
+add_filter( 'term_updated_messages', __NAMESPACE__ . '\\stlms_quesion_tag_updated_messages' );

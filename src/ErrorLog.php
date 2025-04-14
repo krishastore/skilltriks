@@ -2,13 +2,13 @@
 /**
  * The file that stores the error log.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  */
 
-namespace BlueDolphin\Lms;
+namespace ST\Lms;
 
 /**
  * Error log handler.
@@ -24,7 +24,7 @@ class ErrorLog {
 	 * @param int    $line Line number.
 	 */
 	public static function add( $msg = '', $type = 'error', $file = __FILE__, $line = __LINE__ ) {
-		if ( defined( 'BDLMS_LOCAL_DEBUG' ) && BDLMS_LOCAL_DEBUG ) {
+		if ( defined( 'STLMS_LOCAL_DEBUG' ) && STLMS_LOCAL_DEBUG ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			error_log( sprintf( '%s (%s:%d): %s', $type, $file, $line, $msg ) );
 		}

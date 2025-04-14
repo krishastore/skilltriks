@@ -34,9 +34,9 @@ window.wp = window.wp || {};
 			 */
 			snackbarNotice: function (message) {
 				var _t = this;
-				$(".bdlms-snackbar-notice").find("p").html(message);
-				$(".bdlms-snackbar-notice").toggleClass("open", 1000);
-				if ($(".bdlms-snackbar-notice").hasClass("open")) {
+				$(".stlms-snackbar-notice").find("p").html(message);
+				$(".stlms-snackbar-notice").toggleClass("open", 1000);
+				if ($(".stlms-snackbar-notice").hasClass("open")) {
 					setTimeout(function () {
 						_t.snackbarNotice("");
 					}, 3000);
@@ -118,7 +118,7 @@ window.wp = window.wp || {};
 						$('input[name="post_title"]', editRow).val(
 							editData?.title,
 						);
-						$("select#bdlms_answer_type", editRow).val(
+						$("select#stlms_answer_type", editRow).val(
 							editData?.type,
 						);
 						$(".marks-input input", editRow).val(editData?.marks);
@@ -128,7 +128,7 @@ window.wp = window.wp || {};
 
 						if (editData[type]) {
 							var optionList = $(
-								".bdlms-options-table__body .bdlms-options-table__list-wrap",
+								".stlms-options-table__body .stlms-options-table__list-wrap",
 								$("#" + type),
 							);
 							optionList.empty();
@@ -179,7 +179,7 @@ window.wp = window.wp || {};
 						}
 
 						// Trigger select type dropdown.
-						$("#bdlms_answer_type").change();
+						$("#stlms_answer_type").change();
 
 						// Show edit row.
 						$(editRow)
@@ -192,7 +192,7 @@ window.wp = window.wp || {};
 					// Hide answer box.
 					$(document).on(
 						"click",
-						".bdlms-cancel-answer",
+						".stlms-cancel-answer",
 						this.hideAnswers,
 					);
 				}
@@ -208,28 +208,28 @@ window.wp = window.wp || {};
 				_this.dialogInit();
 
 				// Show / Hide answers.
-				$(document).on("change", "#bdlms_answer_type", function () {
+				$(document).on("change", "#stlms_answer_type", function () {
 					var type = $(this).val();
 					if ("true_or_false" === type) {
 						$(
-							".bdlms-add-option, .bdlms-show-ans-action .bdlms-add-answer",
+							".stlms-add-option, .stlms-show-ans-action .stlms-add-answer",
 						).addClass("hidden");
 					} else {
 						$(
-							".bdlms-add-option, .bdlms-show-ans-action .bdlms-add-answer",
+							".stlms-add-option, .stlms-show-ans-action .stlms-add-answer",
 						).removeClass("hidden");
 					}
 					$(
-						".bdlms-answer-group, .inline-edit-col-left .bdlms-options-table, .inline-edit-col-left .bdlms-add-accepted-answers",
+						".stlms-answer-group, .inline-edit-col-left .stlms-options-table, .inline-edit-col-left .stlms-add-accepted-answers",
 					).addClass("hidden");
 					$("#" + type).removeClass("hidden");
 				});
-				$("#bdlms_answer_type").change();
+				$("#stlms_answer_type").change();
 
 				// Inline quick edit.
 				$(document).on(
 					"click",
-					".post-type-bdlms_question .button-link.editinline",
+					".post-type-stlms_question .button-link.editinline",
 					function () {
 						$(".inline-edit-private")
 							.parents("div.inline-edit-group")
@@ -252,21 +252,21 @@ window.wp = window.wp || {};
 				// Remove answer.
 				$(document).on(
 					"click",
-					".bdlms-remove-answer",
+					".stlms-remove-answer",
 					this.removeAnswer,
 				);
 				// Add new answer.
-				$(document).on("click", ".bdlms-add-answer", this.addNewAnswer);
+				$(document).on("click", ".stlms-add-answer", this.addNewAnswer);
 				// Save inline edit.
 				$(document).on(
 					"click",
-					".bdlms-save-answer",
+					".stlms-save-answer",
 					this.saveInlineEdit,
 				);
 
-				const tabs = document.querySelectorAll(".bdlms-tab");
+				const tabs = document.querySelectorAll(".stlms-tab");
 				const tabContents =
-					document.querySelectorAll(".bdlms-tab-content");
+					document.querySelectorAll(".stlms-tab-content");
 
 				tabs.forEach((tab) => {
 					tab.addEventListener("click", function () {
@@ -284,7 +284,7 @@ window.wp = window.wp || {};
 
 						// Show the corresponding tab content with fade effect
 						const tabContent = document.querySelector(
-							`.bdlms-tab-content[data-tab="${tabId}"]`,
+							`.stlms-tab-content[data-tab="${tabId}"]`,
 						);
 						if (tabContent) {
 							tabContent.classList.add("active");
@@ -300,12 +300,12 @@ window.wp = window.wp || {};
 			 */
 			initSortable: function (obj) {
 				var _this = obj;
-				$(".bdlms-sortable-answers", document)
+				$(".stlms-sortable-answers", document)
 					.sortable({
 						appendTo: "parent",
 						axis: "y",
 						containment: "parent",
-						items: "ul.bdlms-options-table__list",
+						items: "ul.stlms-options-table__list",
 						placeholder: "sortable-placeholder",
 						forcePlaceholderSize: true,
 						stop: function () {
@@ -331,15 +331,15 @@ window.wp = window.wp || {};
 			removeAnswer: function (e) {
 				e.preventDefault();
 				var parentElement = $(this).parents(
-					".bdlms-options-table__list-wrap",
+					".stlms-options-table__list-wrap",
 				);
-				$(this).parents("ul.bdlms-options-table__list").remove();
+				$(this).parents("ul.stlms-options-table__list").remove();
 				if (
 					1 ===
-					$("ul.bdlms-options-table__list", parentElement).length
+					$("ul.stlms-options-table__list", parentElement).length
 				) {
-					$("ul.bdlms-options-table__list", parentElement)
-						.find(".bdlms-remove-answer")
+					$("ul.stlms-options-table__list", parentElement)
+						.find(".stlms-remove-answer")
 						.addClass("hidden");
 				}
 				questionBank.reorderAnswer();
@@ -350,13 +350,13 @@ window.wp = window.wp || {};
 			 */
 			reorderAnswer: function () {
 				$(
-					".bdlms-sortable-answers .bdlms-options-table__list-wrap .bdlms-options-table__list:visible",
+					".stlms-sortable-answers .stlms-options-table__list-wrap .stlms-options-table__list:visible",
 				).each(function (index, item) {
 					var AnsId = questionObject.alphabets[index];
 					$(item)
-						.find(".bdlms-options-no")
+						.find(".stlms-options-no")
 						.text(AnsId + ".");
-					$(item).find(".bdlms-option-check-td input").val(index);
+					$(item).find(".stlms-option-check-td input").val(index);
 				});
 			},
 
@@ -365,10 +365,10 @@ window.wp = window.wp || {};
 			 */
 			addNewAnswer: function () {
 				var parentElement = $(this).parents(
-					".bdlms-answer-wrap, .bdlms-show-ans-wrap",
+					".stlms-answer-wrap, .stlms-show-ans-wrap",
 				);
 				var lastItem = $(
-					"ul.bdlms-options-table__list:visible:last, .bdlms-add-accepted-answers li:visible:last",
+					"ul.stlms-options-table__list:visible:last, .stlms-add-accepted-answers li:visible:last",
 					parentElement,
 				);
 				var newItem = lastItem.clone();
@@ -379,8 +379,8 @@ window.wp = window.wp || {};
 					.removeAttr("checked");
 				$(newItem).insertAfter(lastItem);
 				// Show delete button.
-				$("ul.bdlms-options-table__list", parentElement)
-					.find(".bdlms-remove-answer")
+				$("ul.stlms-options-table__list", parentElement)
+					.find(".stlms-remove-answer")
 					.removeClass("hidden");
 				questionBank.reorderAnswer();
 			},
@@ -404,7 +404,7 @@ window.wp = window.wp || {};
 					post_ID: id,
 					edit_date: "",
 					post_status: page,
-					bdlms_nonce: questionObject.nonce
+					stlms_nonce: questionObject.nonce
 				};
 
 				fields = $("#edit-" + id)
@@ -476,7 +476,7 @@ window.wp = window.wp || {};
 			dialogInit: function () {
 				$("#assign_quiz").dialog({
 					title: questionObject.i18n.PopupTitle,
-					dialogClass: "wp-dialog bdlms-modal",
+					dialogClass: "wp-dialog stlms-modal",
 					autoOpen: false,
 					draggable: false,
 					width: "auto",
@@ -496,7 +496,7 @@ window.wp = window.wp || {};
 								post_id: $('#post_ID').val()
 							},
 							function () {
-								$('.bdlms-choose-quiz').trigger('change');
+								$('.stlms-choose-quiz').trigger('change');
 							}
 						);
 					},
@@ -512,33 +512,33 @@ window.wp = window.wp || {};
 					},
 				);
 
-				$(document).on("change", ".bdlms-choose-quiz", function () {
+				$(document).on("change", ".stlms-choose-quiz", function () {
 					var totalChecked = $(
 						"input:checkbox:checked",
 						$(this).parents("ul"),
 					);
 					$(this)
-						.parents(".bdlms-qus-bank-modal")
-						.find(".bdlms-add-quiz")
+						.parents(".stlms-qus-bank-modal")
+						.find(".stlms-add-quiz")
 						.attr("disabled", function () {
 							return false;
 						})
-						.next(".bdlms-qus-selected")
+						.next(".stlms-qus-selected")
 						.text(function (i, txt) {
 							return txt.replace(/\d+/, totalChecked.length);
 						});
 				});
 
-				$(document).on("click", ".bdlms-add-quiz", function (e) {
+				$(document).on("click", ".stlms-add-quiz", function (e) {
 					var _btn = $(this);
-					var qIds = $(".bdlms-choose-quiz:checked")
+					var qIds = $(".stlms-choose-quiz:checked")
 						.map(function () {
 							return $(this).val();
 						})
 						.get();
 					var postId = $("#post_ID").val();
 
-					$(".bdlms-choose-quiz:visible").attr("disabled", true);
+					$(".stlms-choose-quiz:visible").attr("disabled", true);
 					_btn.parent("div")
 						.find("span.spinner")
 						.addClass("is-active")
@@ -549,13 +549,13 @@ window.wp = window.wp || {};
 					$.post(
 						questionObject.ajaxurl,
 						{
-							action: "bdlms_assign_to_quiz",
-							bdlms_nonce: questionObject.nonce,
+							action: "stlms_assign_to_quiz",
+							stlms_nonce: questionObject.nonce,
 							selected: qIds,
 							post_id: postId,
 						},
 						function (data) {
-							$(".bdlms-choose-quiz:visible").removeAttr(
+							$(".stlms-choose-quiz:visible").removeAttr(
 								"disabled",
 							);
 							_btn.parent("div")
@@ -571,16 +571,16 @@ window.wp = window.wp || {};
 					e.preventDefault();
 				});
 				
-				$(document).on('input', 'input.bdlms-qus-bank-search', function () {
+				$(document).on('input', 'input.stlms-qus-bank-search', function () {
 					var searchBox = $(this);
 					var searchKeyword = searchBox.val();
 					clearTimeout($.data(this, "timer"));
 					$(this).data( 'timer', setTimeout(function() {
 						searchBox
 						.addClass("ui-autocomplete-loading")
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.addClass("searching")
-						.find('.bdlms-qus-list-scroll li')
+						.find('.stlms-qus-list-scroll li')
 						.each(function(i, e) {
 							var text = jQuery(e).find('label').text().toLowerCase();
 							var matched = text.indexOf(searchKeyword.toLowerCase());
@@ -590,7 +590,7 @@ window.wp = window.wp || {};
 							}
 							$(e).addClass('hidden');
 						})
-						.parent('.bdlms-qus-list-scroll')
+						.parent('.stlms-qus-list-scroll')
 						.after(function() {
 							$(this).next('p').remove();
 							if( 0 === $(this).find('li:not(.hidden)').length ) {
@@ -598,7 +598,7 @@ window.wp = window.wp || {};
 							}
 							return '';
 						})
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.removeClass("searching")
 						.find('.ui-autocomplete-loading')
 						.removeClass('ui-autocomplete-loading');
@@ -608,11 +608,11 @@ window.wp = window.wp || {};
                 $(document).on('click', 'button[data-tab="assign-quiz-list"]', function() {
                     var currentTab = $(this);
                     currentTab
-                    .parents('.bdlms-qus-bank-modal')
+                    .parents('.stlms-qus-bank-modal')
                     .addClass("searching");
-                    $("#bdlms_quiz_list").load(
+                    $("#stlms_quiz_list").load(
                         questionObject.contentLoadUrl +
-                            " #bdlms_quiz_list > *",
+                            " #stlms_quiz_list > *",
                         {
 							fetch_quizzes: 1,
 							post_id: $('#post_ID').val(),
@@ -620,7 +620,7 @@ window.wp = window.wp || {};
                         },
                         function () {
                             currentTab
-                            .parents('.bdlms-qus-bank-modal')
+                            .parents('.stlms-qus-bank-modal')
                             .removeClass('searching');
                         },
                     );

@@ -28,9 +28,9 @@ window.wp = window.wp || {};
 			 */
 			snackbarNotice: function (message) {
 				var _t = this;
-				$('.bdlms-snackbar-notice').find('p').html(message);
-				$('.bdlms-snackbar-notice').toggleClass('open', 1000);
-				if ($('.bdlms-snackbar-notice').hasClass('open')) {
+				$('.stlms-snackbar-notice').find('p').html(message);
+				$('.stlms-snackbar-notice').toggleClass('open', 1000);
+				if ($('.stlms-snackbar-notice').hasClass('open')) {
 					setTimeout(function () {
 						_t.snackbarNotice('');
 					}, 3000);
@@ -52,7 +52,7 @@ window.wp = window.wp || {};
 				} );
 
 				// Inline quick edit.
-				$(document).on('click', '.post-type-bdlms_lesson .button-link.editinline', function(e) {
+				$(document).on('click', '.post-type-stlms_lesson .button-link.editinline', function(e) {
 					e.preventDefault();
 					var  currentRow = $(this).parents('tr');
 					var editRow = currentRow.next('tr.hidden').next('tr.inline-edit-row');
@@ -71,7 +71,7 @@ window.wp = window.wp || {};
 					$(".inline-edit-lesson-item:visible select", editRow ).val(durationType);
 					if ( selectedCourses && selectedCourses.length ) {
 						$.each(selectedCourses, function(i, v){
-							$('.bdlms_course-checklist:visible input[value="' + v + '"]', editRow ).attr('checked', true).prop('checked', true);
+							$('.stlms_course-checklist:visible input[value="' + v + '"]', editRow ).attr('checked', true).prop('checked', true);
 						});
 					}
 				});
@@ -84,7 +84,7 @@ window.wp = window.wp || {};
 				var _this = this;
 				$('#course_list_modal').dialog({
 					title: lessonObject.i18n.PopupTitle,
-					dialogClass: "wp-dialog bdlms-modal",
+					dialogClass: "wp-dialog stlms-modal",
 					autoOpen: false,
 					draggable: false,
 					width: "auto",
@@ -97,44 +97,44 @@ window.wp = window.wp || {};
 						of: window,
 					},
 					open: function (event, ui) {
-						$('#bdlms_course_list').load(
-							lessonObject.contentLoadUrl + ' #bdlms_course_list > *',
+						$('#stlms_course_list').load(
+							lessonObject.contentLoadUrl + ' #stlms_course_list > *',
 							{
 								fetch_courses: 1,
 								post_id: $('#post_ID').val()
 							},
 							function () {
-								$('.bdlms-choose-course').trigger('change');
+								$('.stlms-choose-course').trigger('change');
 							}
 						);
 					},
 					create: function () {},
 				});
 
-				$(document).on('change', '.bdlms-choose-course', function () {
+				$(document).on('change', '.stlms-choose-course', function () {
 					var totalChecked = $("input:checkbox:checked", $(this).parents('ul'));
 					$(this)
-					.parents('.bdlms-qus-bank-modal')
-					.find('.bdlms-add-course')
+					.parents('.stlms-qus-bank-modal')
+					.find('.stlms-add-course')
 					.attr('disabled', function () {
 						return false;
 					})
-					.next('.bdlms-qus-selected')
+					.next('.stlms-qus-selected')
 					.text(function (i, txt) {
 						return txt.replace(/\d+/, totalChecked.length);
 					});
 				});
 
-				$(document).on('click', '.bdlms-add-course', function (e) {
+				$(document).on('click', '.stlms-add-course', function (e) {
 					var _btn = $(this);
-					var courseIds = $('.bdlms-choose-course:checked')
+					var courseIds = $('.stlms-choose-course:checked')
 					.map(function () {
 						return $(this).val();
 					})
 					.get();
 					var postId = $('#post_ID').val();
 
-					$('.bdlms-choose-quiz:visible').attr('disabled', true);
+					$('.stlms-choose-quiz:visible').attr('disabled', true);
 					_btn.parent('div')
 					.find('span.spinner')
 					.addClass('is-active')
@@ -144,13 +144,13 @@ window.wp = window.wp || {};
 
 					$.post( lessonObject.ajaxurl,
 					{
-						action: 'bdlms_assign_to_course',
-						bdlms_nonce: lessonObject.nonce,
+						action: 'stlms_assign_to_course',
+						stlms_nonce: lessonObject.nonce,
 						selected: courseIds,
 						post_id: postId,
 					},
 					function (data) {
-						$('.bdlms-choose-quiz:visible').removeAttr('disabled');
+						$('.stlms-choose-quiz:visible').removeAttr('disabled');
 						_btn.parent('div')
 						.find('span.spinner')
 						.removeClass('is-active')
@@ -164,16 +164,16 @@ window.wp = window.wp || {};
 					e.preventDefault();
 				});
 
-				$(document).on('input', 'input.bdlms-qus-bank-search', function () {
+				$(document).on('input', 'input.stlms-qus-bank-search', function () {
 					var searchBox = $(this);
 					var searchKeyword = searchBox.val();
 					clearTimeout($.data(this, "timer"));
 					$(this).data( 'timer', setTimeout(function() {
 						searchBox
 						.addClass("ui-autocomplete-loading")
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.addClass("searching")
-						.find('.bdlms-qus-list-scroll li')
+						.find('.stlms-qus-list-scroll li')
 						.each(function(i, e) {
 							var text = jQuery(e).find('label').text().toLowerCase();
 							var matched = text.indexOf(searchKeyword.toLowerCase());
@@ -183,7 +183,7 @@ window.wp = window.wp || {};
 							}
 							$(e).addClass('hidden');
 						})
-						.parent('.bdlms-qus-list-scroll')
+						.parent('.stlms-qus-list-scroll')
 						.after(function() {
 							$(this).next('p').remove();
 							if( 0 === $(this).find('li:not(.hidden)').length ) {
@@ -191,7 +191,7 @@ window.wp = window.wp || {};
 							}
 							return '';
 						})
-						.parents('.bdlms-qus-bank-modal')
+						.parents('.stlms-qus-bank-modal')
 						.removeClass("searching")
 						.find('.ui-autocomplete-loading')
 						.removeClass('ui-autocomplete-loading');
@@ -238,7 +238,7 @@ window.wp = window.wp || {};
 				$(document).on('change', '.media-type-select input:radio', function() {
 					var mediaType = $(this).val();
 					if ( 'text' === mediaType ) {
-						$('.bdlms-video-type-box').addClass('hidden');
+						$('.stlms-video-type-box').addClass('hidden');
 						$('.lesson-media-editor').removeClass('hidden');
 						if ( ! _this.editorLoaded ) {
 							_this.editorLoaded = true;
@@ -248,13 +248,13 @@ window.wp = window.wp || {};
 					}
 					_this.editorLoaded = false;
 					_this.removetextEditor('media_text_editor');
-					$('.lesson-media-editor, .bdlms-video-type-box').addClass('hidden');
+					$('.lesson-media-editor, .stlms-video-type-box').addClass('hidden');
 					$('#media_' + mediaType).removeClass('hidden');
 				});
 				$('.media-type-select input:radio:checked').trigger('change');
 
 				// On upload button click.
-				$( 'body' ).on( 'click', '.bdlms-open-media', function( e ) {
+				$( 'body' ).on( 'click', '.stlms-open-media', function( e ) {
 					e.preventDefault();
 					var libraryType = $(this).attr('data-library_type');
 					var allowedExt = $(this).attr('data-ext');
@@ -289,7 +289,7 @@ window.wp = window.wp || {};
 						button
 						.text(buttonText)
 						.parent()
-						.find('span.bdlms-media-name')
+						.find('span.stlms-media-name')
 						.html(mediaName);
 						button.parent().find( 'input:hidden' ).val( attachment.id ).trigger( 'change' );
 						wp_media_uploader.close();
@@ -336,7 +336,7 @@ window.wp = window.wp || {};
 			 * Rename input name.
 			 */
 			inputRename: function () {
-				$('.bdlms-materials-item').each(function(index, item) {
+				$('.stlms-materials-item').each(function(index, item) {
 					$(item).find('input, select, textarea').attr('name', function( i, val ) {
 						val = val.replace(/\[([0-9]+)\]/g, '[' + index + ']');
 						return val;
@@ -349,16 +349,16 @@ window.wp = window.wp || {};
 			 */
 			handleMaterials: function() {
 				var _this = this;
-				$(document).on('click', '.bdlms-materials-box__footer button', function(e) {
+				$(document).on('click', '.stlms-materials-box__footer button', function(e) {
 					var tmpl = $('#materials_item_tmpl').html();
-					var parentElement = $(this).parents('.bdlms-materials-box').find('.bdlms-materials-box__body .bdlms-materials-list');
+					var parentElement = $(this).parents('.stlms-materials-box').find('.stlms-materials-box__body .stlms-materials-list');
 					$(tmpl).appendTo(parentElement);
 					_this.inputRename();
 					e.preventDefault();
 				});
 				$(document).on('change', '.material-type select', function() {
 					var type = $(this).val();
-					var parentElement = $(this).parents('.bdlms-materials-item');
+					var parentElement = $(this).parents('.stlms-materials-item');
 					if ( 'external' === type ) {
 						$('[data-media_type="choose_file"]', parentElement).addClass('hidden');
 						$('[data-media_type="file_url"]', parentElement).removeClass('hidden');
@@ -367,28 +367,28 @@ window.wp = window.wp || {};
 					$('[data-media_type="file_url"]', parentElement).addClass('hidden');
 					$('[data-media_type="choose_file"]', parentElement).removeClass('hidden');
 				});
-				$(document).on('click', 'button.bdlms-remove-material, a.bdlms-delete-link', function(e) {
+				$(document).on('click', 'button.stlms-remove-material, a.stlms-delete-link', function(e) {
 					$(this)
-					.parents('.bdlms-materials-list-item')
+					.parents('.stlms-materials-list-item')
 					.remove();
 					_this.inputRename();
 					e.preventDefault();
 				});
 				// Edit Material
-				$(document).on('click', '.bdlms-materials-list-action .edit-material', function(e) {
-					$('.bdlms-materials-list-item:not(.material-add-new)').find('.bdlms-save-material').trigger('click');
+				$(document).on('click', '.stlms-materials-list-action .edit-material', function(e) {
+					$('.stlms-materials-list-item:not(.material-add-new)').find('.stlms-save-material').trigger('click');
 					$(this)
 					.parents('ul')
 					.addClass('hidden')
-					.parent('.bdlms-materials-list-item')
-					.find('.bdlms-materials-item')
+					.parent('.stlms-materials-list-item')
+					.find('.stlms-materials-item')
 					.removeClass('hidden');
 					e.preventDefault();
 				} );
 
 				// Save Material
-				$(document).on('click', '.bdlms-save-material', function(e) {
-					var parentElement = $(this).parents('.bdlms-materials-list-item');
+				$(document).on('click', '.stlms-save-material', function(e) {
+					var parentElement = $(this).parents('.stlms-materials-list-item');
 					var fileTitle = $('input.material-file-title', parentElement ).val();
 					var typeText = $('option:selected', $(parentElement).find('.material-type select') ).text();
 					parentElement
@@ -397,11 +397,11 @@ window.wp = window.wp || {};
 					.parent('ul')
 					.find('li.assignment-title')
 					.text(fileTitle)
-					.parents('.bdlms-materials-list-item')
+					.parents('.stlms-materials-list-item')
 					.removeClass('material-add-new')
 					.find('ul.hidden')
 					.removeClass('hidden')
-					.next('.bdlms-materials-item')
+					.next('.stlms-materials-item')
 					.addClass('hidden');
 					e.preventDefault();
 				} );

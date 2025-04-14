@@ -1,4 +1,4 @@
-.bdlms-user {
+.stlms-user {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -12,7 +12,7 @@
       border-radius: 100%;
       border: 1px solid rgba(#293138, 0.16);
     }
-    .bdlms-photo {
+    .stlms-photo {
       width: 48px;
       height: 48px;
       position: relative;
@@ -31,7 +31,7 @@
   &-info {
     display: flex;
     flex-direction: column;
-    .bdlms-logout-link {
+    .stlms-logout-link {
       color: #0f5aa7 !important;
       font-size: 14px;
     }
@@ -48,7 +48,7 @@
   }
 }
 
-.bdlms-user-dd {
+.stlms-user-dd {
   position: relative;
   &__toggle {
     display: inline-flex;
@@ -94,7 +94,7 @@
     &:focus {
       color: $primary;
     }
-    .bdlms-noti-count {
+    .stlms-noti-count {
       width: 22px;
       height: 22px;
       background: $primary;

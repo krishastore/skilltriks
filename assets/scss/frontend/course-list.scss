@@ -1,12 +1,12 @@
-.bdlms-course-list-wrap {
+.stlms-course-list-wrap {
   padding: 48px 0;
-  .bdlms-container {
+  .stlms-container {
     display: flex;
     gap: 80px;
     @include breakpoint(max, $xl) {
       gap: 40px;
     }
-    .bdlms-course-filter {
+    .stlms-course-filter {
       width: 256px;
       flex-shrink: 0;
       display: flex;
@@ -28,19 +28,19 @@
           right: 0;
         }
       }
-      .bdlms-filter-toggle {
+      .stlms-filter-toggle {
         position: absolute;
         right: 8px;
         top: 8px;
       }
     }
-    .bdlms-course-view {
+    .stlms-course-view {
       width: 100%;
     }
   }
 }
 
-.bdlms-filter-toggle {
+.stlms-filter-toggle {
   width: 40px;
   height: 40px;
   background: $gray;
@@ -56,7 +56,7 @@
   }
 }
 
-.bdlms-course-view {
+.stlms-course-view {
   &__header {
     display: flex;
     justify-content: space-between;
@@ -65,7 +65,7 @@
     @include breakpoint(max, $md) {
       flex-direction: column;
     }
-    .bdlms-filtered-item {
+    .stlms-filtered-item {
       font-size: $font_size_lg;
       font-weight: $font_weight_semibold;
       color: $primary_dark;
@@ -75,7 +75,7 @@
         color: $gray_light;
       }
     }
-    .bdlms-sort-by {
+    .stlms-sort-by {
       flex-shrink: 0;
       @include breakpoint(max, $md) {
         width: 100%;
@@ -108,7 +108,7 @@
   }
 }
 
-.bdlms-filter-list {
+.stlms-filter-list {
   padding: 20px 0;
   ul {
     list-style: none;
@@ -118,11 +118,11 @@
     flex-direction: column;
     gap: 10px;
   }
-  .bdlms-check-wrap {
-    .bdlms-check {
+  .stlms-check-wrap {
+    .stlms-check {
       margin-top: 2px;
     }
-    .bdlms-check-label {
+    .stlms-check-label {
       width: 100%;
       display: flex;
       align-items: center;
@@ -135,7 +135,7 @@
 }
 
 
-.bdlms-pagination{
+.stlms-pagination{
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -180,7 +180,7 @@
   }
 }
 
-.bdlms-progress {
+.stlms-progress {
   &__label {
     font-size: 14px;
     line-height: 21px;
@@ -200,7 +200,7 @@
   }
 }
 
-.bdlms-reset-btn {
+.stlms-reset-btn {
   background: transparent;
   border: 0;
   padding: 0 15px;

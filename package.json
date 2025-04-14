@@ -1,20 +1,20 @@
 {
-  "name": "bluedolphin-lms",
+  "name": "skilltriks",
   "version": "1.0.0",
-  "description": "BlueDolphin LMS",
+  "description": "SkilTriks LMS",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/krishastore/bluedolphin-lms.git"
+    "url": "git+https://github.com/krishastore/skilltriks.git"
   },
   "keywords": [
     "wordpress-plugin"
   ],
-  "textdomain": "bluedolphin-lms",
+  "textdomain": "skilltriks",
   "category": "plugins",
   "author": "KrishaWeb <support@krishaweb.com>",
   "license": "GPL-2.0+",
   "bugs": {
-    "url": "https://github.com/krishastore/bluedolphin-lms/issues"
+    "url": "https://github.com/krishastore/skilltriks/issues"
   },
   "scripts": {
     "dev": "wp-scripts start --mode=development",
@@ -37,6 +37,6 @@
     "plyr": "^3.7.8",
     "raw-loader": "^4.0.2",
     "smartwizard": "^6.0.6",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.15"
   }
 }

@@ -2,59 +2,59 @@
 /**
  * The file that register metabox for quiz.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Admin\MetaBoxes;
+namespace ST\Lms\Admin\MetaBoxes;
 
-use BlueDolphin\Lms\ErrorLog as EL;
-use const BlueDolphin\Lms\BDLMS_QUIZ_CPT;
-use const BlueDolphin\Lms\BDLMS_QUESTION_TAXONOMY_TAG;
-use const BlueDolphin\Lms\META_KEY_QUIZ_QUESTION_IDS;
-use const BlueDolphin\Lms\META_KEY_QUIZ_SETTINGS;
-use const BlueDolphin\Lms\META_KEY_QUIZ_GROUPS;
-use const BlueDolphin\Lms\META_KEY_QUESTION_SETTINGS;
+use ST\Lms\ErrorLog as EL;
+use const ST\Lms\STLMS_QUIZ_CPT;
+use const ST\Lms\STLMS_QUESTION_TAXONOMY_TAG;
+use const ST\Lms\META_KEY_QUIZ_QUESTION_IDS;
+use const ST\Lms\META_KEY_QUIZ_SETTINGS;
+use const ST\Lms\META_KEY_QUIZ_GROUPS;
+use const ST\Lms\META_KEY_QUESTION_SETTINGS;
 
 /**
  * Register metaboxes for quiz.
  */
-class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
+class Quiz extends \ST\Lms\Admin\MetaBoxes\QuestionBank {
 
 	/**
 	 * Meta key prefix.
 	 *
 	 * @var string $meta_key_prefix
 	 */
-	public $meta_key_prefix = \BlueDolphin\Lms\META_KEY_QUIZ_PREFIX;
+	public $meta_key_prefix = \ST\Lms\META_KEY_QUIZ_PREFIX;
 
 	/**
 	 * Question module meta key name.
 	 *
 	 * @var string $question_meta_key
 	 */
-	public $question_meta_key = \BlueDolphin\Lms\META_KEY_QUESTION_PREFIX;
+	public $question_meta_key = \ST\Lms\META_KEY_QUESTION_PREFIX;
 
 	/**
 	 * Class construct.
 	 */
 	public function __construct() {
 		$this->set_metaboxes( $this->meta_boxes_list() );
-		$this->alphabets = \BlueDolphin\Lms\question_series();
+		$this->alphabets = \ST\Lms\question_series();
 
 		// Hooks.
-		add_action( 'save_post_' . BDLMS_QUIZ_CPT, array( $this, 'save_metadata' ) );
-		add_filter( 'manage_' . BDLMS_QUIZ_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
-		add_action( 'manage_' . BDLMS_QUIZ_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'save_post_' . STLMS_QUIZ_CPT, array( $this, 'save_metadata' ) );
+		add_filter( 'manage_' . STLMS_QUIZ_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
+		add_action( 'manage_' . STLMS_QUIZ_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_custom_box' ), 10, 2 );
 		add_action( 'admin_action_load_question_list', array( $this, 'load_question_list' ) );
-		add_action( 'wp_ajax_bdlms_quiz_question', array( $this, 'handle_quiz_question' ) );
-		add_action( 'wp_ajax_bdlms_inline_duplicate_question', array( $this, 'inline_duplicate_question' ) );
-		add_action( 'wp_ajax_bdlms_add_new_question', array( $this, 'add_new_question' ) );
+		add_action( 'wp_ajax_stlms_quiz_question', array( $this, 'handle_quiz_question' ) );
+		add_action( 'wp_ajax_stlms_inline_duplicate_question', array( $this, 'inline_duplicate_question' ) );
+		add_action( 'wp_ajax_stlms_add_new_question', array( $this, 'add_new_question' ) );
 	}
 
 	/**
@@ -64,16 +64,16 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	 */
 	private function meta_boxes_list() {
 		$list = apply_filters(
-			'bdlms/questions/meta_boxes',
+			'stlms/questions/meta_boxes',
 			array(
 				array(
 					'id'       => 'quiz-questions',
-					'title'    => __( 'Questions', 'bluedolphin-lms' ),
+					'title'    => __( 'Questions', 'skilltriks' ),
 					'callback' => array( $this, 'render_questions' ),
 				),
 				array(
 					'id'       => 'quiz-settings',
-					'title'    => __( 'Quiz Settings', 'bluedolphin-lms' ),
+					'title'    => __( 'Quiz Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_quiz_settings' ),
 				),
 			)
@@ -96,7 +96,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 				return in_array( $status, array( 'publish', 'draft' ), true );
 			}
 		);
-		require_once BDLMS_TEMPLATEPATH . '/admin/quiz/metabox-questions.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/quiz/metabox-questions.php';
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 
 			)
 		);
-		require_once BDLMS_TEMPLATEPATH . '/admin/quiz/metabox-quiz-settings.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/quiz/metabox-quiz-settings.php';
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			'settings'     => array(),
 		);
 
-		if ( ( isset( $_POST['action'] ) && 'inline-save' !== $_POST['action'] ) && ( isset( $_POST['bdlms_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms_nonce'] ) ), BDLMS_BASEFILE ) ) ) {
+		if ( ( isset( $_POST['action'] ) && 'inline-save' !== $_POST['action'] ) && ( isset( $_POST['stlms_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms_nonce'] ) ), STLMS_BASEFILE ) ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			return;
 		}
@@ -150,7 +150,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			}
 		}
 
-		do_action( 'bdlms_save_quiz_before', $post_id, $post_data );
+		do_action( 'stlms_save_quiz_before', $post_id, $post_data );
 
 		if ( isset( $_POST[ $this->meta_key_prefix ]['question_id'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
@@ -189,7 +189,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 		if ( isset( $_POST[ $this->meta_key_prefix ]['settings']['show_correct_review'] ) ) {
 			$post_data['settings']['show_correct_review'] = 1;
 		}
-		$post_data = apply_filters( 'bdlms_quiz_post_data', $post_data, $post_id );
+		$post_data = apply_filters( 'stlms_quiz_post_data', $post_data, $post_id );
 
 		$meta_groups = array();
 		foreach ( $post_data as $key => $data ) {
@@ -205,7 +205,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 		EL::add( sprintf( 'Quiz updated: %s, Post ID: %d', print_r( $post_data, true ), $post_id ), 'info', __FILE__, __LINE__ );
 
 		update_post_meta( $post_id, META_KEY_QUIZ_GROUPS, $meta_groups );
-		do_action( 'bdlms_save_quiz_after', $post_id, $post_data );
+		do_action( 'stlms_save_quiz_after', $post_id, $post_data );
 	}
 
 	/**
@@ -217,9 +217,9 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	public function add_new_table_columns( $columns ) {
 		unset( $columns['date'] );
 		unset( $columns['author'] );
-		$columns['total_questions'] = __( 'Total Questions', 'bluedolphin-lms' );
-		$columns['total_marks']     = __( 'Total Marks', 'bluedolphin-lms' );
-		$columns['passing_marks']   = __( 'Passing Marks', 'bluedolphin-lms' );
+		$columns['total_questions'] = __( 'Total Questions', 'skilltriks' );
+		$columns['total_marks']     = __( 'Total Marks', 'skilltriks' );
+		$columns['passing_marks']   = __( 'Passing Marks', 'skilltriks' );
 		return $columns;
 	}
 
@@ -275,35 +275,35 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	 * @param string $post_type Post Type.
 	 */
 	public function quick_edit_custom_box( $column_name, $post_type ) {
-		if ( BDLMS_QUIZ_CPT !== $post_type || 'total_questions' !== $column_name ) {
+		if ( STLMS_QUIZ_CPT !== $post_type || 'total_questions' !== $column_name ) {
 			return;
 		}
 		?>
 		<fieldset class="inline-edit-col-right inline-edit-quiz">
 			<div class="inline-edit-col inline-edit-<?php echo esc_attr( $column_name ); ?>">
 				<div class="inline-edit-quiz">
-					<div class="inline-edit-quiz-item bdlms-passing-marks">
+					<div class="inline-edit-quiz-item stlms-passing-marks">
 						<label>
-							<span class="title"><?php esc_html_e( 'Passing Marks', 'bluedolphin-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Passing Marks', 'skilltriks' ); ?></span>
 							<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][passing_marks]">
 						</label>
 					</div>
 					<div class="inline-edit-quiz-item">
 						<label>
-							<span class="title"><?php esc_html_e( 'Status', 'bluedolphin-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Status', 'skilltriks' ); ?></span>
 							<select name="_status">
-								<option value="publish"><?php esc_html_e( 'Published', 'bluedolphin-lms' ); ?></option>
-								<option value="pending"><?php esc_html_e( 'Pending Review', 'bluedolphin-lms' ); ?></option>
-								<option value="draft"><?php esc_html_e( 'Draft', 'bluedolphin-lms' ); ?></option>
+								<option value="publish"><?php esc_html_e( 'Published', 'skilltriks' ); ?></option>
+								<option value="pending"><?php esc_html_e( 'Pending Review', 'skilltriks' ); ?></option>
+								<option value="draft"><?php esc_html_e( 'Draft', 'skilltriks' ); ?></option>
 							</select>
 						</label>
 					</div>
 					<div class="inline-edit-quiz-item">
 						<label>
 							<?php
-								$taxonomy = \BlueDolphin\Lms\BDLMS_QUIZ_TAXONOMY_LEVEL_1;
+								$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_1;
 							?>
-							<span class="title"><?php esc_html_e( 'Category (Level 1)', 'bluedolphin-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Category (Level 1)', 'skilltriks' ); ?></span>
 							<ul class="cat-checklist <?php echo esc_attr( $taxonomy ); ?>-checklist">
 								<?php wp_terms_checklist( 0, array( 'taxonomy' => $taxonomy ) ); ?>
 							</ul>
@@ -312,9 +312,9 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 					<div class="inline-edit-quiz-item">
 						<label>
 							<?php
-								$taxonomy = \BlueDolphin\Lms\BDLMS_QUIZ_TAXONOMY_LEVEL_2;
+								$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_2;
 							?>
-							<span class="title"><?php esc_html_e( 'Category (Level 2)', 'bluedolphin-lms' ); ?></span>
+							<span class="title"><?php esc_html_e( 'Category (Level 2)', 'skilltriks' ); ?></span>
 							<ul class="cat-checklist <?php echo esc_attr( $taxonomy ); ?>-checklist">
 								<?php wp_terms_checklist( 0, array( 'taxonomy' => $taxonomy ) ); ?>
 							</ul>
@@ -323,7 +323,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 				</div>
 			</div>
 		</fieldset>
-		<?php do_action( 'bdlms_inline_quiz_edit_field', $column_name, $post_type, $this ); ?>
+		<?php do_action( 'stlms_inline_quiz_edit_field', $column_name, $post_type, $this ); ?>
 		<?php
 	}
 
@@ -331,7 +331,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	 * Save/Edit Quiz Question.
 	 */
 	public function handle_quiz_question() {
-		check_ajax_referer( BDLMS_BASEFILE, 'bdlms_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
 		$post_id          = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
 		$post_title       = isset( $_POST[ $this->question_meta_key ]['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST[ $this->question_meta_key ]['post_title'] ) ) : '';
 		$_POST['action']  = 'inline-save';
@@ -341,7 +341,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				'ID'          => $post_id,
 				'post_title'  => $post_title,
-				'post_type'   => \BlueDolphin\Lms\BDLMS_QUESTION_CPT,
+				'post_type'   => \ST\Lms\STLMS_QUESTION_CPT,
 				'post_status' => 'publish',
 			)
 		);
@@ -351,7 +351,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 				array(
 					'post_id' => 0,
 					'status'  => false,
-					'message' => __( 'Error', 'bluedolphin-lms' ),
+					'message' => __( 'Error', 'skilltriks' ),
 				)
 			);
 		}
@@ -360,7 +360,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				'post_id' => $post_id,
 				'status'  => true,
-				'message' => __( 'Question updated.', 'bluedolphin-lms' ),
+				'message' => __( 'Question updated.', 'skilltriks' ),
 			)
 		);
 	}
@@ -377,7 +377,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 				array(
 					'post_id' => $post_id,
 					'status'  => false,
-					'message' => __( 'Error', 'bluedolphin-lms' ),
+					'message' => __( 'Error', 'skilltriks' ),
 				)
 			);
 		}
@@ -386,7 +386,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			array(
 				'post_id' => $post_id,
 				'status'  => true,
-				'message' => __( 'Successfully duplicated.', 'bluedolphin-lms' ),
+				'message' => __( 'Successfully duplicated.', 'skilltriks' ),
 			)
 		);
 	}
@@ -395,16 +395,16 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	 * Ajax add new question.
 	 */
 	public function add_new_question() {
-		check_ajax_referer( BDLMS_BASEFILE, 'bdlms_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
 		$questions = isset( $_POST['selected'] ) ? array_map( 'intval', $_POST['selected'] ) : array();
 		$action    = isset( $_POST['_action'] ) ? sanitize_text_field( wp_unslash( $_POST['_action'] ) ) : '';
-		$message   = __( 'Question Added.', 'bluedolphin-lms' );
+		$message   = __( 'Question Added.', 'skilltriks' );
 
 		if ( 'create_new' === $action ) {
 			$post_id = wp_insert_post(
 				array(
 					'post_title'  => '',
-					'post_type'   => \BlueDolphin\Lms\BDLMS_QUESTION_CPT,
+					'post_type'   => \ST\Lms\STLMS_QUESTION_CPT,
 					'post_status' => 'auto-draft',
 				)
 			);
@@ -416,7 +416,7 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 			}
 		}
 		ob_start();
-		require BDLMS_TEMPLATEPATH . '/admin/quiz/question-list.php';
+		require STLMS_TEMPLATEPATH . '/admin/quiz/question-list.php';
 		$content = ob_get_clean();
 		wp_send_json(
 			array(
@@ -432,13 +432,13 @@ class Quiz extends \BlueDolphin\Lms\Admin\MetaBoxes\QuestionBank {
 	 */
 	public function load_question_list() {
 		$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : '';
-		if ( ! wp_verify_nonce( $nonce, BDLMS_BASEFILE ) ) {
+		if ( ! wp_verify_nonce( $nonce, STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			exit;
 		}
 		$fetch_request = isset( $_REQUEST['fetch_question'] ) ? (int) $_REQUEST['fetch_question'] : 0;
 		$questions     = isset( $_REQUEST['questionIds'] ) ? array_map( 'intval', explode( ',', sanitize_text_field( wp_unslash( $_REQUEST['questionIds'] ) ) ) ) : array();
-		require_once BDLMS_TEMPLATEPATH . '/admin/quiz/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/quiz/modal-popup.php';
 		exit;
 	}
 }

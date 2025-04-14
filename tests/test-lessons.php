@@ -2,13 +2,13 @@
 /**
  * Class LessonsTest
  *
- * @package BlueDolphin\Lms\Admin\MetaBoxes
+ * @package ST\Lms\Admin\MetaBoxes
  *
  * phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput
  */
 
-use const BlueDolphin\Lms\BDLMS_LESSON_CPT;
-use const BlueDolphin\Lms\BDLMS_LESSON_TAXONOMY_TAG;
+use const ST\Lms\STLMS_LESSON_CPT;
+use const ST\Lms\STLMS_LESSON_TAXONOMY_TAG;
 
 /**
  * Question test case.
@@ -44,16 +44,16 @@ class LessonsTest extends WP_UnitTestCase {
 		$p = $this->factory->post->create_and_get(
 			array(
 				'post_title'  => 'Create First Lesson',
-				'post_type'   => BDLMS_LESSON_CPT,
+				'post_type'   => STLMS_LESSON_CPT,
 				'post_author' => $user_id,
 			)
 		);
 		$this->assertNotWPError( $p );
 
-		$topic = wp_create_term( 'Lesson Topic 1', BDLMS_LESSON_TAXONOMY_TAG );
+		$topic = wp_create_term( 'Lesson Topic 1', STLMS_LESSON_TAXONOMY_TAG );
 		$this->assertNotWPError( $topic );
 
-		$set_term = wp_set_post_terms( $p->ID, $topic['term_id'], BDLMS_LESSON_TAXONOMY_TAG );
+		$set_term = wp_set_post_terms( $p->ID, $topic['term_id'], STLMS_LESSON_TAXONOMY_TAG );
 		$this->assertNotWPError( $set_term );
 
 		$media = $this->factory->attachment->create_and_get(
@@ -63,8 +63,8 @@ class LessonsTest extends WP_UnitTestCase {
 		);
 		$this->assertNotWPError( $media );
 
-		$_POST['bdlms_nonce']   = wp_create_nonce( BDLMS_BASEFILE );
-		$_POST['_bdlms_lesson'] = array(
+		$_POST['stlms_nonce']   = wp_create_nonce( STLMS_BASEFILE );
+		$_POST['_stlms_lesson'] = array(
 			'media'    => array(
 				'media_type'      => 'text',
 				'video_id'        => 0,
@@ -79,7 +79,7 @@ class LessonsTest extends WP_UnitTestCase {
 				array(
 					'title'        => 'Standards',
 					'method'       => 'external',
-					'external_url' => 'https://getbluedolphin.com/',
+					'external_url' => 'https://www.skilltriks.com//',
 				),
 				array(
 					'title'    => 'PDF URL 1',
@@ -89,10 +89,10 @@ class LessonsTest extends WP_UnitTestCase {
 			),
 		);
 		$post                   = get_post( $p->ID );
-		do_action( 'save_post_' . BDLMS_LESSON_CPT, $p->ID, $p );
+		do_action( 'save_post_' . STLMS_LESSON_CPT, $p->ID, $p );
 
-		foreach ( $_POST['_bdlms_lesson'] as $key => $data ) {
-			$key        = '_bdlms_lesson_' . $key;
+		foreach ( $_POST['_stlms_lesson'] as $key => $data ) {
+			$key        = '_stlms_lesson_' . $key;
 			$saved_data = get_post_meta( $p->ID, $key, true );
 			if ( is_array( $data ) ) {
 				$this->assertEquals( $data, $saved_data );
@@ -108,7 +108,7 @@ class LessonsTest extends WP_UnitTestCase {
 	public function test_get_lessons() {
 		$lessons = get_posts(
 			array(
-				'post_type'      => BDLMS_LESSON_CPT,
+				'post_type'      => STLMS_LESSON_CPT,
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
 			)
@@ -120,7 +120,7 @@ class LessonsTest extends WP_UnitTestCase {
 	 * Check tag exists or not.
 	 */
 	public function test_tag_exists() {
-		$tag = term_exists( 'Lesson Topic 1', BDLMS_LESSON_TAXONOMY_TAG );
+		$tag = term_exists( 'Lesson Topic 1', STLMS_LESSON_TAXONOMY_TAG );
 		$this->assertNotEmpty( $tag );
 	}
 }

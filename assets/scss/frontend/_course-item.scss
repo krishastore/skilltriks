@@ -1,4 +1,4 @@
-.bdlms-course-list {
+.stlms-course-list {
   > ul {
     display: flex;
     flex-wrap: wrap;
@@ -28,7 +28,7 @@
   }
 }
 
-.bdlms-course-item {
+.stlms-course-item {
   height: 100%;
   border: 1px solid $gray;
   border-radius: 6px;
@@ -126,7 +126,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      .bdlms-btn.bdlms-btn-block {
+      .stlms-btn.stlms-btn-block {
         padding-left: 4px;
         padding-right: 4px;
       }
@@ -141,10 +141,10 @@
       background: rgba($primary, 0.05);
     }
   }
-  .bdlms-progress {
+  .stlms-progress {
     margin-top: auto;
   }
-  &:not(.bdlms-progress) & {
+  &:not(.stlms-progress) & {
     &__action {
       margin-top: auto;
     }

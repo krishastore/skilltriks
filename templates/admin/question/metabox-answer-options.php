@@ -2,7 +2,7 @@
 /**
  * Template: Answer Options Metabox.
  *
- * @package BlueDolphin\Lms
+ * @package ST\Lms
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,51 +10,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<?php wp_nonce_field( BDLMS_BASEFILE, 'bdlms_nonce', false ); ?>
-<div class="bdlms-answer-wrap">
-	<div class="bdlms-answer-type">
+<?php wp_nonce_field( STLMS_BASEFILE, 'stlms_nonce', false ); ?>
+<div class="stlms-answer-wrap">
+	<div class="stlms-answer-type">
 		<label for="answers_field">
-			<?php esc_html_e( 'Select Answer Type', 'bluedolphin-lms' ); ?>
+			<?php esc_html_e( 'Select Answer Type', 'skilltriks' ); ?>
 		</label>
-		<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[type]" id="bdlms_answer_type">
-			<option value="true_or_false"<?php selected( 'true_or_false', $type ); ?>><?php esc_html_e( 'True Or False ', 'bluedolphin-lms' ); ?></option>
-			<option value="multi_choice"<?php selected( 'multi_choice', $type ); ?>><?php esc_html_e( 'Multi Choice ', 'bluedolphin-lms' ); ?></option>
-			<option value="single_choice"<?php selected( 'single_choice', $type ); ?>><?php esc_html_e( 'Single Choice ', 'bluedolphin-lms' ); ?></option>
-			<option value="fill_blank"<?php selected( 'fill_blank', $type ); ?>><?php esc_html_e( 'Fill In Blanks ', 'bluedolphin-lms' ); ?></option>
+		<select name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[type]" id="stlms_answer_type">
+			<option value="true_or_false"<?php selected( 'true_or_false', $type ); ?>><?php esc_html_e( 'True Or False ', 'skilltriks' ); ?></option>
+			<option value="multi_choice"<?php selected( 'multi_choice', $type ); ?>><?php esc_html_e( 'Multi Choice ', 'skilltriks' ); ?></option>
+			<option value="single_choice"<?php selected( 'single_choice', $type ); ?>><?php esc_html_e( 'Single Choice ', 'skilltriks' ); ?></option>
+			<option value="fill_blank"<?php selected( 'fill_blank', $type ); ?>><?php esc_html_e( 'Fill In Blanks ', 'skilltriks' ); ?></option>
 		</select>
 	</div>
 
-	<div class="bdlms-answer-group<?php echo 'true_or_false' !== $type ? ' hidden' : ''; ?>" id="true_or_false">
+	<div class="stlms-answer-group<?php echo 'true_or_false' !== $type ? ' hidden' : ''; ?>" id="true_or_false">
 		<?php
 			$corret_answers = isset( $data['true_or_false_answers'] ) ? $data['true_or_false_answers'] : '';
 			$answers        = isset( $data['true_or_false'] ) ? $data['true_or_false'] :
 			array(
-				0 => __( 'True', 'bluedolphin-lms' ),
-				1 => __( 'False', 'bluedolphin-lms' ),
+				0 => __( 'True', 'skilltriks' ),
+				1 => __( 'False', 'skilltriks' ),
 			);
 			?>
-			<div class="bdlms-options-table">
-				<div class="bdlms-options-table__header">
-					<ul class="bdlms-options-table__list">
-						<li><?php esc_html_e( 'Options ', 'bluedolphin-lms' ); ?></li>
-						<li class="bdlms-option-check-td"><?php esc_html_e( 'Correct Option', 'bluedolphin-lms' ); ?></li>
+			<div class="stlms-options-table">
+				<div class="stlms-options-table__header">
+					<ul class="stlms-options-table__list">
+						<li><?php esc_html_e( 'Options ', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
 					</ul>
 				</div>
-				<div class="bdlms-options-table__body bdlms-sortable-answers">
-					<div class="bdlms-options-table__list-wrap">
+				<div class="stlms-options-table__body stlms-sortable-answers">
+					<div class="stlms-options-table__list-wrap">
 						<?php foreach ( $answers as $key => $answer ) : ?>
-							<ul class="bdlms-options-table__list">
+							<ul class="stlms-options-table__list">
 								<li>
-									<div class="bdlms-options-value">
-										<div class="bdlms-options-drag">
+									<div class="stlms-options-value">
+										<div class="stlms-options-drag">
 											<svg class="icon" width="8" height="13">
-												<use xlink:href="<?php echo esc_url( BDLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
+												<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
 											</svg>
 										</div>
-										<input type="text" class="bdlms-option-value-input" value="<?php echo esc_attr( $answer ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[true_or_false][]" readonly>
+										<input type="text" class="stlms-option-value-input" value="<?php echo esc_attr( $answer ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[true_or_false][]" readonly>
 									</div>
 								</li>
-								<li class="bdlms-option-check-td">
+								<li class="stlms-option-check-td">
 									<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[true_or_false_answers]"<?php checked( wp_hash( $answer ), $corret_answers ); ?>>
 								</li>
 							</ul>
@@ -64,43 +64,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 	</div>
 
-	<div class="bdlms-answer-group <?php echo 'multi_choice' !== $type ? ' hidden' : ''; ?>" id="multi_choice">
+	<div class="stlms-answer-group <?php echo 'multi_choice' !== $type ? ' hidden' : ''; ?>" id="multi_choice">
 		<?php
 			$corret_answers = ! empty( $data['multi_choice_answers'] ) ? $data['multi_choice_answers'] : array();
 			$answers        = isset( $data['multi_choice'] ) ? $data['multi_choice'] : array_fill( 0, 4, '' );
 		?>
-			<div class="bdlms-options-table">
-				<div class="bdlms-options-table__header">
-					<ul class="bdlms-options-table__list">
-						<li><?php esc_html_e( 'Options', 'bluedolphin-lms' ); ?></li>
-						<li class="bdlms-option-check-td"><?php esc_html_e( 'Correct Option', 'bluedolphin-lms' ); ?></li>
-						<li class="bdlms-option-action"></li>
+			<div class="stlms-options-table">
+				<div class="stlms-options-table__header">
+					<ul class="stlms-options-table__list">
+						<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
+						<li class="stlms-option-action"></li>
 					</ul>
 				</div>
-				<div class="bdlms-options-table__body bdlms-sortable-answers">
-					<div class="bdlms-options-table__list-wrap">
+				<div class="stlms-options-table__body stlms-sortable-answers">
+					<div class="stlms-options-table__list-wrap">
 						<?php
 						foreach ( $answers as $key => $answer ) :
 							?>
-							<ul class="bdlms-options-table__list">
+							<ul class="stlms-options-table__list">
 								<li>
-									<div class="bdlms-options-value">
-										<div class="bdlms-options-drag">
+									<div class="stlms-options-value">
+										<div class="stlms-options-drag">
 											<svg class="icon" width="8" height="13">
-												<use xlink:href="<?php echo esc_url( BDLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
+												<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
 											</svg>
 										</div>
-										<div class="bdlms-options-no"><?php printf( '%s.', isset( $this->alphabets[ $key ] ) ? esc_html( $this->alphabets[ $key ] ) : '' ); ?></div>
+										<div class="stlms-options-no"><?php echo esc_html( sprintf( '%s.', isset( $this->alphabets[ $key ] ) ? $this->alphabets[ $key ] : '' ) ); ?></div>
 										<input type="text" value="<?php echo esc_attr( $answer ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[multi_choice][]">
 									</div>
 								</li>
-								<li class="bdlms-option-check-td">
+								<li class="stlms-option-check-td">
 									<input type="checkbox" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[multi_choice_answers][]"<?php echo in_array( wp_hash( $answer ), $corret_answers, true ) ? ' checked' : ''; ?>>
 								</li>
-								<li class="bdlms-option-action">
-									<button type="button" class="bdlms-remove-answer">
+								<li class="stlms-option-action">
+									<button type="button" class="stlms-remove-answer">
 										<svg class="icon" width="12" height="12">
-											<use xlink:href="<?php echo esc_url( BDLMS_ASSETS ); ?>/images/sprite.svg#trash"></use>
+											<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#trash"></use>
 										</svg>
 									</button>
 								</li>
@@ -111,43 +111,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 	</div>
 
-	<div class="bdlms-answer-group <?php echo 'single_choice' !== $type ? ' hidden' : ''; ?>" id="single_choice">
+	<div class="stlms-answer-group <?php echo 'single_choice' !== $type ? ' hidden' : ''; ?>" id="single_choice">
 		<?php
 			$corret_answers = ! empty( $data['single_choice_answers'] ) ? $data['single_choice_answers'] : '';
 			$answers        = isset( $data['single_choice'] ) ? $data['single_choice'] : array_fill( 0, 4, '' );
 		?>
-			<div class="bdlms-options-table">
-				<div class="bdlms-options-table__header">
-					<ul class="bdlms-options-table__list">
-						<li><?php esc_html_e( 'Options', 'bluedolphin-lms' ); ?></li>
-						<li class="bdlms-option-check-td"><?php esc_html_e( 'Correct Option', 'bluedolphin-lms' ); ?></li>
-						<li class="bdlms-option-action"></li>
+			<div class="stlms-options-table">
+				<div class="stlms-options-table__header">
+					<ul class="stlms-options-table__list">
+						<li><?php esc_html_e( 'Options', 'skilltriks' ); ?></li>
+						<li class="stlms-option-check-td"><?php esc_html_e( 'Correct Option', 'skilltriks' ); ?></li>
+						<li class="stlms-option-action"></li>
 					</ul>
 				</div>
-				<div class="bdlms-options-table__body bdlms-sortable-answers">
-					<div class="bdlms-options-table__list-wrap">
+				<div class="stlms-options-table__body stlms-sortable-answers">
+					<div class="stlms-options-table__list-wrap">
 						<?php
 						foreach ( $answers as $key => $answer ) :
 							?>
-							<ul class="bdlms-options-table__list bdlms-sortable-answers">
+							<ul class="stlms-options-table__list stlms-sortable-answers">
 								<li>
-									<div class="bdlms-options-value">
-										<div class="bdlms-options-drag">
+									<div class="stlms-options-value">
+										<div class="stlms-options-drag">
 											<svg class="icon" width="8" height="13">
-												<use xlink:href="<?php echo esc_url( BDLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
+												<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#drag"></use>
 											</svg>
 										</div>
-										<div class="bdlms-options-no"><?php printf( '%s.', isset( $this->alphabets[ $key ] ) ? esc_html( $this->alphabets[ $key ] ) : '' ); ?></div>
+										<div class="stlms-options-no"><?php echo esc_html( sprintf( '%s.', isset( $this->alphabets[ $key ] ) ? $this->alphabets[ $key ] : '' ) ); ?></div>
 										<input type="text" value="<?php echo esc_attr( $answer ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[single_choice][]">
 									</div>
 								</li>
-								<li class="bdlms-option-check-td">
+								<li class="stlms-option-check-td">
 									<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[single_choice_answers]"<?php checked( wp_hash( $answer ), $corret_answers ); ?>>
 								</li>
-								<li class="bdlms-option-action">
-									<button type="button" class="bdlms-remove-answer">
+								<li class="stlms-option-action">
+									<button type="button" class="stlms-remove-answer">
 										<svg class="icon" width="12" height="12">
-											<use xlink:href="<?php echo esc_url( BDLMS_ASSETS ); ?>/images/sprite.svg#trash"></use>
+											<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#trash"></use>
 										</svg>
 									</button>
 								</li>
@@ -158,21 +158,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 	</div>
 
-	<div class="bdlms-answer-group <?php echo 'fill_blank' !== $type ? ' hidden' : ''; ?>" id="fill_blank">
+	<div class="stlms-answer-group <?php echo 'fill_blank' !== $type ? ' hidden' : ''; ?>" id="fill_blank">
 		<?php
 			$mandatory_answers = isset( $data['mandatory_answers'] ) ? $data['mandatory_answers'] : '';
 			$optional_answers  = ! empty( $data['optional_answers'] ) ? $data['optional_answers'] : array_fill( 0, 4, '' );
 		?>
-		<div class="bdlms-add-accepted-answers">
-			<h3><?php esc_html_e( 'Add Accepted Answers', 'bluedolphin-lms' ); ?></h3>
+		<div class="stlms-add-accepted-answers">
+			<h3><?php esc_html_e( 'Add Accepted Answers', 'skilltriks' ); ?></h3>
 			<ul>
 				<li>
-					<label><?php esc_html_e( 'Mandatory', 'bluedolphin-lms' ); ?></label>
+					<label><?php esc_html_e( 'Mandatory', 'skilltriks' ); ?></label>
 					<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[mandatory_answers]" value="<?php echo esc_attr( $mandatory_answers ); ?>">
 				</li>
 				<?php foreach ( $optional_answers as $optional_answer ) : ?>
 					<li>
-						<label><?php esc_html_e( 'Optional', 'bluedolphin-lms' ); ?></label>
+						<label><?php esc_html_e( 'Optional', 'skilltriks' ); ?></label>
 						<input type="text" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[optional_answers][]" value="<?php echo esc_attr( $optional_answer ); ?>">
 					</li>
 				<?php endforeach; ?>
@@ -180,7 +180,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="bdlms-add-option hidden">
-		<button type="button" class="button bdlms-add-answer"><?php esc_html_e( 'Add More Options', 'bluedolphin-lms' ); ?></button>
+	<div class="stlms-add-option hidden">
+		<button type="button" class="button stlms-add-answer"><?php esc_html_e( 'Add More Options', 'skilltriks' ); ?></button>
 	</div>
 </div>

@@ -2,7 +2,7 @@
 /**
  * Template: Popup html template.
  *
- * @package BlueDolphin\Lms
+ * @package ST\Lms
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,16 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div id="select_items" class="hidden" style="max-width:463px">
-	<div class="bdlms-qus-bank-modal">
-		<div class="bdlms-tab-container">
-			<div class="bdlms-tabs-nav">
-				<button class="bdlms-tab active" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \BlueDolphin\Lms\BDLMS_LESSON_CPT ); ?>"><?php esc_html_e( 'Lesson', 'bluedolphin-lms' ); ?></button>
-				<button class="bdlms-tab" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \BlueDolphin\Lms\BDLMS_QUIZ_CPT ); ?>"><?php esc_html_e( 'Quiz', 'bluedolphin-lms' ); ?></button>
+	<div class="stlms-qus-bank-modal">
+		<div class="stlms-tab-container">
+			<div class="stlms-tabs-nav">
+				<button class="stlms-tab active" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_LESSON_CPT ); ?>"><?php esc_html_e( 'Lesson', 'skilltriks' ); ?></button>
+				<button class="stlms-tab" data-tab="assign-quiz-list" data-filter_type="<?php echo esc_attr( \ST\Lms\STLMS_QUIZ_CPT ); ?>"><?php esc_html_e( 'Quiz', 'skilltriks' ); ?></button>
 			</div>
 
-			<div class="bdlms-tab-content active" data-tab="assign-quiz-list">
-				<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for items', 'bluedolphin-lms' ); ?>" class="bdlms-qus-bank-search">
-				<div class="bdlms-qus-list" id="curriculums_list">
+			<div class="stlms-tab-content active" data-tab="assign-quiz-list">
+				<input type="text" placeholder="<?php esc_attr_e( 'Type here to search for items', 'skilltriks' ); ?>" class="stlms-qus-bank-search">
+				<div class="stlms-qus-list" id="curriculums_list">
 				<?php
 				if ( ! empty( $fetch_request ) ) :
 					$args  = array(
@@ -31,21 +31,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$items = get_posts( $args );
 					?>
 					<?php if ( ! empty( $items ) ) : ?>
-					<ul class="bdlms-qus-list-scroll">
+					<ul class="stlms-qus-list-scroll">
 						<?php
 						foreach ( $items as $key => $item ) :
 							$disabled_item = in_array( (int) $item->ID, $existing_items, true );
 							?>
 						<li class="<?php echo $disabled_item ? 'disabled-choose-item' : ''; ?>">
-							<div class="bdlms-setting-checkbox">
-								<input type="checkbox" class="bdlms-choose-item" id="bdlms-qus-<?php echo (int) $key; ?>" value="<?php echo (int) $item->ID; ?>"<?php checked( true, $disabled_item, true ); ?>>
-								<label for="bdlms-qus-<?php echo (int) $key; ?>"><?php echo esc_html( $item->post_title ); ?></label>
+							<div class="stlms-setting-checkbox">
+								<input type="checkbox" class="stlms-choose-item" id="stlms-qus-<?php echo (int) $key; ?>" value="<?php echo (int) $item->ID; ?>"<?php checked( true, $disabled_item, true ); ?>>
+								<label for="stlms-qus-<?php echo (int) $key; ?>"><?php echo esc_html( $item->post_title ); ?></label>
 							</div>
 						</li>
 						<?php endforeach; ?>
 					</ul>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No items found.', 'bluedolphin-lms' ); ?></p>
+						<p><?php esc_html_e( 'No items found.', 'skilltriks' ); ?></p>
 					<?php endif; ?>
 				<?php else : ?>
 					<span class="spinner is-active"></span>
@@ -53,10 +53,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 		</div>
-		<div class="bdlms-qus-bank-add">
-			<button class="button button-primary bdlms-add-item" disabled><?php esc_html_e( 'Add', 'bluedolphin-lms' ); ?></button>
+		<div class="stlms-qus-bank-add">
+			<button class="button button-primary stlms-add-item" disabled><?php esc_html_e( 'Add', 'skilltriks' ); ?></button>
 			<span
-				class="bdlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'bluedolphin-lms' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
+				class="stlms-qus-selected"><?php echo esc_html( sprintf( __( '%d Selected', 'skilltriks' ), 0 ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 			<span class="spinner"></span>
 		</div>
 	</div>

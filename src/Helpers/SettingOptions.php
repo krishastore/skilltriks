@@ -2,15 +2,15 @@
 /**
  * The file that manage the setting options.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  */
 
-namespace BlueDolphin\Lms\Helpers;
+namespace ST\Lms\Helpers;
 
-use BlueDolphin\Lms\ErrorLog as EL;
+use ST\Lms\ErrorLog as EL;
 
 /**
  * Helpers utility class.
@@ -29,21 +29,21 @@ class SettingOptions {
 	 *
 	 * @var string $option_group
 	 */
-	private $option_group = 'bdlms_settings';
+	private $option_group = 'stlms_settings';
 
 	/**
 	 * Option section
 	 *
 	 * @var string $option_section
 	 */
-	private $option_section = 'bdlms_section';
+	private $option_section = 'stlms_section';
 
 	/**
 	 * Option name
 	 *
 	 * @var string $option_name
 	 */
-	private $option_name = 'bdlms_settings';
+	private $option_name = 'stlms_settings';
 
 	/**
 	 * Setting fields
@@ -76,58 +76,66 @@ class SettingOptions {
 	 * Init function.
 	 */
 	public function init() {
-		// Set global setting options.
+		// Get options.
+		$this->options = array_filter( get_option( $this->option_name ) ? get_option( $this->option_name ) : array() );
+		// Add admin menu.
+		add_action( 'init', array( $this, 'set_fields' ) );
+		add_action( 'admin_menu', array( $this, 'register_settings' ), 30 );
+		add_filter( 'set-screen-option', array( $this, 'set_screen_option' ), 10, 3 );
+	}
+
+	/**
+	 * Set fields.
+	 */
+	public function set_fields() {
 		$this->fields = array(
 			'client_id'             => array(
-				'title' => esc_html__( 'Client ID', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Client ID', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client ID</a>', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'client_secret'         => array(
-				'title' => esc_html__( 'Client Secret', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Client Secret', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
+				'desc'  => sprintf( __( 'Google application <a href="%s" target="_blank">Client Secret</a>', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#create-authorization-credentials' ),
 				'type'  => 'password',
 				'value' => '',
 			),
 			'redirect_uri'          => array(
-				'title'    => esc_html__( 'Redirect URL', 'bluedolphin-lms' ),
+				'title'    => esc_html__( 'Redirect URL', 'skilltriks' ),
 				// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'bluedolphin-lms' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
+				'desc'     => sprintf( __( 'Google application <a href="%s" target="_blank">redirect URL</a>, Please copy the URL and add it to your application.', 'skilltriks' ), 'https://github.com/googleapis/google-api-php-client/blob/main/docs/oauth-web.md#redirect_uri' ),
 				'type'     => 'url',
-				'value'    => home_url( \BlueDolphin\Lms\get_page_url( 'login', true ) ),
+				'value'    => home_url( \ST\Lms\get_page_url( 'login', true ) ),
 				'readonly' => true,
 			),
 			'company_logo'          => array(
-				'title' => esc_html__( 'Company Logo', 'bluedolphin-lms' ),
-				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Company Logo', 'skilltriks' ),
+				'desc'  => __( 'Add an image of size 240 x 100 pixels', 'skilltriks' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['company_logo'] ) ? esc_url( $this->options['company_logo'] ) : '',
 			),
 			'certificate_signature' => array(
-				'title' => esc_html__( 'Certificate Signature', 'bluedolphin-lms' ),
-				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'bluedolphin-lms' ),
+				'title' => esc_html__( 'Certificate Signature', 'skilltriks' ),
+				'desc'  => __( 'Add an image of size 220 x 80 pixels', 'skilltriks' ),
 				'type'  => 'file',
 				'value' => isset( $this->options['certificate_signature'] ) ? esc_url( $this->options['certificate_signature'] ) : '',
 			),
 		);
-		// Get options.
-		$this->options = array_filter( get_option( $this->option_name ) ? get_option( $this->option_name ) : array() );
-		// Add admin menu.
-		add_action( 'admin_menu', array( $this, 'register_settings' ), 30 );
-		add_filter( 'set-screen-option', array( $this, 'set_screen_option' ), 10, 3 );
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
+		add_action( 'admin_post_user_role', array( $this, 'stlms_new_user_role' ) );
+		add_action( 'admin_post_user_caps', array( $this, 'stlms_user_capabilities' ) );
 		add_action( 'admin_action_activate_layout', array( $this, 'handle_layout_activation' ) );
-		add_action( 'admin_post_bdlms_setting', array( $this, 'bdlms_setting_options' ) );
+		add_action( 'admin_post_stlms_setting', array( $this, 'stlms_setting_options' ) );
 	}
 
 	/**
 	 * Save setting options.
 	 */
-	public function bdlms_setting_options() {
-		if ( isset( $_POST['bdlms-setting-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms-setting-nonce'] ) ), 'bdlms_setting' ) ) :
+	public function stlms_setting_options() {
+		if ( isset( $_POST['stlms-setting-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms-setting-nonce'] ) ), 'stlms_setting' ) ) :
 			$setting_options = array();
 			foreach ( $this->fields as $key => $field ) :
 				if ( isset( $_POST[ $this->option_name ][ $key ] ) ) :
@@ -140,16 +148,16 @@ class SettingOptions {
 
 		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( wp_get_referer() );
-		wp_die();
+		exit;
 	}
 
 	/**
 	 * Option Page.
 	 */
 	public function register_settings() {
-		$setting_name = esc_html__( 'Settings', 'bluedolphin-lms' );
+		$setting_name = esc_html__( 'Settings', 'skilltriks' );
 		// Add option page.
-		$hook = add_submenu_page( \BlueDolphin\Lms\PARENT_MENU_SLUG, $setting_name, $setting_name, 'manage_options', 'bdlms-settings', array( $this, 'view_admin_settings' ) );
+		$hook = add_submenu_page( \ST\Lms\PARENT_MENU_SLUG, $setting_name, $setting_name, 'manage_options', 'stlms-settings', array( $this, 'view_admin_settings' ) );
 		// Add setting section.
 		add_settings_section( $this->option_section, '', '__return_false', $this->option_group );
 		// Add field.
@@ -187,8 +195,8 @@ class SettingOptions {
 	 */
 	public function setting_enqueue_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_style( \BlueDolphin\Lms\BDLMS_SETTING );
-		wp_enqueue_script( \BlueDolphin\Lms\BDLMS_SETTING );
+		wp_enqueue_style( \ST\Lms\STLMS_SETTING );
+		wp_enqueue_script( \ST\Lms\STLMS_SETTING );
 	}
 
 	/**
@@ -202,7 +210,7 @@ class SettingOptions {
 		add_screen_option(
 			'per_page',
 			array(
-				'label'   => __( 'Number of items per page:', 'bluedolphin-lms' ),
+				'label'   => __( 'Number of items per page:', 'skilltriks' ),
 				'default' => get_option( 'posts_per_page', 10 ),
 				'option'  => 'imports_per_page',
 			)
@@ -259,12 +267,13 @@ class SettingOptions {
 		$value       = ! empty( $value ) ? $value : $default_val;
 
 		if ( 'file' === $type ) {
-			$button_text = $value ? esc_html__( 'Change Image', 'bluedolphin-lms' ) : esc_html__( 'Upload Image', 'bluedolphin-lms' );
+			$button_text = $value ? esc_html__( 'Change Image', 'skilltriks' ) : esc_html__( 'Upload Image', 'skilltriks' );
 			echo '<input type="hidden" id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" value="' . esc_attr( $value ) . '" />';
 			echo '<button type="button" id="upload_logo" class="button upload_image_button" data-target="#' . esc_attr( $id ) . '">' . $button_text . '</button>'; //phpcs:ignore
 			if ( $value ) {
 				$width  = 'company_logo' === $id ? '240px' : '220px';
 				$height = 'company_logo' === $id ? '100px' : '80px';
+				// phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
 				echo '<br /><img src="' . esc_url( wp_get_attachment_image_url( $value ) ) . '" alt="" style="max-width:' . esc_attr( $width ) . '; max-height:' . esc_attr( $height ) . '; margin-top:10px;" />';
 			}
 		} elseif ( ! empty( $args['readonly'] ) ) {
@@ -288,25 +297,25 @@ class SettingOptions {
 			$tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		?>
-		<div class="wrap bdlms-settings">
+		<div class="wrap stlms-settings">
 			<div id="icon-options-general" class="icon32"></div>
 			<nav class="nav-tab-wrapper">
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'bluedolphin-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'bluedolphin-lms' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'bluedolphin-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks' ); ?></a>
 				<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'bdlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'bluedolphin-lms' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks' ); ?></a>
 				<?php endif; ?>
 			</nav>
 			<?php
 			if ( 'bulk-import' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-bulk-import.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-bulk-import.php';
 			} elseif ( 'theme' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-theme.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-theme.php';
 			} elseif ( 'customise-theme' === $tab ) {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-customise-theme.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-customise-theme.php';
 			} else {
-				require_once BDLMS_TEMPLATEPATH . '/admin/settings/setting-general.php';
+				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-general.php';
 			}
 			?>
 		</div>
@@ -333,9 +342,9 @@ class SettingOptions {
 			$typography     = array();
 			$theme_settings = array();
 			$theme_name     = $this->options['theme'];
-			$colors         = \BlueDolphin\Lms\layout_colors();
+			$colors         = \ST\Lms\layout_colors();
 			$colors         = isset( $colors[ $theme_name ] ) ? $colors[ $theme_name ] : array();
-			$layout         = \BlueDolphin\Lms\layout_typographies();
+			$layout         = \ST\Lms\layout_typographies();
 			$html_tags      = $layout['tag'];
 			$typographies   = $layout['typography'];
 
@@ -377,19 +386,19 @@ class SettingOptions {
 			$theme_settings = wp_parse_args( $args, $this->options );
 
 			if ( ! empty( $theme_settings[ $theme_name ]['colors'] ) || ! empty( $theme_settings[ $theme_name ]['typography'] ) ) {
-				update_option( 'bdlms_settings', $theme_settings );
+				update_option( 'stlms_settings', $theme_settings );
 			}
 
 			if ( isset( $_POST['reset'] ) ) {
 				unset( $this->options[ $theme_name ]['typography'], $this->options[ $theme_name ]['colors'] );
-				update_option( 'bdlms_settings', $this->options );
+				update_option( 'stlms_settings', $this->options );
 			}
 
 		endif;
 
 		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( add_query_arg( 'tab', 'customise-theme', wp_get_referer() ) );
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -403,7 +412,7 @@ class SettingOptions {
 				$value = sanitize_text_field( wp_unslash( $_GET['theme'] ) );
 				if ( ! isset( $this->options['theme'] ) || $this->options['theme'] !== $value ) :
 					$this->options['theme'] = $value;
-					update_option( 'bdlms_settings', $this->options );
+					update_option( 'stlms_settings', $this->options );
 				endif;
 			endif;
 
@@ -412,8 +421,76 @@ class SettingOptions {
 			exit;
 		} else {
 			wp_die(
-				esc_html_e( 'Security check failed. Please try again.', 'bluedolphin-lms' ),
-				esc_html_e( 'Error', 'bluedolphin-lms' ),
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
+				array( 'back_link' => true )
+			);
+		}
+	}
+
+	/**
+	 * Get new user role.
+	 */
+	public function stlms_new_user_role() {
+		if ( isset( $_POST['user-role-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['user-role-nonce'] ) ), 'user_role' ) ) {
+			if ( isset( $_POST['user_role'] ) && ! empty( $_POST['user_role'] ) ) :
+				$role_name = sanitize_text_field( wp_unslash( $_POST['user_role'] ) );
+				$role_key  = preg_replace( '/\s+/', '_', strtolower( $role_name ) );
+				if ( ! isset( $this->options['user_role'] ) || ! array_key_exists( $role_key, $this->options['user_role'] ) ) :
+					$this->options['user_role'][ $role_key ] = ucwords( $role_name );
+					update_option( 'stlms_settings', $this->options );
+				endif;
+				// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+				wp_redirect( add_query_arg( 'role', sanitize_title( $role_name ), wp_get_referer() ) );
+			endif;
+		} else {
+			wp_die(
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
+				array( 'back_link' => true )
+			);
+		}
+	}
+
+	/**
+	 * Get new user capabilities.
+	 */
+	public function stlms_user_capabilities() {
+		if ( isset( $_POST['user-caps-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['user-caps-nonce'] ) ), 'user_caps' ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$caps         = isset( $_POST['users_can'] ) ? map_deep( $_POST['users_can'], 'sanitize_text_field' ) : array();
+			$user_role    = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
+			$default_caps = ! empty( get_role( 'subscriber' ) ) ? get_role( 'subscriber' )->capabilities : array( 'read' => true );
+
+			if ( ! empty( $user_role ) && ! empty( $caps ) ) {
+				if ( array_key_exists( $user_role, $this->options['user_role'] ) ) {
+					$caps        = array_fill_keys( $caps, true );
+					$role_exists = get_role( $user_role );
+					if ( empty( $role_exists ) ) {
+						$caps = array_merge( $caps, $default_caps );
+						add_role( $user_role, $this->options['user_role'][ $user_role ], $caps );
+					} else {
+						$existing_caps = get_role( $user_role )->capabilities;
+						foreach ( $caps as $key => $value ) {
+							if ( ! array_key_exists( $key, $existing_caps ) ) {
+								$role_exists->add_cap( $key, true );
+							}
+						}
+						foreach ( $existing_caps as $key => $value ) {
+							if ( ! array_key_exists( $key, $caps ) ) {
+								$role_exists->remove_cap( $key );
+							}
+						}
+					}
+				}
+			}
+
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+			wp_redirect( add_query_arg( 'page', 'stlms_manage_roles', admin_url( 'admin.php' ) ) );
+		} else {
+			wp_die(
+				esc_html_e( 'Security check failed. Please try again.', 'skilltriks' ),
+				esc_html_e( 'Error', 'skilltriks' ),
 				array( 'back_link' => true )
 			);
 		}

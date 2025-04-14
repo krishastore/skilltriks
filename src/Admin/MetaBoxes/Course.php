@@ -2,31 +2,31 @@
 /**
  * The file that register metabox for course.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Admin\MetaBoxes;
+namespace ST\Lms\Admin\MetaBoxes;
 
-use BlueDolphin\Lms\ErrorLog as EL;
-use function BlueDolphin\Lms\column_post_author as postAuthor;
-use const BlueDolphin\Lms\BDLMS_COURSE_CPT;
-use const BlueDolphin\Lms\BDLMS_COURSE_CATEGORY_TAX;
-use const BlueDolphin\Lms\BDLMS_COURSE_TAXONOMY_TAG;
-use const BlueDolphin\Lms\META_KEY_COURSE_INFORMATION;
-use const BlueDolphin\Lms\META_KEY_COURSE_ASSESSMENT;
-use const BlueDolphin\Lms\META_KEY_COURSE_MATERIAL;
-use const BlueDolphin\Lms\META_KEY_COURSE_CURRICULUM;
-use const BlueDolphin\Lms\META_KEY_COURSE_SIGNATURE;
+use ST\Lms\ErrorLog as EL;
+use function ST\Lms\column_post_author as postAuthor;
+use const ST\Lms\STLMS_COURSE_CPT;
+use const ST\Lms\STLMS_COURSE_CATEGORY_TAX;
+use const ST\Lms\STLMS_COURSE_TAXONOMY_TAG;
+use const ST\Lms\META_KEY_COURSE_INFORMATION;
+use const ST\Lms\META_KEY_COURSE_ASSESSMENT;
+use const ST\Lms\META_KEY_COURSE_MATERIAL;
+use const ST\Lms\META_KEY_COURSE_CURRICULUM;
+use const ST\Lms\META_KEY_COURSE_SIGNATURE;
 
 /**
  * Register metaboxes for course.
  */
-class Course extends \BlueDolphin\Lms\Collections\PostTypes {
+class Course extends \ST\Lms\Collections\PostTypes {
 
 	/**
 	 * Curriculums list.
@@ -40,7 +40,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 	 *
 	 * @var string $meta_key_prefix
 	 */
-	public $meta_key_prefix = \BlueDolphin\Lms\META_KEY_COURSE_PREFIX;
+	public $meta_key_prefix = \ST\Lms\META_KEY_COURSE_PREFIX;
 
 	/**
 	 * Class construct.
@@ -49,12 +49,12 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		$this->set_metaboxes( $this->meta_boxes_list() );
 
 		// Hooks.
-		add_action( 'save_post_' . BDLMS_COURSE_CPT, array( $this, 'save_metadata' ) );
-		add_filter( 'manage_edit-' . BDLMS_COURSE_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
-		add_filter( 'manage_' . BDLMS_COURSE_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
-		add_action( 'manage_' . BDLMS_COURSE_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'save_post_' . STLMS_COURSE_CPT, array( $this, 'save_metadata' ) );
+		add_filter( 'manage_edit-' . STLMS_COURSE_CPT . '_sortable_columns', array( $this, 'sortable_columns' ) );
+		add_filter( 'manage_' . STLMS_COURSE_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
+		add_action( 'manage_' . STLMS_COURSE_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 		add_action( 'all_admin_notices', array( $this, 'add_header_tab' ) );
-		add_action( 'wp_ajax_bdlms_create_course_curriculum', array( $this, 'create_course_curriculum' ) );
+		add_action( 'wp_ajax_stlms_create_course_curriculum', array( $this, 'create_course_curriculum' ) );
 		add_action( 'admin_action_load_select_items', array( $this, 'load_select_items' ) );
 	}
 
@@ -65,16 +65,16 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 	 */
 	private function meta_boxes_list() {
 		$list = apply_filters(
-			'bdlms/course/meta_boxes',
+			'stlms/course/meta_boxes',
 			array(
 				array(
 					'id'       => 'curriculum',
-					'title'    => __( 'Curriculum', 'bluedolphin-lms' ),
+					'title'    => __( 'Curriculum', 'skilltriks' ),
 					'callback' => array( $this, 'render_curriculum' ),
 				),
 				array(
 					'id'       => 'course-settings',
-					'title'    => __( 'Course Settings', 'bluedolphin-lms' ),
+					'title'    => __( 'Course Settings', 'skilltriks' ),
 					'callback' => array( $this, 'render_course_settings' ),
 				),
 			)
@@ -98,7 +98,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 				'items'        => array(),
 			),
 		);
-		require_once BDLMS_TEMPLATEPATH . '/admin/course/curriculum.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/course/curriculum.php';
 	}
 
 	/**
@@ -144,9 +144,9 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		// Get course materials.
 		$materials   = get_post_meta( $post_id, META_KEY_COURSE_MATERIAL, true );
 		$materials   = ! empty( $materials ) ? $materials : array();
-		$curriculums = \BlueDolphin\Lms\get_curriculums( $this->curriculums, \BlueDolphin\Lms\BDLMS_QUIZ_CPT );
+		$curriculums = \ST\Lms\get_curriculums( $this->curriculums, \ST\Lms\STLMS_QUIZ_CPT );
 		$last_quiz   = end( $curriculums );
-		require_once BDLMS_TEMPLATEPATH . '/admin/course/course-settings.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/course/course-settings.php';
 	}
 
 	/**
@@ -158,11 +158,11 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		$post_data = array(
 			'material' => array(),
 		);
-		if ( ! isset( $_POST['bdlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bdlms_nonce'] ) ), BDLMS_BASEFILE ) ) {
+		if ( ! isset( $_POST['stlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms_nonce'] ) ), STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 			return;
 		}
-		do_action( 'bdlms_save_course_before', $post_id, $post_data );
+		do_action( 'stlms_save_course_before', $post_id, $post_data );
 
 		/**
 		 * Sanitize all string in array.
@@ -242,7 +242,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 			$post_data['signature']['certificate'] = 1;
 		}
 
-		$post_data = apply_filters( 'bdlms_course_post_data', $post_data, $post_id );
+		$post_data = apply_filters( 'stlms_course_post_data', $post_data, $post_id );
 		foreach ( $post_data as $key => $data ) {
 			$key = $this->meta_key_prefix . '_' . $key;
 			if ( empty( $data ) ) {
@@ -254,7 +254,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		EL::add( sprintf( 'Course updated: %s, Post ID: %d', print_r( $post_data, true ), $post_id ), 'info', __FILE__, __LINE__ );
 
-		do_action( 'bdlms_save_course_after', $post_id, $post_data );
+		do_action( 'stlms_save_course_after', $post_id, $post_data );
 	}
 
 	/**
@@ -279,8 +279,8 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		$date = $columns['date'];
 		unset( $columns['date'] );
 
-		$category_key = 'taxonomy-' . BDLMS_COURSE_CATEGORY_TAX;
-		$tag_key      = 'taxonomy-' . BDLMS_COURSE_TAXONOMY_TAG;
+		$category_key = 'taxonomy-' . STLMS_COURSE_CATEGORY_TAX;
+		$tag_key      = 'taxonomy-' . STLMS_COURSE_TAXONOMY_TAG;
 		$category     = $columns[ $category_key ];
 		$checkbox     = $columns['cb'];
 		unset( $columns[ $category_key ] );
@@ -288,16 +288,16 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 		unset( $columns['author'] );
 		unset( $columns['comments'] );
 		unset( $columns['cb'] );
-		$columns['post_author']   = __( 'Author', 'bluedolphin-lms' );
-		$columns['content']       = __( 'Content', 'bluedolphin-lms' );
-		$columns['category_list'] = __( 'Categories', 'bluedolphin-lms' );
-		$columns['comments_list'] = __( 'Comments', 'bluedolphin-lms' );
+		$columns['post_author']   = __( 'Author', 'skilltriks' );
+		$columns['content']       = __( 'Content', 'skilltriks' );
+		$columns['category_list'] = __( 'Categories', 'skilltriks' );
+		$columns['comments_list'] = __( 'Comments', 'skilltriks' );
 		$columns['date']          = $date;
 
 		$columns = array_merge(
 			array(
 				'cb'        => $checkbox,
-				'thumbnail' => __( 'Thumbnail', 'bluedolphin-lms' ),
+				'thumbnail' => __( 'Thumbnail', 'skilltriks' ),
 			),
 			$columns
 		);
@@ -317,6 +317,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 			case 'thumbnail':
 				echo '<div class="column-thumb-img">';
 				if ( has_post_thumbnail( $post_id ) ) {
+					// phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
 					echo '<img src="' . esc_url( get_the_post_thumbnail_url( $post_id ) ) . '" class="course-img" width="80" height="80">';
 				}
 				echo '</div>';
@@ -325,35 +326,35 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 				echo wp_kses_post( (string) postAuthor( $post_id ) );
 				break;
 			case 'content':
-				$curriculums = get_post_meta( $post_id, \BlueDolphin\Lms\META_KEY_COURSE_CURRICULUM, true );
+				$curriculums = get_post_meta( $post_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 				if ( ! empty( $curriculums ) ) {
-					$total_lessons = count( \BlueDolphin\Lms\get_curriculums( $curriculums, \BlueDolphin\Lms\BDLMS_LESSON_CPT ) );
-					$total_quizzes = count( \BlueDolphin\Lms\get_curriculums( $curriculums, \BlueDolphin\Lms\BDLMS_QUIZ_CPT ) );
+					$total_lessons = count( \ST\Lms\get_curriculums( $curriculums, \ST\Lms\STLMS_LESSON_CPT ) );
+					$total_quizzes = count( \ST\Lms\get_curriculums( $curriculums, \ST\Lms\STLMS_QUIZ_CPT ) );
 
 					$content = sprintf(
 						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-						_n( '%s Lesson', '%s Lessons', (int) $total_lessons, 'bluedolphin-lms' ),
+						_n( '%s Lesson', '%s Lessons', (int) $total_lessons, 'skilltriks' ),
 						number_format_i18n( $total_lessons )
 					);
 					$content .= sprintf(
 						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-						_n( ' | %s Quiz', ' | %s Quizzes', (int) $total_quizzes, 'bluedolphin-lms' ),
+						_n( ' | %s Quiz', ' | %s Quizzes', (int) $total_quizzes, 'skilltriks' ),
 						number_format_i18n( $total_quizzes )
 					);
 					echo esc_html( $content );
 				} else {
-					echo esc_html__( 'No Content', 'bluedolphin-lms' );
+					echo esc_html__( 'No Content', 'skilltriks' );
 				}
 				break;
 			case 'category_list':
-				$categories = get_the_terms( $post_id, BDLMS_COURSE_CATEGORY_TAX );
+				$categories = get_the_terms( $post_id, STLMS_COURSE_CATEGORY_TAX );
 				$categories = is_array( $categories ) ? $categories : array();
 				$categories = array_map(
 					function ( $category ) {
 						$filter_url = add_query_arg(
 							array(
-								'post_type'               => BDLMS_COURSE_CPT,
-								BDLMS_COURSE_CATEGORY_TAX => $category->slug,
+								'post_type'               => STLMS_COURSE_CPT,
+								STLMS_COURSE_CATEGORY_TAX => $category->slug,
 							),
 							admin_url( 'edit.php' )
 						);
@@ -379,7 +380,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 				}
 				break;
 			case 'comments_list':
-				echo '<a href="' . esc_url( add_query_arg( 'p', $post_id, admin_url( 'edit-comments.php' ) ) ) . '">' . esc_html__( 'View', 'bluedolphin-lms' ) . '</a>';
+				echo '<a href="' . esc_url( add_query_arg( 'p', $post_id, admin_url( 'edit-comments.php' ) ) ) . '">' . esc_html__( 'View', 'skilltriks' ) . '</a>';
 				break;
 			default:
 				break;
@@ -395,14 +396,14 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 			return;
 		}
 		$id = $current_screen->id;
-		if ( function_exists( 'str_contains' ) && str_contains( $id, 'edit-bdlms_course' ) ) {
+		if ( function_exists( 'str_contains' ) && str_contains( $id, 'edit-stlms_course' ) ) {
 			$id = str_replace( 'edit-', '', $id );
 			?>
-			<div class="bdlms-course-wrap">
+			<div class="stlms-course-wrap">
 				<nav class="nav-tab-wrapper">
-					<a href="<?php echo esc_url( add_query_arg( 'post_type', BDLMS_COURSE_CPT, admin_url( 'edit.php' ) ) ); ?>" class="nav-tab <?php echo BDLMS_COURSE_CPT === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Courses', 'bluedolphin-lms' ); ?></a>
-					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', BDLMS_COURSE_CATEGORY_TAX, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo BDLMS_COURSE_CATEGORY_TAX === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Categories', 'bluedolphin-lms' ); ?></a>
-					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', BDLMS_COURSE_TAXONOMY_TAG, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo BDLMS_COURSE_TAXONOMY_TAG === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Tags', 'bluedolphin-lms' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'post_type', STLMS_COURSE_CPT, admin_url( 'edit.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CPT === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Courses', 'skilltriks' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_CATEGORY_TAX, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_CATEGORY_TAX === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Categories', 'skilltriks' ); ?></a>
+					<a href="<?php echo esc_url( add_query_arg( 'taxonomy', STLMS_COURSE_TAXONOMY_TAG, admin_url( 'edit-tags.php' ) ) ); ?>" class="nav-tab <?php echo STLMS_COURSE_TAXONOMY_TAG === $id ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Tags', 'skilltriks' ); ?></a>
 				</nav>
 			</div>
 			<?php
@@ -413,16 +414,16 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 	 * Create course curriculum.
 	 */
 	public function create_course_curriculum() {
-		check_ajax_referer( BDLMS_BASEFILE, '_nonce' );
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 		$title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 		$type  = isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : '';
 
 		$post_type = '';
 		if ( 'lesson' === $type ) {
-			$post_type = \BlueDolphin\Lms\BDLMS_LESSON_CPT;
+			$post_type = \ST\Lms\STLMS_LESSON_CPT;
 		}
 		if ( 'quiz' === $type ) {
-			$post_type = \BlueDolphin\Lms\BDLMS_QUIZ_CPT;
+			$post_type = \ST\Lms\STLMS_QUIZ_CPT;
 		}
 		if ( empty( $post_type ) ) {
 			EL::add( 'Invalid type selected', 'error', __FILE__, __LINE__ );
@@ -455,7 +456,7 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 				'post_id'   => $post_id,
 				'edit_link' => get_edit_post_link( $post_id ),
 				'view_link' => get_the_permalink( $post_id ),
-				'message'   => sprintf( __( '%s added', 'bluedolphin-lms' ), ucfirst( $type ) ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+				'message'   => sprintf( __( '%s added', 'skilltriks' ), ucfirst( $type ) ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
 			)
 		);
 	}
@@ -465,14 +466,14 @@ class Course extends \BlueDolphin\Lms\Collections\PostTypes {
 	 */
 	public function load_select_items() {
 		$nonce          = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : '';
-		$type           = isset( $_REQUEST['type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['type'] ) ) : \BlueDolphin\Lms\BDLMS_LESSON_CPT;
+		$type           = isset( $_REQUEST['type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['type'] ) ) : \ST\Lms\STLMS_LESSON_CPT;
 		$fetch_request  = isset( $_REQUEST['fetch_items'] ) ? (int) $_REQUEST['fetch_items'] : 0;
 		$question_id    = isset( $_REQUEST['post_id'] ) ? (int) $_REQUEST['post_id'] : 0;
 		$existing_items = isset( $_REQUEST['existing_items'] ) ? array_map( 'intval', $_REQUEST['existing_items'] ) : array();
-		if ( ! wp_verify_nonce( $nonce, BDLMS_BASEFILE ) ) {
+		if ( ! wp_verify_nonce( $nonce, STLMS_BASEFILE ) ) {
 			EL::add( 'Failed nonce verification', 'error', __FILE__, __LINE__ );
 		}
-		require_once BDLMS_TEMPLATEPATH . '/admin/course/modal-popup.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/course/modal-popup.php';
 		exit;
 	}
 }

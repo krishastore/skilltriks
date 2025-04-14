@@ -1,14 +1,14 @@
 <?php
 /**
- * Declare the interface for `BlueDolphin\Lms\Shortcode\MyLearning` class.
+ * Declare the interface for `ST\Lms\Shortcode\MyLearning` class.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  */
 
-namespace BlueDolphin\Lms\Interfaces;
+namespace ST\Lms\Interfaces;
 
 interface MyLearning {
 

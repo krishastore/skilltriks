@@ -2,20 +2,20 @@
 /**
  * The file that register the post types.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Collections;
+namespace ST\Lms\Collections;
 
 /**
  * Register post types.
  */
-class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
+class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 
 	/**
 	 * Post type list.
@@ -46,7 +46,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 		add_action( 'load-edit-tags.php', array( $this, 'handle_admin_screen' ) );
 		add_action( 'restrict_manage_posts', array( $this, 'custom_filter_dropdown' ) );
 		add_action( 'post_submitbox_start', array( $this, 'post_submitbox_start' ) );
-		add_action( 'admin_action_bdlms_clone', array( $this, 'clone_post' ) );
+		add_action( 'admin_action_stlms_clone', array( $this, 'clone_post' ) );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 */
 	public function register() {
 		$this->post_type = apply_filters(
-			'bdlms/collections/post-types',
+			'stlms/collections/post-types',
 			glob( plugin_dir_path( __FILE__ ) . '/post-types/*.php' )
 		);
 		if ( ! empty( $this->post_type ) ) {
@@ -116,11 +116,11 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 */
 	public function handle_admin_screen() {
 		global $current_screen;
-		$category_screen = array( 'bdlms_course_category', 'bdlms_course_tag' );
+		$category_screen = array( 'stlms_course_category', 'stlms_course_tag' );
 
 		if ( $current_screen && isset( $current_screen->id ) ) {
 			$screen_id = str_replace( 'edit-', '', $current_screen->id );
-			$screen_id = in_array( $screen_id, $category_screen, true ) ? 'bdlms_course' : $screen_id;
+			$screen_id = in_array( $screen_id, $category_screen, true ) ? 'stlms_course' : $screen_id;
 			wp_enqueue_script( $screen_id );
 			wp_enqueue_style( $screen_id );
 		}
@@ -132,9 +132,9 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	public function custom_filter_dropdown() {
 		global $post_type;
 		$screen = get_current_screen();
-		if ( $screen && in_array( $screen->post_type, array( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, \BlueDolphin\Lms\BDLMS_COURSE_CPT ), true ) ) {
+		if ( $screen && in_array( $screen->post_type, array( \ST\Lms\STLMS_QUESTION_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
 			$query_args = array(
-				'show_option_all'  => __( 'Search by user', 'bluedolphin-lms' ),
+				'show_option_all'  => __( 'Search by user', 'skilltriks' ),
 				'orderby'          => 'display_name',
 				'order'            => 'ASC',
 				'name'             => 'author',
@@ -147,10 +147,10 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 			}
 			wp_dropdown_users( $query_args );
 
-			if ( \BlueDolphin\Lms\BDLMS_QUESTION_CPT === $screen->post_type ) {
-				$taxonomy = \BlueDolphin\Lms\BDLMS_QUESTION_TAXONOMY_TAG;
+			if ( \ST\Lms\STLMS_QUESTION_CPT === $screen->post_type ) {
+				$taxonomy = \ST\Lms\STLMS_QUESTION_TAXONOMY_TAG;
 				$args     = array(
-					'show_option_none'  => __( 'All Question', 'bluedolphin-lms' ),
+					'show_option_none'  => __( 'All Question', 'skilltriks' ),
 					'show_count'        => 0,
 					'orderby'           => 'name',
 					'taxonomy'          => $taxonomy,
@@ -167,10 +167,10 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 			}
 		}
 
-		if ( $screen && in_array( $screen->post_type, array( \BlueDolphin\Lms\BDLMS_QUIZ_CPT ), true ) ) {
-			$taxonomy = \BlueDolphin\Lms\BDLMS_QUIZ_TAXONOMY_LEVEL_1;
+		if ( $screen && in_array( $screen->post_type, array( \ST\Lms\STLMS_QUIZ_CPT ), true ) ) {
+			$taxonomy = \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_1;
 			$args     = array(
-				'show_option_none'  => __( 'All Quiz', 'bluedolphin-lms' ),
+				'show_option_none'  => __( 'All Quiz', 'skilltriks' ),
 				'show_count'        => 0,
 				'orderby'           => 'name',
 				'taxonomy'          => $taxonomy,
@@ -196,7 +196,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 * @param string $post_type The post type.
 	 */
 	public function disable_months_dropdown( $disable, $post_type ) {
-		if ( in_array( $post_type, array( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, \BlueDolphin\Lms\BDLMS_QUIZ_CPT ), true ) ) {
+		if ( in_array( $post_type, array( \ST\Lms\STLMS_QUESTION_CPT, \ST\Lms\STLMS_QUIZ_CPT ), true ) ) {
 			return true;
 		}
 		return $disable;
@@ -208,7 +208,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 * @param object $post Post object.
 	 */
 	public function post_submitbox_start( $post ) {
-		if ( ! in_array( $post->post_type, array( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, \BlueDolphin\Lms\BDLMS_QUIZ_CPT, \BlueDolphin\Lms\BDLMS_LESSON_CPT, \BlueDolphin\Lms\BDLMS_COURSE_CPT ), true ) ) {
+		if ( ! in_array( $post->post_type, array( \ST\Lms\STLMS_QUESTION_CPT, \ST\Lms\STLMS_QUIZ_CPT, \ST\Lms\STLMS_LESSON_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
 			return;
 		}
 		?>
@@ -218,16 +218,16 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 			$url = wp_nonce_url(
 				add_query_arg(
 					array(
-						'action' => 'bdlms_clone',
+						'action' => 'stlms_clone',
 						'post'   => $post->ID,
 					),
 					'admin.php'
 				),
-				BDLMS_BASEFILE,
-				'bdlms_nonce'
+				STLMS_BASEFILE,
+				'stlms_nonce'
 			);
 			?>
-			<a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_attr_e( 'Clone', 'bluedolphin-lms' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_attr_e( 'Clone', 'skilltriks' ); ?></a>
 			<?php
 		}
 		?>
@@ -242,7 +242,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 */
 	public function clone_post( $duplicate_only = false ) {
 		global $wpdb;
-		if ( ! isset( $_REQUEST['bdlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['bdlms_nonce'] ) ), BDLMS_BASEFILE ) ) {
+		if ( ! isset( $_REQUEST['stlms_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['stlms_nonce'] ) ), STLMS_BASEFILE ) ) {
 			return;
 		}
 		$post_id     = isset( $_REQUEST['post'] ) ? absint( $_REQUEST['post'] ) : 0;
@@ -253,7 +253,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 			return;
 		}
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		$new_title = $duplicate_only ? $post->post_title : wp_sprintf( esc_html__( 'Copy of %1$s', 'bluedolphin-lms' ), $post->post_title );
+		$new_title = $duplicate_only ? $post->post_title : wp_sprintf( esc_html__( 'Copy of %1$s', 'skilltriks' ), $post->post_title );
 		$args      = array(
 			'comment_status' => $post->comment_status,
 			'ping_status'    => $post->ping_status,
@@ -324,7 +324,7 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 * @return bool
 	 */
 	public function quick_edit_show_taxonomy( $show, $taxonomy_name ) {
-		if ( ! wp_doing_ajax() && in_array( $taxonomy_name, array( \BlueDolphin\Lms\BDLMS_QUIZ_TAXONOMY_LEVEL_1, \BlueDolphin\Lms\BDLMS_QUIZ_TAXONOMY_LEVEL_2 ), true ) ) {
+		if ( ! wp_doing_ajax() && in_array( $taxonomy_name, array( \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_1, \ST\Lms\STLMS_QUIZ_TAXONOMY_LEVEL_2 ), true ) ) {
 			return false;
 		}
 		return $show;
@@ -339,19 +339,19 @@ class PostTypes implements \BlueDolphin\Lms\Interfaces\PostTypes {
 	 */
 	public function quick_actions( $actions, $post ) {
 		// Clone action.
-		if ( in_array( $post->post_type, array( \BlueDolphin\Lms\BDLMS_QUIZ_CPT, \BlueDolphin\Lms\BDLMS_LESSON_CPT, \BlueDolphin\Lms\BDLMS_COURSE_CPT ), true ) ) {
+		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUIZ_CPT, \ST\Lms\STLMS_LESSON_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
 			$url                   = wp_nonce_url(
 				add_query_arg(
 					array(
-						'action' => 'bdlms_clone',
+						'action' => 'stlms_clone',
 						'post'   => $post->ID,
 					),
 					'admin.php'
 				),
-				BDLMS_BASEFILE,
-				'bdlms_nonce'
+				STLMS_BASEFILE,
+				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'bluedolphin-lms' ) . ' </a>';
+			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
 		}
 		return $actions;
 	}

@@ -2,17 +2,17 @@
 /**
  * The file that register the taxonomies.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Collections;
+namespace ST\Lms\Collections;
 
-use const BlueDolphin\Lms\PARENT_MENU_SLUG;
+use const ST\Lms\PARENT_MENU_SLUG;
 
 /**
  * Register taxonomies.
@@ -40,7 +40,7 @@ class Taxonomies {
 	 */
 	private function register() {
 		$this->taxonomies = apply_filters(
-			'bdlms/collections/taxonomies',
+			'stlms/collections/taxonomies',
 			glob( plugin_dir_path( __FILE__ ) . '/taxonomies/*.php' )
 		);
 		if ( ! empty( $this->taxonomies ) ) {
@@ -61,7 +61,7 @@ class Taxonomies {
 	public function filter_parent_file( $parent_file ) {
 		global $current_screen;
 		$taxonomy = $current_screen->taxonomy;
-		if ( in_array( $taxonomy, array( 'bdlms_course_tag', 'bdlms_course_category' ), true ) ) {
+		if ( in_array( $taxonomy, array( 'stlms_course_tag', 'stlms_course_category' ), true ) ) {
 			$parent_file = PARENT_MENU_SLUG;
 		}
 		return $parent_file;
@@ -73,18 +73,18 @@ class Taxonomies {
 	public function register_submenu_page() {
 		add_submenu_page(
 			PARENT_MENU_SLUG,
-			__( 'Categories', 'bluedolphin-lms' ),
-			__( 'Categories', 'bluedolphin-lms' ),
-			apply_filters( 'bdlms/menu/capability', 'manage_options' ),
-			'edit-tags.php?taxonomy=bdlms_course_category',
+			__( 'Categories', 'skilltriks' ),
+			__( 'Categories', 'skilltriks' ),
+			apply_filters( 'stlms/menu/capability', 'manage_options' ),
+			'edit-tags.php?taxonomy=stlms_course_category',
 			'__return_null'
 		);
 		add_submenu_page(
 			PARENT_MENU_SLUG,
-			__( 'Tags', 'bluedolphin-lms' ),
-			__( 'Tags', 'bluedolphin-lms' ),
-			apply_filters( 'bdlms/menu/capability', 'manage_options' ),
-			'edit-tags.php?taxonomy=bdlms_course_tag',
+			__( 'Tags', 'skilltriks' ),
+			__( 'Tags', 'skilltriks' ),
+			apply_filters( 'stlms/menu/capability', 'manage_options' ),
+			'edit-tags.php?taxonomy=stlms_course_tag',
 			'__return_null'
 		);
 	}

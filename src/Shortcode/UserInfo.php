@@ -2,19 +2,19 @@
 /**
  * The file that defines the user info shortcode functionality.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms\Shortcode
+ * @package    ST\Lms\Shortcode
  */
 
-namespace BlueDolphin\Lms\Shortcode;
+namespace ST\Lms\Shortcode;
 
-use BlueDolphin\Lms\ErrorLog as EL;
+use ST\Lms\ErrorLog as EL;
 /**
  * Shortcode register manage class.
  */
-class UserInfo extends \BlueDolphin\Lms\Shortcode\Register {
+class UserInfo extends \ST\Lms\Shortcode\Register {
 
 	/**
 	 * Class constructor.
@@ -32,7 +32,7 @@ class UserInfo extends \BlueDolphin\Lms\Shortcode\Register {
 		wp_print_scripts( $this->handler );
 		wp_print_styles( $this->handler );
 		ob_start();
-		load_template( \BlueDolphin\Lms\locate_template( 'userinfo.php' ), false, array() );
+		load_template( \ST\Lms\locate_template( 'userinfo.php' ), false, array() );
 		$content = ob_get_clean();
 		return $content;
 	}

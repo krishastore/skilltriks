@@ -2,13 +2,13 @@
 /**
  * Declare the interface for Database utility class.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  */
 
-namespace BlueDolphin\Lms\Interfaces;
+namespace ST\Lms\Interfaces;
 
 interface Helpers {
 

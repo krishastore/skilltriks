@@ -2,32 +2,32 @@
 /**
  * The file that register metabox for results.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Admin\MetaBoxes;
+namespace ST\Lms\Admin\MetaBoxes;
 
-use BlueDolphin\Lms\ErrorLog as EL;
-use function BlueDolphin\Lms\column_post_author as postAuthor;
-use const BlueDolphin\Lms\BDLMS_RESULTS_CPT;
+use ST\Lms\ErrorLog as EL;
+use function ST\Lms\column_post_author as postAuthor;
+use const ST\Lms\STLMS_RESULTS_CPT;
 
 /**
  * Register metaboxes for results.
  */
-class Results extends \BlueDolphin\Lms\Collections\PostTypes {
+class Results extends \ST\Lms\Collections\PostTypes {
 	/**
 	 * Class construct.
 	 */
 	public function __construct() {
 		$this->set_metaboxes( $this->meta_boxes_list() );
-		add_filter( 'manage_' . BDLMS_RESULTS_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
+		add_filter( 'manage_' . STLMS_RESULTS_CPT . '_posts_columns', array( $this, 'add_new_table_columns' ) );
 		add_filter( 'post_row_actions', array( $this, 'quick_actions' ), 10, 2 );
-		add_action( 'manage_' . BDLMS_RESULTS_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
+		add_action( 'manage_' . STLMS_RESULTS_CPT . '_posts_custom_column', array( $this, 'manage_custom_column' ), 10, 2 );
 	}
 
 	/**
@@ -37,11 +37,11 @@ class Results extends \BlueDolphin\Lms\Collections\PostTypes {
 	 */
 	private function meta_boxes_list() {
 		$list = apply_filters(
-			'bdlms/results/meta_boxes',
+			'stlms/results/meta_boxes',
 			array(
 				array(
 					'id'       => 'result-view',
-					'title'    => __( 'Quiz result', 'bluedolphin-lms' ),
+					'title'    => __( 'Quiz result', 'skilltriks' ),
 					'callback' => array( $this, 'render_results' ),
 				),
 			)
@@ -56,7 +56,7 @@ class Results extends \BlueDolphin\Lms\Collections\PostTypes {
 		global $post;
 		$post_id          = isset( $post->ID ) ? $post->ID : 0;
 		$grade_percentage = get_post_meta( $post_id, 'grade_percentage', true );
-		$accuracy         = get_post_meta( $post_id, 'accuracy', true );
+		$accuracy         = get_post_meta( $post_id, 'attempted_questions', true );
 		$time_str         = get_post_meta( $post_id, 'time_str', true );
 		$quiz_id          = get_post_meta( $post_id, 'quiz_id', true );
 		$course_id        = get_post_meta( $post_id, 'course_id', true );
@@ -64,23 +64,23 @@ class Results extends \BlueDolphin\Lms\Collections\PostTypes {
 		<table class="wp-list-table widefat fixed striped posts" style="margin-top: 15px;">
 			<tbody>
 				<tr>
-					<th><?php esc_html_e( 'Course', 'bluedolphin-lms' ); ?></th>
+					<th><?php esc_html_e( 'Course', 'skilltriks' ); ?></th>
 					<td><a href="<?php echo esc_url( get_edit_post_link( $course_id ) ); ?>"><?php echo esc_html( get_the_title( $course_id ) ); ?></a></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Quiz', 'bluedolphin-lms' ); ?></th>
+					<th><?php esc_html_e( 'Quiz', 'skilltriks' ); ?></th>
 					<td><a href="<?php echo esc_url( get_edit_post_link( $quiz_id ) ); ?>"><?php echo esc_html( get_the_title( $quiz_id ) ); ?></a></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Grade', 'bluedolphin-lms' ); ?></th>
+					<th><?php esc_html_e( 'Grade', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $grade_percentage ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Accuracy', 'bluedolphin-lms' ); ?></th>
+					<th><?php esc_html_e( 'Attempted Questions', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $accuracy ); ?></td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'Time', 'bluedolphin-lms' ); ?></th>
+					<th><?php esc_html_e( 'Time', 'skilltriks' ); ?></th>
 					<td><?php echo esc_html( $time_str ); ?></td>
 				</tr>
 			</tbody>
@@ -97,10 +97,10 @@ class Results extends \BlueDolphin\Lms\Collections\PostTypes {
 	public function add_new_table_columns( $columns ) {
 		unset( $columns['date'] );
 		unset( $columns['author'] );
-		$columns['post_author'] = __( 'Employee', 'bluedolphin-lms' );
-		$columns['grade']       = __( 'Corect answers', 'bluedolphin-lms' );
-		$columns['accuracy']    = __( 'Attempted Questions', 'bluedolphin-lms' );
-		$columns['time']        = __( 'Time taken', 'bluedolphin-lms' );
+		$columns['post_author'] = __( 'Employee', 'skilltriks' );
+		$columns['grade']       = __( 'Correct answers', 'skilltriks' );
+		$columns['accuracy']    = __( 'Attempted Questions', 'skilltriks' );
+		$columns['time']        = __( 'Time taken', 'skilltriks' );
 		return $columns;
 	}
 
@@ -143,9 +143,8 @@ class Results extends \BlueDolphin\Lms\Collections\PostTypes {
 	 * @return array
 	 */
 	public function quick_actions( $actions, $post ) {
-		if ( BDLMS_RESULTS_CPT === $post->post_type ) {
-			unset( $actions['inline hide-if-no-js'] );
-			$newtext = __( 'View More Details', 'bluedolphin-lms' );
+		if ( STLMS_RESULTS_CPT === $post->post_type ) {
+			$newtext = __( 'View More Details', 'skilltriks' );
 			if ( isset( $actions['edit'] ) ) {
 				$actions['edit'] = preg_replace( '/(<a.*?>).*?(<\/a>)/', '$1' . $newtext . '$2', $actions['edit'] );
 			}

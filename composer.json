@@ -1,18 +1,18 @@
 {
-  "name": "krishaweb/bluedolphin-lms",
+  "name": "krishaweb/skilltriks",
   "description": "A Comprehensive Solution For Training Management. Contact Us For More Details On Training Management System.",
   "keywords": [
     "wordpress",
     "learnpress",
     "lms"
   ],
-  "homepage": "https://getbluedolphin.com",
+  "homepage": "https://www.skilltriks.com/",
   "license": "GPL-2.0+",
   "authors": [
     {
       "name": "KrishaWeb",
       "email": "info@krishaweb.com",
-      "homepage": "https://getbluedolphin.com"
+      "homepage": "https://www.skilltriks.com/"
     }
   ],
   "type": "wordpress-plugin",
@@ -22,7 +22,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BlueDolphin\\Lms\\": "./src"
+      "ST\\Lms\\": "./src"
     },
     "files": [
       "./src/helpers.php",

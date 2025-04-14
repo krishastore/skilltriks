@@ -2,7 +2,7 @@
 /**
  * Template: Setting General Tab.
  *
- * @package BlueDolphin\Lms
+ * @package ST\Lms
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,11 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <h2><?php echo esc_html( 'Settings' ); ?></h2>
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
-	<input type = 'hidden' name = 'action' value = 'bdlms_setting' / >
+	<input type = 'hidden' name = 'action' value = 'stlms_setting' / >
 	<?php
-	wp_nonce_field( 'bdlms_setting', 'bdlms-setting-nonce' );
+	wp_nonce_field( 'stlms_setting', 'stlms-setting-nonce' );
 	do_settings_sections( $this->option_group ); // @phpstan-ignore variable.undefined
-	submit_button( esc_html__( 'Save', 'bluedolphin-lms' ) );
+	submit_button( esc_html__( 'Save', 'skilltriks' ) );
 	?>
 </form>
 

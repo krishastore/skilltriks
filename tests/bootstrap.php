@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file.
  *
- * @package Bluedolphin_Lms
+ * @package ST\LMS
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -35,8 +35,8 @@ require_once "{$_tests_dir}/includes/functions.php";
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( __DIR__ ) . '/bluedolphin-lms.php';
-	add_action( 'init', 'bdlms_activation' );
+	require dirname( __DIR__ ) . '/skilltriks.php';
+	add_action( 'init', 'stlms_activation' );
 }
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
@@ -44,7 +44,7 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 // Start up the WP testing environment.
 require "{$_tests_dir}/includes/bootstrap.php";
 
-activate_plugin( 'bluedolphin-lms/bluedolphin-lms.php' );
+activate_plugin( 'skilltriks/skilltriks.php' );
 global $current_user;
 $current_user = new WP_User( 1 ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 $current_user->set_role( 'administrator' );

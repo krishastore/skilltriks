@@ -5,22 +5,22 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms\Admin
+ * @package    ST\Lms\Admin
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms\Admin;
+namespace ST\Lms\Admin;
 
-use const BlueDolphin\Lms\PARENT_MENU_SLUG;
+use const ST\Lms\PARENT_MENU_SLUG;
 
 /**
  * Admin class
  */
-class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
+class Core implements \ST\Lms\Interfaces\AdminCore {
 
 	/**
 	 * Plugin version.
@@ -33,7 +33,7 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 	/**
 	 * The main instance.
 	 *
-	 * @var \BlueDolphin\Lms\BlueDolphin|null Main class instance.
+	 * @var \ST\Lms\Core|null Main class instance.
 	 * @since 1.0.0
 	 */
 	public $instance = null;
@@ -41,23 +41,23 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 	/**
 	 * Calling class construct.
 	 *
-	 * @param int|string                   $version Plugin version.
-	 * @param \BlueDolphin\Lms\BlueDolphin $bdlms_main Plugin main instance.
+	 * @param int|string   $version Plugin version.
+	 * @param \ST\Lms\Core $stlms_main Plugin main instance.
 	 */
-	public function __construct( $version, \BlueDolphin\Lms\BlueDolphin $bdlms_main ) { // phpcs:ignore Squiz.Commenting.FunctionComment.IncorrectTypeHint
+	public function __construct( $version, \ST\Lms\Core $stlms_main ) { // phpcs:ignore Squiz.Commenting.FunctionComment.IncorrectTypeHint
 		$this->version  = $version;
-		$this->instance = $bdlms_main;
+		$this->instance = $stlms_main;
 
 		// Load modules.
-		new \BlueDolphin\Lms\Admin\Users\Users();
-		new \BlueDolphin\Lms\Shortcode\Login();
-		new \BlueDolphin\Lms\Shortcode\Courses();
-		new \BlueDolphin\Lms\Shortcode\UserInfo();
-		new \BlueDolphin\Lms\Shortcode\MyLearning();
-		\BlueDolphin\Lms\Helpers\SettingOptions::instance()->init();
-		new \BlueDolphin\Lms\Import\QuestionImport();
-		new \BlueDolphin\Lms\Import\LessonImport();
-		new \BlueDolphin\Lms\Import\CourseImport();
+		new \ST\Lms\Admin\Users\Users();
+		new \ST\Lms\Shortcode\Login();
+		new \ST\Lms\Shortcode\Courses();
+		new \ST\Lms\Shortcode\UserInfo();
+		new \ST\Lms\Shortcode\MyLearning();
+		\ST\Lms\Helpers\SettingOptions::instance()->init();
+		new \ST\Lms\Import\QuestionImport();
+		new \ST\Lms\Import\LessonImport();
+		new \ST\Lms\Import\CourseImport();
 
 		// Hooks.
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
@@ -74,13 +74,13 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 	 */
 	public function register_admin_menu() {
 		$hook = add_menu_page(
-			__( 'BlueDolphin LMS', 'bluedolphin-lms' ),
-			__( 'BlueDolphin LMS', 'bluedolphin-lms' ),
-			apply_filters( 'bdlms/menu/capability', 'manage_options' ),
+			__( 'SkillTriks LMS', 'skilltriks' ),
+			__( 'SkillTriks LMS', 'skilltriks' ),
+			apply_filters( 'stlms/menu/capability', 'manage_options' ),
 			PARENT_MENU_SLUG,
 			'__return_empty_string',
 			'dashicons-welcome-learn-more',
-			apply_filters( 'bdlms/menu/position', 4 )
+			apply_filters( 'stlms/menu/position', 4 )
 		);
 	}
 
@@ -103,7 +103,7 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 		if ( ! $use_block_editor ) {
 			return $use_block_editor;
 		}
-		if ( in_array( $post_type, apply_filters( 'bdlms/disable/block-editor', array( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, \BlueDolphin\Lms\BDLMS_QUIZ_CPT, \BlueDolphin\Lms\BDLMS_LESSON_CPT, \BlueDolphin\Lms\BDLMS_COURSE_CPT ) ), true ) ) {
+		if ( in_array( $post_type, apply_filters( 'stlms/disable/block-editor', array( \ST\Lms\STLMS_QUESTION_CPT, \ST\Lms\STLMS_QUIZ_CPT, \ST\Lms\STLMS_LESSON_CPT, \ST\Lms\STLMS_COURSE_CPT ) ), true ) ) {
 			return false;
 		}
 		return $use_block_editor;
@@ -114,50 +114,50 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 	 */
 	public function backend_scripts() {
 		// Questions.
-		wp_register_script( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, BDLMS_ASSETS . '/js/build/questions.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
+		wp_register_script( \ST\Lms\STLMS_QUESTION_CPT, STLMS_ASSETS . '/js/build/questions.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
 		$question_object = array(
-			'alphabets'      => \BlueDolphin\Lms\question_series(),
+			'alphabets'      => \ST\Lms\question_series(),
 			'ajaxurl'        => admin_url( 'admin-ajax.php' ),
 			'i18n'           => array(
-				'PopupTitle'        => __( 'Assign to Quiz', 'bluedolphin-lms' ),
-				'emptySearchResult' => __( 'No results found', 'bluedolphin-lms' ),
+				'PopupTitle'        => __( 'Assign to Quiz', 'skilltriks' ),
+				'emptySearchResult' => __( 'No results found', 'skilltriks' ),
 			),
-			'nonce'          => wp_create_nonce( BDLMS_BASEFILE ),
+			'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 			'contentLoadUrl' => esc_url(
 				add_query_arg(
 					array(
 						'action' => 'load_quiz_list',
-						'_nonce' => wp_create_nonce( BDLMS_BASEFILE ),
+						'_nonce' => wp_create_nonce( STLMS_BASEFILE ),
 					),
 					admin_url( 'admin.php' )
 				)
 			),
 		);
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_QUESTION_CPT,
+			\ST\Lms\STLMS_QUESTION_CPT,
 			'questionObject',
 			$question_object
 		);
-		wp_register_style( \BlueDolphin\Lms\BDLMS_QUESTION_CPT, BDLMS_ASSETS . '/css/questions.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_QUESTION_CPT, STLMS_ASSETS . '/css/questions.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 
 		// Quiz.
-		wp_register_script( \BlueDolphin\Lms\BDLMS_QUIZ_CPT, BDLMS_ASSETS . '/js/build/quiz.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
+		wp_register_script( \ST\Lms\STLMS_QUIZ_CPT, STLMS_ASSETS . '/js/build/quiz.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_QUIZ_CPT,
+			\ST\Lms\STLMS_QUIZ_CPT,
 			'quizModules',
 			array(
 				'ajaxurl'        => admin_url( 'admin-ajax.php' ),
-				'nonce'          => wp_create_nonce( BDLMS_BASEFILE ),
-				'addMoreButton'  => '<a href="javascript:;" class="add-new-question button button-primary">' . __( 'Add More Question', 'bluedolphin-lms' ) . '</a>',
+				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
+				'addMoreButton'  => '<a href="javascript:;" class="add-new-question button button-primary">' . __( 'Add More Question', 'skilltriks' ) . '</a>',
 				'i18n'           => array(
-					'addNewPopupTitle'   => __( 'From where you want to add a new Question?', 'bluedolphin-lms' ),
-					'existingPopupTitle' => __( 'Questions Bank', 'bluedolphin-lms' ),
+					'addNewPopupTitle'   => __( 'From where you want to add a new Question?', 'skilltriks' ),
+					'existingPopupTitle' => __( 'Questions Bank', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
 						array(
 							'action' => 'load_question_list',
-							'_nonce' => wp_create_nonce( BDLMS_BASEFILE ),
+							'_nonce' => wp_create_nonce( STLMS_BASEFILE ),
 						),
 						admin_url( 'admin.php' )
 					)
@@ -165,142 +165,143 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 			)
 		);
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_QUIZ_CPT,
+			\ST\Lms\STLMS_QUIZ_CPT,
 			'questionObject',
 			$question_object
 		);
-		wp_register_style( \BlueDolphin\Lms\BDLMS_QUIZ_CPT, BDLMS_ASSETS . '/css/quiz.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_QUIZ_CPT, STLMS_ASSETS . '/css/quiz.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 
 		// Lesson.
-		wp_register_script( \BlueDolphin\Lms\BDLMS_LESSON_CPT, BDLMS_ASSETS . '/js/build/lesson.js', array( 'jquery', 'jquery-ui-dialog' ), $this->version, true );
+		wp_register_script( \ST\Lms\STLMS_LESSON_CPT, STLMS_ASSETS . '/js/build/lesson.js', array( 'jquery', 'jquery-ui-dialog' ), $this->version, true );
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_LESSON_CPT,
+			\ST\Lms\STLMS_LESSON_CPT,
 			'lessonObject',
 			array(
 				'ajaxurl'        => admin_url( 'admin-ajax.php' ),
-				'nonce'          => wp_create_nonce( BDLMS_BASEFILE ),
+				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 				'i18n'           => array(
-					'PopupTitle'            => __( 'Select Course', 'bluedolphin-lms' ),
-					'media_iframe_title'    => __( 'Select file', 'bluedolphin-lms' ),
-					'media_iframe_button'   => __( 'Set default file', 'bluedolphin-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'bluedolphin-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'bluedolphin-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'bluedolphin-lms' ),
-					'emptySearchResult'     => __( 'No results found', 'bluedolphin-lms' ),
+					'PopupTitle'            => __( 'Select Course', 'skilltriks' ),
+					'media_iframe_title'    => __( 'Select file', 'skilltriks' ),
+					'media_iframe_button'   => __( 'Set default file', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'emptySearchResult'     => __( 'No results found', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
 						array(
 							'action' => 'load_course_list',
-							'_nonce' => wp_create_nonce( BDLMS_BASEFILE ),
+							'_nonce' => wp_create_nonce( STLMS_BASEFILE ),
 						),
 						admin_url( 'admin.php' )
 					)
 				),
 			)
 		);
-		if ( wp_script_is( \BlueDolphin\Lms\BDLMS_LESSON_CPT ) ) {
+		if ( wp_script_is( \ST\Lms\STLMS_LESSON_CPT ) ) {
 			wp_enqueue_media();
 			wp_enqueue_editor();
 		}
-		wp_register_style( \BlueDolphin\Lms\BDLMS_LESSON_CPT, BDLMS_ASSETS . '/css/lesson.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_LESSON_CPT, STLMS_ASSETS . '/css/lesson.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 
 		// Course.
-		wp_register_script( \BlueDolphin\Lms\BDLMS_COURSE_CPT, BDLMS_ASSETS . '/js/build/course.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
+		wp_register_script( \ST\Lms\STLMS_COURSE_CPT, STLMS_ASSETS . '/js/build/course.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_COURSE_CPT,
+			\ST\Lms\STLMS_COURSE_CPT,
 			'courseObject',
 			array(
 				'ajaxurl'        => admin_url( 'admin-ajax.php' ),
-				'nonce'          => wp_create_nonce( BDLMS_BASEFILE ),
+				'nonce'          => wp_create_nonce( STLMS_BASEFILE ),
 				'HasGdLibrary'   => extension_loaded( 'gd' ),
 				'i18n'           => array(
-					'PopupTitle'            => __( 'Select Item', 'bluedolphin-lms' ),
-					'media_iframe_title'    => __( 'Select file', 'bluedolphin-lms' ),
-					'media_iframe_button'   => __( 'Set default file', 'bluedolphin-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'bluedolphin-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'bluedolphin-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'bluedolphin-lms' ),
-					'emptySearchResult'     => __( 'No results found', 'bluedolphin-lms' ),
-					'errorMediaMessage'     => __( 'Bluedolphin required PHP `zip` and `GD` extension for external library.', 'bluedolphin-lms' ),
+					'PopupTitle'            => __( 'Select Item', 'skilltriks' ),
+					'media_iframe_title'    => __( 'Select file', 'skilltriks' ),
+					'media_iframe_button'   => __( 'Set default file', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'emptySearchResult'     => __( 'No results found', 'skilltriks' ),
+					'errorMediaMessage'     => __( 'SkillTriks required PHP `zip` and `GD` extension for external library.', 'skilltriks' ),
 					// Translators: %s to selected item type.
-					'itemAddedMessage'      => __( '%s added', 'bluedolphin-lms' ),
+					'itemAddedMessage'      => __( '%s added', 'skilltriks' ),
 				),
 				'contentLoadUrl' => esc_url(
 					add_query_arg(
 						array(
 							'action' => 'load_select_items',
-							'_nonce' => wp_create_nonce( BDLMS_BASEFILE ),
+							'_nonce' => wp_create_nonce( STLMS_BASEFILE ),
 						),
 						admin_url( 'admin.php' )
 					)
 				),
 			)
 		);
-		if ( wp_script_is( \BlueDolphin\Lms\BDLMS_COURSE_CPT ) ) {
+		if ( wp_script_is( \ST\Lms\STLMS_COURSE_CPT ) ) {
 			wp_enqueue_media();
 		}
-		wp_register_style( \BlueDolphin\Lms\BDLMS_COURSE_CPT, BDLMS_ASSETS . '/css/course.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_COURSE_CPT, STLMS_ASSETS . '/css/course.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 
 		// Settings.
-		wp_register_script( \BlueDolphin\Lms\BDLMS_SETTING, BDLMS_ASSETS . '/js/build/settings.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
+		wp_register_script( \ST\Lms\STLMS_SETTING, STLMS_ASSETS . '/js/build/settings.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog' ), $this->version, true );
 		wp_localize_script(
-			\BlueDolphin\Lms\BDLMS_SETTING,
+			\ST\Lms\STLMS_SETTING,
 			'settingObject',
 			array(
 				'ajaxurl'         => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( BDLMS_BASEFILE ),
+				'nonce'           => wp_create_nonce( STLMS_BASEFILE ),
 				'HasOpenSpout'    => class_exists( 'OpenSpout\Reader\Common\Creator\ReaderEntityFactory' ),
 				'HasGdLibrary'    => extension_loaded( 'gd' ),
-				'QuestionCsvPath' => BDLMS_ASSETS . '/csv/question.csv',
-				'LessonCsvPath'   => BDLMS_ASSETS . '/csv/lesson.csv',
-				'CourseCsvPath'   => BDLMS_ASSETS . '/csv/course.csv',
+				'QuestionCsvPath' => STLMS_ASSETS . '/csv/question.csv',
+				'LessonCsvPath'   => STLMS_ASSETS . '/csv/lesson.csv',
+				'CourseCsvPath'   => STLMS_ASSETS . '/csv/course.csv',
 				'i18n'            => array(
-					'PopupTitle'            => __( 'Import file', 'bluedolphin-lms' ),
-					'CancelPopupTitle'      => __( 'Cancel Import', 'bluedolphin-lms' ),
-					'ImportRows'            => __( 'Rows', 'bluedolphin-lms' ),
-					'ImportColumns'         => __( 'Columns', 'bluedolphin-lms' ),
-					'ImportQuestionMsgText' => __( 'Imported Questions to Question Bank', 'bluedolphin-lms' ),
-					'ImportLessonMsgText'   => __( 'Imported Lessons', 'bluedolphin-lms' ),
-					'ImportCourseMsgText'   => __( 'Imported Courses', 'bluedolphin-lms' ),
-					'DemoFileTitle'         => __( 'Demo CSV', 'bluedolphin-lms' ),
-					'SuccessTitle'          => __( 'Successful Import', 'bluedolphin-lms' ),
-					'FailTitle'             => __( 'Failed Import', 'bluedolphin-lms' ),
-					'CancelTitle'           => __( 'Cancelled Import', 'bluedolphin-lms' ),
-					'UploadTitle'           => __( 'Upload in Progress', 'bluedolphin-lms' ),
-					'emptyMediaButtonTitle' => __( 'Choose File', 'bluedolphin-lms' ),
-					'MediaButtonTitle'      => __( 'Change File', 'bluedolphin-lms' ),
-					'nullMediaMessage'      => __( 'No File Chosen', 'bluedolphin-lms' ),
-					'errorMediaMessage'     => __( 'Bluedolphin required PHP `zip` and `GD` extension for external library.', 'bluedolphin-lms' ),
+					'PopupTitle'            => __( 'Import file', 'skilltriks' ),
+					'CancelPopupTitle'      => __( 'Cancel Import', 'skilltriks' ),
+					'ImportRows'            => __( 'Rows', 'skilltriks' ),
+					'ImportColumns'         => __( 'Columns', 'skilltriks' ),
+					'ImportQuestionMsgText' => __( 'Imported Questions to Question Bank', 'skilltriks' ),
+					'ImportLessonMsgText'   => __( 'Imported Lessons', 'skilltriks' ),
+					'ImportCourseMsgText'   => __( 'Imported Courses', 'skilltriks' ),
+					'DemoFileTitle'         => __( 'Demo CSV', 'skilltriks' ),
+					'SuccessTitle'          => __( 'Successful Import', 'skilltriks' ),
+					'FailTitle'             => __( 'Failed Import', 'skilltriks' ),
+					'CancelTitle'           => __( 'Cancelled Import', 'skilltriks' ),
+					'UploadTitle'           => __( 'Upload in Progress', 'skilltriks' ),
+					'emptyMediaButtonTitle' => __( 'Choose File', 'skilltriks' ),
+					'MediaButtonTitle'      => __( 'Change File', 'skilltriks' ),
+					'nullMediaMessage'      => __( 'No File Chosen', 'skilltriks' ),
+					'errorMediaMessage'     => __( 'skilltriks required PHP `zip` and `GD` extension for external library.', 'skilltriks' ),
+					'RoleTitle'             => __( 'User Role', 'skilltriks' ),
 				),
 			)
 		);
-		wp_register_style( \BlueDolphin\Lms\BDLMS_SETTING, BDLMS_ASSETS . '/css/settings.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_SETTING, STLMS_ASSETS . '/css/settings.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 
 		// Result css.
-		wp_register_style( \BlueDolphin\Lms\BDLMS_RESULTS_CPT, BDLMS_ASSETS . '/css/result.css', array( 'wp-jquery-ui-dialog' ), $this->version );
+		wp_register_style( \ST\Lms\STLMS_RESULTS_CPT, STLMS_ASSETS . '/css/result.css', array( 'wp-jquery-ui-dialog' ), $this->version );
 	}
 
 	/**
 	 * Load JS based templates.
 	 */
 	public function js_templates() {
-		require_once BDLMS_TEMPLATEPATH . '/admin/question/inline-show-answers.php';
+		require_once STLMS_TEMPLATEPATH . '/admin/question/inline-show-answers.php';
 	}
 
 	/**
 	 * Create rewrite rules.
 	 */
 	public static function create_rewrite_rules() {
-		$courses_page_slug = \BlueDolphin\Lms\get_page_url( 'courses', true );
+		$courses_page_slug = \ST\Lms\get_page_url( 'courses', true );
 		add_rewrite_rule( '^' . $courses_page_slug . '/page/?([0-9]{1,})/?$', 'index.php?pagename=' . $courses_page_slug . '&paged=$matches[1]', 'top' );
-		add_rewrite_rule( '^' . $courses_page_slug . '/([^/]+)/([0-9]+)/lesson/([0-9]+)/?$', 'index.php?post_type=' . \BlueDolphin\Lms\BDLMS_COURSE_CPT . '&section=$matches[2]&name=$matches[1]&item_id=$matches[3]&curriculum_type=lesson', 'bottom' );
-		add_rewrite_rule( '^' . $courses_page_slug . '/([^/]+)/([0-9]+)/quiz/([0-9]+)/?$', 'index.php?post_type=' . \BlueDolphin\Lms\BDLMS_COURSE_CPT . '&section=$matches[2]&name=$matches[1]&item_id=$matches[3]&curriculum_type=quiz', 'bottom' );
-		$course_result = apply_filters( 'bdlms_course_result_endpoint', 'course-result' );
-		add_rewrite_rule( $course_result . '/([0-9]+)[/]?$', 'index.php?course_id=$matches[1]', 'top' );
-		if ( ! get_option( 'bdlms_permalinks_flushed', 0 ) ) {
+		add_rewrite_rule( '^' . $courses_page_slug . '/([^/]+)/([0-9]+)/lesson/([0-9]+)/?$', 'index.php?post_type=' . \ST\Lms\STLMS_COURSE_CPT . '&section=$matches[2]&name=$matches[1]&item_id=$matches[3]&curriculum_type=lesson', 'bottom' );
+		add_rewrite_rule( '^' . $courses_page_slug . '/([^/]+)/([0-9]+)/quiz/([0-9]+)/?$', 'index.php?post_type=' . \ST\Lms\STLMS_COURSE_CPT . '&section=$matches[2]&name=$matches[1]&item_id=$matches[3]&curriculum_type=quiz', 'bottom' );
+		$course_result = apply_filters( 'stlms_course_result_endpoint', 'course-result' );
+		add_rewrite_rule( $course_result . '/([0-9]+)[/]?$', 'index.php?course_id=$matches[1]&show_result=1', 'top' );
+		if ( ! get_option( 'stlms_permalinks_flushed', 0 ) ) {
 			flush_rewrite_rules( false );
-			update_option( 'bdlms_permalinks_flushed', 1 );
+			update_option( 'stlms_permalinks_flushed', 1 );
 		}
 	}
 
@@ -314,6 +315,7 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 		$query_vars[] = 'curriculum_type';
 		$query_vars[] = 'section';
 		$query_vars[] = 'course_id';
+		$query_vars[] = 'show_result';
 		return $query_vars;
 	}
 
@@ -323,6 +325,6 @@ class Core implements \BlueDolphin\Lms\Interfaces\AdminCore {
 	 * @param bool $show Show admin bar.
 	 */
 	public function show_admin_bar( $show ) {
-		return apply_filters( 'bdlms_show_admin_bar', false );
+		return apply_filters( 'stlms_show_admin_bar', false );
 	}
 }

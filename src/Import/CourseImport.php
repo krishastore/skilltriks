@@ -2,36 +2,36 @@
 /**
  * The file that manage the import course.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  */
 
-namespace BlueDolphin\Lms\Import;
+namespace ST\Lms\Import;
 
-use function BlueDolphin\Lms\explode_import_data as explodeData;
-use const BlueDolphin\Lms\BDLMS_COURSE_CATEGORY_TAX;
-use const BlueDolphin\Lms\META_KEY_COURSE_CURRICULUM;
-use const BlueDolphin\Lms\META_KEY_COURSE_ASSESSMENT;
-use const BlueDolphin\Lms\META_KEY_COURSE_MATERIAL;
-use const BlueDolphin\Lms\META_KEY_COURSE_INFORMATION;
-use const BlueDolphin\Lms\BDLMS_COURSE_TAXONOMY_TAG;
-use const BlueDolphin\Lms\BDLMS_QUIZ_CPT;
-use const BlueDolphin\Lms\BDLMS_LESSON_CPT;
+use function ST\Lms\explode_import_data as explodeData;
+use const ST\Lms\STLMS_COURSE_CATEGORY_TAX;
+use const ST\Lms\META_KEY_COURSE_CURRICULUM;
+use const ST\Lms\META_KEY_COURSE_ASSESSMENT;
+use const ST\Lms\META_KEY_COURSE_MATERIAL;
+use const ST\Lms\META_KEY_COURSE_INFORMATION;
+use const ST\Lms\STLMS_COURSE_TAXONOMY_TAG;
+use const ST\Lms\STLMS_QUIZ_CPT;
+use const ST\Lms\STLMS_LESSON_CPT;
 
 
 /**
  * Import lesson class
  */
-class CourseImport extends \BlueDolphin\Lms\Helpers\FileImport {
+class CourseImport extends \ST\Lms\Helpers\FileImport {
 
 	/**
 	 * Class construct.
 	 */
 	public function __construct() {
 		$this->import_type  = 3;
-		$this->taxonomy_tag = BDLMS_COURSE_CATEGORY_TAX;
+		$this->taxonomy_tag = STLMS_COURSE_CATEGORY_TAX;
 		$this->init();
 	}
 
@@ -65,18 +65,18 @@ class CourseImport extends \BlueDolphin\Lms\Helpers\FileImport {
 			'post_excerpt' => ! empty( $value[1] ) ? $value[1] : '',
 			'post_content' => ! empty( $value[2] ) ? $value[2] : '',
 			'post_status'  => 'publish',
-			'post_type'    => \BlueDolphin\Lms\BDLMS_COURSE_CPT,
+			'post_type'    => \ST\Lms\STLMS_COURSE_CPT,
 			'post_author'  => 1,
 		);
 
 		$terms = ! empty( $value[3] ) ? explodeData( $value[3] ) : array();
 
 		foreach ( $terms as $_term ) {
-			if ( term_exists( $_term, BDLMS_COURSE_TAXONOMY_TAG ) ) {
-				$existing_term = get_term_by( 'name', $_term, BDLMS_COURSE_TAXONOMY_TAG );
+			if ( term_exists( $_term, STLMS_COURSE_TAXONOMY_TAG ) ) {
+				$existing_term = get_term_by( 'name', $_term, STLMS_COURSE_TAXONOMY_TAG );
 				$terms_id[]    = $existing_term->term_id;
 			} else {
-				$terms      = wp_insert_term( $_term, BDLMS_COURSE_TAXONOMY_TAG );
+				$terms      = wp_insert_term( $_term, STLMS_COURSE_TAXONOMY_TAG );
 				$terms_id[] = $terms['term_id'];
 			}
 		}
@@ -90,17 +90,45 @@ class CourseImport extends \BlueDolphin\Lms\Helpers\FileImport {
 			if ( is_numeric( $item ) ) {
 				$item_id = get_post( (int) $item ) ? (int) $item : 0;
 			} else {
-				if ( ! function_exists( 'post_exists' ) ) {
-					require_once ABSPATH . 'wp-admin/includes/post.php';
-				}
-				if ( str_contains( $item, 'Quiz:' ) ) { // @phpstan-ignore function.notFound
-					$item    = ltrim( $item, 'Quiz:' );
-					$item_id = post_exists( $item, '', '', BDLMS_QUIZ_CPT );
+				$item_id = 0;
+				if ( str_contains( $item, 'Quiz:' ) ) { // @phpstan-ignore-line
+					$item      = ltrim( $item, 'Quiz:' );
+					$quiz_data = get_posts(
+						array(
+							'title'       => $item,
+							'post_type'   => STLMS_QUIZ_CPT,
+							'numberposts' => 1,
+							'fields'      => 'ids',
+						)
+					);
+					if ( ! empty( $quiz_data ) ) {
+						$item_id = reset( $quiz_data );
+					}
 				} else {
-					$item_id = post_exists( $item, '', '', BDLMS_LESSON_CPT );
+					$lesson_data = get_posts(
+						array(
+							'title'       => $item,
+							'post_type'   => STLMS_LESSON_CPT,
+							'numberposts' => 1,
+							'fields'      => 'ids',
+						)
+					);
+					if ( ! empty( $lesson_data ) ) {
+						$item_id = reset( $lesson_data );
+					}
 
-					if ( 0 === $item_id ) {
-						$item_id = post_exists( $item, '', '', BDLMS_QUIZ_CPT );
+					if ( ! $item_id ) {
+						$quiz_data = get_posts(
+							array(
+								'title'       => $item,
+								'post_type'   => STLMS_QUIZ_CPT,
+								'numberposts' => 1,
+								'fields'      => 'ids',
+							)
+						);
+						if ( ! empty( $quiz_data ) ) {
+							$item_id = reset( $quiz_data );
+						}
 					}
 				}
 			}
@@ -143,7 +171,7 @@ class CourseImport extends \BlueDolphin\Lms\Helpers\FileImport {
 
 		// create course.
 		$course_id = wp_insert_post( $course );
-		wp_set_post_terms( $course_id, $terms_id, BDLMS_COURSE_TAXONOMY_TAG );
+		wp_set_post_terms( $course_id, $terms_id, STLMS_COURSE_TAXONOMY_TAG );
 		return $course_id;
 	}
 }

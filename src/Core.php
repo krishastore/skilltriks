@@ -5,18 +5,18 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://getbluedolphin.com
+ * @link       https://www.skilltriks.com/
  * @since      1.0.0
  *
- * @package    BlueDolphin\Lms
+ * @package    ST\Lms
  *
  * phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
  */
 
-namespace BlueDolphin\Lms;
+namespace ST\Lms;
 
-use BlueDolphin\Lms\Collections\PostTypes as RegisterPostType;
-use BlueDolphin\Lms\Collections\Taxonomies as RegisterTaxonomies;
+use ST\Lms\Collections\PostTypes as RegisterPostType;
+use ST\Lms\Collections\Taxonomies as RegisterTaxonomies;
 
 /**
  * The core plugin class.
@@ -27,20 +27,20 @@ use BlueDolphin\Lms\Collections\Taxonomies as RegisterTaxonomies;
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  */
-final class BlueDolphin {
+final class Core {
 
 	/**
 	 * Plugin version.
 	 *
-	 * @var int|string Plugin version. Default `BDLMS_VERSION`
+	 * @var int|string Plugin version. Default `STLMS_VERSION`
 	 * @since 1.0.0
 	 */
-	private $version = BDLMS_VERSION;
+	private $version = STLMS_VERSION;
 
 	/**
 	 * The main instance var.
 	 *
-	 * @var BlueDolphin|null The one BlueDolphin instance.
+	 * @var Core|null The one Core instance.
 	 * @since 1.0.0
 	 */
 	private static $instance = null;
@@ -55,11 +55,11 @@ final class BlueDolphin {
 	/**
 	 * Init the main singleton instance class.
 	 *
-	 * @return BlueDolphin Return the instance class
+	 * @return Core Return the instance class
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
-			self::$instance = new BlueDolphin();
+			self::$instance = new Core();
 		}
 
 		return self::$instance;
@@ -77,14 +77,14 @@ final class BlueDolphin {
 	 */
 	public function init() {
 		$this->collections = apply_filters(
-			'bdlms/collections',
+			'stlms/collections',
 			array(
 				new RegisterPostType(),
 				new RegisterTaxonomies(),
 			)
 		);
 		$this->load_collections();
-		$admin_instance = new \BlueDolphin\Lms\Admin\Core( $this->version, self::instance() );
+		$admin_instance = new \ST\Lms\Admin\Core( $this->version, self::instance() );
 	}
 
 	/**

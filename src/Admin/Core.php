@@ -76,7 +76,7 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		$hook = add_menu_page(
 			__( 'SkillTriks LMS', 'skilltriks' ),
 			__( 'SkillTriks LMS', 'skilltriks' ),
-			apply_filters( 'stlms/menu/capability', 'manage_options' ),
+			apply_filters( 'stlms/menu/capability', 'edit_posts' ),
 			PARENT_MENU_SLUG,
 			'__return_empty_string',
 			'dashicons-welcome-learn-more',

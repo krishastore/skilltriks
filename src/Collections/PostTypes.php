@@ -340,7 +340,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 	public function quick_actions( $actions, $post ) {
 		// Clone action.
 		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUIZ_CPT, \ST\Lms\STLMS_LESSON_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
-			$url                   = wp_nonce_url(
+			$url       = wp_nonce_url(
 				add_query_arg(
 					array(
 						'action' => 'stlms_clone',
@@ -351,7 +351,11 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 				STLMS_BASEFILE,
 				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
+			$suffix    = \ST\Lms\STLMS_QUIZ_CPT === $post->post_type ? 'zes' : 's';
+			$post_type = ltrim( $post->post_type, 'stlms' ) . $suffix;
+			if ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published' . $post_type ) && current_user_can( 'edit_others' . $post_type ) ) ) {
+				$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
+			}
 		}
 		return $actions;
 	}

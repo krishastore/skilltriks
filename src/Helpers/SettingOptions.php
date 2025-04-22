@@ -460,14 +460,14 @@ class SettingOptions {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			$caps         = isset( $_POST['users_can'] ) ? map_deep( $_POST['users_can'], 'sanitize_text_field' ) : array();
 			$user_role    = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
-			$default_caps = ! empty( get_role( 'subscriber' ) ) ? get_role( 'subscriber' )->capabilities : array( 'read' => true );
+			$default_caps = ! empty( get_role( 'author' ) ) ? get_role( 'author' )->capabilities : array( 'read' => true );
 
 			if ( ! empty( $user_role ) && ! empty( $caps ) ) {
 				if ( array_key_exists( $user_role, $this->options['user_role'] ) ) {
 					$caps        = array_fill_keys( $caps, true );
 					$role_exists = get_role( $user_role );
+					$caps        = array_merge( $caps, $default_caps );
 					if ( empty( $role_exists ) ) {
-						$caps = array_merge( $caps, $default_caps );
 						add_role( $user_role, $this->options['user_role'][ $user_role ], $caps );
 					} else {
 						$existing_caps = get_role( $user_role )->capabilities;

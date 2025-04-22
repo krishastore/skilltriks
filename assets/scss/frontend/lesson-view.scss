@@ -208,6 +208,7 @@
   flex-direction: column;
   padding: 12px;
   background: $white;
+  z-index: 123;
   @include transition(all 0.3s ease-in-out);
   @include breakpoint(max, $md) {
     position: fixed;
@@ -307,7 +308,7 @@
             display: flex;
             font-size: 16px;
             font-weight: 500;
-            align-items: center;
+
             @include breakpoint(max, $md) {
               font-size: $font_size_sm;
             }
@@ -351,11 +352,16 @@
   }
 }
 
-.stlms-course-requirement-box .class-type {
-  @include breakpoint(max, 767) {
-    position: absolute;
-    top: 0;
-    left: 0;
+.stlms-course-requirement-box {
+  .class-type {
+    @include breakpoint(max, 767) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  .class-name {
+    align-items: center;
   }
 }
 

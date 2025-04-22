@@ -70,6 +70,25 @@ class Capability extends \WP_List_Table {
 	}
 
 	/**
+	 * Removes the additional user capability from the user on removal of role.
+	 *
+	 * @param string $role_id Role name.
+	 */
+	protected function remove_additional_user_caps( $role_id ) {
+		$args  = array(
+			'role'   => $role_id,
+			'fields' => 'all',
+		);
+		$users = get_users( $args );
+
+		foreach ( $users as $user ) {
+			if ( $user->has_cap( $role_id ) ) {
+				$user->remove_cap( $role_id );
+			}
+		}
+	}
+
+	/**
 	 * Handle delete role action
 	 */
 	protected function handle_delete_action() {
@@ -91,6 +110,7 @@ class Capability extends \WP_List_Table {
 			$role_exists = get_option( 'stlms_settings', array() );
 			if ( ! empty( $role_id ) && array_key_exists( $role_id, $role_exists['user_role'] ) ) {
 				if ( ! empty( get_role( $role_id ) ) ) {
+					$this->remove_additional_user_caps( $role_id );
 					remove_role( $role_id );
 				}
 				unset( $role_exists['user_role'][ $role_id ] );

@@ -187,6 +187,7 @@ jQuery(function ($) {
     url.searchParams.delete('_s');
 	url.searchParams.delete('levels');
     $('.stlms-filter-form input[name="category"]').val('');
+    $('.stlms-filter-form input[name="progress"]:hidden').val('');
     $('.stlms-filter-form input[name="_s"]').val('');
 	$('.stlms-filter-list input:checkbox').removeAttr("checked");
 	$('.stlms-filter-list input:radio').removeAttr("checked");
@@ -199,6 +200,23 @@ jQuery(function ($) {
 	// 	var clean_uri = uri.substring(0, uri.indexOf("?"));
 	// 	window.history.replaceState({}, document.title, clean_uri);
 	// }
+});
+
+jQuery(function($) {
+	$('input[id^="st_course_term"]').each(function() {
+		if ($('input[id^="st_course_term"]').prop('checked')) {
+			$('#stlms_category_all').prop('checked', true);
+		} else {
+			$('#stlms_category_all').prop('checked', false);
+		}
+	});
+	$('input[id^="st_course_level"]').each(function() {
+		if ($('input[id^="st_course_level"]').prop('checked')) {
+			$('#stlms_level_all').prop('checked', true);
+		} else {
+			$('#stlms_level_all').prop('checked', false);
+		}
+	});
 });
 
 jQuery(window).on('load', function() {

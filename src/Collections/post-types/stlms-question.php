@@ -14,6 +14,20 @@ use const ST\Lms\PARENT_MENU_SLUG;
  * Registers the `stlms_question` post type.
  */
 function stlms_question_init() {
+	$capability = array(
+		'edit_post'              => 'edit_question',
+		'read_post'              => 'read_question',
+		'delete_post'            => 'delete_question',
+		'edit_posts'             => 'edit_questions',
+		'edit_others_posts'      => 'edit_others_questions',
+		'publish_posts'          => 'publish_questions',
+		'delete_posts'           => 'delete_questions',
+		'delete_published_posts' => 'delete_published_questions',
+		'delete_others_posts'    => 'delete_others_questions',
+		'edit_published_posts'   => 'edit_published_questions',
+		'create_posts'           => 'create_questions',
+	);
+	$capability = apply_filters( 'stlms/question/capability', $capability );
 	register_post_type(
 		STLMS_QUESTION_CPT,
 		array(
@@ -44,10 +58,13 @@ function stlms_question_init() {
 				'parent_item_colon'     => __( 'Parent question:', 'skilltriks' ),
 				'menu_name'             => __( 'Questions', 'skilltriks' ),
 			),
+			'capability_type'       => ! current_user_can( 'manage_options' ) ? 'question' : 'post',
+			'map_meta_cap'          => true,
+			'capabilities'          => ! current_user_can( 'manage_options' ) ? $capability : array(),
 			'publicly_queryable'    => false,
 			'public'                => true,
 			'hierarchical'          => false,
-			'show_in_menu'          => PARENT_MENU_SLUG,
+			'show_in_menu'          => current_user_can( apply_filters( 'stlms/question_menu/capability', 'edit_questions' ) ) || current_user_can( 'manage_options' ) ? PARENT_MENU_SLUG : false,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => true,
 			'supports'              => array( 'title', 'editor', 'revisions', 'author' ),

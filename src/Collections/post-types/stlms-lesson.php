@@ -14,6 +14,20 @@ use const ST\Lms\PARENT_MENU_SLUG;
  * Registers the `stlms_lesson` post type.
  */
 function stlms_lesson_init() {
+	$capability = array(
+		'edit_post'              => 'edit_lesson',
+		'read_post'              => 'read_lesson',
+		'delete_post'            => 'delete_lesson',
+		'edit_posts'             => 'edit_lessons',
+		'edit_others_posts'      => 'edit_others_lessons',
+		'publish_posts'          => 'publish_lessons',
+		'delete_posts'           => 'delete_lessons',
+		'delete_published_posts' => 'delete_published_lessons',
+		'delete_others_posts'    => 'delete_others_lessons',
+		'edit_published_posts'   => 'edit_published_lessons',
+		'create_posts'           => 'create_lessons',
+	);
+	$capability = apply_filters( 'stlms/lesson/capability', $capability );
 	register_post_type(
 		STLMS_LESSON_CPT,
 		array(
@@ -44,10 +58,13 @@ function stlms_lesson_init() {
 				'parent_item_colon'     => __( 'Parent lesson:', 'skilltriks' ),
 				'menu_name'             => __( 'Lessons', 'skilltriks' ),
 			),
+			'capability_type'       => ! current_user_can( 'manage_options' ) ? 'lesson' : 'post',
+			'map_meta_cap'          => true,
+			'capabilities'          => ! current_user_can( 'manage_options' ) ? $capability : array(),
 			'publicly_queryable'    => false,
 			'public'                => true,
 			'hierarchical'          => false,
-			'show_in_menu'          => PARENT_MENU_SLUG,
+			'show_in_menu'          => current_user_can( apply_filters( 'stlms/lesson_menu/capability', 'edit_lessons' ) ) || current_user_can( 'manage_options' ) ? PARENT_MENU_SLUG : false,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => true,
 			'supports'              => array( 'title', 'editor', 'revisions', 'author' ),

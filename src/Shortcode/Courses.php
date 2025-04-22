@@ -466,7 +466,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			'post_title'  => $result_title,
 			'ID'          => $result_id ? $result_id : 0,
 			'meta_input'  => $quiz_data,
-			'post_author' => 2,
+			'post_author' => get_current_user_id(),
 			'post_status' => 'publish',
 		);
 		$result_id   = wp_insert_post( $result_args );

@@ -14,6 +14,20 @@ use const ST\Lms\PARENT_MENU_SLUG;
  * Registers the `stlms_quiz` post type.
  */
 function stlms_quiz_init() {
+	$capability = array(
+		'edit_post'              => 'edit_quiz',
+		'read_post'              => 'read_quiz',
+		'delete_post'            => 'delete_quiz',
+		'edit_posts'             => 'edit_quizzes',
+		'edit_others_posts'      => 'edit_others_quizzes',
+		'publish_posts'          => 'publish_quizzes',
+		'delete_posts'           => 'delete_quizzes',
+		'delete_published_posts' => 'delete_published_quizzes',
+		'delete_others_posts'    => 'delete_others_quizzes',
+		'edit_published_posts'   => 'edit_published_quizzes',
+		'create_posts'           => 'create_quizzes',
+	);
+	$capability = apply_filters( 'stlms/quiz/capability', $capability );
 	register_post_type(
 		STLMS_QUIZ_CPT,
 		array(
@@ -44,10 +58,13 @@ function stlms_quiz_init() {
 				'parent_item_colon'     => __( 'Parent quiz:', 'skilltriks' ),
 				'menu_name'             => __( 'Quizzes', 'skilltriks' ),
 			),
+			'capability_type'       => ! current_user_can( 'manage_options' ) ? array( 'quiz', 'quizzes' ) : 'post',
+			'map_meta_cap'          => true,
+			'capabilities'          => ! current_user_can( 'manage_options' ) ? $capability : array(),
 			'publicly_queryable'    => false,
 			'public'                => true,
 			'hierarchical'          => false,
-			'show_in_menu'          => PARENT_MENU_SLUG,
+			'show_in_menu'          => current_user_can( apply_filters( 'stlms/course_menu/capability', 'edit_quizzes' ) ) || current_user_can( 'manage_options' ) ? PARENT_MENU_SLUG : false,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => true,
 			'supports'              => array( 'title', 'editor', 'revisions', 'author' ),

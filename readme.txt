@@ -1,4 +1,6 @@
 === SkillTriks ===
+Author: KrishaWeb
+Author URI: https://profiles.wordpress.org/krishaweb/
 Contributors: krishaweb, dilipbheda, Dhruvang21, parthvataliya
 Tags: learnpress, lms, e-learning, education, courses
 Requires at least: 6.0

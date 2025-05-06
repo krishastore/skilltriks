@@ -163,11 +163,13 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 	 * @return void
 	 */
 	public static function create_default_roles() {
-		$capabilities = get_role( 'subscriber' );
 		add_role(
 			'stlms',
 			esc_html__( 'SkillTriks LMS', 'skilltriks' ),
-			$capabilities->capabilities
+			array(
+				'read'    => true,
+				'level_0' => true,
+			)
 		);
 	}
 

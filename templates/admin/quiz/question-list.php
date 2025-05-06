@@ -26,6 +26,7 @@ foreach ( $questions as $question_id ) :
 	$explanation = isset( $settings['explanation'] ) ? esc_textarea( $settings['explanation'] ) : '';
 	$levels      = isset( $settings['levels'] ) ? esc_textarea( $settings['levels'] ) : '';
 	$qstatus     = isset( $settings['status'] ) ? $settings['status'] : 0;
+	$is_draft    = 'draft' === get_post_status( $question_id );
 	?>
 	<li>
 		<input type="hidden" class="stlms-qid" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[question_id][]" value="<?php echo (int) $question_id; ?>">
@@ -37,7 +38,7 @@ foreach ( $questions as $question_id ) :
 					</svg>
 				</div>
 				<div class="stlms-quiz-qus-name">
-					<span><?php echo esc_html( $question_title ); ?></span>
+					<span><?php echo esc_html( $question_title ); ?><?php $is_draft ? esc_html_e( ' - Draft', 'skilltriks' ) : ''; ?></span>
 					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( _n( '%s Point', '%s Points', $point, 'skilltriks' ), number_format_i18n( $point ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 				</div>
 				<div class="stlms-quiz-qus-toggle" data-accordion="true">
@@ -303,6 +304,7 @@ foreach ( $questions as $question_id ) :
 				</div>
 			</div>
 			<div class="stlms-quiz-qus-item__footer">
+				<?php if ( ( current_user_can( 'edit_other_questions' ) && current_user_can( 'edit_published_questions' ) ) || ( current_user_can( 'manage_options' ) ) ) : // phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
 				<a href="javascript:;" data-accordion="true">
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#edit"></use>
@@ -315,6 +317,7 @@ foreach ( $questions as $question_id ) :
 					</svg>
 					<?php esc_html_e( 'Duplicate', 'skilltriks' ); ?>
 				</a>
+				<?php endif; ?>
 				<a href="javascript:;" class="stlms-delete-link">
 					<svg class="icon" width="12" height="12">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>

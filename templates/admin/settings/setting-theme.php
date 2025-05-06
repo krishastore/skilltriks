@@ -23,9 +23,6 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 		<li>
 			<div class="theme-template-card">
 				<div class="card-top">
-					<div class="image-wrap">
-						<img src="https://dummyimage.com/600x400/fff/000&text=stlms" alt="">
-					</div>
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-default' === $theme_name ) { ?>
@@ -58,9 +55,6 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 		<li>
 			<div class="theme-template-card">
 				<div class="card-top">
-					<div class="image-wrap">
-						<img src="https://dummyimage.com/600x400/fff/000&text=stlms" alt="">
-					</div>
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-2' === $theme_name ) { ?>
@@ -95,5 +89,4 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 </div>
 
 <div class="preview-theme-modal wp-dialog stlms-modal bulk-import-modal" id='bulk-import-modal'>
-	<img src="https://dummyimage.com/1920x1080/000/fff" alt="">
 </div>

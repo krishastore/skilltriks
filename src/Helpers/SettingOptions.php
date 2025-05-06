@@ -302,18 +302,10 @@ class SettingOptions {
 			<nav class="nav-tab-wrapper">
 				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks' ); ?></a>
 				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks' ); ?></a>
-				<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks' ); ?></a>
-				<?php endif; ?>
 			</nav>
 			<?php
 			if ( 'bulk-import' === $tab ) {
 				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-bulk-import.php';
-			} elseif ( 'theme' === $tab ) {
-				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-theme.php';
-			} elseif ( 'customise-theme' === $tab ) {
-				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-customise-theme.php';
 			} else {
 				require_once STLMS_TEMPLATEPATH . '/admin/settings/setting-general.php';
 			}

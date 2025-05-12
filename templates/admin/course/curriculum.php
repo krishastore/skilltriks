@@ -123,7 +123,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 												</svg>
 											</a>
 										<?php endif; ?>
-										<?php if ( ( current_user_can( 'edit_others_lessons' ) && current_user_can( 'edit_published_lessons' ) ) || ( current_user_can( 'manage_options' ) ) ) : // phpcs:ignore WordPress.WP.Capabilities.Unknown ?> 
+										<?php $suffix = 'lesson' === $item_type ? $item_type . 's' : $item_type . 'zes'; ?>
+										<?php if ( ( current_user_can( 'edit_others_' . $suffix ) && current_user_can( 'edit_published_' . $suffix ) ) || ( current_user_can( 'manage_options' ) ) ) : // phpcs:ignore WordPress.WP.Capabilities.Unknown ?> 
 										<a href="<?php echo esc_url( get_edit_post_link( $item_id, null ) ); ?>" class="curriculum-edit-item" target="_blank">
 											<svg class="icon" width="12" height="12">
 												<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#file-edit"></use>

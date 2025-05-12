@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name:     SkillTriks
- * Plugin URI:
+ * Plugin URI:      https://wordpress.org/plugins/skilltriks/
  * Description:     A Comprehensive Solution For Training Management. Contact Us For More Details On Training Management System.
  * Author:          KrishaWeb
  * Author URI:      https://www.skilltriks.com/
  * Text Domain:     skilltriks
- * License:         GPL v2 or later
+ * License:         GPLv3 or later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:     /languages
- * Version:         1.0.0
+ * Version:         1.0
  *
  * @package         ST\Lms
  */

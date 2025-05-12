@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="add_new_question" class="hidden stlms-add-qus-modal" style="max-width:463px">
 	<div class="stlms-btn-group">
-		<?php if ( ( current_user_can( 'create_questions' ) && current_user_can( 'publish_questions' ) ) || ( current_user_can( 'manage_options' ) ) ) : //phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
+		<?php if ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published_questions' ) && current_user_can( 'edit_others_questions' ) ) ) : //phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
 		<button class="button button-primary create-your-own"><?php esc_html_e( 'Create Your Own', 'skilltriks' ); ?></button>
 		<?php endif; ?>
 		<button class="button open-questions-bank"><?php esc_html_e( 'Add From Existing', 'skilltriks' ); ?></button>

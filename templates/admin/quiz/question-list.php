@@ -38,14 +38,16 @@ foreach ( $questions as $question_id ) :
 					</svg>
 				</div>
 				<div class="stlms-quiz-qus-name">
-					<span><?php echo esc_html( $question_title ); ?><?php $is_draft ? esc_html_e( ' - Draft', 'skilltriks' ) : ''; ?></span>
+					<span><?php echo esc_html( $question_title ); ?></span><span class="stlms-quiz-qus-draft"><?php $is_draft ? esc_html_e( ' - Draft', 'skilltriks' ) : ''; ?></span>
 					<span class="stlms-quiz-qus-point"><?php echo esc_html( sprintf( _n( '%s Point', '%s Points', $point, 'skilltriks' ), number_format_i18n( $point ) ) ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment ?></span>
 				</div>
+				<?php if ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published_questions' ) && current_user_can( 'edit_others_questions' ) ) ) : //phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
 				<div class="stlms-quiz-qus-toggle" data-accordion="true">
 					<svg class="icon" width="18" height="18">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#down-arrow"></use>
 					</svg>
 				</div>
+				<?php endif; ?>
 			</div>
 			<div class="stlms-quiz-qus-item__body">
 				<div class="stlms-answer-wrap">

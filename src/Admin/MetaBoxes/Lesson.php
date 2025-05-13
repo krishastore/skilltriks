@@ -167,7 +167,21 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 			);
 			if ( ! empty( $_POST['courses'] ) ) {
 				$courses = isset( $_POST['courses'] ) ? map_deep( $_POST['courses'], 'intval' ) : array();
-				update_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, array_unique( $courses ) );
+				foreach ( $courses as $course ) {
+					$curriculums = get_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+					$curriculums = ! empty( $curriculums ) ? $curriculums : array(
+						array(
+							'section_name' => '',
+							'section_desc' => '',
+							'items'        => array(),
+						),
+					);
+					$last_index  = array_key_last( $curriculums );
+					if ( isset( $curriculums[ $last_index ]['items'] ) && ! in_array( $post_id, $curriculums[ $last_index ]['items'], true ) ) {
+						$curriculums[ $last_index ]['items'][] = $post_id;
+					}
+					update_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
+				}
 			}
 		}
 
@@ -514,13 +528,24 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		}
 		foreach ( $updated as $lesson_id ) {
 			if ( ! empty( $post_data['bulk_courses'] ) ) {
-				$courses      = get_post_meta( $lesson_id, META_KEY_LESSON_COURSE_IDS, true );
-				$courses      = ! empty( $courses ) ? $courses : array();
 				$bulk_courses = map_deep( $post_data['bulk_courses'], 'intval' );
-				$courses      = array_merge( $courses, $bulk_courses );
-				update_post_meta( $lesson_id, META_KEY_LESSON_COURSE_IDS, array_unique( $courses ) );
+				foreach ( $bulk_courses as $course ) {
+					$curriculums = get_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+					$curriculums = ! empty( $curriculums ) ? $curriculums : array(
+						array(
+							'section_name' => '',
+							'section_desc' => '',
+							'items'        => array(),
+						),
+					);
+					$last_index  = array_key_last( $curriculums );
+					if ( isset( $curriculums[ $last_index ]['items'] ) && ! in_array( $lesson_id, $curriculums[ $last_index ]['items'], true ) ) {
+						$curriculums[ $last_index ]['items'][] = $lesson_id;
+					}
+					update_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
+				}
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-				EL::add( sprintf( 'Bulk course assigned: %s, Post ID: %d', print_r( array_unique( $courses ), true ), $lesson_id ), 'info', __FILE__, __LINE__ );
+				EL::add( sprintf( 'Bulk course assigned: %s, Post ID: %d', print_r( array_unique( $bulk_courses ), true ), $lesson_id ), 'info', __FILE__, __LINE__ );
 			}
 		}
 	}

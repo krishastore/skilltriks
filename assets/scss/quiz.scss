@@ -120,11 +120,16 @@ $color_1: #23282d;
 			font-size: 14px;
 			color: #272d31;
 			font-weight: 600;
-			gap: 16px;
+			gap: 8px;
 			.stlms-quiz-qus-point {
 				font-size: 12px;
 				font-weight: 400;
 				text-wrap: nowrap;
+				margin-left: auto;
+				padding-left: 8px;
+			}
+			.stlms-quiz-qus-draft {
+				color:#a53934;
 			}
 		}
 		.stlms-quiz-qus-toggle {

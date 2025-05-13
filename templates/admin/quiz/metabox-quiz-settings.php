@@ -32,24 +32,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</li>
 		<li>
-			<div class="stlms-setting-label"><?php esc_html_e( 'Negative Marking', 'skilltriks' ); ?></div>
-			<div class="stlms-setting-option">
-				<div class="stlms-setting-checkbox">
-					<input name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][negative_marking]" type="checkbox" id="stlms-neg-mark"<?php checked( 1, $settings['negative_marking'] ); ?>>
-					<label for="stlms-neg-mark"><?php esc_html_e( 'Each question that answer wrongly, the total point is deducted exactly from the question\'s point.', 'skilltriks' ); ?></label>
-				</div>
-			</div>
-		</li>
-		<li>
-			<div class="stlms-setting-label"><?php esc_html_e( 'Review', 'skilltriks' ); ?></div>
-			<div class="stlms-setting-option">
-				<div class="stlms-setting-checkbox">
-					<input name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[settings][review]" type="checkbox" id="stlms-review"<?php checked( 1, $settings['review'] ); ?>>
-					<label for="stlms-review"><?php esc_html_e( 'Allow students to review this quiz after they finish the quiz.', 'skilltriks' ); ?></label>
-				</div>
-			</div>
-		</li>
-		<li>
 			<div class="stlms-setting-label"><?php esc_html_e( 'Show Correct Answer', 'skilltriks' ); ?></div>
 			<div class="stlms-setting-option">
 				<div class="stlms-setting-checkbox">

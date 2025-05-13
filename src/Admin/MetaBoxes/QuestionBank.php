@@ -420,13 +420,13 @@ class QuestionBank extends \ST\Lms\Collections\PostTypes {
 				$data['optional']  = ! empty( $optional ) ? $optional : '';
 			}
 			$data['status'] = $post->post_status;
-			if ( current_user_can( 'manage_options' ) || current_user_can( 'edit_published_questions' ) ) { //phpcs:ignore WordPress.WP.Capabilities.Unknown
+			if ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published_questions' ) && current_user_can( 'edit_others_questions' ) ) ) { //phpcs:ignore WordPress.WP.Capabilities.Unknown
 				$actions['show_answer'] = '<a href="javascript:;" data-inline_edit="' . esc_attr( wp_json_encode( $data ) ) . '" aria-expanded="false">' . __( 'Show Answer', 'skilltriks' ) . '<a>';
 			}
 		}
 
 		// Clone action.
-		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUESTION_CPT ), true ) && ( current_user_can( 'manage_options' ) || current_user_can( 'edit_published_questions' ) ) ) { //phpcs:ignore WordPress.WP.Capabilities.Unknown
+		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUESTION_CPT ), true ) && ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published_questions' ) && current_user_can( 'edit_others_questions' ) ) ) ) { //phpcs:ignore WordPress.WP.Capabilities.Unknown
 			$url                   = wp_nonce_url(
 				add_query_arg(
 					array(

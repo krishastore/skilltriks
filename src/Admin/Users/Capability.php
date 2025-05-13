@@ -48,12 +48,12 @@ class Capability extends \WP_List_Table {
 		$data     = isset( $settings['user_role'] ) && ! empty( $settings['user_role'] ) ? $settings['user_role'] : array();
 
 		if ( ! empty( $search_by_name ) ) {
-			$result = array_filter(
+			$search_by_name = strtolower( $search_by_name );
+			$result         = array_filter(
 				$data,
 				function ( $value ) use ( $search_by_name ) {
-					return $value == $search_by_name; //phpcs:ignore.Universal.Operators.StrictComparisons.LooseEqual
-				},
-				ARRAY_FILTER_USE_BOTH
+					return stripos( $value, $search_by_name ) !== false;
+				}
 			);
 			return $result;
 		}

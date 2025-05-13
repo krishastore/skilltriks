@@ -663,3 +663,38 @@
 		}
 	}
 }
+
+.tooltip {
+	position: relative;
+	display: inline;
+	padding-left: 4px;
+	vertical-align: middle;
+	flex-shrink: 0;
+	
+  
+  .tooltip-text {
+	visibility: hidden;
+	max-width: 200px;
+	width: max-content;
+	background-color: #50575e;
+	color: #fff;
+	text-align: center;
+	border-radius: 4px;
+	padding: 5px 10px 10px;
+	font-size: 16px;
+	line-height: 1.1;
+	
+	position: absolute;
+	z-index: 1;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+  }
+
+
+  &:hover {
+	.tooltip-text {
+		visibility: visible;
+	}
+  }
+}

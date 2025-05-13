@@ -824,45 +824,37 @@ function user_capability_list() {
 	return apply_filters(
 		'stlms_user_capability_list',
 		array(
-			'course'   => array(
-				'create_courses'           => __( 'Create Courses', 'skilltriks' ),
-				'publish_courses'          => __( 'Publish Courses', 'skilltriks' ),
-				'edit_courses'             => __( 'View and Edit Courses', 'skilltriks' ),
-				'edit_others_courses'      => __( 'Edit Other Courses', 'skilltriks' ),
-				'delete_courses'           => __( 'Delete Courses', 'skilltriks' ),
-				'delete_others_courses'    => __( 'Delete Others Courses', 'skilltriks' ),
-				'edit_published_courses'   => __( 'Edit Published Courses', 'skilltriks' ),
-				'delete_published_courses' => __( 'Delete Published Courses', 'skilltriks' ),
+			'edit'             => array(
+				'label'   => __( 'Allow View & Edit', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user view and edit their own content.', 'skilltriks' ),
 			),
-			'lesson'   => array(
-				'create_lessons'           => __( 'Create lessons', 'skilltriks' ),
-				'publish_lessons'          => __( 'Publish lessons', 'skilltriks' ),
-				'edit_lessons'             => __( 'View and Edit lessons', 'skilltriks' ),
-				'edit_others_lessons'      => __( 'Edit Other lessons', 'skilltriks' ),
-				'delete_lessons'           => __( 'Delete lessons', 'skilltriks' ),
-				'delete_others_lessons'    => __( 'Delete Others lessons', 'skilltriks' ),
-				'edit_published_lessons'   => __( 'Edit Published lessons', 'skilltriks' ),
-				'delete_published_lessons' => __( 'Delete Published lessons', 'skilltriks' ),
+			'create'           => array(
+				'label'   => __( 'Allow To Create', 'skilltriks' ),
+				'tooltip' => __( ' Allows the user to create new content.', 'skilltriks' ),
 			),
-			'question' => array(
-				'create_questions'           => __( 'Create questions', 'skilltriks' ),
-				'publish_questions'          => __( 'Publish questions', 'skilltriks' ),
-				'edit_questions'             => __( 'View and Edit questions', 'skilltriks' ),
-				'edit_others_questions'      => __( 'Edit Other questions', 'skilltriks' ),
-				'delete_questions'           => __( 'Delete questions', 'skilltriks' ),
-				'delete_others_questions'    => __( 'Delete Others questions', 'skilltriks' ),
-				'edit_published_questions'   => __( 'Edit Published questions', 'skilltriks' ),
-				'delete_published_questions' => __( 'Delete Published questions', 'skilltriks' ),
+			'publish'          => array(
+				'label'   => __( 'Allow To Publish', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user publish their own content.', 'skilltriks' ),
 			),
-			'quiz'     => array(
-				'create_quizzes'           => __( 'Create quizzes', 'skilltriks' ),
-				'publish_quizzes'          => __( 'Publish quizzes', 'skilltriks' ),
-				'edit_quizzes'             => __( 'View and Edit quizzes', 'skilltriks' ),
-				'edit_others_quizzes'      => __( 'Edit Other quizzes', 'skilltriks' ),
-				'delete_quizzes'           => __( 'Delete quizzes', 'skilltriks' ),
-				'delete_others_quizzes'    => __( 'Delete Others quizzes', 'skilltriks' ),
-				'edit_published_quizzes'   => __( 'Edit Published quizzes', 'skilltriks' ),
-				'delete_published_quizzes' => __( 'Delete Published quizzes', 'skilltriks' ),
+			'edit_published'   => array(
+				'label'   => __( 'Allow To Edit Published', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to update their own published content.', 'skilltriks' ),
+			),
+			'edit_others'      => array(
+				'label'   => __( 'Allow To Edit Other', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user edit content created by others.', 'skilltriks' ),
+			),
+			'delete'           => array(
+				'label'   => __( 'Allow To Delete', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to delete their own content.', 'skilltriks' ),
+			),
+			'delete_published' => array(
+				'label'   => __( 'Allow To Delete Published', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user delete their own published content.', 'skilltriks' ),
+			),
+			'delete_others'    => array(
+				'label'   => __( 'Allow To Delete Others', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to delete content created by others.', 'skilltriks' ),
 			),
 		)
 	);

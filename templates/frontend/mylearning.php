@@ -62,6 +62,7 @@ $enrol_courses = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURS
 ?>
 
 <div class="stlms-wrap alignfull">
+	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
 	<div class="stlms-course-list-wrap">
 		<div class="stlms-container">
 			<div class="stlms-course-filter">
@@ -70,24 +71,6 @@ $enrol_courses = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURS
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 					</svg>
 				</button>
-				<?php do_action( 'stlms_before_search_bar' ); ?>
-				<div class="stlms-course-search">
-					<form onsubmit="return false;">
-						<div class="stlms-search">
-							<span class="stlms-search-icon">
-								<svg width="20" height="20">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#search"></use>
-								</svg>
-							</span>
-							<input type="text" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Search', 'skilltriks' ); ?>" value="<?php echo esc_attr( $search_keyword ); ?>">
-							<button type="submit" class="stlms-search-submit">
-								<svg width="22" height="22">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#angle-circle-right"></use>
-								</svg>
-							</button>
-						</div>
-					</form>
-				</div>
 				<form method="get" onsubmit="return false;" class="stlms-filter-form">
 					<div class="stlms-accordion">
 						<div class="stlms-accordion-item" data-expanded="true">

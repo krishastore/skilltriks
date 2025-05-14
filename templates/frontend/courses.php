@@ -71,6 +71,7 @@ $courses     = new \WP_Query( $course_args );
 
 ?>
 <div class="stlms-wrap alignfull">
+	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
 	<div class="stlms-course-list-wrap">
 		<div class="stlms-container">
 			<?php if ( isset( $args['filter'] ) && 'yes' === $args['filter'] ) : ?>
@@ -80,24 +81,6 @@ $courses     = new \WP_Query( $course_args );
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 					</svg>
 				</button>
-				<?php do_action( 'stlms_before_search_bar' ); ?>
-				<div class="stlms-course-search">
-					<form onsubmit="return false;">
-						<div class="stlms-search">
-							<span class="stlms-search-icon">
-								<svg width="20" height="20">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#search"></use>
-								</svg>
-							</span>
-							<input type="text" class="stlms-form-control" placeholder="<?php esc_attr_e( 'Search', 'skilltriks' ); ?>" value="<?php echo esc_attr( $search_keyword ); ?>">
-							<button type="submit" class="stlms-search-submit">
-								<svg width="22" height="22">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#angle-circle-right"></use>
-								</svg>
-							</button>
-						</div>
-					</form>
-				</div>
 				<form method="get" onsubmit="return false;" class="stlms-filter-form">
 					<div class="stlms-accordion stlms-pb-20">
 						<div class="stlms-accordion-item" data-expanded="true">
@@ -105,30 +88,18 @@ $courses     = new \WP_Query( $course_args );
 								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course category', 'skilltriks' ); ?></div>
 							</div>
 							<?php
-							$terms_list  = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
-							$total_count = $courses->found_posts;
+							$terms_list = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
 							?>
 							<div class="stlms-accordion-collapse">
 								<div class="stlms-filter-list">
-									<ul>
-										<li>
-											<div class="stlms-check-wrap">
-												<input type="checkbox" class="stlms-check" id="stlms_category_all">
-												<label for="stlms_category_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
-											</div>
-										</li>
-										<?php foreach ( $terms_list as $key => $course_term ) : ?>
-											<li>
-												<div class="stlms-check-wrap">
-													<input type="checkbox" name="category[]" class="stlms-check" id="st_course_term_<?php echo (int) $key; ?>" value="<?php echo esc_attr( $course_term['id'] ); ?>"<?php echo in_array( $course_term['id'], $category, true ) ? ' checked' : ''; ?>>
-													<label for="st_course_term_<?php echo (int) $key; ?>" class="stlms-check-label">
-														<?php echo esc_html( $course_term['name'] ); ?>
-														<span><?php echo esc_html( $course_term['count'] ); ?></span>
-													</label>
-												</div>
-											</li>
-										<?php endforeach; ?>
-									</ul>
+									<div class="stlms-form-group">
+										<select class="stlms-form-control category">
+											<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
+											<?php foreach ( $terms_list as $key => $term_level ) : ?>
+												<option value="<?php echo esc_attr( $term_level['id'] ); ?>" <?php selected( reset( $category ), $term_level['id'] ); ?>><?php echo esc_html( $term_level['name'] ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -144,12 +115,6 @@ $courses     = new \WP_Query( $course_args );
 							<div class="stlms-accordion-collapse">
 								<div class="stlms-filter-list">
 									<ul>
-										<li>
-											<div class="stlms-check-wrap">
-												<input type="checkbox" class="stlms-check" id="stlms_level_all">
-												<label for="stlms_level_all" class="stlms-check-label"><?php esc_html_e( 'All', 'skilltriks' ); ?><span><?php echo esc_html( (string) $total_count ); ?></span></label>
-											</div>
-										</li>
 										<?php foreach ( $levels_list as $key => $get_level ) : ?>
 											<li>
 												<div class="stlms-check-wrap">
@@ -166,6 +131,7 @@ $courses     = new \WP_Query( $course_args );
 							</div>
 						</div>
 					</div>
+					<input type="hidden" name="category" value="<?php echo esc_attr( (string) reset( $category ) ); ?>">
 					<input type="hidden" name="order_by" value="<?php echo esc_attr( $_orderby ); ?>">
 					<input type="hidden" name="_s" value="<?php echo esc_attr( $search_keyword ); ?>">
 				</form>
@@ -183,6 +149,15 @@ $courses     = new \WP_Query( $course_args );
 								number_format_i18n( $courses->post_count )
 							)
 						);
+						?>
+						<?php
+						$category_id = isset( $_GET['category'] ) ? (int) $_GET['category'] : 0;
+						if ( $category_id ) {
+							$_term = get_term_by( 'term_id', $category_id, \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
+							if ( $_term && ! is_wp_error( $_term ) ) {
+								echo esc_html( '(' . $_term->name . ')' );
+							}
+						}
 						?>
 					</div>
 					<div class="stlms-sort-by">

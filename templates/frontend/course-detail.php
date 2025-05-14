@@ -13,30 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $course_id        = ! empty( $args['course_id'] ) ? $args['course_id'] : 0;
 $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['course_data']['curriculums'] : array();
-
-global $current_user;
-$current_user_id    = $current_user->ID;
-$current_user_name  = $current_user->display_name;
-$current_user_email = $current_user->user_email;
 ?>
 
 <div class="stlms-wrap">
-	<?php if ( is_user_logged_in() ) : ?>
-		<div class="stlms-container">
-			<div class="stlms-pt-48 stlms-pb-48">
-				<div class="stlms-user">
-					<div class="stlms-user-photo">
-						<?php echo get_avatar( $current_user_email ); ?>
-					</div>
-					<div class="stlms-user-info">
-						<span class="stlms-user-name"><?php echo esc_html( $current_user_name ); ?></span>
-						<span class="stlms-user-email"><?php echo esc_html( $current_user_email ); ?></span>
-					</div>
-				</div>
-			</div>
-		</div>
-	<?php endif; ?>
-
+	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
 	<div class="stlms-course-banner" style="background-image: url('<?php echo esc_url( STLMS_ASSETS ) . '/images/course-detail-banner.jpg'; ?>')">
 		<div class="stlms-container">
 			<ul class="stlms-breadcrumb">

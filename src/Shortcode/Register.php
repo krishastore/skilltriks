@@ -71,6 +71,8 @@ abstract class Register {
 		wp_register_script( $this->handler . '-smartwizard', STLMS_ASSETS . '/js/build/smartwizard.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-countdowntimer', STLMS_ASSETS . '/js/build/countdowntimer.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-swiper', STLMS_ASSETS . '/js/build/swiper.js', array( 'jquery' ), $version, true );
+		wp_register_script( $this->handler . '-assigncourse', STLMS_ASSETS . '/js/build/assigncourse.js', array( 'jquery' ), $version, true );
+
 		$curriculum_type = get_query_var( 'curriculum_type' );
 		$userinfo        = wp_get_current_user();
 		$user_name       = $userinfo->display_name;
@@ -79,21 +81,23 @@ abstract class Register {
 			$this->handler,
 			'StlmsObject',
 			array(
-				'ajaxurl'       => admin_url( 'admin-ajax.php' ),
-				'securityNonce' => wp_create_nonce( STLMS_QUESTION_VALIDATE_NONCE ),
-				'nonce'         => wp_create_nonce( STLMS_BASEFILE ),
-				'quizId'        => ! empty( $curriculum_type ) && 'quiz' === $curriculum_type ? (int) get_query_var( 'item_id' ) : 0,
-				'courseId'      => ! empty( $curriculum_type ) && 'quiz' === $curriculum_type ? get_the_ID() : 0,
-				'fileName'      => 'ST-' . substr( strtoupper( wp_hash( $user_name ) ), 0, 5 ),
-				'currentUrl'    => get_the_permalink(),
-				'iconUrl'       => STLMS_ASSETS . '/images/plyr.svg',
-				'blankVideo'    => STLMS_ASSETS . '/images/blank.mp4',
+				'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+				'securityNonce'   => wp_create_nonce( STLMS_QUESTION_VALIDATE_NONCE ),
+				'nonce'           => wp_create_nonce( STLMS_BASEFILE ),
+				'quizId'          => ! empty( $curriculum_type ) && 'quiz' === $curriculum_type ? (int) get_query_var( 'item_id' ) : 0,
+				'courseId'        => ! empty( $curriculum_type ) && 'quiz' === $curriculum_type ? get_the_ID() : 0,
+				'fileName'        => 'ST-' . substr( strtoupper( wp_hash( $user_name ) ), 0, 5 ),
+				'currentUrl'      => get_the_permalink(),
+				'iconUrl'         => STLMS_ASSETS . '/images/plyr.svg',
+				'blankVideo'      => STLMS_ASSETS . '/images/blank.mp4',
+				'assignCourseUrl' => \ST\Lms\get_page_url( 'assign_course_by_me' ),
 			)
 		);
 
 		wp_register_style( $this->handler . '-plyr', STLMS_ASSETS . '/css/plyr.css', array(), $version );
 		wp_register_style( $this->handler . '-smartwizard', STLMS_ASSETS . '/css/smartwizard.css', array(), $version );
 		wp_register_style( $this->handler . '-swiper', STLMS_ASSETS . '/css/swiper.css', array(), $version );
+		wp_register_style( $this->handler . '-assigncourse', STLMS_ASSETS . '/css/assigncourse.css', array(), $version );
 	}
 
 	/**

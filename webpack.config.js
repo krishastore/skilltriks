@@ -25,7 +25,7 @@ module.exports = {
         countdowntimer: ['./assets/js/src/countdowntimer.js'],
         swiper: ['./assets/js/src/swiper.js', './assets/scss/swiper.scss'],
         result: './assets/scss/result.scss',
-
+        assigncourse: ['./assets/js/src/assigncourse.js', './assets/scss/assigncourse.scss'],
     },
     output: {
         path: path.resolve(__dirname, './assets'),

@@ -49,5 +49,25 @@ printf(
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+	<h3><?php esc_html_e( 'Frontend Capability', 'skilltriks' ); ?></h3>
+	<table class="wp-list-table widefat fixed striped table-view-list capability">
+		<thead>
+			<tr>
+				<th scope="col" id="type" class="manage-column column-type column-primary "><?php esc_html_e( 'Access Right', 'skilltriks' ); ?></th>
+				<th scope="col" id="assign-course" class="manage-column column-assign-course"></th>
+			</tr>
+		</thead>
+		<tbody id="the-list" data-wp-lists="list:capability">
+			<tr>
+				<td class="title column has-row-actions column-primary" data-colname="Access Right"><?php esc_html_e( 'Assign Course', 'skilltriks' ); ?><div class="tooltip dashicons dashicons-info"><span class="tooltip-text"><?php esc_html_e( 'Allows the user to assign course to others', 'skilltriks' ); ?></span></div>
+					<button type="button" class="toggle-row">
+						<span class="screen-reader-text">Show more details</span>
+					</button>
+				</td>
+				<td class="type column-type" data-colname="Assign-course"><input name="users_can[]" type="checkbox" id="users_can_assign_course" value='assign_course' <?php echo ! empty( $role_caps ) && array_key_exists( 'assign_course', $role_caps ) ? esc_attr( 'checked' ) : ''; ?>></td>
+			</tr>	
+		</tbody>
+	</table>			
+
 	<input type="submit" style="margin-top: 1em;" class="button button-primary" name="submit" value="<?php esc_html_e( 'Submit', 'skilltriks' ); ?>" />
 </form>

@@ -2,7 +2,8 @@
 /**
  * Class UserRoleTest
  *
- * @package ST\Lms\Admin\MetaBoxes
+ * @package ST\Lms\Admin\Users
+ * @subpackage UserRoleTest
  *
  * phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput
  */
@@ -73,6 +74,7 @@ class UserRoleTest extends WP_UnitTestCase {
 			'edit_lessons',
 			'edit_questions',
 			'edit_quizzes',
+			'assign_course'
 		);
 		$caps       			  = array_merge( $user_caps, $default_caps );
 		$_POST['user-caps-nonce'] = wp_create_nonce( 'user_caps' );
@@ -108,6 +110,7 @@ class UserRoleTest extends WP_UnitTestCase {
 		$this->assertTrue( current_user_can( 'edit_lessons' ) );
 		$this->assertTrue( current_user_can( 'edit_questions' ) );
 		$this->assertTrue( current_user_can( 'edit_quizzes' ) );
+		$this->assertTrue( current_user_can( 'assign_course' ) );
 	}
 
 }

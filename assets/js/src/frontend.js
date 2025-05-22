@@ -320,54 +320,49 @@ jQuery(window).on('load', function() {
 	});
 
   // User Dropdown Toggle
-  jQuery(document).ready(function ($) {
-    $(".stlms-user-dd .stlms-user-dd__toggle").on("click", function (event) {
-      event.stopPropagation();
-      $(this).toggleClass("active");
-      $(this).next(".stlms-user-dd__menu").slideToggle();
-    });
-    $(document).on("click", function (event) {
-      if (!$(event.target).closest(".stlms-user-dd").length) {
-        $(".stlms-user-dd__toggle").removeClass("active");
-        $(".stlms-user-dd__menu").slideUp();
-      }
-    });
-  });
-  // User Dropdown Toggle with data-id
-  jQuery(document).ready(function ($) {
-    $("[data-id]").on("click", function (event) {
-      event.stopPropagation();
-      let $this = $(this);
-      let targetId = $this.data("id");
-      let $target = $("#" + targetId);
-      $("[data-id]").each(function () {
-        let otherId = $(this).data("id");
-        if (otherId !== targetId) {
-          $("#" + otherId).slideUp();
-          $(this).removeClass("active");
-        }
-      });
-      $this.toggleClass("active");
-      $target.slideToggle();
-    });
-    $(document).on("click", function (event) {
-      $("[data-id]").each(function () {
-        let targetId = $(this).data("id");
-        if (
-          !$(event.target).closest(
-            "#" + targetId + ", [data-id='" + targetId + "']"
-          ).length
-        ) {
-          $("#" + targetId).slideUp();
-          $(this).removeClass("active");
-        }
-      });
-    });
-    $("[id]").on("click", "a", function () {
-      let $dropdown = $(this).closest("[id]");
-      $dropdown.slideUp();
-      let dropdownId = $dropdown.attr("id");
-      $("[data-id='" + dropdownId + "']").removeClass("active");
-    });
-  });
+	jQuery(function($) {
+		$(".stlms-user-dd .stlms-user-dd__toggle").on("click", function (event) {
+			event.stopPropagation();
+			$(this).toggleClass("active");
+			$(this).next(".stlms-user-dd__menu").slideToggle();
+		});
+		$(document).on("click", function (event) {
+			if ( ! $(event.target).closest(".stlms-user-dd").length ) {
+				$(".stlms-user-dd__toggle").removeClass("active");
+				$(".stlms-user-dd__menu").slideUp();
+			}
+		});
+	});
+	jQuery(function($) {
+		$("[data-id]").on("click", function (event) {
+			event.stopPropagation();
+			let $this = $(this);
+			let targetId = $this.data("id");
+			let $target = $("#" + targetId);
+			$("[data-id]").each(function () {
+			let otherId = $(this).data("id");
+			if (otherId !== targetId) {
+				$("#" + otherId).slideUp();
+				$(this).removeClass("active");
+			}
+			});
+			$this.toggleClass("active");
+			$target.stop(true, true).slideToggle();
+		});
+		$(document).on("click", function (event) {
+			if (!$(event.target).closest(".stlms-dd-wrap").length) {
+			$("[data-id]").each(function () {
+				let targetId = $(this).data("id");
+				$("#" + targetId).slideUp();
+				$(this).removeClass("active");
+			});
+			}
+		});
+		$(".stlms-dd-content").on("click", "a", function () {
+			let $dropdown = $(this).closest(".stlms-dd-content");
+			$dropdown.slideUp();
+			let dropdownId = $dropdown.attr("id");
+			$("[data-id='" + dropdownId + "']").removeClass("active");
+		});
+	});
 });

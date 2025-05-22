@@ -316,8 +316,11 @@
         }
       }
       .cta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         padding: 20px 0;
-        &:has(.download-certificate) {
+        .download-certificate-cta {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 20px;
@@ -326,6 +329,15 @@
             padding-right: 4px;
           }
         }
+        // &:has(.download-certificate) {
+        //   display: grid;
+        //   grid-template-columns: 1fr 1fr;
+        //   gap: 20px;
+        //   .stlms-btn.stlms-btn-block {
+        //     padding-left: 4px;
+        //     padding-right: 4px;
+        //   }
+        // }
       }
       .stlms-course-share {
         display: flex;

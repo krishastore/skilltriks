@@ -55,6 +55,12 @@
     top: 0;
     padding: 12px 12px 0 12px;
     z-index: 1;
+
+    &.due-tag {
+      top: auto;
+      bottom: 0;
+      padding: 12px 0 12px 12px;
+    }
     span {
       display: inline-block;
       padding: 5px 10px;
@@ -63,6 +69,13 @@
       color: $white;
       font-size: $font_size_sm;
       font-weight: $font_weight_medium;
+
+      &.due-soon-tag {
+        background-color: $yellow;
+      }
+      &.due-tag {
+        background-color: $red;
+      }
     }
   }
   &__info {

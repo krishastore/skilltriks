@@ -13,6 +13,9 @@
 namespace ST\Lms\Shortcode;
 
 use ST\Lms\ErrorLog as EL;
+use const ST\Lms\STLMS_COURSE_ASSIGN_BY_ME;
+use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
+use const ST\Lms\META_KEY_COURSE_ASSIGNED;
 
 /**
  * Shortcode register manage class.
@@ -25,6 +28,7 @@ class AssignNewCourse extends \ST\Lms\Shortcode\Register {
 	public function __construct() {
 		$this->set_shortcode_tag( 'assign_new_course' );
 		add_action( 'wp_ajax_assign_new_course', array( $this, 'assign_course' ) );
+		add_action( 'wp_ajax_get_assigned_users', array( $this, 'get_assigned_users' ) );
 		$this->init();
 	}
 
@@ -52,8 +56,10 @@ class AssignNewCourse extends \ST\Lms\Shortcode\Register {
 		if ( isset( $_POST['assign_course_data'] ) && is_array( $_POST['assign_course_data'] ) ) {
 			$assign_course_data = $_POST['assign_course_data'];
 			$current_user_id    = get_current_user_id();
+			$users              = array();
+			$course_id          = 0;
 
-			$course_assigned_by_me = get_user_meta( $current_user_id, 'course_assigned_by_me', true );
+			$course_assigned_by_me = get_user_meta( $current_user_id, STLMS_COURSE_ASSIGN_BY_ME, true );
 			if ( ! is_array( $course_assigned_by_me ) ) {
 				$course_assigned_by_me = array();
 			}
@@ -71,17 +77,42 @@ class AssignNewCourse extends \ST\Lms\Shortcode\Register {
 				$assigner_key                           = "{$course_id}_{$_user_id}";
 				$course_assigned_by_me[ $assigner_key ] = $completion_date;
 				$assignee_key                           = "{$course_id}_{$current_user_id}";
-				$assigned_to_me                         = get_user_meta( $_user_id, 'course_assigned_to_me', true );
+				$assigned_to_me                         = get_user_meta( $_user_id, STLMS_COURSE_ASSIGN_BY_ME, true );
 				if ( ! is_array( $assigned_to_me ) ) {
 					$assigned_to_me = array();
 				}
 				$assigned_to_me[ $assignee_key ] = $completion_date;
+				$users[]                         = $_user_id;
 
-				update_user_meta( $_user_id, 'course_assigned_to_me', $assigned_to_me );
+				update_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, $assigned_to_me );
 			}
 
+			$existing_users = get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true ) ? get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true ) : array();
+			$merged_users   = array_unique( array_merge( $existing_users, $users ) );
+
 			// Update current user’s assigned_by_me meta after loop.
-			update_user_meta( $current_user_id, 'course_assigned_by_me', $course_assigned_by_me );
+			update_user_meta( $current_user_id, STLMS_COURSE_ASSIGN_BY_ME, $course_assigned_by_me );
+			// Update course meta key to avoid assigning course to same user.
+			update_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, $merged_users );
 		}
+	}
+
+	/**
+	 * Get the list of already assigned users to the course.
+	 */
+	public function get_assigned_users() {
+		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
+
+		$course_id = isset( $_POST['course_id'] ) ? (int) $_POST['course_id'] : 0;
+		if ( ! $course_id ) {
+			wp_send_json_error( 'Invalid course ID.' );
+		}
+
+		$assigned_users = get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true );
+		if ( ! is_array( $assigned_users ) ) {
+			$assigned_users = array();
+		}
+
+		wp_send_json_success( $assigned_users );
 	}
 }

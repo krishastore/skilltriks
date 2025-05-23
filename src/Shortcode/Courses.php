@@ -107,6 +107,9 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			// Frontend.
 			wp_enqueue_script( $this->handler );
 			wp_enqueue_style( $this->handler );
+			// Assign course.
+			wp_enqueue_script( $this->handler . '-assigncourse' );
+			wp_enqueue_style( $this->handler . '-assigncourse' );
 			return;
 		}
 		if ( ! is_singular( \ST\Lms\STLMS_COURSE_CPT ) ) {

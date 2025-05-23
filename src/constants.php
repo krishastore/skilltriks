@@ -61,6 +61,7 @@ const META_KEY_COURSE_ASSESSMENT  = META_KEY_COURSE_PREFIX . '_assessment';
 const META_KEY_COURSE_MATERIAL    = META_KEY_COURSE_PREFIX . '_material';
 const META_KEY_COURSE_CURRICULUM  = META_KEY_COURSE_PREFIX . '_curriculum';
 const META_KEY_COURSE_SIGNATURE   = META_KEY_COURSE_PREFIX . '_signature';
+const META_KEY_COURSE_ASSIGNED    = META_KEY_COURSE_PREFIX . '_assigned';
 
 // Frontend nonce.
 const STLMS_LOGIN_NONCE             = '_stlms_login';
@@ -72,6 +73,8 @@ const STLMS_COURSE_STATUS       = '_stlms_%d_course_status';
 const STLMS_LESSON_VIEW         = '_stlms_lesson_view_%d';
 const STLMS_COURSE_COMPLETED_ON = '_stlms_%d_course_completed_on';
 const STLMS_ENROL_COURSES       = '_stlms_enrol_courses';
+const STLMS_COURSE_ASSIGN_TO_ME = '_stlms_course_assigned_to_me';
+const STLMS_COURSE_ASSIGN_BY_ME = '_stlms_course_assigned_by_me';
 
 // Define constant for setting.
 const STLMS_SETTING = 'stlms-setting';

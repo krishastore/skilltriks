@@ -117,9 +117,9 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 							$total_quizzes   = count( $quizzes );
 							$total_duration  = \ST\Lms\count_duration( array_merge( $lessons, $quizzes ) );
 							$duration_str    = \ST\Lms\seconds_to_decimal_hours( $total_duration );
-							$enrol_courses   = get_user_meta( $current_user_id, \ST\Lms\STLMS_ENROL_COURSES, true );
+							$enrol_courses   = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURSES, true );
 							$is_enrol        = ! empty( $enrol_courses ) && in_array( get_the_ID(), $enrol_courses, true );
-							if ( 2 === $assessment['evaluation'] ) {
+							if ( isset( $assessment['evaluation'] ) && 2 === $assessment['evaluation'] ) {
 								$passing_grade = isset( $last_quiz['settings']['passing_marks'] ) ? $last_quiz['settings']['passing_marks'] : '0';
 							}
 							?>
@@ -195,7 +195,7 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 											</use>
 										</svg>
 										<?php
-										$passing_text = 2 === $assessment['evaluation'] ? 'Marks' : 'Grade';
+										$passing_text = isset( $assessment['evaluation'] ) && 2 === $assessment['evaluation'] ? 'Marks' : 'Grade';
 										echo wp_kses(
 											sprintf(
 												// Translators: %s passing grade.
@@ -238,7 +238,7 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 								$extra_class      = '';
 								$meta_key         = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
 								$button_text      = $is_enrol ? esc_html__( 'Start Learning', 'skilltriks' ) : $button_text;
-								$current_status   = get_user_meta( $current_user_id, $meta_key, true );
+								$current_status   = get_user_meta( get_current_user_id(), $meta_key, true );
 								if ( ! empty( $current_status ) ) {
 									$current_status  = ! is_string( $current_status ) ? end( $current_status ) : $current_status;
 									$current_status  = explode( '_', $current_status );
@@ -273,6 +273,7 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 									<?php if ( $has_certificate && '100%' === $course_progress ) : ?>
 										<a href="javascript:;" id="download-certificate" data-course="<?php echo esc_attr( $course_id ); ?>" class="stlms-btn stlms-btn-block download-certificate"><?php esc_html_e( 'Download certificate', 'skilltriks' ); ?></a>
 									<?php endif; ?>
+									<a href="javascript:void(0);" data-fancybox data-src="#assign-course" class="stlms-btn stlms-btn-outline stlms-btn-block"><?php esc_html_e( 'Assign Course', 'skilltriks' ); ?></a>
 								</div>
 							</div>
 						</div>
@@ -695,4 +696,103 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- assign popup -->
+<?php
+$stlms_users    = get_users(
+	array(
+		'fields'       => array( 'ID', 'display_name' ),
+		'role__not_in' => array( 'Administrator' ),
+		'exclude'      => get_current_user_id(),
+	)
+);
+$assigned_users = get_post_meta( $course_id, ST\LMS\META_KEY_COURSE_ASSIGNED, true ) ? get_post_meta( $course_id, ST\LMS\META_KEY_COURSE_ASSIGNED, true ) : array();
+?>
+<div id="assign-course" class="stlms-dialog" data-course="<?php echo esc_attr( $course_id ); ?>" style="display: none;">
+	<form class="stlms-assign-course__box">
+		<div class="stlms-dialog__header">
+			<div class="stlms-dialog__title">
+				<?php esc_html_e( 'Assign This Course', 'skilltriks' ); ?>
+			</div>
+			<button class="stlms-dialog__close" data-fancybox-close>
+				<svg width="30" height="30">
+					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
+				</svg>
+			</button>
+		</div>
+		<div class="stlms-dialog__content-box">
+			<div class="stlms-dialog__content">
+				<div class="stlms-dialog__content-title">
+					<p>
+						<span>
+							<?php esc_html_e( 'Choose people whom you wish to assign this course', 'skilltriks' ); ?>
+						</span>
+					</p>
+				</div>
+			</div>
+			<div class="stlms-dialog__content">
+				<div class="stlms-form-group">
+					<label class="stlms-select-search" for="employee-list">
+						<?php esc_html_e( 'Choose Employee(s)', 'skilltriks' ); ?>
+						<select multiple data-placeholder="John Doe" class="stlms-select2-multi js-states form-control" id="employee-list">
+							<?php foreach ( $stlms_users as $users ) : ?>
+								<option value="<?php echo esc_attr( base64_encode( $users->ID ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode ?>" <?php echo in_array( (int) $users->ID, $assigned_users, true ) ? 'disabled' : ''; ?>><?php echo esc_html( $users->display_name ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+				</div>
+			</div>
+			<div class="stlms-dialog__content">
+				<div class="stlms-switch-wrap">
+					<label>
+						<input type="checkbox" class="stlms-check"><?php esc_html_e( 'Common completion date for all?', 'skilltriks' ); ?>
+					</label>
+				</div>
+			</div>
+			<div class="stlms-dialog__content" id="common-date">
+				<div class="stlms-form-group">
+					<label for="completion-date"><?php esc_html_e( 'Common completion date for all', 'skilltriks' ); ?></label>
+					<input type="date" id="completion-date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" />
+				</div>
+			</div>
+			<div class="stlms-dialog__content" id="unique-date">
+				<div class="stlms-form-col">
+					<div class="stlms-form-group">
+						<label for="completion-date"><?php esc_html_e( 'Common completion date for John Doe', 'skilltriks' ); ?></label>
+						<input type="date" id="completion-date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="stlms-dialog__footer">
+			<div class="stlms-dialog__cta">
+				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
+				<button class="stlms-btn stlms-btn-outline" data-fancybox-close id="showSnackbar"><?php esc_html_e( 'Assign', 'skilltriks' ); ?></button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="snackbar-success" class="stlms-snackbar">
+	<svg width="30" height="30">
+		<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#tick"></use>
+	</svg>
+	<?php esc_html_e( 'Course Assigned Successfully!', 'skilltriks' ); ?>
+	<button class="hideSnackbar">
+		<svg width="20" height="20">
+			<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
+		</svg>
+	</button>
+</div>
+<div id="snackbar-error" class="stlms-snackbar error-snackbar">
+	<svg width="30" height="30">
+		<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross-error"></use>
+	</svg>
+	<?php esc_html_e( 'Oops, something went wrong, please try again later.', 'skilltriks' ); ?>
+	<button class="hideSnackbar">
+		<svg width="20" height="20">
+			<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
+		</svg>
+	</button>
 </div>

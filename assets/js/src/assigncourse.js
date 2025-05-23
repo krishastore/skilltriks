@@ -55,7 +55,6 @@ jQuery(function($) {
                 visibleItems[visibleItems.length - 1].addClass('last-item');
             }
 
-
             if (visibleCount === 0) {
                 $noResults.show();
                 $(listSelector).hide()
@@ -67,8 +66,10 @@ jQuery(function($) {
     });
 
     function updateEmployeeCount() {
-        const count = $('.stlms-employee:checked').length;
+        let count = $('.stlms-employee:checked').length;
         $('#employee_cnt').text(count + ' Selected');
+
+        count = $('.stlms-select2-multi').val() ? $('.stlms-select2-multi').val().length : count;
 
         if ( count > 1 ) {
             $('.stlms-switch-wrap').show();
@@ -83,6 +84,10 @@ jQuery(function($) {
         updateEmployeeCount();
     });
 
+    $(document).on('change', '.stlms-select2-multi', function () {
+        updateEmployeeCount();
+    });
+
     const $commonDateCheckbox = $('.stlms-switch-wrap .stlms-check');
     const $commonDateField = $('#common-date');
     const $uniqueDateContainer = $('#unique-date');
@@ -90,8 +95,17 @@ jQuery(function($) {
 
     function updateDateFields() {
         const isCommon = $commonDateCheckbox.is(':checked');
-        const $selectedEmployees = $employeeList.find('.stlms-check:checked');
-        const today = new Date().toISOString().slice(0, 10)
+        const today = new Date().toISOString().slice(0, 10);
+        let selectedEmployees = [];
+
+        if ($employeeList.is('select') && $employeeList.hasClass('select2-hidden-accessible')) {
+            const selectedOptions = $employeeList.select2('data');
+            selectedEmployees = selectedOptions.map(opt => opt.text.trim());
+        } else {
+            selectedEmployees = $employeeList.find('.stlms-check:checked').map(function () {
+                return $(this).closest('label').text().trim();
+            }).get();
+        }
 
         if (isCommon) {
             $commonDateField.show();
@@ -100,9 +114,7 @@ jQuery(function($) {
             $commonDateField.hide();
             $uniqueDateContainer.empty().show();
 
-            $selectedEmployees.each(function() {
-                const employeeName = $(this).closest('label').text().trim();
-
+            selectedEmployees.forEach(employeeName => {
                 const dateField = `
                     <div class="stlms-form-col">
                         <div class="stlms-form-group">
@@ -117,45 +129,34 @@ jQuery(function($) {
         }
     }
 
-    // Initial toggle.
+    // Initial run
     updateDateFields();
 
-    // Toggle when common checkbox is clicked.
-    $commonDateCheckbox.on('change', function() {
-        updateDateFields();
-    });
-
-    // Update when any employee checkbox changes.
-    $employeeList.on('change', '.stlms-check', function() {
-        updateDateFields();
-    });
+    // Trigger updates on change
+    $commonDateCheckbox.on('change', updateDateFields);
+    $employeeList.on('change', updateDateFields);
 });
 
-Fancybox.bind('[data-fancybox]', {
-    on: {
-        ready: (fancybox) => {
-            jQuery('.stmls-select2').each(function() {
-                const $select = jQuery(this);
-                const $modal = $select.closest('.stlms-dialog');
+Fancybox.bind("[data-fancybox]", {});
 
-                if (!$select.hasClass('select2-hidden-accessible')) {
-                    $select.select2({
-                        dropdownParent: $modal
-                    });
-                }
-            });
-
-            jQuery('select').on('select2:open', function($) {
-                $('.select2-search--dropdown .select2-search__field').attr('placeholder', 'Search here...');
-            });
-        }
-    }
-});
-
-// Reset filter js
 jQuery(function($) {
+    $('.stlms-select2').select2();
+    $('.stlms-select2.modal').select2({
+        dropdownParent: $('#edit-course')
+    });
+    $('.stlms-select2-multi').select2({
+        dropdownParent: $('#assign-course')
+    });
+
+    // Reset filter js
     $('.stlms-form-control').on('change', function () {
-        const selectedValue = $(this).val();
+        const $this = $(this);
+        let selectedValue = $this.val();
+        selectedValue = selectedValue.replace('-', ' ');
+
+        $('.stlms-form-control').not($this).each(function () {
+            $(this).val('').trigger('change.select2');
+        });
 
         if (selectedValue) {
             $('.dt-input').val(selectedValue).trigger('input');
@@ -166,11 +167,10 @@ jQuery(function($) {
 
     $('.stlms-reset-btn').on('click', function (e) {
         e.preventDefault();
-        $('.stlms-form-control').val('');
+        $('.stlms-form-control').val('').trigger('change.select2');
         $('.dt-input').val('').trigger('input');
     });
 });
-
 
 let snackbarTimeout;
 
@@ -196,19 +196,32 @@ jQuery(document).on('click', '.hideSnackbar', function (e) {
 jQuery('#showSnackbar').on('click', function (e) {
     e.preventDefault();
 
-    const $selectedCourse = jQuery('#course-list .stlms-check[type="radio"]:checked');
-    const $selectedEmployees = jQuery('#employee-list .stlms-check[type="checkbox"]:checked');
+    let $selectedCourse = jQuery('#course-list .stlms-check[type="radio"]:checked');
+    let $selectedEmployees = jQuery('#employee-list .stlms-check[type="checkbox"]:checked');
+
+    if (jQuery('form.stlms-assign-course__box').length) {
+        $selectedCourse = jQuery('#assign-course');
+        $selectedEmployees = jQuery('#employee-list');
+    }
 
     if ($selectedCourse.length > 0 && $selectedEmployees.length > 0) {
-        const courseId = $selectedCourse.val();
+        const courseId = $selectedCourse.val() ? $selectedCourse.val() : $selectedCourse.data('course');
         const assignCourseData = [];
 
         const isCommon = jQuery('.stlms-switch-wrap input[type="checkbox"]').is(':checked');
         const commonDate = jQuery('#common-date input[type="date"]').val();
 
-        // Loop through selected employees.
-        $selectedEmployees.each(function (index) {
-            const encodedId = jQuery(this).val();
+        let employeeValues = [];
+
+        if ($selectedEmployees.is('select')) {
+            employeeValues = $selectedEmployees.val() || [];
+        } else {
+            $selectedEmployees.each(function () {
+                employeeValues.push(jQuery(this).val());
+            });
+        }
+
+        employeeValues.forEach(function (encodedId, index) {
             let decodedId = '';
             try {
                 decodedId = atob(encodedId);
@@ -251,4 +264,51 @@ jQuery('#showSnackbar').on('click', function (e) {
     } else {
         showSnackbar('snackbar-error');
     }
+});
+
+jQuery(function($) {
+	let isRequestInProgress = false;
+
+	$('input[name="course"]').on('change', function () {
+		if (isRequestInProgress) {
+			return false;
+		}
+
+		const courseId = $(this).val();
+		if (!courseId) return;
+
+		// Disable other inputs during request.
+		isRequestInProgress = true;
+		$('input[name="course"]').prop('disabled', true);
+		$('#employee-list input[type="checkbox"]').prop('disabled', false);
+
+		$.ajax({
+			type: 'POST',
+			url: StlmsObject.ajaxurl,
+			data: {
+				action: 'get_assigned_users',
+				course_id: courseId,
+				_nonce: StlmsObject.nonce,
+			},
+			success: function (response) {
+				if (response.success && Array.isArray(response.data)) {
+					// Disable already assigned users.
+					$('#employee-list input[type="checkbox"]').each(function () {
+						const val = $(this).val();
+						const decoded = atob(val);
+						if (response.data.includes(parseInt(decoded))) {
+							$(this).prop('disabled', true);
+						}
+					});
+				}
+			},
+			error: function (err) {
+				console.error('AJAX failed:', err);
+			},
+			complete: function () {
+				isRequestInProgress = false;
+				$('input[name="course"]').prop('disabled', false);
+			},
+		});
+	});
 });

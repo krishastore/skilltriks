@@ -21,6 +21,7 @@ $stlms_users = get_users(
 	array(
 		'fields'       => array( 'ID', 'display_name' ),
 		'role__not_in' => array( 'Administrator' ),
+		'exclude'      => get_current_user_id(),
 	)
 );
 

@@ -18,7 +18,7 @@ $stlms_users = get_users(
 	)
 );
 
-$course_assigned_to_me = get_user_meta( get_current_user_id(), 'course_assigned_to_me', true ) ? get_user_meta( get_current_user_id(), 'course_assigned_to_me', true ) : array();
+$course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) : array();
 ?>
 
 <div class="stlms-wrap alignfull">
@@ -44,9 +44,9 @@ $course_assigned_to_me = get_user_meta( get_current_user_id(), 'course_assigned_
 									<label class="stlms-form-label"><?php esc_html_e( 'By Progress', 'skilltriks' ); ?></label>
 									<select class="stlms-form-control">
 										<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
-										<option value="Not Started"><?php esc_html_e( 'Not Started', 'skilltriks' ); ?></option>
-										<option value="In Progress"><?php esc_html_e( 'In Progress', 'skilltriks' ); ?></option>
-										<option value="Completed"><?php esc_html_e( 'Completed', 'skilltriks' ); ?></option>									
+										<option value="not-started"><?php esc_html_e( 'Not Started', 'skilltriks' ); ?></option>
+										<option value="in-progress"><?php esc_html_e( 'In Progress', 'skilltriks' ); ?></option>
+										<option value="completed"><?php esc_html_e( 'Completed', 'skilltriks' ); ?></option>									
 									</select>
 								</div>
 								<div class="stlms-form-group">
@@ -115,14 +115,58 @@ $course_assigned_to_me = get_user_meta( get_current_user_id(), 'course_assigned_
 
 									list( $course_id, $_user_id ) = explode( '_', $key, 2 );
 
-									$user_info       = get_userdata( $_user_id );
-									$completion_date = strtotime( $completion_date );
-									$formatted_date  = wp_date( 'M. j, Y', $completion_date );
-									$current_status  = get_user_meta( $_user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
-									$curriculums     = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
-									$curriculums     = \ST\Lms\merge_curriculum_items( \ST\Lms\get_curriculums() );
-									$curriculums     = array_keys( $curriculums );
-									$course_progress = \ST\Lms\calculate_course_progress( $_user_id, $curriculums, $current_status ) . '%';
+									$user_info        = get_userdata( $_user_id );
+									$completion_date  = strtotime( $completion_date );
+									$formatted_date   = wp_date( 'M. j, Y', $completion_date );
+									$current_status   = get_user_meta( get_current_user_id(), sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
+									$curriculums      = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+									$course_progress  = '0%';
+									$course_view_link = get_the_permalink( $course_id );
+									$course_link      = $course_view_link;
+									$button_text      = esc_html__( 'Enrol Now', 'skilltriks' );
+									if ( ! empty( $curriculums ) ) {
+										$curriculums      = \ST\Lms\merge_curriculum_items( $curriculums );
+										$curriculums      = array_keys( $curriculums );
+										$course_progress  = \ST\Lms\calculate_course_progress( get_current_user_id(), $curriculums, $current_status ) . '%';
+										$first_curriculum = reset( $curriculums );
+										$first_curriculum = explode( '_', $first_curriculum );
+										$first_curriculum = array_map( 'absint', $first_curriculum );
+										$section_id       = reset( $first_curriculum );
+										$item_id          = end( $first_curriculum );
+										if ( is_user_logged_in() ) {
+											$meta_key      = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
+											$enrol_courses = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_ENROL_COURSES, true );
+											$is_enrol      = ! empty( $enrol_courses ) && in_array( (int) $course_id, $enrol_courses, true );
+											$button_text   = $is_enrol ? esc_html__( 'Start', 'skilltriks' ) : $button_text;
+											if ( ! empty( $current_status ) ) {
+												$course_progress = \ST\Lms\calculate_course_progress( $course_id, $curriculums, $current_status ) . '%';
+												$current_status  = ! is_string( $current_status ) ? end( $current_status ) : $current_status;
+												$current_status  = explode( '_', $current_status );
+												$section_id      = (int) reset( $current_status );
+												$item_id         = (int) end( $current_status );
+												$button_text     = esc_html__( 'Continue', 'skilltriks' );
+												$last_curriculum = end( $curriculums );
+												$last_curriculum = explode( '_', $last_curriculum );
+												$last_curriculum = array_map( 'absint', $last_curriculum );
+												if ( reset( $last_curriculum ) === $section_id && end( $last_curriculum ) === $item_id ) {
+													$restart_course = \ST\Lms\restart_course( $course_id );
+													if ( $restart_course ) {
+														$first_curriculum = reset( $curriculums );
+														$first_curriculum = explode( '_', $first_curriculum );
+														$first_curriculum = array_map( 'absint', $first_curriculum );
+														$section_id       = reset( $first_curriculum );
+														$item_id          = end( $first_curriculum );
+														$button_text      = esc_html__( 'Restart', 'skilltriks' );
+													}
+												}
+											}
+										}
+										$curriculum_type = get_post_type( $item_id );
+										$curriculum_type = str_replace( 'stlms_', '', $curriculum_type );
+										$course_link     = sprintf( '%s/%d/%s/%d/', untrailingslashit( $course_view_link ), $section_id, $curriculum_type, $item_id );
+										$button_text     = apply_filters( 'stlms_course_view_button_text', $button_text );
+										$course_link     = apply_filters( 'stlms_course_view_button_link', $course_link );
+									}
 
 									if ( '100%' === $course_progress ) {
 										$course_status = 'Completed';
@@ -157,7 +201,7 @@ $course_assigned_to_me = get_user_meta( get_current_user_id(), 'course_assigned_
 											</div>
 										</div>
 									</td>
-									<td><a href="#" class="stlms-btn stlms-btn-light">Start</a></td>
+									<td><a href="<?php echo ! $is_enrol && is_user_logged_in() ? 'javascript:;' : esc_url( $course_link ); ?>" class="stlms-btn stlms-btn-light" id="<?php echo ! $is_enrol && is_user_logged_in() ? 'enrol-now' : ''; ?>" data-course="<?php echo esc_html( $course_id ); ?>"><?php echo esc_html( $button_text ); ?><i class="stlms-loader"></i></a></td>
 								</tr>
 									<?php
 								endforeach;

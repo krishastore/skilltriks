@@ -18,7 +18,7 @@ $stlms_users = get_users(
 	)
 );
 
-$course_assigned_by_me = get_user_meta( get_current_user_id(), 'course_assigned_by_me', true ) ? get_user_meta( get_current_user_id(), 'course_assigned_by_me', true ) : array();
+$course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
 ?>
 <div class="stlms-wrap alignfull">
 	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
@@ -40,22 +40,25 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), 'course_assigned_
 						<div class="stlms-accordion-collapse">
 							<div class="stlms-pt-20">
 								<div class="stlms-form-group">
-									<label class="stlms-form-label"><?php esc_html_e( 'By Progress', 'skilltriks' ); ?></label>
-									<select class="stlms-form-control">
-										<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
-										<option value="Not Started"><?php esc_html_e( 'Not Started', 'skilltriks' ); ?></option>
-										<option value="In Progress"><?php esc_html_e( 'In Progress', 'skilltriks' ); ?></option>
-										<option value="Completed"><?php esc_html_e( 'Completed', 'skilltriks' ); ?></option>									
-									</select>
+									<label class="stlms-select-search" for="id_label_nosearch">
+										<?php esc_html_e( 'By Progress', 'skilltriks' ); ?>
+										<select data-placeholder="Choose" class="stlms-select2 js-states stlms-form-control" data-minimum-results-for-search="Infinity" id="id_label_nosearch">
+											<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
+											<option value="not-started"><?php esc_html_e( 'Not Started', 'skilltriks' ); ?></option>
+											<option value="in-progress"><?php esc_html_e( 'In Progress', 'skilltriks' ); ?></option>
+											<option value="completed"><?php esc_html_e( 'Completed', 'skilltriks' ); ?></option>	
+										</select>
+									</label>
 								</div>
 								<div class="stlms-form-group">
-									<label class="stlms-form-label"><?php esc_html_e( 'By Assignee', 'skilltriks' ); ?></label>
-									<select class="stlms-form-control">
-										<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
-										<?php foreach ( $stlms_users as $users ) : ?>
-										<option value="<?php echo esc_html( $users->display_name ); ?>"><?php echo esc_html( $users->display_name ); ?></option>
-										<?php endforeach; ?>
-									</select>
+									<label class="stlms-select-search" for="id_label_user"><?php esc_html_e( 'By Assignee', 'skilltriks' ); ?>
+										<select data-placeholder="Choose" class="stlms-select2 js-states stlms-form-control" id="id_label_user">
+											<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
+											<?php foreach ( $stlms_users as $users ) : ?>
+											<option value="<?php echo esc_html( $users->display_name ); ?>"><?php echo esc_html( $users->display_name ); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</label>
 								</div>
 								<button class="stlms-reset-btn"><?php esc_html_e( 'Reset', 'skilltriks' ); ?></button>
 							</div>
@@ -157,14 +160,14 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), 'course_assigned_
 										</div>
 									</td>
 									<td>
-										<div class="stmls-assigned-course__action">
-											<button class="stmls-assigned-course__button edit"
+										<div class="stlms-assigned-course__action">
+											<button class="stlms-assigned-course__button edit"
 												data-fancybox data-src="#edit-course">
 												<svg width="19" height="17">
 													<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#edit-assigned-course"></use>
 												</svg>
 											</button>
-											<button class="stmls-assigned-course__button delete" data-fancybox data-src="#delete-course">
+											<button class="stlms-assigned-course__button delete" data-fancybox data-src="#delete-course">
 												<svg width="14" height="17">
 													<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#delete-assigned-course"></use>
 												</svg>
@@ -238,7 +241,7 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), 'course_assigned_
 				<div class="stlms-form-group">
 					<label class="stlms-select-search" for="id_label_single">
 						Assigned Course
-						<select data-placeholder="HubSpot CMS for Developers – Beginners" class="stmls-select2 js-states form-control" id="id_label_single">
+						<select data-placeholder="HubSpot CMS for Developers – Beginners" class="stlms-select2 js-states form-control modal" id="id_label_single">
 							<option></option>
 							<option value="1">One</option>
 							<option value="2">Two</option>
@@ -246,15 +249,6 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), 'course_assigned_
 							<option value="4">Four</option>
 							<option value="5">Five</option>
 							<option value="6">Six</option>
-							<option value="7">Seven</option>
-							<option value="8">Eight</option>
-							<option value="9">Nine</option>
-							<option value="10">Ten</option>
-							<option value="11">Eleven</option>
-							<option value="12">Twelve</option>
-							<option value="13">Thirteen</option>
-							<option value="14">Fourteen</option>
-							<option value="15">Fifteen</option>
 						</select>
 					</label>
 				</div>

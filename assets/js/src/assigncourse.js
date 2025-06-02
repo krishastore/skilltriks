@@ -312,3 +312,61 @@ jQuery(function($) {
 		});
 	});
 });
+
+jQuery(function($) {
+    $('#myTable').on('click', '.stlms-assigned-course__button.edit', function () {
+        var $row = $(this).closest('tr');
+        var courseId = $row.find('td[data-course-id]').data('course-id');
+        var assignedTo = $row.find('td').eq(1).text().trim();
+        var timestamp = $row.find('td[data-date]').data('date') || '';
+        var formattedDate = '';
+        if (timestamp) {
+            var dateObj = new Date(timestamp * 1000);
+            formattedDate = dateObj.toISOString().split('T')[0];
+        }
+
+        $('#edit-course .stlms-dialog__content-title span').text(assignedTo);
+        $('#edit-course #id_label_single').val(courseId).trigger('change');
+        $('#edit-course #completion-date').val(formattedDate);
+        $('#edit-course label[for="completion-date"]').text('Completion Date For ' + assignedTo);
+    });
+});
+
+jQuery('#edit-course .stlms-btn, #delete-course .stlms-btn').on('click', function () {
+    const actionType = jQuery(this).closest('.stlms-dialog').attr('id') === 'edit-course' ? 'edit' : 'delete';
+    UpdateAssignCourse(actionType);
+});
+
+let currentActionKey = null;
+
+jQuery('.stlms-assigned-course__button.edit, .stlms-assigned-course__button.delete').on('click', function () {
+    currentActionKey = jQuery(this).closest('tr').data('key');
+});
+
+function UpdateAssignCourse(actionType) {
+    if (!currentActionKey) return;
+
+    let data = {
+        action: 'update_assign_course',
+        type: actionType,
+        key: currentActionKey,
+        _nonce: StlmsObject.nonce,
+    };
+
+    if (actionType === 'edit') {
+        const selectedCourseId = jQuery('#edit-course #id_label_single').val();
+        const completionDate = jQuery('#edit-course #completion-date').val();
+
+        data.id = selectedCourseId;
+        data.date = completionDate;
+    }
+
+    jQuery.ajax({
+        type: 'POST',
+		url: StlmsObject.ajaxurl,
+        data: data,
+        success: function (response) {
+            window.location.reload();
+        },
+    });
+}

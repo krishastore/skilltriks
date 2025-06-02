@@ -68,9 +68,7 @@ $stlms_users = get_users(
 										<h4>
 											<?php esc_html_e( 'Step 2: Choose Employee(s)', 'skilltriks' ); ?>
 										</h4>
-										<span id="employee_cnt">
-											2 Selected
-										</span>
+										<span id="employee_cnt"></span>
 									</div>
 									<div class="stlms-search-card">
 										<div class="stlms-form-group">
@@ -112,7 +110,7 @@ $stlms_users = get_users(
 									<div class="stlms-form-row" id="unique-date">
 										<div class="stlms-form-col">
 											<div class="stlms-form-group">
-												<label for="completion-date">Completion Date For Bryn Noble</label>
+												<label for="completion-date"></label>
 												<input type="date" id="completion-date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" />
 											</div>
 										</div>

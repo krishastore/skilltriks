@@ -257,8 +257,13 @@ $courses     = get_posts( $course_args );
 				<div class="stlms-dialog__content-title">
 					<p>
 					<?php
-					sprintf(
-						__( 'Update the completion date for the course "<span class="course-name"></span>" assigned to <span class="user-name"></span>.', 'skilltriks' )
+					echo wp_kses_post(
+						sprintf(
+							/* translators: 1: course span tag, 2: user span tag */
+							__( 'Update the completion date for the course %1$s assigned to %2$s.', 'skilltriks' ),
+							'<span class="course-name"></span>',
+							'<span class="user-name"></span>'
+						)
 					);
 					?>
 					</p>

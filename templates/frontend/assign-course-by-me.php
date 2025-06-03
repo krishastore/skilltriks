@@ -138,7 +138,7 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 									}
 									?>
 								<tr data-key="<?php echo esc_attr( $key ); ?>">
-									<td data-course-id="<?php echo esc_attr( $course_id ); ?>">
+									<td>
 										<a href="<?php echo esc_url( get_permalink( $course_id ) ); ?>" class="stlms-datatable__course-link">
 											<?php echo esc_html( get_the_title( $course_id ) ); ?>
 										</a>
@@ -244,7 +244,7 @@ $courses     = get_posts( $course_args );
 	<form class="stlms-assign-course__box">
 		<div class="stlms-dialog__header">
 			<div class="stlms-dialog__title">
-				<?php esc_html_e( 'Edit Assigned Course', 'skilltriks' ); ?>
+				<?php esc_html_e( 'Edit Assigned Course Date', 'skilltriks' ); ?>
 			</div>
 			<button class="stlms-dialog__close" data-fancybox-close>
 				<svg width="30" height="30">
@@ -255,21 +255,13 @@ $courses     = get_posts( $course_args );
 		<div class="stlms-dialog__content-box">
 			<div class="stlms-dialog__content">
 				<div class="stlms-dialog__content-title">
-					<p><?php esc_html_e( 'Update the assigned course or completion date for', 'skilltriks' ); ?>
-						<span></span>
+					<p>
+					<?php
+					sprintf(
+						__( 'Update the completion date for the course "<span class="course-name"></span>" assigned to <span class="user-name"></span>.', 'skilltriks' )
+					);
+					?>
 					</p>
-				</div>
-			</div>
-			<div class="stlms-dialog__content">
-				<div class="stlms-form-group">
-					<label class="stlms-select-search" for="id_label_single">
-						<?php esc_html_e( 'Assigned Course', 'skilltriks' ); ?>
-						<select data-placeholder="HubSpot CMS for Developers – Beginners" class="stlms-select2 js-states form-control modal" id="id_label_single">
-							<?php foreach ( $courses as $course_id ) : ?>
-								<option value="<?php echo esc_html( $course_id ); ?>"><?php echo esc_html( get_the_title( $course_id ) ); ?></option>
-							<?php endforeach; ?>		
-						</select>
-					</label>
 				</div>
 			</div>
 			<div class="stlms-dialog__content">

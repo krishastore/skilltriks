@@ -192,10 +192,9 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 											<?php
 											if ( ! empty( $completion_date ) ) :
 													$today_timestamp     = (int) current_datetime()->format( 'U' );
-													$due_date_timestamp  = strtotime( $due_date );
 													$formatted_timestamp = strtotime( $formatted_date );
 												?>
-												<?php if ( $today_timestamp >= $due_date_timestamp && $today_timestamp <= $formatted_timestamp ) : ?>	
+												<?php if ( $today_timestamp >= $due_date && $today_timestamp <= $formatted_timestamp ) : ?>	
 													<span class="due-soon-tag">
 														<?php esc_html_e( 'Due Soon', 'skilltriks' ); ?>
 													</span>

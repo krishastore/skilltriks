@@ -66,24 +66,22 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 		wp_set_current_user( $assigner_id );
 
 		// Create initial course and assign it.
-		$original_course_id = $this->factory->post->create( array( 'post_type' => 'course' ) );
-		$new_course_id      = $this->factory->post->create( array( 'post_type' => 'course' ) );
+		$course_id = $this->factory->post->create( array( 'post_type' => 'course' ) );
 
 		$completion_date = date( 'Y-m-d' );
 
 		// Assign course initially.
 		update_user_meta( $assigner_id, STLMS_COURSE_ASSIGN_BY_ME, array(
-			"{$original_course_id}_{$assignee_id}" => $completion_date,
+			"{$course_id}_{$assignee_id}" => $completion_date,
 		) );
 		update_user_meta( $assignee_id, STLMS_COURSE_ASSIGN_TO_ME, array(
-			"{$original_course_id}_{$assigner_id}" => $completion_date,
+			"{$course_id}_{$assigner_id}" => $completion_date,
 		) );
-		update_post_meta( $original_course_id, META_KEY_COURSE_ASSIGNED, array( $assignee_id ) );
+		update_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, array( $assignee_id ) );
 
 		$_POST['_nonce'] = wp_create_nonce( STLMS_BASEFILE );
 		$_POST['type']   = 'edit';
-		$_POST['key']    = "{$original_course_id}_{$assignee_id}";
-		$_POST['id']     = $new_course_id;
+		$_POST['key']    = "{$course_id}_{$assignee_id}";
 		$_POST['date']   = '2025-12-31';
 
 		try {
@@ -93,19 +91,14 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 		}
 
 		$by_me = get_user_meta( $assigner_id, STLMS_COURSE_ASSIGN_BY_ME, true );
-		$this->assertArrayHasKey( "{$new_course_id}_{$assignee_id}", $by_me );
-		$this->assertEquals( '2025-12-31', $by_me["{$new_course_id}_{$assignee_id}"] );
-		$this->assertArrayNotHasKey( "{$original_course_id}_{$assignee_id}", $by_me );
+		$this->assertArrayHasKey( "{$course_id}_{$assignee_id}", $by_me );
+		$this->assertEquals( '2025-12-31', $by_me["{$course_id}_{$assignee_id}"] );
 
 		$to_me = get_user_meta( $assignee_id, STLMS_COURSE_ASSIGN_TO_ME, true );
-		$this->assertArrayHasKey( "{$new_course_id}_{$assigner_id}", $to_me );
-		$this->assertArrayNotHasKey( "{$original_course_id}_{$assigner_id}", $to_me );
+		$this->assertArrayHasKey( "{$course_id}_{$assigner_id}", $to_me );
 
-		$new_course_users = get_post_meta( $new_course_id, META_KEY_COURSE_ASSIGNED, true );
-		$this->assertContains( $assignee_id, $new_course_users );
-
-		$old_course_users = get_post_meta( $original_course_id, META_KEY_COURSE_ASSIGNED, true );
-		$this->assertNotContains( $assignee_id, $old_course_users );
+		$course_users = get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true );
+		$this->assertContains( $assignee_id, $course_users );
 	}
 
 	public function test_delete_assigned_course() {

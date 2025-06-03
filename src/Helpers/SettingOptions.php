@@ -123,6 +123,12 @@ class SettingOptions {
 				'type'  => 'file',
 				'value' => isset( $this->options['certificate_signature'] ) ? esc_url( $this->options['certificate_signature'] ) : '',
 			),
+			'due_soon'              => array(
+				'title' => esc_html__( 'Due Soon', 'skilltriks' ),
+				'desc'  => __( 'Course to be due soon in 7 days', 'skilltriks' ),
+				'type'  => 'number',
+				'value' => isset( $this->options['due_soon'] ) ? esc_url( $this->options['due_soon'] ) : '',
+			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
 		add_action( 'admin_post_user_role', array( $this, 'stlms_new_user_role' ) );
@@ -278,6 +284,8 @@ class SettingOptions {
 			}
 		} elseif ( ! empty( $args['readonly'] ) ) {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" readonly/>';
+		} elseif ( 'number' === $type ) {
+			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" min="1" max="30"/>';
 		} else {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" />';
 		}

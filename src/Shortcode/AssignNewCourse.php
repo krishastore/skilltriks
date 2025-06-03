@@ -77,7 +77,7 @@ class AssignNewCourse extends \ST\Lms\Shortcode\Register {
 				$assigner_key                           = "{$course_id}_{$_user_id}";
 				$course_assigned_by_me[ $assigner_key ] = $completion_date;
 				$assignee_key                           = "{$course_id}_{$current_user_id}";
-				$assigned_to_me                         = get_user_meta( $_user_id, STLMS_COURSE_ASSIGN_BY_ME, true );
+				$assigned_to_me                         = get_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, true );
 				if ( ! is_array( $assigned_to_me ) ) {
 					$assigned_to_me = array();
 				}

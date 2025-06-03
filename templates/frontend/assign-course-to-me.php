@@ -19,6 +19,8 @@ $stlms_users = get_users(
 );
 
 $course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) : array();
+$due_soon              = get_option( 'stlms_settings' );
+$due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
 ?>
 
 <div class="stlms-wrap alignfull">
@@ -117,6 +119,7 @@ $course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 
 									$user_info        = get_userdata( $_user_id );
 									$completion_date  = strtotime( $completion_date );
+									$due_date         = strtotime( '-7 day', $completion_date );
 									$formatted_date   = wp_date( 'M. j, Y', $completion_date );
 									$current_status   = get_user_meta( get_current_user_id(), sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
 									$curriculums      = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
@@ -186,11 +189,25 @@ $course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 									<td>
 										<div class="due-date">
 											<?php echo esc_html( $formatted_date ); ?>
-											<?php if ( ! empty( $completion_date ) ) : ?>
-											<span class="due-soon-tag">
-												<?php esc_html_e( 'Due Soon', 'skilltriks' ); ?>
-											</span>
-											<?php endif; ?>
+											<?php
+											if ( ! empty( $completion_date ) ) :
+													$today_timestamp     = (int) current_datetime()->format( 'U' );
+													$due_date_timestamp  = strtotime( $due_date );
+													$formatted_timestamp = strtotime( $formatted_date );
+												?>
+												<?php if ( $today_timestamp >= $due_date_timestamp && $today_timestamp <= $formatted_timestamp ) : ?>	
+													<span class="due-soon-tag">
+														<?php esc_html_e( 'Due Soon', 'skilltriks' ); ?>
+													</span>
+												<?php endif; ?>
+												<?php if ( $today_timestamp > $formatted_timestamp ) : ?>	
+													<span class="due-tag">
+														<?php esc_html_e( 'Due', 'skilltriks' ); ?>
+													</span>
+													<?php
+												endif;
+											endif;
+											?>
 										</div>
 									</td>
 									<td>

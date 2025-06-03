@@ -19,6 +19,8 @@ $stlms_users = get_users(
 );
 
 $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
+$due_soon              = get_option( 'stlms_settings' );
+$due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
 ?>
 <div class="stlms-wrap alignfull">
 	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
@@ -105,7 +107,7 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 							<thead>
 								<tr>
 									<th><?php esc_html_e( 'Course Assigned', 'skilltriks' ); ?></th>
-									<th><?php esc_html_e( 'Assigned By', 'skilltriks' ); ?></th>
+									<th><?php esc_html_e( 'Assigned To', 'skilltriks' ); ?></th>
 									<th><?php esc_html_e( 'Completion Date', 'skilltriks' ); ?></th>
 									<th><?php esc_html_e( 'Progress Status', 'skilltriks' ); ?></th>
 									<th><?php esc_html_e( 'Actions', 'skilltriks' ); ?></th>
@@ -119,6 +121,7 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 
 									$user_info       = get_userdata( $_user_id );
 									$completion_date = strtotime( $completion_date );
+									$due_date        = strtotime( '-7 day', $completion_date );
 									$formatted_date  = wp_date( 'M. j, Y', $completion_date );
 									$current_status  = get_user_meta( $_user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
 									$curriculums     = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
@@ -134,21 +137,34 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 										$course_status = 'In Progress';
 									}
 									?>
-								<tr>
-									<td>
+								<tr data-key="<?php echo esc_attr( $key ); ?>">
+									<td data-course-id="<?php echo esc_attr( $course_id ); ?>">
 										<a href="<?php echo esc_url( get_permalink( $course_id ) ); ?>" class="stlms-datatable__course-link">
 											<?php echo esc_html( get_the_title( $course_id ) ); ?>
 										</a>
 									</td>
 									<td><?php echo esc_html( $user_info->display_name ); ?></td>
-									<td>
+									<td data-date="<?php echo esc_attr( $completion_date ); ?>">
 										<div class="due-date">
 											<?php echo esc_html( $formatted_date ); ?>
-											<?php if ( ! empty( $completion_date ) ) : ?>
-											<span class="due-soon-tag">
-												<?php esc_html_e( 'Due Soon', 'skilltriks' ); ?>
-											</span>
-											<?php endif; ?>
+											<?php
+											if ( ! empty( $completion_date ) ) :
+													$today_timestamp     = (int) current_datetime()->format( 'U' );
+													$formatted_timestamp = strtotime( $formatted_date );
+												?>
+												<?php if ( $today_timestamp >= $due_date && $today_timestamp <= $formatted_timestamp ) : ?>	
+													<span class="due-soon-tag">
+														<?php esc_html_e( 'Due Soon', 'skilltriks' ); ?>
+													</span>
+												<?php endif; ?>
+												<?php if ( $today_timestamp > $formatted_timestamp ) : ?>	
+													<span class="due-tag">
+														<?php esc_html_e( 'Due', 'skilltriks' ); ?>
+													</span>
+													<?php
+												endif;
+											endif;
+											?>
 										</div>
 									</td>
 									<td>
@@ -192,78 +208,81 @@ $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COU
 	<form class="stlms-assign-course__box">
 		<div class="stlms-dialog__header">
 			<div class="stlms-dialog__title">
-				Confirm Deletion
+				<?php esc_html_e( 'Confirm Deletion', 'skilltriks' ); ?>
 			</div>
 			<button class="stlms-dialog__close" data-fancybox-close>
 				<svg width="30" height="30">
-					<use xlink:href="assets/images/sprite-front.svg#cross"></use>
+					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 				</svg>
 			</button>
 		</div>
 		<div class="stlms-dialog__content-box">
 			<div class="stlms-dialog__content">
-				<p>Are you sure you want to delete this item? This action cannot be undone.</p>
+				<p><?php esc_html_e( 'Are you sure you want to delete this item? This action cannot be undone.', 'skilltriks' ); ?></p>
 			</div>
 		</div>
 		<div class="stlms-dialog__footer">
 			<div class="stlms-dialog__cta">
-				<button class="stlms-btn">Cancel</button>
-				<button class="stlms-btn stlms-btn-outline">Delete</button>
+				<button class="stlms-btn stlms-btn-outline" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
+				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Delete', 'skilltriks' ); ?></button>
 			</div>
 		</div>
 	</form>
 </div>
 
 <!-- edit popup -->
+<?php
+$course_args = array(
+	'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
+	'post_status'    => 'publish',
+	'posts_per_page' => -1,
+	'fields'         => 'ids',
+);
+$courses     = get_posts( $course_args );
+?>
 <div id="edit-course" class="stlms-dialog" style="display: none;">
 	<form class="stlms-assign-course__box">
 		<div class="stlms-dialog__header">
 			<div class="stlms-dialog__title">
-				Edit Assigned Course
+				<?php esc_html_e( 'Edit Assigned Course', 'skilltriks' ); ?>
 			</div>
 			<button class="stlms-dialog__close" data-fancybox-close>
 				<svg width="30" height="30">
-					<use xlink:href="assets/images/sprite-front.svg#cross"></use>
+					<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 				</svg>
 			</button>
 		</div>
 		<div class="stlms-dialog__content-box">
 			<div class="stlms-dialog__content">
 				<div class="stlms-dialog__content-title">
-					<p>Update the assigned course or completion date for
-						<span>
-							Bhargavkumar Khirsariya.
-						</span>
+					<p><?php esc_html_e( 'Update the assigned course or completion date for', 'skilltriks' ); ?>
+						<span></span>
 					</p>
 				</div>
 			</div>
 			<div class="stlms-dialog__content">
 				<div class="stlms-form-group">
 					<label class="stlms-select-search" for="id_label_single">
-						Assigned Course
+						<?php esc_html_e( 'Assigned Course', 'skilltriks' ); ?>
 						<select data-placeholder="HubSpot CMS for Developers – Beginners" class="stlms-select2 js-states form-control modal" id="id_label_single">
-							<option></option>
-							<option value="1">One</option>
-							<option value="2">Two</option>
-							<option value="3">Three</option>
-							<option value="4">Four</option>
-							<option value="5">Five</option>
-							<option value="6">Six</option>
+							<?php foreach ( $courses as $course_id ) : ?>
+								<option value="<?php echo esc_html( $course_id ); ?>"><?php echo esc_html( get_the_title( $course_id ) ); ?></option>
+							<?php endforeach; ?>		
 						</select>
 					</label>
 				</div>
 			</div>
 			<div class="stlms-dialog__content">
 				<div class="stlms-form-group">
-					<label for="completion-date">Completion Date For Bhargavkumar Khirsariya</label>
-					<input type="date" id="completion-date" placeholder="Type here to search employee">
+					<label for="completion-date"></label>
+					<input type="date" id="completion-date">
 				</div>
 			</div>
 		</div>
 		<div class="stlms-dialog__footer">
 			<div class="stlms-dialog__cta">
-				<button class="stlms-btn stlms-btn-outline">Cancel</button>
-				<button class="stlms-btn">Update</button>
+				<button class="stlms-btn stlms-btn-outline" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
+				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Update', 'skilltriks' ); ?></button>
 			</div>
 		</div>
 	</form>

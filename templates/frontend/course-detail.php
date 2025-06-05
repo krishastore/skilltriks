@@ -273,7 +273,9 @@ $curriculums_list = ! empty( $args['course_data']['curriculums'] ) ? $args['cour
 									<?php if ( $has_certificate && '100%' === $course_progress ) : ?>
 										<a href="javascript:;" id="download-certificate" data-course="<?php echo esc_attr( $course_id ); ?>" class="stlms-btn stlms-btn-block download-certificate"><?php esc_html_e( 'Download certificate', 'skilltriks' ); ?></a>
 									<?php endif; ?>
+									<?php if ( current_user_can( 'assign_course' ) || current_user_can( 'manage_options' ) ) : //phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
 									<a href="javascript:void(0);" data-fancybox data-src="#assign-course" class="stlms-btn stlms-btn-outline stlms-btn-block"><?php esc_html_e( 'Assign Course', 'skilltriks' ); ?></a>
+									<?php endif; ?>
 								</div>
 							</div>
 						</div>

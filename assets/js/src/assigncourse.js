@@ -141,9 +141,6 @@ Fancybox.bind("[data-fancybox]", {});
 
 jQuery(function($) {
     $('.stlms-select2').select2();
-    $('.stlms-select2.modal').select2({
-        dropdownParent: $('#edit-course')
-    });
     $('.stlms-select2-multi').select2({
         dropdownParent: $('#assign-course')
     });
@@ -316,7 +313,7 @@ jQuery(function($) {
 jQuery(function($) {
     $('#myTable').on('click', '.stlms-assigned-course__button.edit', function () {
         var $row = $(this).closest('tr');
-        var courseId = $row.find('td[data-course-id]').data('course-id');
+        var courseName = $row.find('td').eq(0).text().trim();
         var assignedTo = $row.find('td').eq(1).text().trim();
         var timestamp = $row.find('td[data-date]').data('date') || '';
         var formattedDate = '';
@@ -325,14 +322,14 @@ jQuery(function($) {
             formattedDate = dateObj.toISOString().split('T')[0];
         }
 
-        $('#edit-course .stlms-dialog__content-title span').text(assignedTo);
-        $('#edit-course #id_label_single').val(courseId).trigger('change');
+        $('#edit-course .stlms-dialog__content-title span.course-name').text(courseName);
+        $('#edit-course .stlms-dialog__content-title span.user-name').text(assignedTo);
         $('#edit-course #completion-date').val(formattedDate);
         $('#edit-course label[for="completion-date"]').text('Completion Date For ' + assignedTo);
     });
 });
 
-jQuery('#edit-course .stlms-btn, #delete-course .stlms-btn').on('click', function () {
+jQuery('#edit-course .update, #delete-course .delete').on('click', function () {
     const actionType = jQuery(this).closest('.stlms-dialog').attr('id') === 'edit-course' ? 'edit' : 'delete';
     UpdateAssignCourse(actionType);
 });
@@ -354,10 +351,7 @@ function UpdateAssignCourse(actionType) {
     };
 
     if (actionType === 'edit') {
-        const selectedCourseId = jQuery('#edit-course #id_label_single').val();
         const completionDate = jQuery('#edit-course #completion-date').val();
-
-        data.id = selectedCourseId;
         data.date = completionDate;
     }
 

@@ -11,16 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$stlms_users = get_users(
-	array(
-		'fields'       => array( 'display_name' ),
-		'role__not_in' => array( 'Administrator' ),
-	)
-);
-
 $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
 $due_soon              = get_option( 'stlms_settings' );
 $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
+
+foreach ( $course_assigned_by_me as $key => $completion_date ) :
+	list( $course_id, $_user_id ) = explode( '_', $key, 2 );
+	$stlms_users[]                = get_userdata( $_user_id )->display_name;
+endforeach;
 ?>
 <div class="stlms-wrap alignfull">
 	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
@@ -57,7 +55,7 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 										<select data-placeholder="Choose" class="stlms-select2 js-states stlms-form-control" id="id_label_user">
 											<option value=""><?php esc_html_e( 'Choose', 'skilltriks' ); ?></option>
 											<?php foreach ( $stlms_users as $users ) : ?>
-											<option value="<?php echo esc_html( $users->display_name ); ?>"><?php echo esc_html( $users->display_name ); ?></option>
+											<option value="<?php echo esc_html( $users ); ?>"><?php echo esc_html( $users ); ?></option>
 											<?php endforeach; ?>
 										</select>
 									</label>
@@ -119,18 +117,22 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 
 									list( $course_id, $_user_id ) = explode( '_', $key, 2 );
 
-									$user_info       = get_userdata( $_user_id );
-									$completion_date = strtotime( $completion_date );
-									$due_date        = strtotime( '-7 day', $completion_date );
-									$formatted_date  = wp_date( 'M. j, Y', $completion_date );
-									$current_status  = get_user_meta( $_user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
-									$curriculums     = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
-									$curriculums     = \ST\Lms\merge_curriculum_items( \ST\Lms\get_curriculums() );
-									$curriculums     = array_keys( $curriculums );
-									$course_progress = \ST\Lms\calculate_course_progress( $_user_id, $curriculums, $current_status ) . '%';
+									$user_info            = get_userdata( $_user_id );
+									$completion_date      = strtotime( $completion_date );
+									$date_format          = get_option( 'date_format' );
+									$due_date             = strtotime( '-7 day', $completion_date );
+									$formatted_date       = wp_date( $date_format, $completion_date );
+									$current_status       = get_user_meta( $_user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
+									$curriculums          = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+									$curriculums          = \ST\Lms\merge_curriculum_items( $curriculums );
+									$curriculums          = array_keys( $curriculums );
+									$course_progress      = \ST\Lms\calculate_course_progress( $course_id, $curriculums, $current_status ) . '%';
+									$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
+									$completed_on         = get_user_meta( $_user_id, $course_completed_key, true );
 
-									if ( '100%' === $course_progress ) {
-										$course_status = 'Completed';
+									if ( $completed_on ) {
+										$course_status   = 'Completed';
+										$course_progress = '100%';
 									} elseif ( '0%' === $course_progress ) {
 										$course_status = 'Not Started';
 									} else {
@@ -148,7 +150,7 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 										<div class="due-date">
 											<?php echo esc_html( $formatted_date ); ?>
 											<?php
-											if ( ! empty( $completion_date ) ) :
+											if ( ! empty( $completion_date ) && '100%' !== $course_progress ) :
 													$today_timestamp     = (int) current_datetime()->format( 'U' );
 													$formatted_timestamp = strtotime( $formatted_date );
 												?>
@@ -224,7 +226,7 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 		<div class="stlms-dialog__footer">
 			<div class="stlms-dialog__cta">
 				<button class="stlms-btn stlms-btn-outline" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
-				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Delete', 'skilltriks' ); ?></button>
+				<button class="stlms-btn delete" data-fancybox-close><?php esc_html_e( 'Delete', 'skilltriks' ); ?></button>
 			</div>
 		</div>
 	</form>
@@ -279,7 +281,7 @@ $courses     = get_posts( $course_args );
 		<div class="stlms-dialog__footer">
 			<div class="stlms-dialog__cta">
 				<button class="stlms-btn stlms-btn-outline" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
-				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Update', 'skilltriks' ); ?></button>
+				<button class="stlms-btn update" data-fancybox-close><?php esc_html_e( 'Update', 'skilltriks' ); ?></button>
 			</div>
 		</div>
 	</form>

@@ -68,7 +68,10 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 		// Create initial course and assign it.
 		$course_id = $this->factory->post->create( array( 'post_type' => 'course' ) );
 
-		$completion_date = date( 'Y-m-d' );
+		$current_date        = (int) current_datetime()->format( 'U' );
+		$completion_date     = wp_date( 'Y-m-d', $current_date );
+		$new_completion_date = strtotime( '+5 day', $current_date ); 
+		$new_completion_date = wp_date( 'Y-m-d', $new_completion_date ); 
 
 		// Assign course initially.
 		update_user_meta( $assigner_id, STLMS_COURSE_ASSIGN_BY_ME, array(
@@ -82,7 +85,7 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 		$_POST['_nonce'] = wp_create_nonce( STLMS_BASEFILE );
 		$_POST['type']   = 'edit';
 		$_POST['key']    = "{$course_id}_{$assignee_id}";
-		$_POST['date']   = '2025-12-31';
+		$_POST['date']   = $new_completion_date;
 
 		try {
 			$this->_handleAjax( 'update_assign_course' );
@@ -92,7 +95,7 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 
 		$by_me = get_user_meta( $assigner_id, STLMS_COURSE_ASSIGN_BY_ME, true );
 		$this->assertArrayHasKey( "{$course_id}_{$assignee_id}", $by_me );
-		$this->assertEquals( '2025-12-31', $by_me["{$course_id}_{$assignee_id}"] );
+		$this->assertEquals( $new_completion_date, $by_me["{$course_id}_{$assignee_id}"] );
 
 		$to_me = get_user_meta( $assignee_id, STLMS_COURSE_ASSIGN_TO_ME, true );
 		$this->assertArrayHasKey( "{$course_id}_{$assigner_id}", $to_me );

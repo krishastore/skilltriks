@@ -329,7 +329,7 @@ jQuery(function($) {
     });
 });
 
-jQuery('#edit-course .stlms-btn, #delete-course .stlms-btn').on('click', function () {
+jQuery('#edit-course .update, #delete-course .delete').on('click', function () {
     const actionType = jQuery(this).closest('.stlms-dialog').attr('id') === 'edit-course' ? 'edit' : 'delete';
     UpdateAssignCourse(actionType);
 });

@@ -319,50 +319,42 @@ jQuery(window).on('load', function() {
 		});
 	});
 
-  // User Dropdown Toggle
-	jQuery(function($) {
-		$(".stlms-user-dd .stlms-user-dd__toggle").on("click", function (event) {
-			event.stopPropagation();
-			$(this).toggleClass("active");
-			$(this).next(".stlms-user-dd__menu").slideToggle();
-		});
-		$(document).on("click", function (event) {
-			if ( ! $(event.target).closest(".stlms-user-dd").length ) {
-				$(".stlms-user-dd__toggle").removeClass("active");
-				$(".stlms-user-dd__menu").slideUp();
-			}
-		});
+  	// User Dropdown Toggle
+	jQuery(".stlms-user-dd .stlms-user-dd__toggle").on("click", function ($) {
+		$(this).toggleClass("active");
+		$(this).next(".stlms-user-dd__menu").slideToggle();
 	});
 	jQuery(function($) {
-		$("[data-id]").on("click", function (event) {
-			event.stopPropagation();
-			let $this = $(this);
-			let targetId = $this.data("id");
-			let $target = $("#" + targetId);
-			$("[data-id]").each(function () {
-			let otherId = $(this).data("id");
-			if (otherId !== targetId) {
+		$("[data-dropdown]").on("click", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			const $btn = $(this);
+			const dropdownId = $btn.data("dropdown");
+			const $dropdown = $("#" + dropdownId);
+			$btn.toggleClass("active");
+			$dropdown.stop(true, true).slideToggle();
+			$("[data-dropdown]")
+			.not($btn)
+			.each(function () {
+				const otherId = $(this).data("dropdown");
 				$("#" + otherId).slideUp();
 				$(this).removeClass("active");
-			}
 			});
-			$this.toggleClass("active");
-			$target.stop(true, true).slideToggle();
 		});
-		$(document).on("click", function (event) {
-			if (!$(event.target).closest(".stlms-dd-wrap").length) {
-			$("[data-id]").each(function () {
-				let targetId = $(this).data("id");
-				$("#" + targetId).slideUp();
+		$(document).on("click", function (e) {
+			if (!$(e.target).closest(".stlms-dd-wrap").length) {
+				$("[data-dropdown]").each(function () {
+				const id = $(this).data("dropdown");
+				$("#" + id).slideUp();
 				$(this).removeClass("active");
-			});
+				});
 			}
 		});
 		$(".stlms-dd-content").on("click", "a", function () {
-			let $dropdown = $(this).closest(".stlms-dd-content");
+			const $dropdown = $(this).closest(".stlms-dd-content");
+			const id = $dropdown.attr("id");
 			$dropdown.slideUp();
-			let dropdownId = $dropdown.attr("id");
-			$("[data-id='" + dropdownId + "']").removeClass("active");
+			$("[data-dropdown='" + id + "']").removeClass("active");
 		});
 	});
 });

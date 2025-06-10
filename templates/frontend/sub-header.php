@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="stlms-sub-header">
 		<div class="stlms-browse-wrap">
 			<div class="stlms-browse-popup stlms-dd-wrap">
-				<button class="stlms-dd-btn" data-id="browseContent">
+				<button class="stlms-dd-btn" data-dropdown="browseContent">
 					<?php esc_html_e( 'Browse', 'skilltriks' ); ?>
 					<svg width="16" height="16">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#ChevronDown"></use>
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php $userinfo = wp_get_current_user(); ?>
 			<div class="stlms-profile-popup stlms-dd-wrap">
-				<button class="stlms-dd-btn" data-id="profile">
+				<button class="stlms-dd-btn" data-dropdown="profile">
 					<div class="profile-picture">
 						<?php echo get_avatar( $userinfo->ID ); ?>
 					</div>

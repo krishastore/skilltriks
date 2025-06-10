@@ -11,6 +11,8 @@
 namespace ST\Lms\Shortcode;
 
 use ST\Lms\ErrorLog as EL;
+use ST\Lms\Notification\UpdateCourseNotification as UpdateNotification;
+use ST\Lms\Notification\DeleteCourseNotification as DeleteNotification;
 use const ST\Lms\STLMS_COURSE_ASSIGN_BY_ME;
 use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
 use const ST\Lms\META_KEY_COURSE_ASSIGNED;
@@ -80,6 +82,7 @@ class AssignCourse extends \ST\Lms\Shortcode\Register {
 				$existing_users = array_diff( $existing_users, array( (int) $_user_id ) );
 				update_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, $existing_users );
 			}
+			DeleteNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date );
 		}
 
 		if ( 'edit' === $type ) {
@@ -91,6 +94,7 @@ class AssignCourse extends \ST\Lms\Shortcode\Register {
 
 			update_user_meta( $curr_user_id, STLMS_COURSE_ASSIGN_BY_ME, $course_assigned_by_me );
 			update_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, $course_assigned_to_me );
+			UpdateNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date );
 		}
 
 		wp_send_json_success( array( 'message' => 'Updated successfully.' ) );

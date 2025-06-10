@@ -8,6 +8,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+$options      = get_option( 'stlms_settings' );
+$company_logo = $options['company_logo'];
+$date_format  = get_option( 'date_format' );
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<tr style="vertical-align: top;">
 								<td style="padding-bottom: 20px; padding-top: 20px; text-align: center; background-color: #ffffff;"
 									bgcolor="#ffffff">
-									<a href="https://www.skilltriks.com/" style="display: block;">
-										<img src="http://3.209.68.239/stlms-mailer/image/Logo.png" width="208"
+									<a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display: block;">
+										<img src="<?php echo esc_url( wp_get_attachment_image_url( $company_logo ) ); ?>" width="208"
 											height="35" style="display: block; margin: 0 auto;" alt="">
 									</a>
 								</td>
@@ -50,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												<strong>Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( $args['due_date'] ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
+												<strong>Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
 											</td>
 										</tr>
 										<tr>

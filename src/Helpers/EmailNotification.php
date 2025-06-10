@@ -13,7 +13,7 @@ namespace ST\Lms\Helpers;
 /**
  * Main Notification class.
  */
-abstract class EmailNotification {
+abstract class Notification {
 
 	/**
 	 * Email Subject.

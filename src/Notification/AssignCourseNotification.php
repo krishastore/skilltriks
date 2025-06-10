@@ -10,7 +10,7 @@ namespace ST\Lms\Notification;
 /**
  * AssignCourseNotification class.
  */
-class AssignCourseNotification extends \ST\Lms\Helpers\EmailNotification {
+class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 
 	/**
 	 * The main instance var.

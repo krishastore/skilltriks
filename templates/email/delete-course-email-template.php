@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 $options      = get_option( 'stlms_settings' );
-$company_logo = $options['company_logo'];
+$company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,10 +31,12 @@ $company_logo = $options['company_logo'];
 							<tr style="vertical-align: top;">
 								<td style="padding-bottom: 20px; padding-top: 20px; text-align: center; background-color: #ffffff;"
 									bgcolor="#ffffff">
+									<?php if ( $company_logo ) : ?>
 									<a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display: block;">
 										<img src="<?php echo esc_url( wp_get_attachment_image_url( $company_logo ) ); ?>" width="208"
 											height="35" style="display: block; margin: 0 auto;" alt="">
 									</a>
+									<?php endif; ?>
 								</td>
 							</tr>
 							<tr>

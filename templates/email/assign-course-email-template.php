@@ -50,7 +50,7 @@ $date_format  = get_option( 'date_format' );
 										<tr>
 											<td style="padding-bottom: 16px;">
 												You’ve been assigned a new course:
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>, assigned
 												by <?php echo esc_html( $args['from_user'] ); ?>.
 											</td>
 										</tr>
@@ -60,8 +60,7 @@ $date_format  = get_option( 'date_format' );
 											</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">Start learning today and expand your
-												skills!
+											<td style="padding-bottom: 16px;">Start learning today to build new skills and grow your knowledge!
 											</td>
 										</tr>
 										<tr>

@@ -47,25 +47,13 @@ $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												The course
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>, which was previously assigned to you, has been removed by
-												<?php echo esc_html( $args['from_user'] ); ?>.
+												Good news! Your assigned learner <?php echo esc_html( $args['from_user'] ); ?> has completed the course
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												You don’t need to take any further action regarding this course.
-											</td>
-										</tr>
-										<tr>
-											<td style="padding-bottom: 16px;">Thanks</td>
-										</tr>
-										<tr>
-											<td style="padding-top: 04px;">
-												<a href="<?php echo esc_url( $args['course_page_link'] ); ?>"
-													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 163px; height: 34px; font-size: 13px; line-height: 34px;">
-													Explore Other Courses
-												</a>
+												Keep up the great mentorship!
 											</td>
 										</tr>
 									</table>

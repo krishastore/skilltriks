@@ -1,6 +1,6 @@
 <?php
 /**
- * Notification class for assigned course.
+ * Notification class for updated assigned course.
  *
  * @package ST\Lms
  */
@@ -8,14 +8,14 @@
 namespace ST\Lms\Notification;
 
 /**
- * AssignCourseNotification class.
+ * CompleteCourseNotification class.
  */
-class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
+class CompleteCourseNotification extends \ST\Lms\Helpers\Notification {
 
 	/**
 	 * The main instance var.
 	 *
-	 * @var AssignCourseNotification|null $instance The one AssignCourseNotification instance.
+	 * @var CompleteCourseNotification|null $instance The one CompleteCourseNotification instance.
 	 * @since 1.0.0
 	 */
 	private static $instance = null;
@@ -23,11 +23,11 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 	/**
 	 * Init the main singleton instance class.
 	 *
-	 * @return AssignCourseNotification Return the instance class
+	 * @return CompleteCourseNotification Return the instance class
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
-			self::$instance = new AssignCourseNotification();
+			self::$instance = new CompleteCourseNotification();
 		}
 		return self::$instance;
 	}
@@ -40,14 +40,14 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * @return string
 	 */
 	public function email_subject( $course_name ) {
-		$this->subject = __( 'Great news! A new course has been assigned to you: ', 'skilltriks' ) . $course_name;
+		$this->subject = __( 'Course Completed: ', 'skilltriks' ) . $course_name;
 
 		/**
 		 * Filter the course assigned email subject.
 		 *
 		 * @param string $subject Email subject.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/subject', $this->subject );
+		return apply_filters( 'stlms/complete_course_notification/subject', $this->subject );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 		$course_link = get_permalink( $course_id );
 
 		$this->message = $this->render_email_template(
-			'assign-course-email-template',
+			'complete-course-email-template',
 			array(
 				'from_user'   => $from_user_name,
 				'to_user'     => $to_user_name,
@@ -82,7 +82,7 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param string $message Email message template.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/message', $this->message );
+		return apply_filters( 'stlms/complete_course_notification/message', $this->message );
 	}
 
 	/**
@@ -96,6 +96,6 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param bool $should_send_email Default true.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/should_send_email', true );
+		return apply_filters( 'stlms/complete_course_notification/should_send_email', true );
 	}
 }

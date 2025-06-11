@@ -768,9 +768,8 @@ $assigned_users = get_post_meta( $course_id, ST\LMS\META_KEY_COURSE_ASSIGNED, tr
 			</div>
 		</div>
 		<div class="stlms-dialog__footer">
-			<div class="stlms-dialog__cta">
-				<button class="stlms-btn" data-fancybox-close><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></button>
-				<button class="stlms-btn stlms-btn-outline" data-fancybox-close id="showSnackbar"><?php esc_html_e( 'Assign', 'skilltriks' ); ?></button>
+			<div class="stlms-dialog__cta center">
+				<button class="stlms-btn" data-fancybox-close id="showSnackbar"><?php esc_html_e( 'Assign Course', 'skilltriks' ); ?></button>
 			</div>
 		</div>
 	</form>

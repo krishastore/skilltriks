@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
 $due_soon              = get_option( 'stlms_settings' );
 $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
+$stlms_users           = array();
 
 foreach ( $course_assigned_by_me as $key => $completion_date ) :
 	list( $course_id, $_user_id ) = explode( '_', $key, 2 );
@@ -126,7 +127,7 @@ endforeach;
 									$curriculums          = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
 									$curriculums          = \ST\Lms\merge_curriculum_items( $curriculums );
 									$curriculums          = array_keys( $curriculums );
-									$course_progress      = \ST\Lms\calculate_course_progress( $course_id, $curriculums, $current_status ) . '%';
+									$course_progress      = ! empty( $current_status ) ? \ST\Lms\calculate_course_progress( $course_id, $curriculums, $current_status ) . '%' : '0%';
 									$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 									$completed_on         = get_user_meta( $_user_id, $course_completed_key, true );
 

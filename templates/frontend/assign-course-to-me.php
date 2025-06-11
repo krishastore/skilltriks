@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) : array();
 $due_soon              = get_option( 'stlms_settings' );
 $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
+$stlms_users           = array();
 
 foreach ( $course_assigned_to_me as $key => $completion_date ) :
 	list( $course_id, $_user_id ) = explode( '_', $key, 2 );

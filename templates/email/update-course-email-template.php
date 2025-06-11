@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for assign new course.
+ * Email template for updated assigned course due date.
  *
  * @package ST\Lms
  */
@@ -8,6 +8,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+$options      = get_option( 'stlms_settings' );
+$company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0;
+$date_format  = get_option( 'date_format' );
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,10 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<tr style="vertical-align: top;">
 								<td style="padding-bottom: 20px; padding-top: 20px; text-align: center; background-color: #ffffff;"
 									bgcolor="#ffffff">
-									<a href="https://www.skilltriks.com/" style="display: block;">
-										<img src="http://3.209.68.239/stlms-mailer/image/Logo.png" width="208"
+									<?php if ( $company_logo ) : ?>
+									<a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display: block;">
+										<img src="<?php echo esc_url( wp_get_attachment_image_url( $company_logo ) ); ?>" width="208"
 											height="35" style="display: block; margin: 0 auto;" alt="">
 									</a>
+									<?php endif; ?>
 								</td>
 							</tr>
 							<tr>
@@ -43,19 +49,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												You’ve been assigned a new course:
+												Heads-up! The due date for your course
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
-												by <?php echo esc_html( $args['from_user'] ); ?>.
+												has been updated by <?php echo esc_html( $args['from_user'] ); ?>.
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												<strong>Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( $args['due_date'] ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
+												<strong>New Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
 											</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">Start learning today and expand your
-												skills!
+											<td style="padding-bottom: 16px;">
+												Please plan accordingly to complete your course in time.
 											</td>
 										</tr>
 										<tr>
@@ -65,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 											<td style="padding-top: 04px;">
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
 													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 104px; height: 34px; font-size: 13px; line-height: 34px;">
-													Start Course
+													View Course
 												</a>
 											</td>
 										</tr>
@@ -79,5 +85,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</tbody>
 	</table>
 </body>
+
 </html>
-<?php

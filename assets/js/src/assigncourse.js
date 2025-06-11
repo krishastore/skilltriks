@@ -198,7 +198,7 @@ jQuery('#showSnackbar').on('click', function (e) {
 
     if (jQuery('form.stlms-assign-course__box').length) {
         $selectedCourse = jQuery('#assign-course');
-        $selectedEmployees = jQuery('#employee-list');
+        $selectedEmployees = jQuery('#employee-list').val();
     }
 
     if ($selectedCourse.length > 0 && $selectedEmployees.length > 0) {
@@ -210,8 +210,8 @@ jQuery('#showSnackbar').on('click', function (e) {
 
         let employeeValues = [];
 
-        if ($selectedEmployees.is('select')) {
-            employeeValues = $selectedEmployees.val() || [];
+        if (jQuery('#employee-list').is('select')) {
+            employeeValues = $selectedEmployees || [];
         } else {
             $selectedEmployees.each(function () {
                 employeeValues.push(jQuery(this).val());
@@ -276,7 +276,6 @@ jQuery(function($) {
 
 		// Disable other inputs during request.
 		isRequestInProgress = true;
-		$('input[name="course"]').prop('disabled', true);
 		$('#employee-list input[type="checkbox"]').prop('disabled', false);
 
 		$.ajax({
@@ -304,7 +303,6 @@ jQuery(function($) {
 			},
 			complete: function () {
 				isRequestInProgress = false;
-				$('input[name="course"]').prop('disabled', false);
 			},
 		});
 	});

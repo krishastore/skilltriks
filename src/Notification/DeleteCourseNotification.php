@@ -1,6 +1,6 @@
 <?php
 /**
- * Notification class for assigned course.
+ * Notification class for deleted assigned course.
  *
  * @package ST\Lms
  */
@@ -8,14 +8,14 @@
 namespace ST\Lms\Notification;
 
 /**
- * AssignCourseNotification class.
+ * DeleteCourseNotification class.
  */
-class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
+class DeleteCourseNotification extends \ST\Lms\Helpers\Notification {
 
 	/**
 	 * The main instance var.
 	 *
-	 * @var AssignCourseNotification|null $instance The one AssignCourseNotification instance.
+	 * @var DeleteCourseNotification|null $instance The one DeleteCourseNotification instance.
 	 * @since 1.0.0
 	 */
 	private static $instance = null;
@@ -23,11 +23,11 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 	/**
 	 * Init the main singleton instance class.
 	 *
-	 * @return AssignCourseNotification Return the instance class
+	 * @return DeleteCourseNotification Return the instance class
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
-			self::$instance = new AssignCourseNotification();
+			self::$instance = new DeleteCourseNotification();
 		}
 		return self::$instance;
 	}
@@ -40,14 +40,14 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * @return string
 	 */
 	public function email_subject( $course_name ) {
-		$this->subject = __( 'Great news! A new course has been assigned to you: ', 'skilltriks' ) . $course_name;
+		$this->subject = __( 'Course Unassigned: ', 'skilltriks' ) . $course_name;
 
 		/**
 		 * Filter the course assigned email subject.
 		 *
 		 * @param string $subject Email subject.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/subject', $this->subject );
+		return apply_filters( 'stlms/delete_course_notification/subject', $this->subject );
 	}
 
 	/**
@@ -62,18 +62,19 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 	 */
 	public function email_message( $from_user_name, $to_user_name, $course_id, $due_date ) {
 
-		$course      = get_post( $course_id );
-		$course_name = ! empty( $course ) ? $course->post_title : '';
-		$course_link = get_permalink( $course_id );
+		$course           = get_post( $course_id );
+		$course_name      = ! empty( $course ) ? $course->post_title : '';
+		$course_link      = get_permalink( $course_id );
+		$course_page_link = \ST\Lms\get_page_url( 'courses' );
 
 		$this->message = $this->render_email_template(
-			'assign-course-email-template',
+			'delete-course-email-template',
 			array(
-				'from_user'   => $from_user_name,
-				'to_user'     => $to_user_name,
-				'course_name' => $course_name,
-				'due_date'    => $due_date,
-				'course_link' => $course_link,
+				'from_user'        => $from_user_name,
+				'to_user'          => $to_user_name,
+				'course_name'      => $course_name,
+				'course_link'      => $course_link,
+				'course_page_link' => $course_page_link,
 			)
 		);
 
@@ -82,7 +83,7 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param string $message Email message template.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/message', $this->message );
+		return apply_filters( 'stlms/delete_course_notification/message', $this->message );
 	}
 
 	/**
@@ -96,6 +97,6 @@ class AssignCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param bool $should_send_email Default true.
 		 */
-		return apply_filters( 'stlms/assign_course_notification/should_send_email', true );
+		return apply_filters( 'stlms/delete_course_notification/should_send_email', true );
 	}
 }

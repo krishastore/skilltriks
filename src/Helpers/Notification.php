@@ -40,10 +40,11 @@ abstract class Notification {
 	 * Get subject line for the email notification.
 	 *
 	 * @param string|null $course_name Course name related to the notification.
+	 * @param bool        $is_assigner Optional course assigner.
 	 *
 	 * @return string
 	 */
-	abstract public function email_subject( $course_name );
+	abstract public function email_subject( $course_name, $is_assigner = false );
 
 	/**
 	 * Get body/content of the email notification.
@@ -52,10 +53,11 @@ abstract class Notification {
 	 * @param string      $to_user_name Recipient user.
 	 * @param int         $course_id course ID.
 	 * @param string|null $due_date Optional course due date.
+	 * @param bool        $is_assigner Optional course assigner.
 	 *
 	 * @return string
 	 */
-	abstract public function email_message( $from_user_name, $to_user_name, $course_id, $due_date );
+	abstract public function email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner = false );
 
 	/**
 	 * Return true if this notification should also send an email.
@@ -93,8 +95,9 @@ abstract class Notification {
 	 * @param int         $to_user_id   Recipient user ID.
 	 * @param int         $course_id    Course ID related to the notification.
 	 * @param string|null $due_date Optional course due date.
+	 * @param bool        $is_assigner Optional course assigner.
 	 */
-	public function send_email_notification( $from_user_id, $to_user_id, $course_id, $due_date = null ) {
+	public function send_email_notification( $from_user_id, $to_user_id, $course_id, $due_date = null, $is_assigner = false ) {
 		if ( ! $this->should_send_email_notification() ) {
 			return;
 		}
@@ -105,8 +108,8 @@ abstract class Notification {
 		$to_user_name   = $to_user->display_name;
 		$course         = get_post( $course_id );
 		$course_name    = ! empty( $course ) ? $course->post_title : '';
-		$subject        = $this->email_subject( $course_name );
-		$message        = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date );
+		$subject        = $this->email_subject( $course_name, $is_assigner );
+		$message        = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
 
 		wp_mail(
 			$to_user->user_email,

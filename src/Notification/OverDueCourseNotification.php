@@ -1,6 +1,6 @@
 <?php
 /**
- * Notification class for due assigned course.
+ * Notification class for over due assigned course.
  *
  * @package ST\Lms
  */
@@ -10,14 +10,14 @@ namespace ST\Lms\Notification;
 use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
 
 /**
- * DueCourseNotification class.
+ * OverDueCourseNotification class.
  */
-class DueCourseNotification extends \ST\Lms\Helpers\Notification {
+class OverDueCourseNotification extends \ST\Lms\Helpers\Notification {
 
 	/**
 	 * The main instance var.
 	 *
-	 * @var DueCourseNotification|null $instance The one DueCourseNotification instance.
+	 * @var OverDueCourseNotification|null $instance The one OverDueCourseNotification instance.
 	 * @since 1.0.0
 	 */
 	private static $instance = null;
@@ -25,11 +25,11 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 	/**
 	 * Init the main singleton instance class.
 	 *
-	 * @return DueCourseNotification Return the instance class
+	 * @return OverDueCourseNotification Return the instance class
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
-			self::$instance = new DueCourseNotification();
+			self::$instance = new OverDueCourseNotification();
 		}
 		return self::$instance;
 	}
@@ -38,7 +38,7 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * Init function.
 	 */
 	public function init() {
-		add_action( 'init', array( $this, 'schedule_due_course_notification' ) );
+		add_action( 'init', array( $this, 'schedule_over_due_course_notification' ) );
 	}
 
 	/**
@@ -50,14 +50,15 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * @return string
 	 */
 	public function email_subject( $course_name, $is_assigner = false ) {
-		$this->subject = __( 'Today’s the Day! Course: ', 'skilltriks' ) . $course_name . __( ' Is Due', 'skilltriks' );
+		$this->subject = $is_assigner ? __( 'Alert: ', 'skilltriks' ) . $course_name . __( ' Is Overdue', 'skilltriks' )
+		: __( 'Course: ', 'skilltriks' ) . $course_name . __( ' Is Now Overdue', 'skilltriks' );
 
 		/**
 		 * Filter the course assigned email subject.
 		 *
 		 * @param string $subject Email subject.
 		 */
-		return apply_filters( 'stlms/due_course_notification/subject', $this->subject );
+		return $is_assigner ? apply_filters( 'stlms/over_due_course_assigner_notification/subject', $this->subject ) : apply_filters( 'stlms/over_due_course_notification/subject', $this->subject );
 	}
 
 	/**
@@ -73,12 +74,13 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 	 */
 	public function email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner = false ) {
 
-		$course      = get_post( $course_id );
-		$course_name = ! empty( $course ) ? $course->post_title : '';
-		$course_link = get_permalink( $course_id );
+		$course        = get_post( $course_id );
+		$course_name   = ! empty( $course ) ? $course->post_title : '';
+		$course_link   = get_permalink( $course_id );
+		$template_name = $is_assigner ? 'over-due-course-assigner-email-template' : 'over-due-course-email-template';
 
 		$this->message = $this->render_email_template(
-			'due-course-email-template',
+			$template_name,
 			array(
 				'from_user'   => $from_user_name,
 				'to_user'     => $to_user_name,
@@ -93,7 +95,7 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param string $message Email message template.
 		 */
-		return apply_filters( 'stlms/due_course_notification/message', $this->message );
+		return $is_assigner ? apply_filters( 'stlms/over_due_course_assigner_notification/message', $this->message ) : apply_filters( 'stlms/over_due_course_notification/message', $this->message );
 	}
 
 	/**
@@ -107,25 +109,25 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 		 *
 		 * @param bool $should_send_email Default true.
 		 */
-		return apply_filters( 'stlms/due_course_notification/should_send_email', true );
+		return apply_filters( 'stlms/over_due_course_notification/should_send_email', true );
 	}
 
 	/**
 	 * Schedule the daily cron event if not already scheduled.
 	 */
-	public function schedule_due_course_notification() {
-		if ( ! wp_next_scheduled( 'stlms_check_due_courses_daily' ) ) {
-			wp_schedule_event( time(), 'daily', 'stlms_check_due_courses_daily' );
+	public function schedule_over_due_course_notification() {
+		if ( ! wp_next_scheduled( 'stlms_check_over_due_courses_daily' ) ) {
+			wp_schedule_event( time(), 'daily', 'stlms_check_over_due_courses_daily' );
 		}
 
-		add_action( 'stlms_check_due_courses_daily', array( $this, 'check_due_courses_daily' ) );
+		add_action( 'stlms_check_over_due_courses_daily', array( $this, 'check_over_due_courses_daily' ) );
 	}
 
 	/**
 	 * Check due courses and send email notifications.
 	 */
-	public function check_due_courses_daily() {
-		$today = current_time( 'Y-m-d' );
+	public function check_over_due_courses_daily() {
+		$yesterday = wp_date( 'Y-m-d', strtotime( '-1 day', (int) current_datetime()->format( 'U' ) ) );
 
 		$users = get_users(
 			array(
@@ -144,7 +146,7 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 			}
 
 			foreach ( $assigned_courses as $key => $due_date ) {
-				if ( empty( $due_date ) || $due_date !== $today ) {
+				if ( empty( $due_date ) || $due_date !== $yesterday ) {
 					continue;
 				}
 
@@ -152,7 +154,8 @@ class DueCourseNotification extends \ST\Lms\Helpers\Notification {
 				$to_user_id                       = $user_id;
 
 				if ( $course_id && $from_user_id && $to_user_id ) {
-					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date );
+					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false );
+					$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
 				}
 			}
 		}

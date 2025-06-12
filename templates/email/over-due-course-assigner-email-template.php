@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for assigned course due today.
+ * Email template for assigned course overdue.
  *
  * @package ST\Lms
  */
@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $options      = get_option( 'stlms_settings' );
 $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0;
+$date_format  = get_option( 'date_format' );
 
 ?>
 <!DOCTYPE html>
@@ -47,25 +48,29 @@ $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0
 											<td style="padding-bottom: 16px;">Hi <?php echo esc_html( $args['to_user'] ); ?></td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">
-												Today is the final day to complete your course
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
-											</td>
+											<td  style="padding-bottom: 16px;">Just a heads-up — here’s the current status of a course you assigned:</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">
-												Wrap it up and mark your learning milestone!
-											</td>
-										</tr>
-										<tr>
-											<td style="padding-bottom: 16px;">Happy Learning.</td>
-										</tr>
-										<tr>
-											<td style="padding-top: 04px;">
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
-													tyle="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 128px; height: 34px; font-size: 13px; line-height: 34px;">
-													Continue Course
+											<td>
+												<strong>Course:</strong>
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;">
+													<?php echo esc_html( $args['course_name'] ); ?>
 												</a>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Learner:</strong> <?php echo esc_html( $args['from_user'] ); ?>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Due Date:</strong> <?php echo esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ); ?>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Status:</strong> Overdue – Missed the deadline by 1 day
 											</td>
 										</tr>
 									</table>
@@ -78,5 +83,4 @@ $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0
 		</tbody>
 	</table>
 </body>
-
 </html>

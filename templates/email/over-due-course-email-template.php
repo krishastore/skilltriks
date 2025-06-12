@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for assigned course due today.
+ * Email template for assigned course overdue.
  *
  * @package ST\Lms
  */
@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $options      = get_option( 'stlms_settings' );
 $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0;
+$date_format  = get_option( 'date_format' );
 
 ?>
 <!DOCTYPE html>
@@ -48,22 +49,31 @@ $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												Today is the final day to complete your course
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
+												The due date for your course
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;">
+													<?php echo esc_html( $args['course_name'] ); ?>
+												</a>
+												has passed.
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												Wrap it up and mark your learning milestone!
+												<strong>Original Due Date:</strong> <?php echo esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ); ?>
 											</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">Happy Learning.</td>
+											<td style="padding-bottom: 16px;">
+												You can still complete the course, but please connect with your manager
+												or trainer if you need more time.
+											</td>
+										</tr>
+										<tr>
+											<td style="padding-bottom: 16px;">Thanks</td>
 										</tr>
 										<tr>
 											<td style="padding-top: 04px;">
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
-													tyle="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 128px; height: 34px; font-size: 13px; line-height: 34px;">
+													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 128px; height: 34px; font-size: 13px; line-height: 34px;">
 													Continue Course
 												</a>
 											</td>

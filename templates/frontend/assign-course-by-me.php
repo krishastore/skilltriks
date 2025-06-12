@@ -11,16 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use const ST\Lms\STLMS_COURSE_ASSIGN_BY_ME;
-use const ST\Lms\STLMS_COURSE_STATUS;
-use const ST\Lms\META_KEY_COURSE_CURRICULUM;
-use const ST\Lms\STLMS_COURSE_COMPLETED_ON;
-use const ST\Lms\STLMS_COURSE_CPT;
-use function ST\Lms\get_page_url;
-use function ST\Lms\merge_curriculum_items;
-use function ST\Lms\calculate_course_progress;
-
-$course_assigned_by_me = get_user_meta( get_current_user_id(), STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
+$course_assigned_by_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_BY_ME, true ) : array();
 $due_soon              = get_option( 'stlms_settings' );
 $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'] : '';
 $stlms_users           = array();
@@ -84,7 +75,7 @@ endforeach;
 						<?php esc_html_e( 'Assign Course', 'skilltriks' ); ?>
 					</div>
 					<div class="stlms-sort-by">
-						<a href="<?php echo esc_url( get_page_url( 'assign_new_course' ) ); ?>" class="stlms-btn">
+						<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'assign_new_course' ) ); ?>" class="stlms-btn">
 							<?php esc_html_e( 'Assign New Course', 'skilltriks' ); ?>
 						</a>
 						<button class="stlms-filter-toggle">
@@ -98,12 +89,12 @@ endforeach;
 				<div class="stlms-course-view__body">
 					<?php if ( current_user_can( 'assign_course' ) || current_user_can( 'manage_options' ) ) : //phpcs:ignore WordPress.WP.Capabilities.Unknown ?>
 					<div class="stlms-assigned-course__header">
-						<a href="<?php echo esc_url( get_page_url( 'assign_course_by_me' ) ); ?>" class="stlms-assigned-course__btn active">
+						<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'assign_course_by_me' ) ); ?>" class="stlms-assigned-course__btn active">
 							<span>
 								<?php esc_html_e( 'Assigned By Me', 'skilltriks' ); ?>
 							</span>
 						</a>
-						<a href="<?php echo esc_url( get_page_url( 'assign_course_to_me' ) ); ?>" class="stlms-assigned-course__btn ">
+						<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'assign_course_to_me' ) ); ?>" class="stlms-assigned-course__btn ">
 							<span>
 								<?php esc_html_e( 'Assigned To Me', 'skilltriks' ); ?>
 							</span>
@@ -132,12 +123,12 @@ endforeach;
 									$date_format          = get_option( 'date_format' );
 									$due_date             = strtotime( '-7 day', $completion_date );
 									$formatted_date       = wp_date( $date_format, $completion_date );
-									$current_status       = get_user_meta( $_user_id, sprintf( STLMS_COURSE_STATUS, $course_id ), true );
-									$curriculums          = get_post_meta( $course_id, META_KEY_COURSE_CURRICULUM, true );
-									$curriculums          = merge_curriculum_items( $curriculums );
+									$current_status       = get_user_meta( $_user_id, sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id ), true );
+									$curriculums          = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
+									$curriculums          = \ST\Lms\merge_curriculum_items( $curriculums );
 									$curriculums          = array_keys( $curriculums );
-									$course_progress      = ! empty( $current_status ) ? calculate_course_progress( $course_id, $curriculums, $current_status ) . '%' : '0%';
-									$course_completed_key = sprintf( STLMS_COURSE_COMPLETED_ON, $course_id );
+									$course_progress      = ! empty( $current_status ) ? \ST\Lms\calculate_course_progress( $course_id, $curriculums, $current_status ) . '%' : '0%';
+									$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
 									$completed_on         = get_user_meta( $_user_id, $course_completed_key, true );
 
 									if ( $completed_on ) {
@@ -245,7 +236,7 @@ endforeach;
 <!-- edit popup -->
 <?php
 $course_args = array(
-	'post_type'      => STLMS_COURSE_CPT,
+	'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 	'post_status'    => 'publish',
 	'posts_per_page' => -1,
 	'fields'         => 'ids',

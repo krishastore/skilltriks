@@ -7,6 +7,8 @@
 
 namespace ST\Lms\Notification;
 
+use function ST\Lms\get_page_url;
+
 /**
  * DeleteCourseNotification class.
  */
@@ -65,7 +67,7 @@ class DeleteCourseNotification extends \ST\Lms\Helpers\Notification {
 		$course           = get_post( $course_id );
 		$course_name      = ! empty( $course ) ? $course->post_title : '';
 		$course_link      = get_permalink( $course_id );
-		$course_page_link = \ST\Lms\get_page_url( 'courses' );
+		$course_page_link = get_page_url( 'courses' );
 
 		$this->message = $this->render_email_template(
 			'delete-course-email-template',

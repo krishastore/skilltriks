@@ -13,6 +13,8 @@ namespace ST\Lms\Shortcode;
 use ST\Lms\ErrorLog as EL;
 use ST\Lms\Notification\UpdateCourseNotification as UpdateNotification;
 use ST\Lms\Notification\DeleteCourseNotification as DeleteNotification;
+use ST\Lms\Notification\DueCourseNotification as DueNotification;
+use ST\Lms\Notification\DueSoonCourseNotification as DueSoonNotification;
 use const ST\Lms\STLMS_COURSE_ASSIGN_BY_ME;
 use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
 use const ST\Lms\META_KEY_COURSE_ASSIGNED;
@@ -95,6 +97,8 @@ class AssignCourse extends \ST\Lms\Shortcode\Register {
 			update_user_meta( $curr_user_id, STLMS_COURSE_ASSIGN_BY_ME, $course_assigned_by_me );
 			update_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, $course_assigned_to_me );
 			UpdateNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date );
+			DueNotification::instance()->check_due_courses_daily();
+			DueSoonNotification::instance()->check_due_soon_courses_daily();
 		}
 
 		wp_send_json_success( array( 'message' => 'Updated successfully.' ) );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for updated assigned course due date.
+ * Email template for assigned course due today.
  *
  * @package ST\Lms
  */
@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $options      = get_option( 'stlms_settings' );
 $company_logo = isset( $options['company_logo'] ) ? $options['company_logo'] : 0;
-$date_format  = get_option( 'date_format' );
 
 ?>
 <!DOCTYPE html>
@@ -49,29 +48,23 @@ $date_format  = get_option( 'date_format' );
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												Heads-up! The due date for your course
+												Today is the final day to complete your course
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
-												has been updated by <?php echo esc_html( $args['from_user'] ); ?>.
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												<strong>New Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
+												Wrap it up and mark your learning milestone!
 											</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">
-												We encourage you to complete the course by the updated due date.
-											</td>
-										</tr>
-										<tr>
-											<td style="padding-bottom: 16px;">Thanks</td>
+											<td style="padding-bottom: 16px;">Happy Learning.</td>
 										</tr>
 										<tr>
 											<td style="padding-top: 04px;">
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
-													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 104px; height: 34px; font-size: 13px; line-height: 34px;">
-													View Course
+													tyle="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 128px; height: 34px; font-size: 13px; line-height: 34px;">
+													Continue Course
 												</a>
 											</td>
 										</tr>

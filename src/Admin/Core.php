@@ -58,6 +58,8 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		new \ST\Lms\Shortcode\AssignedCourse();
 		new \ST\Lms\Shortcode\AssignNewCourse();
 		\ST\Lms\Helpers\SettingOptions::instance()->init();
+		\ST\Lms\Notification\DueCourseNotification::instance()->init();
+		\ST\Lms\Notification\OverDueCourseNotification::instance()->init();
 		new \ST\Lms\Import\QuestionImport();
 		new \ST\Lms\Import\LessonImport();
 		new \ST\Lms\Import\CourseImport();

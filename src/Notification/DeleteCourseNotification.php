@@ -7,6 +7,8 @@
 
 namespace ST\Lms\Notification;
 
+use function ST\Lms\get_page_url;
+
 /**
  * DeleteCourseNotification class.
  */
@@ -36,10 +38,11 @@ class DeleteCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * Get subject line for the email notification.
 	 *
 	 * @param string|null $course_name Course name related to the notification.
+	 * @param bool        $is_assigner Optional course assigner.
 	 *
 	 * @return string
 	 */
-	public function email_subject( $course_name ) {
+	public function email_subject( $course_name, $is_assigner = false ) {
 		$this->subject = __( 'Course Unassigned: ', 'skilltriks' ) . $course_name;
 
 		/**
@@ -57,15 +60,16 @@ class DeleteCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * @param string      $to_user_name Recipient user.
 	 * @param int         $course_id course ID.
 	 * @param string|null $due_date Optional course due date.
+	 * @param bool        $is_assigner Optional course assigner.
 	 *
 	 * @return string
 	 */
-	public function email_message( $from_user_name, $to_user_name, $course_id, $due_date ) {
+	public function email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner = false ) {
 
 		$course           = get_post( $course_id );
 		$course_name      = ! empty( $course ) ? $course->post_title : '';
 		$course_link      = get_permalink( $course_id );
-		$course_page_link = \ST\Lms\get_page_url( 'courses' );
+		$course_page_link = get_page_url( 'courses' );
 
 		$this->message = $this->render_email_template(
 			'delete-course-email-template',

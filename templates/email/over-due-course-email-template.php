@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for updated assigned course due date.
+ * Email template for assigned course overdue.
  *
  * @package ST\Lms
  */
@@ -49,19 +49,22 @@ $date_format  = get_option( 'date_format' );
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												Heads-up! The due date for your course
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
-												has been updated by <?php echo esc_html( $args['from_user'] ); ?>.
+												The due date for your course
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;">
+													<?php echo esc_html( $args['course_name'] ); ?>
+												</a>
+												has passed.
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												<strong>New Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
+												<strong>Original Due Date:</strong> <?php echo esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ); ?>
 											</td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 16px;">
-												We encourage you to complete the course by the updated due date.
+												You can still complete the course, but please connect with your manager
+												or trainer if you need more time.
 											</td>
 										</tr>
 										<tr>
@@ -70,8 +73,8 @@ $date_format  = get_option( 'date_format' );
 										<tr>
 											<td style="padding-top: 04px;">
 												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
-													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 104px; height: 34px; font-size: 13px; line-height: 34px;">
-													View Course
+													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 128px; height: 34px; font-size: 13px; line-height: 34px;">
+													Continue Course
 												</a>
 											</td>
 										</tr>

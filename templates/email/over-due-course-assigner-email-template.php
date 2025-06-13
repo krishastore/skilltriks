@@ -1,6 +1,6 @@
 <?php
 /**
- * Email template for updated assigned course due date.
+ * Email template for assigned course overdue.
  *
  * @package ST\Lms
  */
@@ -48,31 +48,29 @@ $date_format  = get_option( 'date_format' );
 											<td style="padding-bottom: 16px;">Hi <?php echo esc_html( $args['to_user'] ); ?></td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">
-												Heads-up! The due date for your course
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;"><?php echo esc_html( $args['course_name'] ); ?></a>
-												has been updated by <?php echo esc_html( $args['from_user'] ); ?>.
-											</td>
+											<td  style="padding-bottom: 16px;">Just a heads-up — here’s the current status of a course you assigned:</td>
 										</tr>
 										<tr>
-											<td style="padding-bottom: 16px;">
-												<strong>New Due Date:</strong> <?php echo ! empty( $args['due_date'] ) ? esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ) : esc_html_e( 'No due date set', 'skilltriks' ); ?>
-											</td>
-										</tr>
-										<tr>
-											<td style="padding-bottom: 16px;">
-												We encourage you to complete the course by the updated due date.
-											</td>
-										</tr>
-										<tr>
-											<td style="padding-bottom: 16px;">Thanks</td>
-										</tr>
-										<tr>
-											<td style="padding-top: 04px;">
-												<a href="<?php echo esc_url( $args['course_link'] ); ?>"
-													style="display: block; text-align: center; background-color: #0F5AA7; color: #ffffff; text-decoration: none; border-radius: 4px; width: 104px; height: 34px; font-size: 13px; line-height: 34px;">
-													View Course
+											<td>
+												<strong>Course:</strong>
+												<a href="<?php echo esc_url( $args['course_link'] ); ?>" style="color: #0F5AA7; text-decoration: none;">
+													<?php echo esc_html( $args['course_name'] ); ?>
 												</a>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Learner:</strong> <?php echo esc_html( $args['from_user'] ); ?>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Due Date:</strong> <?php echo esc_html( wp_date( $date_format, strtotime( $args['due_date'] ) ) ); ?>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Status:</strong> Overdue – Missed the deadline by 1 day
 											</td>
 										</tr>
 									</table>
@@ -85,5 +83,4 @@ $date_format  = get_option( 'date_format' );
 		</tbody>
 	</table>
 </body>
-
 </html>

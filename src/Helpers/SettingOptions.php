@@ -125,9 +125,10 @@ class SettingOptions {
 			),
 			'due_soon'              => array(
 				'title' => esc_html__( 'Due Soon', 'skilltriks' ),
-				'desc'  => __( 'Course to be due soon in 7 days', 'skilltriks' ),
+				// translators: %d is the number of days before the course is due.
+				'desc'  => sprintf( __( 'Course to be due soon in %d days', 'skilltriks' ), absint( $this->options['due_soon'] ) ),
 				'type'  => 'number',
-				'value' => isset( $this->options['due_soon'] ) ? esc_url( $this->options['due_soon'] ) : '',
+				'value' => isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : '',
 			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );

@@ -126,7 +126,7 @@ class SettingOptions {
 			'due_soon'              => array(
 				'title' => esc_html__( 'Due Soon', 'skilltriks' ),
 				// translators: %d is the number of days before the course is due.
-				'desc'  => sprintf( __( 'Course to be due soon in %d days', 'skilltriks' ), absint( $this->options['due_soon'] ) ),
+				'desc'  => sprintf( __( 'Course to be due soon in %d days', 'skilltriks' ), isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : 7 ),
 				'type'  => 'number',
 				'value' => isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : '',
 			),

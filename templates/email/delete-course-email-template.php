@@ -3,6 +3,8 @@
  * Email template for delete assigned course.
  *
  * @package ST\Lms
+ *
+ * phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

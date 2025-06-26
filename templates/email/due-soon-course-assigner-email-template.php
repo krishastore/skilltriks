@@ -3,6 +3,8 @@
  * Email template for assigned course overdue.
  *
  * @package ST\Lms
+ *
+ * phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

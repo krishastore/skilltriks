@@ -3,6 +3,8 @@
  * Email template for updated assigned course due date.
  *
  * @package ST\Lms
+ *
+ * phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

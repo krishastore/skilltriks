@@ -30,7 +30,7 @@ class AssignCourseTest extends WP_Ajax_UnitTestCase {
 
 		$_POST['_nonce'] = wp_create_nonce( STLMS_BASEFILE );
 
-		$completion_date = date( 'Y-m-d' );
+		$completion_date = gmdate( 'Y-m-d' );
 		$_POST['assign_course_data'] = array(
 			array(
 				'course_id'       => $course_id,

@@ -192,7 +192,7 @@ endforeach;
 									<td><?php echo esc_html( $user_info->display_name ); ?></td>
 									<td>
 										<div class="due-date">
-											<?php echo esc_html( $formatted_date ); ?>
+											<?php echo ! empty( $formatted_date ) ? esc_html( $formatted_date ) : '-'; ?>
 											<?php
 											if ( ! empty( $completion_date ) && '100%' !== $course_progress ) :
 													$today_timestamp     = (int) current_datetime()->format( 'U' );

@@ -315,6 +315,7 @@ jQuery(function($) {
         var assignedTo = $row.find('td').eq(1).text().trim();
         var timestamp = $row.find('td[data-date]').data('date') || '';
         var formattedDate = '';
+        const today = new Date().toISOString().split('T')[0];
         if (timestamp) {
             var dateObj = new Date(timestamp * 1000);
             formattedDate = dateObj.toISOString().split('T')[0];
@@ -322,7 +323,7 @@ jQuery(function($) {
 
         $('#edit-course .stlms-dialog__content-title span.course-name').text(courseName);
         $('#edit-course .stlms-dialog__content-title span.user-name').text(assignedTo);
-        $('#edit-course #completion-date').val(formattedDate);
+        $('#edit-course #completion-date').val(formattedDate).attr('min', today);
         $('#edit-course label[for="completion-date"]').text('Completion Date For ' + assignedTo);
     });
 });

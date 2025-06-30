@@ -140,7 +140,9 @@ endforeach;
 									} else {
 										$course_status = 'In Progress';
 									}
-									?>
+
+									if ( 'publish' === get_post_status( $course_id ) ) :
+										?>
 								<tr data-key="<?php echo esc_attr( $key ); ?>">
 									<td>
 										<a href="<?php echo esc_url( get_permalink( $course_id ) ); ?>" class="stlms-datatable__course-link">
@@ -197,7 +199,8 @@ endforeach;
 										</div>
 									</td>
 								</tr>
-									<?php
+										<?php
+									endif;
 								endforeach;
 								?>
 							</tbody>

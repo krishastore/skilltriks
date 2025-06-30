@@ -194,7 +194,7 @@ jQuery('#showSnackbar').on('click', function (e) {
     e.preventDefault();
 
     let $selectedCourse = jQuery('#course-list .stlms-check[type="radio"]:checked');
-    let $selectedEmployees = jQuery('#employee-list .stlms-check[type="checkbox"]:checked');
+    let $selectedEmployees = jQuery('#employee-list .stlms-check[type="checkbox"]:checked:not(:disabled)');
 
     if (jQuery('form.stlms-assign-course__box').length) {
         $selectedCourse = jQuery('#assign-course');

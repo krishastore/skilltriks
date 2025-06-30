@@ -181,12 +181,14 @@ endforeach;
 									</td>
 									<td>
 										<div class="stlms-assigned-course__action">
+											<?php if ( '100%' !== $course_progress ) : ?>
 											<button class="stlms-assigned-course__button edit"
 												data-fancybox data-src="#edit-course">
 												<svg width="19" height="17">
 													<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#edit-assigned-course"></use>
 												</svg>
 											</button>
+											<?php endif; ?>
 											<button class="stlms-assigned-course__button delete" data-fancybox data-src="#delete-course">
 												<svg width="14" height="17">
 													<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#delete-assigned-course"></use>

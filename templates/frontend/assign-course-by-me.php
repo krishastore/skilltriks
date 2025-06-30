@@ -20,6 +20,8 @@ foreach ( $course_assigned_by_me as $key => $completion_date ) :
 	list( $course_id, $_user_id ) = explode( '_', $key, 2 );
 	$stlms_users[]                = get_userdata( $_user_id )->display_name;
 endforeach;
+
+$stlms_users = array_unique( $stlms_users );
 ?>
 <div class="stlms-wrap alignfull">
 	<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>

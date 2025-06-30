@@ -12,6 +12,8 @@
 
 namespace ST\Lms\Collections;
 
+use const ST\Lms\META_KEY_COURSE_ASSIGNED;
+
 /**
  * Register post types.
  */
@@ -289,6 +291,10 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 		$post_meta = get_post_meta( $post_id );
 		if ( $post_meta ) {
 			foreach ( $post_meta as $meta_key => $meta_values ) {
+				// Skip cloning course assigned meta to assign cloned courses to all users.
+				if ( META_KEY_COURSE_ASSIGNED === $meta_key ) {
+					continue;
+				}
 				foreach ( $meta_values as $meta_value ) {
 					if ( is_serialized( $meta_value ) ) {
 						$meta_value = maybe_unserialize( $meta_value );

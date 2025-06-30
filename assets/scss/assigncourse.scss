@@ -807,6 +807,15 @@ table.dataTable > tbody > tr.child ul.dtr-details > li {
       color: $primary_dark;
     }
   }
+  &__content {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+
+		@include breakpoint(max, $sm) {
+			gap: 15px;
+		}
+	}
   &__content-box {
     padding: 30px 40px;
     display: flex;

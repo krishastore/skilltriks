@@ -104,33 +104,35 @@ $courses     = new \WP_Query( $course_args );
 							</div>
 						</div>
 					</div>
+					<?php
+					$levels_list = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_TAXONOMY_TAG );
+					if ( ! empty( $levels_list ) ) :
+						?>
 					<div class="stlms-accordion stlms-pb-20">
 						<div class="stlms-accordion-item" data-expanded="true">
 							<div class="stlms-accordion-header">
 								<div class="stlms-accordion-filter-title"><?php esc_html_e( 'Course Level', 'skilltriks' ); ?></div>
 							</div>
-							<?php
-							$levels_list = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_TAXONOMY_TAG );
-							?>
 							<div class="stlms-accordion-collapse">
 								<div class="stlms-filter-list">
 									<ul>
-										<?php foreach ( $levels_list as $key => $get_level ) : ?>
-											<li>
-												<div class="stlms-check-wrap">
-													<input type="checkbox" name="levels[]" class="stlms-check" id="st_course_level_<?php echo (int) $key; ?>" value="<?php echo esc_attr( $get_level['id'] ); ?>"<?php echo in_array( $get_level['id'], $levels, true ) ? ' checked' : ''; ?>>
-													<label for="st_course_level_<?php echo (int) $key; ?>" class="stlms-check-label">
-														<?php echo esc_html( $get_level['name'] ); ?>
-														<span><?php echo esc_html( $get_level['count'] ); ?></span>
-													</label>
-												</div>
-											</li>
-										<?php endforeach; ?>
+									<?php foreach ( $levels_list as $key => $get_level ) : ?>
+										<li>
+											<div class="stlms-check-wrap">
+												<input type="checkbox" name="levels[]" class="stlms-check" id="st_course_level_<?php echo (int) $key; ?>" value="<?php echo esc_attr( $get_level['id'] ); ?>"<?php echo in_array( $get_level['id'], $levels, true ) ? ' checked' : ''; ?>>
+												<label for="st_course_level_<?php echo (int) $key; ?>" class="stlms-check-label">
+													<?php echo esc_html( $get_level['name'] ); ?>
+													<span><?php echo esc_html( $get_level['count'] ); ?></span>
+												</label>
+											</div>
+										</li>
+									<?php endforeach; ?>
 									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
+					<?php endif; ?>
 					<input type="hidden" name="category" value="<?php echo esc_attr( (string) reset( $category ) ); ?>">
 					<input type="hidden" name="order_by" value="<?php echo esc_attr( $_orderby ); ?>">
 					<input type="hidden" name="_s" value="<?php echo esc_attr( $search_keyword ); ?>">

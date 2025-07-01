@@ -110,11 +110,17 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    color: $primary_dark;
     font-weight: 600;
     font-size: 18px;
     line-height: 1.2;
     color: $black;
+
+    h4 {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 1.2;
+      color: $black;
+    }
 
     span {
       font-weight: 400;

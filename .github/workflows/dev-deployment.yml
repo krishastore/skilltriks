@@ -1,0 +1,44 @@
+name: Deployment on dev environment
+
+on:
+  push:
+    branches: [ development ]
+
+jobs:
+  deploy_on_dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: http://44.206.8.68/skilltriks/
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install SSH client
+        run: |
+          sudo apt update -y
+          sudo apt install openssh-client -y
+
+      - name: Configure SSH agent based on secret parameters
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEV_ENV_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p "$DEV_ENV_PORT" -H "$DEV_ENV_IP" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+        env:
+          DEV_ENV_PRIVATE_KEY: ${{ secrets.DEV_ENV_PRIVATE_KEY }}
+          DEV_ENV_IP: ${{ secrets.DEV_ENV_IP }}
+          DEV_ENV_PORT: ${{ secrets.DEV_ENV_PORT }}
+
+      - name: Add execute permission to deployment script
+        run: chmod +x .github/deployment/scripts/dev-deployment.sh
+
+      - name: Execute deployment script
+        run: .github/deployment/scripts/dev-deployment.sh
+        env:
+          DEV_ENV_IP: ${{ secrets.DEV_ENV_IP }}
+          DEV_ENV_USER: ${{ secrets.DEV_ENV_USER }}
+          DEV_ENV_PORT: ${{ secrets.DEV_ENV_PORT }} 

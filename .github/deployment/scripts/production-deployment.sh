@@ -20,7 +20,7 @@ fi
 # Check if project directory does not exist
 if [ ! -d bluedolphin-lms ]; then
     # Clone the repository if project directory does not exist
-    git clone git@github.com:krishastore/bluedolphin-lms.git bluedolphin-lms
+    git clone git@github.com:krishastore/skilltriks.git bluedolphin-lms
 fi
 
 # Change directory to the project directory

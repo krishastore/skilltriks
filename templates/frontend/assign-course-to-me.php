@@ -182,7 +182,9 @@ endforeach;
 									} else {
 										$course_status = 'In Progress';
 									}
-									?>
+
+									if ( 'publish' === get_post_status( $course_id ) ) :
+										?>
 								<tr>
 									<td>
 										<a href="<?php echo esc_url( get_permalink( $course_id ) ); ?>" class="stlms-datatable__course-link">
@@ -223,7 +225,8 @@ endforeach;
 									</td>
 									<td><a href="<?php echo ! $is_enrol && is_user_logged_in() ? 'javascript:;' : esc_url( $course_link ); ?>" class="stlms-btn stlms-btn-light" id="<?php echo ! $is_enrol && is_user_logged_in() ? 'enrol-now' : ''; ?>" data-course="<?php echo esc_html( $course_id ); ?>"><?php echo esc_html( $button_text ); ?><i class="stlms-loader"></i></a></td>
 								</tr>
-									<?php
+										<?php
+									endif;
 								endforeach;
 								?>
 							</tbody>

@@ -310,7 +310,11 @@ jQuery(function($) {
 
 jQuery(function($) {
     $('#myTable').on('click', '.stlms-assigned-course__button.edit', function () {
-        var $row = $(this).closest('tr');
+        let $row = $(this).closest('tr');
+        if ($row.hasClass('child')) {
+            $row = $row.prevAll('tr[data-key]').first();
+        }
+
         var courseName = $row.find('td').eq(0).text().trim();
         var assignedTo = $row.find('td').eq(1).text().trim();
         var timestamp = $row.find('td[data-date]').data('date') || '';

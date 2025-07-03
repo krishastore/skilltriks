@@ -689,7 +689,6 @@ table.dataTable > tbody > tr.child ul.dtr-details > li {
 
 .stlms-snackbar {
   display: none;
-  // display: flex;
   align-items: center;
   gap: 10px;
   padding: 15px;
@@ -704,26 +703,30 @@ table.dataTable > tbody > tr.child ul.dtr-details > li {
   font-weight: 500;
   font-size: 15px;
   line-height: 1.5;
+  margin-left: 50px;
 
   &.error-snackbar {
     background-color: $red;
   }
-
   &.show {
-    display: flex; // only show when needed
+    display: flex;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
   }
-
+  svg {
+    flex-shrink: 0;
+  }
   button {
     margin-left: auto;
     color: white;
     cursor: pointer;
+    flex-shrink: 0;
   }
-
   @include breakpoint(max, $sm) {
     right: 15px;
     bottom: 15px;
-    min-width: 250px;
+    min-width: auto;
+    width: 280px;
+    margin-left: 15px;
   }
 }
 

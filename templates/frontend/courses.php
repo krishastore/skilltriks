@@ -76,7 +76,7 @@ $courses     = new \WP_Query( $course_args );
 		<div class="stlms-container">
 			<?php if ( isset( $args['filter'] ) && 'yes' === $args['filter'] ) : ?>
 			<div class="stlms-course-filter">
-				<button class="stlms-filter-toggle">
+				<button class="stlms-filter-toggle stlms-filter-close">
 					<svg width="24" height="24">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 					</svg>

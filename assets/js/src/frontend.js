@@ -50,6 +50,9 @@ jQuery(function ($) {
   $(".stlms-filter-toggle").on("click", function () {
     $(".stlms-course-filter").toggleClass("active");
   });
+  $(".stlms-filter-close").on("click", function () {
+    $(".stlms-course-filter").removeClass("active");
+  });
   // Close Sidebar on Search Button Click
   $(".stlms-search button").on("click", function () {
     $(".stlms-course-filter").removeClass("active");
@@ -136,14 +139,17 @@ jQuery(function ($) {
 			}
 		}
 		window.history.replaceState(null, null, url.toString());
-		$('#stlms_course_view')
-		.addClass('is-loading')
-		.load(
-			url.toString() + ' #stlms_course_view > *',
-			function() {
-				$(this).removeClass('is-loading');
-			}
-		);
+    $('#stlms_course_view')
+    .addClass('is-loading')
+    .load(url.toString() + ' #stlms_course_view > *', function () {
+      $(this).removeClass('is-loading');
+      $(".stlms-filter-toggle").on("click", function () {
+        $(".stlms-course-filter").toggleClass("active");
+      });
+      $(".stlms-filter-close").on("click", function () {
+        $(".stlms-course-filter").removeClass("active");
+      });
+    });
   };
 
   // Filter category.

@@ -6,7 +6,7 @@ Tags: learnpress, lms, e-learning, education, courses
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 1.0
+Stable tag: 1.1
 Copyright: (c) 2012-2025 KrishaWeb Technologies PVT LTD (info@krishaweb.com)
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html

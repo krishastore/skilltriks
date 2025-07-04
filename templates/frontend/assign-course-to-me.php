@@ -29,7 +29,7 @@ $stlms_users = array_unique( $stlms_users );
 	<div class="stlms-course-list-wrap">
 		<div class="stlms-container">
 			<div class="stlms-course-filter">
-				<button class="stlms-filter-toggle">
+				<button class="stlms-filter-toggle stlms-filter-close">
 					<svg width="24" height="24">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>
 					</svg>

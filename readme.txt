@@ -83,8 +83,6 @@ If you're managing people, tracking learning outcomes, or building a culture of 
 
 == Frequently Asked Questions ==
 
-== Frequently Asked Questions ==
-
 **1. What makes SkillTriks different from a traditional LMS plugin?**  
      SkillTriks is a Learning Experience Platform (LXP), not just a Learning Management System. It focuses on learner engagement, skill development, and data-driven personalization rather than only course management. Think of it as learner-first, not admin-first.
 
@@ -144,6 +142,11 @@ If you're managing people, tracking learning outcomes, or building a culture of 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.1.0 =
+* User Role Modules
+* Assign Course
+* Email Notification
 
 = 1.0.0 =
 * Initial release.

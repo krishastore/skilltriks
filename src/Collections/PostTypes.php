@@ -12,6 +12,8 @@
 
 namespace ST\Lms\Collections;
 
+use const ST\Lms\META_KEY_COURSE_ASSIGNED;
+
 /**
  * Register post types.
  */
@@ -214,7 +216,9 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 		?>
 		<div id="clone-action">
 		<?php
-		if ( current_user_can( 'edit_posts', $post->ID ) ) {
+		$suffix    = \ST\Lms\STLMS_QUIZ_CPT === $post->post_type ? 'zes' : 's';
+		$post_type = ltrim( $post->post_type, 'stlms' ) . $suffix;
+		if ( current_user_can( 'edit_published' . $post_type, $post->ID ) || current_user_can( 'publish' . $post_type, $post->ID ) || current_user_can( 'manage_options' ) ) {
 			$url = wp_nonce_url(
 				add_query_arg(
 					array(
@@ -287,6 +291,10 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 		$post_meta = get_post_meta( $post_id );
 		if ( $post_meta ) {
 			foreach ( $post_meta as $meta_key => $meta_values ) {
+				// Skip cloning course assigned meta to assign cloned courses to all users.
+				if ( META_KEY_COURSE_ASSIGNED === $meta_key ) {
+					continue;
+				}
 				foreach ( $meta_values as $meta_value ) {
 					if ( is_serialized( $meta_value ) ) {
 						$meta_value = maybe_unserialize( $meta_value );
@@ -340,7 +348,7 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 	public function quick_actions( $actions, $post ) {
 		// Clone action.
 		if ( in_array( $post->post_type, array( \ST\Lms\STLMS_QUIZ_CPT, \ST\Lms\STLMS_LESSON_CPT, \ST\Lms\STLMS_COURSE_CPT ), true ) ) {
-			$url                   = wp_nonce_url(
+			$url       = wp_nonce_url(
 				add_query_arg(
 					array(
 						'action' => 'stlms_clone',
@@ -351,7 +359,11 @@ class PostTypes implements \ST\Lms\Interfaces\PostTypes {
 				STLMS_BASEFILE,
 				'stlms_nonce'
 			);
-			$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
+			$suffix    = \ST\Lms\STLMS_QUIZ_CPT === $post->post_type ? 'zes' : 's';
+			$post_type = ltrim( $post->post_type, 'stlms' ) . $suffix;
+			if ( current_user_can( 'manage_options' ) || ( current_user_can( 'edit_published' . $post_type ) && current_user_can( 'edit_others' . $post_type ) ) ) {
+				$actions['clone_post'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Clone', 'skilltriks' ) . ' </a>';
+			}
 		}
 		return $actions;
 	}

@@ -106,6 +106,22 @@ list( $passing_grade, $grade_percentage, $completed_on ) = $completed_results;
 		</div>
 	</div>
 </div>
+<?php
+$course_assigned_to_me = get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) ? get_user_meta( get_current_user_id(), \ST\Lms\STLMS_COURSE_ASSIGN_TO_ME, true ) : array();
+$data                  = '';
+if ( ! empty( $course_assigned_to_me ) ) :
+	foreach ( $course_assigned_to_me as $key => $completion_date ) :
+		if ( str_contains( $key, $course_id ) ) :
+			$data = $key;
+		endif;
+	endforeach;
+
+	if ( ! empty( $data ) ) :
+		list( $course_id, $_user_id ) = explode( '_', $data, 2 );
+		\ST\Lms\Notification\CompleteCourseNotification::instance()->send_email_notification( get_current_user_id(), $_user_id, $course_id, $completion_date );
+	endif;
+endif;
+?>
 
 <script type="text/javascript">
 	if(localStorage) { // Check if the localStorage object exists

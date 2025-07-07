@@ -253,6 +253,7 @@
     }
     .stlms-course-info-img {
       position: relative;
+      padding-bottom: 56.25%;
       &:after {
         content: "";
         position: absolute;
@@ -266,9 +267,13 @@
       }
       img {
         width: 100%;
-        height: auto;
+        height: 100%;
         display: block;
         border-radius: 6px 6px 0 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
       }
       .tag {
         position: absolute;
@@ -316,8 +321,11 @@
         }
       }
       .cta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         padding: 20px 0;
-        &:has(.download-certificate) {
+        .download-certificate-cta {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 20px;
@@ -326,6 +334,15 @@
             padding-right: 4px;
           }
         }
+        // &:has(.download-certificate) {
+        //   display: grid;
+        //   grid-template-columns: 1fr 1fr;
+        //   gap: 20px;
+        //   .stlms-btn.stlms-btn-block {
+        //     padding-left: 4px;
+        //     padding-right: 4px;
+        //   }
+        // }
       }
       .stlms-course-share {
         display: flex;

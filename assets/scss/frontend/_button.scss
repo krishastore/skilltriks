@@ -1,3 +1,7 @@
+button {
+  background-color: transparent;
+  border: 0;
+}
 .stlms-btn {
   padding: 10px $spacing_32;
   border-radius: 6px;
@@ -16,6 +20,15 @@
   &:hover,
   &:focus {
     background: darken($primary, 10%);
+  }
+  &.stlms-btn-outline {
+    background: transparent;
+    border-color: $primary;
+    color: $primary !important;
+    &:hover {
+      background: $primary;
+      color: $white !important;
+    }
   }
   &.stlms-btn-block {
     width: 100%;
@@ -75,7 +88,7 @@
       pointer-events: none;
     }
   }
-  &.google-sign-in-btn{
+  &.google-sign-in-btn {
     background: transparent;
     display: flex;
     gap: 10px;
@@ -83,8 +96,8 @@
     justify-content: center;
     color: $black !important;
     border: 1px solid $gray_light;
-    &:hover{
-      background: rgba($gray_light, .2);
+    &:hover {
+      background: rgba($gray_light, 0.2);
     }
   }
 }

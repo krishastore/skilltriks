@@ -1,0 +1,1275 @@
+.stlms-wrap.stlms-landing {
+  .stlms-container {
+    position: relative;
+    max-width: 1622px;
+    width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+  }
+}
+
+// stlms-header
+.stlms-header-wrap {
+  position: relative;
+  z-index: 1234;
+
+  .stlms-header {
+    padding: 0 32px;
+    display: flex;
+    gap: 98px;
+    align-items: center;
+    // position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 97px;
+    background: $white;
+    border-bottom: 1px solid #e6e6e7;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.14);
+
+    @include transition(all 0.3s ease-in-out);
+    @include breakpoint(max, $md) {
+      gap: 10px;
+      padding: 0 15px;
+      height: 70px;
+      justify-content: space-between;
+    }
+
+    .stlms-header-left {
+      flex-shrink: 0;
+    }
+
+    .stlms-header-right {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+
+      @include breakpoint(max, $md) {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%;
+        z-index: -1;
+        overflow: auto;
+      }
+    }
+
+    .stlms-header-toggle {
+      display: none;
+
+      @include breakpoint(max, $md) {
+        display: block;
+      }
+
+      button {
+        background-color: transparent;
+        border: 0;
+      }
+
+      .stlms-close-menu {
+        display: none;
+      }
+      .stlms-open-menu {
+        display: block;
+      }
+
+      &.active {
+        .stlms-open-menu {
+          display: none;
+        }
+        .stlms-close-menu {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+// stlms-header-menu
+.stlms-header-menu {
+  width: 100%;
+
+  @include breakpoint(max, $md) {
+    background-color: $white;
+  }
+
+  &__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @include breakpoint(max, $md) {
+      flex-direction: column;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: #141414;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    padding: 38px 16px;
+    display: inline-block;
+
+    @include transition(all 0.3s ease-in-out);
+    @include breakpoint(max, $md) {
+      padding: 15px 20px;
+      display: block;
+      border-bottom: 1px solid $primary_dark;
+    }
+
+    &.active {
+      box-shadow: 0px -4px 0px 0px rgba(15, 90, 167, 1) inset;
+
+      @include breakpoint(max, $md) {
+        box-shadow: none;
+        color: $primary;
+      }
+    }
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+// stlms-sub-header
+.stlms-sub-header-wrap {
+  position: relative;
+
+  .stlms-sub-header {
+    padding: 24px 32px;
+    display: flex;
+    gap: 50px;
+    background-color: $white;
+    box-shadow: 0px -1px 0px 0px #e9eaf0 inset;
+
+    @include breakpoint(max, $md) {
+      gap: 15px;
+      justify-content: space-between;
+      padding: 15px;
+    }
+    @include breakpoint(max, $sm) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .stlms-search-wrap {
+    width: 100%;
+
+    @include breakpoint(max, $sm) {
+      order: 1;
+    }
+    .stlms-search {
+      .stlms-search-icon {
+        height: 48px;
+        width: 48px;
+      }
+      .stlms-form-control {
+        background: $white;
+        border-color: #e6e9f0;
+        padding: 12px 16px 12px 48px;
+        border-radius: 50px;
+        border-width: 1px;
+        height: 48px;
+
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+  }
+}
+
+// stlms-browse-wrap (sub-header)
+// .stlms-browse-wrap {
+//   @include breakpoint(max, $sm) {
+//     order: 2;
+//   }
+//   .stlms-user-dd {
+//     padding: 11px 18px;
+//     border: 1px solid #e6e6e7;
+//     border-radius: 50px;
+//     min-width: 180px;
+
+//     .stlms-user-dd__toggle {
+//       display: flex;
+//       justify-content: space-between;
+//       gap: 16px;
+//       font-weight: 400;
+//       font-size: 16px;
+//       line-height: 24px;
+//       letter-spacing: 0%;
+//       color: #4e5566;
+
+//       svg {
+//         @include transition(all 0.3s ease-in-out);
+//       }
+
+//       &.active {
+//         color: #1d2026;
+
+//         svg {
+//           transform: rotate(180deg);
+//         }
+//       }
+//     }
+
+//     .stlms-user-dd__menu {
+//       top: calc(100% + 16px);
+//       border: 1px solid #e9eaf0;
+//       border-radius: 8px;
+//       padding: 12px 0;
+//       box-shadow: 0px 6px 16px 0px #0000000f;
+//       background-color: $white;
+
+//       .stlms-user-dd__link {
+//         padding: 8px 20px;
+//         font-size: 16px;
+//         color: #6e7485;
+//         border-bottom: 0;
+
+//         &:hover {
+//           background-color: #e3f0fc;
+//           color: #091bdd;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// stlms-browse-wrap (sub-header)
+.stlms-browse-wrap {
+  @include breakpoint(max, $sm) {
+    order: 2;
+  }
+
+  .stlms-dd-btn {
+    padding: 11px 18px;
+    border: 1px solid #e6e6e7;
+    border-radius: 50px;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $white;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4e5566;
+
+    svg {
+      @include transition(all 0.3s ease-in-out);
+    }
+
+    &.active {
+      color: #1d2026;
+
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .stlms-dd-content {
+    border: 1px solid #e9eaf0;
+    border-radius: 8px;
+    padding: 12px 0;
+    box-shadow: 0px 6px 16px 0px #0000000f;
+    background-color: $white;
+    left: 0 !important;
+    right: auto !important;
+    transform: translate(0) !important;
+    min-width: 300px;
+    max-height: 350px;
+    overflow-y: auto !important;
+
+    a {
+      padding: 8px 20px;
+      font-size: 16px;
+      color: #6e7485;
+      border-bottom: 0;
+      display: flex;
+      width: 100%;
+      text-decoration: none;
+      line-height: 24px;
+      cursor: pointer;
+      @include transition(all 0.3s ease-in-out);
+
+      &:hover {
+        background-color: #e3f0fc;
+        color: #091bdd;
+      }
+    }
+  }
+}
+
+// stlms-profile-wrap (sub-header)
+.stlms-profile-wrap {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-left: 14px;
+
+  @include breakpoint(max, $sm) {
+    order: 3;
+    gap: 15px;
+    margin-left: 0;
+  }
+  button {
+    background-color: transparent;
+    border: 0;
+  }
+  .stlms-profile-popup {
+    .profile-picture {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+// stlms-dd-wrap (dropdown)
+.stlms-dd-wrap {
+  position: relative;
+
+  .stlms-dd-btn {
+    cursor: pointer;
+  }
+
+  .stlms-dd-content {
+    display: none;
+    position: absolute;
+    overflow: hidden;
+    top: calc(100% + 16px);
+    z-index: 123;
+    left: auto;
+    right: 0;
+
+    @include breakpoint(max, $sm) {
+      width: 320px;
+    }
+  }
+}
+
+// stlms-hero-banner
+.stlms-hero-banner {
+  .stlms-banner-slide {
+    background-color: $white;
+    background-repeat: no-repeat;
+
+    .stlms-container.row {
+      display: flex;
+      gap: 32px;
+
+      @include breakpoint(max, $md) {
+        flex-wrap: wrap;
+      }
+
+      .stlms-banner-col {
+        &.left {
+          width: 42%;
+        }
+        &.right {
+          width: 58%;
+        }
+        @include breakpoint(max, $md) {
+          width: 100% !important;
+        }
+      }
+
+      .stlms-banner-col.right {
+        .stlms-banner-media {
+          height: 100%;
+
+          .stlms-img-wrap {
+            position: relative;
+            height: 100%;
+
+            @include breakpoint(max, $md) {
+              text-align: center;
+            }
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              object-position: bottom;
+
+              @include breakpoint(max, $md) {
+                width: 70%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.stlms-banner-content {
+  padding: 222px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  gap: 24px;
+
+  @include breakpoint(max, $lg) {
+    padding: 100px 0;
+  }
+  @include breakpoint(max, $md) {
+    padding: 100px 0px 0px;
+  }
+  @include breakpoint(max, $md) {
+    padding: 40px 0px 0px;
+    display: none;
+  }
+
+  &.mobile-content {
+    display: none;
+    padding: 20px 15px;
+
+    @include breakpoint(max, $md) {
+      display: flex;
+    }
+  }
+
+  .stlms-banner-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    h1 {
+      font-weight: 700;
+      font-size: 42px;
+      line-height: 1.2;
+      color: #1d2026;
+
+      @include breakpoint(max, $sm) {
+        font-size: 32px;
+      }
+    }
+    p {
+      font-size: 22px;
+      line-height: 30px;
+      color: #595b68;
+
+      @include breakpoint(max, $sm) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// swiper-nav hero-banner
+.stlms-hero-banner {
+  .stlms-container {
+    position: relative;
+    .stlms-swiper-nav {
+      position: absolute;
+      right: 0;
+      bottom: 25px;
+      display: flex;
+      gap: 24px;
+      width: auto;
+      top: auto;
+      left: auto;
+      transform: translateY(0);
+
+      @include breakpoint(max, $sm) {
+        right: 5px;
+        bottom: 5px;
+        gap: 6px;
+      }
+    }
+  }
+}
+
+// swiper-nav
+.stlms-swiper-wrap {
+  position: relative;
+  .stlms-swiper-nav {
+    position: absolute;
+    width: calc(100% + 48px);
+    display: flex;
+    justify-content: space-between;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1;
+
+    @include breakpoint(max, $xxl) {
+      width: calc(100% + 24px);
+    }
+
+    .swiper-button {
+      left: 0;
+      right: 0;
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid #e6e9f0;
+      box-shadow: 0px 2px 24px 0px #00000014;
+      background-color: $white;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      &::after {
+        display: none;
+      }
+
+      &.swiper-button-prev {
+        background-image: url(../images/nav-prev.svg);
+      }
+      &.swiper-button-next {
+        background-image: url(../images/nav-next.svg);
+      }
+    }
+  }
+}
+
+.stlms-section-title {
+  padding-bottom: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  justify-content: space-between;
+  @include breakpoint(max, $md) {
+    padding-bottom: 24px;
+    gap: 12px;
+  }
+  h2 {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 42px;
+    color: #101011;
+
+    @include breakpoint(max, $md) {
+      font-size: 28px;
+    }
+  }
+}
+
+// stlms-current-course
+.stlms-current-course {
+  padding: 64px 0;
+  background-color: #f1f7fe;
+
+  .stlms-btn-outline {
+    background-color: transparent;
+    color: $primary !important;
+
+    &:hover {
+      background-color: $primary;
+      color: $white !important;
+    }
+  }
+
+  .stlms-row {
+    display: flex;
+    gap: 32px;
+
+    .stlms-swiper-wrap {
+      height: 100%;
+      .swiper {
+        height: 100%;
+      }
+    }
+
+    @include breakpoint(max, $xl) {
+      flex-wrap: wrap;
+    }
+    .col-5 {
+      width: 41.66%;
+      @include breakpoint(max, $xl) {
+        width: 75%;
+        margin: 0 auto;
+      }
+      @include breakpoint(max, $md) {
+        width: 100%;
+      }
+    }
+    .col-7 {
+      width: 58.33%;
+      @include breakpoint(max, $xl) {
+        width: 100%;
+      }
+    }
+  }
+
+  .stlms-course-item {
+    display: flex;
+    flex-direction: row-reverse;
+    border: 0;
+    border-radius: 32px;
+    overflow: hidden;
+
+    @include breakpoint(max, $md) {
+      flex-direction: column;
+    }
+
+    &__img {
+      width: 50%;
+      padding: 0;
+
+      @include breakpoint(max, $md) {
+        width: 100%;
+        padding-bottom: 56.25%;
+      }
+    }
+    &__info {
+      width: 50%;
+      padding: 48px;
+      border: 0;
+      gap: 16px;
+
+      @include breakpoint(max, $md) {
+        width: 100%;
+        padding: 20px;
+      }
+    }
+    &__meta {
+      padding: 0;
+      ul {
+        li {
+          color: #5d5d73;
+          svg {
+            color: #3c3c3c;
+          }
+        }
+      }
+    }
+    &__title {
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 42px;
+      color: #101011;
+      padding: 0;
+    }
+    &__action {
+      padding-top: 8px;
+    }
+    .stlms-progress {
+      padding-top: 8px;
+
+      &__bar {
+        height: 8px;
+        border-radius: 4px;
+      }
+
+      &__label-wrap {
+        padding-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+      &__label {
+        display: flex;
+        gap: 6px;
+        padding: 0;
+        align-items: center;
+        color: #5d5d73;
+      }
+    }
+  }
+}
+
+// stlms-trending-course
+.stlms-trending-course {
+  padding: 64px 0;
+  overflow: hidden;
+
+  &.light-bg {
+    background-color: #f1f7fe;
+    overflow: hidden;
+
+    .stlms-row {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+
+      @include breakpoint(max, $md) {
+        flex-wrap: wrap;
+        gap: 60px;
+      }
+      .col-3 {
+        width: 25%;
+        @include breakpoint(max, $md) {
+          width: 100%;
+        }
+      }
+      .col-9 {
+        width: 75%;
+        @include breakpoint(max, $md) {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .stlms-banner-content {
+    display: flex !important;
+    padding: 0;
+    h2 {
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 42px;
+      color: #101011;
+    }
+  }
+
+  .stlms-category-nav-wrap {
+    padding-bottom: 32px;
+    overflow: hidden;
+  }
+}
+
+.stlms-swiper-wrap {
+  .stlms-course-item:hover {
+    transform: translate(0);
+    box-shadow: none;
+    .stlms-course-item__info {
+      background-color: $white;
+    }
+  }
+}
+
+.stlms-category-nav-wrap {
+  ul {
+    display: flex;
+    gap: 14px;
+    overflow: auto;
+  }
+
+  .stlms-check-wrap {
+    .hidden {
+      position: absolute;
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    input[type="checkbox"] + label {
+      padding: 10px 20px;
+      border-radius: 50px;
+      background-color: #fcfcfc;
+      border: 1px solid #e6e9f0;
+      line-height: 1.5;
+      color: #03061a;
+      text-wrap: nowrap;
+      @include transition(all 0.3s ease-in-out);
+    }
+
+    input[type="checkbox"]:checked + label {
+      background-color: #0f5aa7;
+      color: $white;
+      font-weight: 600;
+    }
+  }
+}
+
+.stlms-perfomers {
+  padding: 64px 0;
+
+  .stlms-leaderboard {
+    padding: 24px;
+
+    @include breakpoint(max, $xl) {
+      padding: 12px;
+    }
+    @include breakpoint(max, $sm) {
+      padding: 0;
+    }
+  }
+
+  .perfomers-cards-wrap {
+    ul {
+      display: flex;
+      gap: 28px;
+
+      @include breakpoint(max, $sm) {
+        flex-wrap: wrap;
+      }
+      @include breakpoint(max, $xl) {
+        gap: 15px;
+      }
+
+      li {
+        width: 33.33%;
+
+        @include breakpoint(max, $sm) {
+          width: 100%;
+        }
+
+        .perfomers-card {
+          overflow: hidden;
+          position: relative;
+          padding: 24px;
+          background-color: #f5f5f5;
+          border-radius: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .perfomers-position {
+            position: absolute;
+            display: flex;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+            max-width: 166px;
+
+            @include breakpoint(max, $xxl) {
+              max-width: 130px;
+            }
+            @include breakpoint(max, $xl) {
+              max-width: 100px;
+            }
+            @include breakpoint(max, $lg) {
+              max-width: 90px;
+            }
+            @include breakpoint(max, $md) {
+              max-width: 70px;
+            }
+            @include breakpoint(max, $sm) {
+              max-width: 100px;
+            }
+
+            img {
+              width: 100%;
+            }
+          }
+
+          .perfomers-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+
+            .perfomers-img {
+              width: 128px;
+              height: 128px;
+              border-radius: 50%;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            .perfomers-info {
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              align-items: center;
+
+              .perfomers-name {
+                font-weight: 700;
+                font-size: 28px;
+                line-height: 100%;
+                letter-spacing: 0%;
+                color: #101011;
+              }
+
+              .perfomers-designation {
+                font-weight: 400;
+                font-size: 18px;
+                line-height: 26px;
+                letter-spacing: 0%;
+                color: #595b68;
+              }
+            }
+          }
+
+          .perfomers-streak {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            font-size: 14px;
+            line-height: 150%;
+            text-align: right;
+            color: #565656;
+          }
+        }
+      }
+    }
+  }
+
+  .perfomers-list-wrap {
+    padding-top: 14px;
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      counter-reset: count;
+      counter-reset: listCounter 3;
+
+      li {
+        position: relative;
+        padding-left: 30px;
+        counter-increment: listCounter;
+        border-bottom: 1px solid #e6e6e7;
+
+        &::before {
+          position: absolute;
+          content: counter(listCounter);
+          color: #000;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          min-width: 24px;
+          text-align: center;
+        }
+
+        .perfomers-card {
+          position: relative;
+          padding: 16px 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          @include breakpoint(max, $sm) {
+            gap: 16px;
+          }
+
+          .perfomers-detail {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+
+            .perfomers-img {
+              width: 64px;
+              height: 64px;
+              border-radius: 50%;
+              flex-shrink: 0;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            .perfomers-info {
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+
+              .perfomers-name {
+                font-weight: 700;
+                font-size: 18px;
+                line-height: 100%;
+                color: #03061a;
+
+                @include breakpoint(max, $sm) {
+                  font-size: 16px;
+                }
+              }
+
+              .perfomers-designation {
+                font-size: 18px;
+                line-height: 26px;
+                color: #595b68;
+
+                @include breakpoint(max, $sm) {
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+
+          .perfomers-streak {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            padding: 0 24px;
+            font-size: 14px;
+            line-height: 150%;
+            text-align: right;
+            color: #565656;
+            margin-left: auto;
+
+            @include breakpoint(max, $sm) {
+              padding: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.stlms-streak {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background-color: $white;
+  border: 1px solid #e6e6e7;
+  border-radius: 10px;
+  padding: 32px 24px;
+
+  @include breakpoint(max, $sm) {
+    padding: 24px 16px;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.2;
+    color: #101011;
+
+    @include breakpoint(max, $sm) {
+      font-size: 22px;
+    }
+  }
+  &__text {
+    line-height: 24px;
+    display: flex;
+    gap: 8px;
+    color: #141414;
+
+    &.gray {
+      color: #5d5d73;
+    }
+  }
+  &__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    &.small {
+      width: 32px;
+      height: 32px;
+    }
+    @include breakpoint(max, $sm) {
+      width: 32px;
+      height: 32px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &__highlight {
+    display: flex;
+    gap: 32px;
+    justify-content: space-between;
+
+    @include breakpoint(max, $sm) {
+      gap: 16px;
+    }
+  }
+  &__highlight-right.width-full {
+    width: 100%;
+  }
+  &__week {
+    ul {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+
+      @include breakpoint(max, $sm) {
+        flex-wrap: wrap;
+        justify-content: start;
+      }
+    }
+  }
+  &__day {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 18px;
+    align-items: center;
+    color: #595b68;
+    border-radius: 8px;
+
+    &.active {
+      background-color: #e2f0ff;
+      color: #03061a;
+    }
+  }
+  &__point-bar {
+    padding: 7px 0;
+    .stlms-progress__bar {
+      height: 20px;
+      overflow: visible;
+      border-radius: 100px;
+
+      .stlms-progress__bar-inner {
+        font-weight: 500;
+        font-size: 12px;
+        text-align: center;
+        color: $white;
+        position: relative;
+        line-height: 20px;
+        border-radius: 100px;
+        img {
+          position: absolute;
+          top: 50%;
+          transform: translate(50%, -50%);
+          right: 0;
+        }
+      }
+    }
+  }
+}
+
+.stlms-streak-popup {
+  .stlms-dd-content {
+    @include breakpoint(max, $sm) {
+      right: -100px;
+    }
+  }
+}
+
+.stlms-profile-dd {
+  border-radius: 8px;
+  padding: 24px;
+  background: $white;
+  box-shadow: 0px 2px 48px 0px #0000001f;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 320px;
+  border: 1px solid #e6e6e7;
+
+  .stlms-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .stlms-profile-picture {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .stlms-profile-name {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20.8px;
+      color: #101011;
+      text-wrap: nowrap;
+    }
+  }
+
+  .stlms-profile-link-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    .stlms-profile-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 8px;
+      border: 1px solid $white;
+      border-bottom: 1px solid #dcdcdc;
+      line-height: 24px;
+      color: #565656;
+      text-decoration: none;
+      text-wrap: nowrap;
+      border-radius: 8px;
+      @include transition(all 0.3s ease-in-out);
+
+      &.sign-out {
+        border: 1px solid $white;
+        color: #e10000 !important;
+      }
+
+      span {
+        margin-left: auto;
+      }
+
+      &:hover {
+        border: 1px solid #e6e6e7;
+        box-shadow: 4px 4px 4px 0px #f3f3f3;
+        color: #141414;
+      }
+    }
+  }
+}
+
+@include breakpoint(max, $sm) {
+  .stlms-current-course,
+  .stlms-trending-course,
+  .stlms-perfomers {
+    padding: 40px 0;
+  }
+}
+
+// stlms-inner-banner
+.stlms-inner-banner {
+  background-color: #f8f8f8;
+  .stlms-banner-row {
+    display: flex;
+    gap: 32px;
+
+    @include breakpoint(max, $md) {
+      flex-wrap: wrap;
+    }
+
+    .stlms-banner-col {
+      width: 50%;
+
+      @include breakpoint(max, $md) {
+        width: 100%;
+      }
+
+      .stlms-banner-media {
+        height: 100%;
+        text-align: center;
+        padding-top: 25px;
+
+        @include breakpoint(max, $md) {
+          padding: 0;
+        }
+        img {
+          height: 100%;
+          object-fit: contain;
+          object-position: bottom;
+
+          @include breakpoint(max, $sm) {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .stlms-banner-content {
+    padding: 164px 0 142px 64px;
+
+    &.mobile-content {
+      background-color: $white;
+      padding: 20px 15px;
+    }
+  }
+}

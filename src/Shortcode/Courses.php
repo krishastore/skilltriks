@@ -107,6 +107,9 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			// Frontend.
 			wp_enqueue_script( $this->handler );
 			wp_enqueue_style( $this->handler );
+			// Assign course.
+			wp_enqueue_script( $this->handler . '-assigncourse' );
+			wp_enqueue_style( $this->handler . '-assigncourse' );
 			return;
 		}
 		if ( ! is_singular( \ST\Lms\STLMS_COURSE_CPT ) ) {
@@ -189,7 +192,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	 * Handle template redirect hook.
 	 */
 	public function template_redirect() {
-		if ( ! is_user_logged_in() && is_singular( \ST\Lms\STLMS_COURSE_CPT ) && get_query_var( 'section' ) && get_query_var( 'item_id' ) ) {
+		if ( ( ! is_user_logged_in() ) && ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) || is_page( array( 'stlms-my-learning', 'courses' ) ) ) ) {
 			wp_safe_redirect( \ST\Lms\get_page_url( 'login' ) );
 			exit;
 		}
@@ -466,7 +469,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			'post_title'  => $result_title,
 			'ID'          => $result_id ? $result_id : 0,
 			'meta_input'  => $quiz_data,
-			'post_author' => 2,
+			'post_author' => get_current_user_id(),
 			'post_status' => 'publish',
 		);
 		$result_id   = wp_insert_post( $result_args );

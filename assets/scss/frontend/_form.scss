@@ -30,7 +30,7 @@
   }
   &-footer {
     padding-top: 12px;
-    .or-txt{
+    .or-txt {
       display: block;
       text-align: center;
       padding: 10px 0;
@@ -111,6 +111,7 @@ input[type="checkbox"].stlms-check {
   display: grid;
   place-items: center;
   cursor: pointer;
+  flex-shrink: 0;
   @include transition(all 0.3s ease-in-out);
   &:after {
     content: "";
@@ -153,6 +154,7 @@ input[type="radio"].stlms-check {
   place-items: center;
   cursor: pointer;
   border-radius: 100%;
+  flex-shrink: 0;
   @include transition(all 0.3s ease-in-out);
   &:after {
     content: "";

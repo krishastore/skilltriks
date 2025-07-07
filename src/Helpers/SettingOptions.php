@@ -123,6 +123,13 @@ class SettingOptions {
 				'type'  => 'file',
 				'value' => isset( $this->options['certificate_signature'] ) ? esc_url( $this->options['certificate_signature'] ) : '',
 			),
+			'due_soon'              => array(
+				'title' => esc_html__( 'Due Soon', 'skilltriks' ),
+				// translators: %d is the number of days before the course is due.
+				'desc'  => sprintf( __( 'Course to be due soon in %d days', 'skilltriks' ), isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : 7 ),
+				'type'  => 'number',
+				'value' => isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : '',
+			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
 		add_action( 'admin_post_user_role', array( $this, 'stlms_new_user_role' ) );
@@ -278,6 +285,8 @@ class SettingOptions {
 			}
 		} elseif ( ! empty( $args['readonly'] ) ) {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" readonly/>';
+		} elseif ( 'number' === $type ) {
+			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" min="1" max="30"/>';
 		} else {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" />';
 		}
@@ -302,6 +311,12 @@ class SettingOptions {
 			<nav class="nav-tab-wrapper">
 				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks' ); ?></a>
 				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a>
+				<?php if ( is_plugin_active( 'stlms-addon/stlms-addon.php' ) ) : ?>
+					<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks' ); ?></a>
+					<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>
+					<a href="<?php echo esc_url( add_query_arg( 'tab', 'customise-theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'customise-theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Customise Theme', 'skilltriks' ); ?></a>
+					<?php endif; ?>
+				<?php endif; ?>
 			</nav>
 			<?php
 			if ( 'bulk-import' === $tab ) {
@@ -452,14 +467,14 @@ class SettingOptions {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			$caps         = isset( $_POST['users_can'] ) ? map_deep( $_POST['users_can'], 'sanitize_text_field' ) : array();
 			$user_role    = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
-			$default_caps = ! empty( get_role( 'subscriber' ) ) ? get_role( 'subscriber' )->capabilities : array( 'read' => true );
+			$default_caps = ! empty( get_role( 'author' ) ) ? get_role( 'author' )->capabilities : array( 'read' => true );
 
 			if ( ! empty( $user_role ) && ! empty( $caps ) ) {
 				if ( array_key_exists( $user_role, $this->options['user_role'] ) ) {
 					$caps        = array_fill_keys( $caps, true );
 					$role_exists = get_role( $user_role );
+					$caps        = array_merge( $caps, $default_caps );
 					if ( empty( $role_exists ) ) {
-						$caps = array_merge( $caps, $default_caps );
 						add_role( $user_role, $this->options['user_role'][ $user_role ], $caps );
 					} else {
 						$existing_caps = get_role( $user_role )->capabilities;

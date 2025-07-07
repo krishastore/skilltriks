@@ -4,7 +4,7 @@
 
 # SkillTriks
 
-Guiding organizations to transform their learning culture with digital learning experiences.
+SkillTriks is a modern, modular Learning Experience Platform (LXP) built for organizations that want to centralize learning, foster team growth, and make data-driven decisions—right within WordPress.
 
 # Setup Guide
 
@@ -152,3 +152,7 @@ Remember to commit your changes to your branch relatively frequently, with a mea
 This helps anyone looking at the commit history in the future to find what they might be looking for.
 
 If it's a particularly large commit, be sure to include more information in the commit description.
+
+## User Manual
+
+[Click Here](https://drive.google.com/file/d/1AMgz_bH0n-tovBtYR4W2IYRvW5LpEY6p/view?usp=drive_link)

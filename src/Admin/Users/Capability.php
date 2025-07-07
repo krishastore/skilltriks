@@ -48,12 +48,12 @@ class Capability extends \WP_List_Table {
 		$data     = isset( $settings['user_role'] ) && ! empty( $settings['user_role'] ) ? $settings['user_role'] : array();
 
 		if ( ! empty( $search_by_name ) ) {
-			$result = array_filter(
+			$search_by_name = strtolower( $search_by_name );
+			$result         = array_filter(
 				$data,
 				function ( $value ) use ( $search_by_name ) {
-					return $value == $search_by_name; //phpcs:ignore.Universal.Operators.StrictComparisons.LooseEqual
-				},
-				ARRAY_FILTER_USE_BOTH
+					return stripos( $value, $search_by_name ) !== false;
+				}
 			);
 			return $result;
 		}
@@ -67,6 +67,25 @@ class Capability extends \WP_List_Table {
 		wp_enqueue_media();
 		wp_enqueue_style( \ST\Lms\STLMS_SETTING );
 		wp_enqueue_script( \ST\Lms\STLMS_SETTING );
+	}
+
+	/**
+	 * Removes the additional user capability from the user on removal of role.
+	 *
+	 * @param string $role_id Role name.
+	 */
+	protected function remove_additional_user_caps( $role_id ) {
+		$args  = array(
+			'role'   => $role_id,
+			'fields' => 'all',
+		);
+		$users = get_users( $args );
+
+		foreach ( $users as $user ) {
+			if ( $user->has_cap( $role_id ) ) {
+				$user->remove_cap( $role_id );
+			}
+		}
 	}
 
 	/**
@@ -91,6 +110,7 @@ class Capability extends \WP_List_Table {
 			$role_exists = get_option( 'stlms_settings', array() );
 			if ( ! empty( $role_id ) && array_key_exists( $role_id, $role_exists['user_role'] ) ) {
 				if ( ! empty( get_role( $role_id ) ) ) {
+					$this->remove_additional_user_caps( $role_id );
 					remove_role( $role_id );
 				}
 				unset( $role_exists['user_role'][ $role_id ] );

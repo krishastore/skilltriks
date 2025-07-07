@@ -9,7 +9,7 @@
  * License:         GPLv3 or later
  * License URI:     https://www.gnu.org/licenses/gpl-3.0.html
  * Domain Path:     /languages
- * Version:         1.0
+ * Version:         1.1
  *
  * @package         ST\Lms
  */
@@ -24,7 +24,7 @@ if ( is_readable( $vendor_file ) ) {
 }
 
 define( 'STLMS_BASEFILE', __FILE__ );
-define( 'STLMS_VERSION', '1.0.0' );
+define( 'STLMS_VERSION', '1.1.0' );
 define( 'STLMS_ABSURL', plugins_url( '/', STLMS_BASEFILE ) );
 define( 'STLMS_BASENAME', plugin_basename( STLMS_BASEFILE ) );
 define( 'STLMS_ABSPATH', dirname( STLMS_BASEFILE ) );

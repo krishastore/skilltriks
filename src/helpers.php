@@ -824,42 +824,37 @@ function user_capability_list() {
 	return apply_filters(
 		'stlms_user_capability_list',
 		array(
-			'course'   => array(
-				'create_course'          => __( 'Create Course', 'skilltriks' ),
-				'view_course'            => __( 'View Course', 'skilltriks' ),
-				'edit_course'            => __( 'Edit Course', 'skilltriks' ),
-				'delete_course'          => __( 'Delete Course', 'skilltriks' ),
-				'create_course_category' => __( 'Create Course Category', 'skilltriks' ),
-				'edit_course_category'   => __( 'Edit Course Category', 'skilltriks' ),
-				'delete_course_category' => __( 'Delete Course Category', 'skilltriks' ),
-				'create_course_level'    => __( 'Create Course Level', 'skilltriks' ),
-				'edit_course_level'      => __( 'Edit Course Level', 'skilltriks' ),
-				'delete_course_level'    => __( 'Delete Course Level', 'skilltriks' ),
+			'edit'             => array(
+				'label'   => __( 'Allow View & Edit', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user view and edit their own content.', 'skilltriks' ),
 			),
-			'lesson'   => array(
-				'create_lesson' => __( 'Create Lesson', 'skilltriks' ),
-				'view_lesson'   => __( 'View Lesson', 'skilltriks' ),
-				'edit_lesson'   => __( 'Edit Lesson', 'skilltriks' ),
-				'delete_lesson' => __( 'Delete Lesson', 'skilltriks' ),
+			'create'           => array(
+				'label'   => __( 'Allow To Create', 'skilltriks' ),
+				'tooltip' => __( ' Allows the user to create new content.', 'skilltriks' ),
 			),
-			'question' => array(
-				'create_question' => __( 'Create Question', 'skilltriks' ),
-				'view_question'   => __( 'View Question', 'skilltriks' ),
-				'edit_question'   => __( 'Edit Question', 'skilltriks' ),
-				'delete_question' => __( 'Delete Question', 'skilltriks' ),
+			'publish'          => array(
+				'label'   => __( 'Allow To Publish', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user publish their own content.', 'skilltriks' ),
 			),
-			'quiz'     => array(
-				'create_quiz' => __( 'Create Quiz', 'skilltriks' ),
-				'view_quiz'   => __( 'View Quiz', 'skilltriks' ),
-				'edit_quiz'   => __( 'Edit Quiz', 'skilltriks' ),
-				'delete_quiz' => __( 'Delete Quiz', 'skilltriks' ),
+			'edit_published'   => array(
+				'label'   => __( 'Allow To Edit Published', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to update their own published content.', 'skilltriks' ),
 			),
-			'result'   => array(
-				'view_result'   => __( 'View Result', 'skilltriks' ),
-				'delete_result' => __( 'Delete Result', 'skilltriks' ),
+			'edit_others'      => array(
+				'label'   => __( 'Allow To Edit Other', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user edit content created by others.', 'skilltriks' ),
 			),
-			'setting'  => array(
-				'view_setting' => __( 'View Setting', 'skilltriks' ),
+			'delete'           => array(
+				'label'   => __( 'Allow To Delete', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to delete their own content.', 'skilltriks' ),
+			),
+			'delete_published' => array(
+				'label'   => __( 'Allow To Delete Published', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user delete their own published content.', 'skilltriks' ),
+			),
+			'delete_others'    => array(
+				'label'   => __( 'Allow To Delete Others', 'skilltriks' ),
+				'tooltip' => __( 'Allows the user to delete content created by others.', 'skilltriks' ),
 			),
 		)
 	);

@@ -50,6 +50,9 @@ jQuery(function ($) {
   $(".stlms-filter-toggle").on("click", function () {
     $(".stlms-course-filter").toggleClass("active");
   });
+  $(".stlms-filter-close").on("click", function () {
+    $(".stlms-course-filter").removeClass("active");
+  });
   // Close Sidebar on Search Button Click
   $(".stlms-search button").on("click", function () {
     $(".stlms-course-filter").removeClass("active");
@@ -136,14 +139,17 @@ jQuery(function ($) {
 			}
 		}
 		window.history.replaceState(null, null, url.toString());
-		$('#stlms_course_view')
-		.addClass('is-loading')
-		.load(
-			url.toString() + ' #stlms_course_view > *',
-			function() {
-				$(this).removeClass('is-loading');
-			}
-		);
+    $('#stlms_course_view')
+    .addClass('is-loading')
+    .load(url.toString() + ' #stlms_course_view > *', function () {
+      $(this).removeClass('is-loading');
+      $(".stlms-filter-toggle").on("click", function () {
+        $(".stlms-course-filter").toggleClass("active");
+      });
+      $(".stlms-filter-close").on("click", function () {
+        $(".stlms-course-filter").removeClass("active");
+      });
+    });
   };
 
   // Filter category.
@@ -175,7 +181,7 @@ jQuery(function ($) {
 		sendFilterItemRequest();
   });
 
-  $(document).on('submit','.stlms-course-search form', function() {
+  $(document).on('submit','.stlms-course-search form, .stlms-search-wrap form', function() {
   	$('.stlms-filter-form input[name="_s"]').val( $('input:text', $(this)).val() );
 		sendFilterItemRequest();
   });
@@ -187,6 +193,7 @@ jQuery(function ($) {
     url.searchParams.delete('_s');
 	url.searchParams.delete('levels');
     $('.stlms-filter-form input[name="category"]').val('');
+    $('.stlms-filter-form input[name="progress"]:hidden').val('');
     $('.stlms-filter-form input[name="_s"]').val('');
 	$('.stlms-filter-list input:checkbox').removeAttr("checked");
 	$('.stlms-filter-list input:radio').removeAttr("checked");
@@ -199,6 +206,23 @@ jQuery(function ($) {
 	// 	var clean_uri = uri.substring(0, uri.indexOf("?"));
 	// 	window.history.replaceState({}, document.title, clean_uri);
 	// }
+});
+
+jQuery(function($) {
+	$('input[id^="st_course_term"]').each(function() {
+		if ($('input[id^="st_course_term"]').prop('checked')) {
+			$('#stlms_category_all').prop('checked', true);
+		} else {
+			$('#stlms_category_all').prop('checked', false);
+		}
+	});
+	$('input[id^="st_course_level"]').each(function() {
+		if ($('input[id^="st_course_level"]').prop('checked')) {
+			$('#stlms_level_all').prop('checked', true);
+		} else {
+			$('#stlms_level_all').prop('checked', false);
+		}
+	});
 });
 
 jQuery(window).on('load', function() {
@@ -301,8 +325,42 @@ jQuery(window).on('load', function() {
 		});
 	});
 
-  // User Dropdown Toggle
-  jQuery(".stlms-user-dd .stlms-user-dd__toggle").on("click", function () {
-    jQuery(this).next(".stlms-user-dd__menu").slideToggle();
-  });
+  	// User Dropdown Toggle
+	jQuery(".stlms-user-dd .stlms-user-dd__toggle").on("click", function ($) {
+		$(this).toggleClass("active");
+		$(this).next(".stlms-user-dd__menu").slideToggle();
+	});
+	jQuery(function($) {
+		$("[data-dropdown]").on("click", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			const $btn = $(this);
+			const dropdownId = $btn.data("dropdown");
+			const $dropdown = $("#" + dropdownId);
+			$btn.toggleClass("active");
+			$dropdown.stop(true, true).slideToggle();
+			$("[data-dropdown]")
+			.not($btn)
+			.each(function () {
+				const otherId = $(this).data("dropdown");
+				$("#" + otherId).slideUp();
+				$(this).removeClass("active");
+			});
+		});
+		$(document).on("click", function (e) {
+			if (!$(e.target).closest(".stlms-dd-wrap").length) {
+				$("[data-dropdown]").each(function () {
+				const id = $(this).data("dropdown");
+				$("#" + id).slideUp();
+				$(this).removeClass("active");
+				});
+			}
+		});
+		$(".stlms-dd-content").on("click", "a", function () {
+			const $dropdown = $(this).closest(".stlms-dd-content");
+			const id = $dropdown.attr("id");
+			$dropdown.slideUp();
+			$("[data-dropdown='" + id + "']").removeClass("active");
+		});
+	});
 });

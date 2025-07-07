@@ -27,6 +27,9 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		'courses',
 		'term_conditions',
 		'my_learning',
+		'assign_new_course',
+		'assign_course_to_me',
+		'assign_course_by_me',
 	);
 
 	/**
@@ -61,6 +64,9 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				delete_option( $option_key );
 			}
 			delete_option( 'stlms_permalinks_flushed' );
+			wp_clear_scheduled_hook( 'stlms_check_due_courses_daily' );
+			wp_clear_scheduled_hook( 'stlms_check_over_due_courses_daily' );
+			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}
@@ -127,6 +133,12 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_courses filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
 			} elseif ( preg_match( '#^stlms_my_learning_page_id.*#', $key_option ) ) {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_my_learning filter="yes" pagination="yes"]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_assign_new_course_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_new_course]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_assign_course_to_me_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_course_to_me]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_assign_course_by_me_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_course_by_me]<!-- /wp:shortcode -->';
 			}
 
 			$args = array_merge(
@@ -163,11 +175,13 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 	 * @return void
 	 */
 	public static function create_default_roles() {
-		$capabilities = get_role( 'subscriber' );
 		add_role(
 			'stlms',
 			esc_html__( 'SkillTriks LMS', 'skilltriks' ),
-			$capabilities->capabilities
+			array(
+				'read'    => true,
+				'level_0' => true,
+			)
 		);
 	}
 

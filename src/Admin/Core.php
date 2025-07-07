@@ -54,7 +54,13 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		new \ST\Lms\Shortcode\Courses();
 		new \ST\Lms\Shortcode\UserInfo();
 		new \ST\Lms\Shortcode\MyLearning();
+		new \ST\Lms\Shortcode\AssignCourse();
+		new \ST\Lms\Shortcode\AssignedCourse();
+		new \ST\Lms\Shortcode\AssignNewCourse();
 		\ST\Lms\Helpers\SettingOptions::instance()->init();
+		\ST\Lms\Notification\DueCourseNotification::instance()->init();
+		\ST\Lms\Notification\OverDueCourseNotification::instance()->init();
+		\ST\Lms\Notification\DueSoonCourseNotification::instance()->init();
 		new \ST\Lms\Import\QuestionImport();
 		new \ST\Lms\Import\LessonImport();
 		new \ST\Lms\Import\CourseImport();
@@ -76,7 +82,7 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		$hook = add_menu_page(
 			__( 'SkillTriks LMS', 'skilltriks' ),
 			__( 'SkillTriks LMS', 'skilltriks' ),
-			apply_filters( 'stlms/menu/capability', 'manage_options' ),
+			apply_filters( 'stlms/menu/capability', 'edit_posts' ),
 			PARENT_MENU_SLUG,
 			'__return_empty_string',
 			'dashicons-welcome-learn-more',

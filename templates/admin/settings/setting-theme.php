@@ -23,6 +23,9 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 		<li>
 			<div class="theme-template-card">
 				<div class="card-top">
+					<div class="image-wrap">
+						<img src="<?php echo esc_url( STLMS_ASSETS . '/images/default-theme.png' ); // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage ?>" alt="default-theme-preview">
+					</div>
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-default' === $theme_name ) { ?>
@@ -55,6 +58,9 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 		<li>
 			<div class="theme-template-card">
 				<div class="card-top">
+					<div class="image-wrap">
+						<img src="<?php echo esc_url( STLMS_ASSETS . '/images/theme-preview.png' ); // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage ?>" alt="theme-2-preview">
+					</div>
 					<div class="overlay">
 						<div class="btn-wrap">
 							<?php if ( 'layout-2' === $theme_name ) { ?>
@@ -89,4 +95,5 @@ $theme_name = isset( $this->options['theme'] ) ? $this->options['theme'] : '';
 </div>
 
 <div class="preview-theme-modal wp-dialog stlms-modal bulk-import-modal" id='bulk-import-modal'>
+	<img src="<?php echo esc_url( STLMS_ASSETS . '/images/theme-preview.png' ); // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage ?>" alt="theme-2-preview">
 </div>

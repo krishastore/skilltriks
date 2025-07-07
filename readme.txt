@@ -5,7 +5,7 @@ Contributors: krishaweb, dilipbheda, Dhruvang21, parthvataliya
 Tags: learnpress, lms, e-learning, education, courses
 Requires at least: 6.0
 Tested up to: 6.8
-Requires PHP: 7.0
+Requires PHP: 7.4
 Stable tag: 1.1
 Copyright: (c) 2012-2025 KrishaWeb Technologies PVT LTD (info@krishaweb.com)
 License: GPLv3 or later
@@ -36,6 +36,9 @@ SkillTriks plugin is an open-source project, and we welcome contributors to be p
 === Manually ===
 1. From wordpress directories, Upload `SkillTriks` to the `/wp-content/plugins/` directory
 2. Now activate the plugin through the 'Plugins' menu in WordPress
+
+=== User Manual ===
+Click Here : https://drive.google.com/file/d/1AMgz_bH0n-tovBtYR4W2IYRvW5LpEY6p/view?usp=drive_link
 
 == Key Features ==
 * **Course & Content Creation**  

@@ -310,7 +310,7 @@ class SettingOptions {
 			<div id="icon-options-general" class="icon32"></div>
 			<nav class="nav-tab-wrapper">
 				<a href="<?php echo esc_url( add_query_arg( 'tab', 'general', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'general' === $tab || empty( $tab ) ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'General', 'skilltriks' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a><<<<<<< development
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'bulk-import', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'bulk-import' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Bulk Import', 'skilltriks' ); ?></a>
 				<?php if ( is_plugin_active( 'stlms-addon/stlms-addon.php' ) ) : ?>
 					<a href="<?php echo esc_url( add_query_arg( 'tab', 'theme', menu_page_url( 'stlms-settings', false ) ) ); ?>" class="nav-tab <?php echo 'theme' === $tab ? esc_attr( 'active' ) : ''; ?>"><?php esc_html_e( 'Theme', 'skilltriks' ); ?></a>
 					<?php if ( 'layout-default' !== $this->options['theme'] ) : ?>

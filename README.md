@@ -155,4 +155,4 @@ If it's a particularly large commit, be sure to include more information in the 
 
 ## User Manual
 
-[Click Here](https://drive.google.com/file/d/1AMgz_bH0n-tovBtYR4W2IYRvW5LpEY6p/view?usp=drive_link)
+[Click Here](https://www.skilltriks.com/user-manual/)

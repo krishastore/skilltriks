@@ -43,7 +43,7 @@ SkillTriks plugin is an open-source project, and we welcome contributors to be p
 2. Now activate the plugin through the 'Plugins' menu in WordPress
 
 === User Manual ===
-**<a href="https://drive.google.com/file/d/1AMgz_bH0n-tovBtYR4W2IYRvW5LpEY6p/view?usp=drive_link" target="_blank">Click Here</a>**
+**<a href="https://www.skilltriks.com/user-manual/" target="_blank">Click Here</a>**
 
 == Key Features ==
 * **Course & Content Creation**  

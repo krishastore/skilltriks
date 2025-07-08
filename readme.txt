@@ -43,7 +43,7 @@ SkillTriks plugin is an open-source project, and we welcome contributors to be p
 2. Now activate the plugin through the 'Plugins' menu in WordPress
 
 === User Manual ===
-Click Here : https://drive.google.com/file/d/1AMgz_bH0n-tovBtYR4W2IYRvW5LpEY6p/view?usp=drive_link
+**<a href="https://www.skilltriks.com/user-manual/" target="_blank">Click Here</a>**
 
 == Key Features ==
 * **Course & Content Creation**  
@@ -88,10 +88,6 @@ SkillTriks is built to support a wide range of professionals and organizations f
 * **Remote & Hybrid Teams** – Deliver structured learning regardless of location
 
 If you're managing people, tracking learning outcomes, or building a culture of continuous improvement—SkillTriks is made for you.
-
-=== Manually ===
-1. From directories, Upload `SkillTriks` to the `/wp-content/plugins/` directory.
-2. Now, activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
 **1. What makes SkillTriks different from a traditional LMS plugin?**  

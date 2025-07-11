@@ -23,11 +23,6 @@ Unlike typical SaaS-based tools, SkillTriks is 100% self-hosted, giving you full
 
 ## BECOME A CONTRIBUTOR ##
 
-SkillTriks plugin is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [Github LINK](https://github.com/krishastore/skilltriks)
-**<a href="https://www.skilltriks.com/" target="_blank">SkillTriks</a>** - SkillTriks stands as a robust WordPress LMS Plugin, designed to empower your WordPress experience. Renowned as one of the finest options available, it facilitates effortless online course creation. Craft your curriculum seamlessly, integrating lessons and quizzes, all managed through a user-friendly interface. With SkillTriks, delve into the world of online course creation with ease, requiring only minimal expertise to launch your own educational platform.
-
-## BECOME A CONTRIBUTOR ##
-
 SkillTriks plugin is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [Github Link](https://github.com/krishastore/skilltriks)
 
 == Installation ==

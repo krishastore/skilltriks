@@ -10,6 +10,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+if ( ! ( current_user_can( 'assign_course' ) || current_user_can( 'manage_options' ) ) ) { //phpcs:ignore WordPress.WP.Capabilities.Unknown 
+	exit;
+}
 $course_args = array(
 	'post_type'      => \ST\Lms\STLMS_COURSE_CPT,
 	'post_status'    => 'publish',

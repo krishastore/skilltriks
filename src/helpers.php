@@ -183,15 +183,15 @@ function get_curriculums( $curriculums = array(), $reference = '' ) {
 function locate_template( $template ) {
 
 	$layout = 'default';
-	if ( function_exists( 'stlms_addons_template' ) ) {
-		$layout = \stlms_addons_template();
+	if ( function_exists( 'stlmstp_addons_template' ) ) {
+		$layout = \stlmstp_addons_template();
 	}
 	if ( file_exists( get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
 		$template = get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template;
 	} elseif ( file_exists( get_template_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
 		$template = get_template_directory() . '/skilltriks/' . $layout . '/' . $template;
-	} elseif ( 'default' !== $layout && defined( 'STLMS_ADDONS_TEMPLATEPATH' ) && file_exists( STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
-		$template = STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
+	} elseif ( 'default' !== $layout && defined( 'STLMSTP_ADDONS_TEMPLATEPATH' ) && file_exists( STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
+		$template = STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
 	} elseif ( file_exists( STLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
 		$template = STLMS_TEMPLATEPATH . '/frontend/' . $template;
 	}

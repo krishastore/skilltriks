@@ -66,7 +66,7 @@ jQuery(function($) {
     });
 
     function updateEmployeeCount() {
-        let count = $('.stlms-employee:checked').length;
+        let count = $('.stlms-employee:checked:not(:disabled)').length;
         $('#employee_cnt').text(count + ' Selected');
 
         count = $('.stlms-select2-multi').val() ? $('.stlms-select2-multi').val().length : count;

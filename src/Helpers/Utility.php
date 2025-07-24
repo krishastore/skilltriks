@@ -30,6 +30,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		'assign_new_course',
 		'assign_course_to_me',
 		'assign_course_by_me',
+		'notifications',
 	);
 
 	/**
@@ -139,6 +140,8 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_course_to_me]<!-- /wp:shortcode -->';
 			} elseif ( preg_match( '#^stlms_assign_course_by_me_page_id.*#', $key_option ) ) {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_course_by_me]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_notifications_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_notifications]<!-- /wp:shortcode -->';
 			}
 
 			$args = array_merge(

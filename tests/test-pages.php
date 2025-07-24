@@ -32,7 +32,8 @@ class PagesTest extends WP_UnitTestCase {
 			'My Learning',
 			'Assign New Course',
 			'Assign Course To Me',
-			'Assign Course By Me'
+			'Assign Course By Me',
+			'Notifications'
 		);
 
 		foreach ( $pages as $page ) {

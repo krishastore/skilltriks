@@ -58,7 +58,7 @@ $total_items          = $notifications['items'];
 									$message     = $notification_message[ $action_type - 1 ];
 									?>
 								<li>
-									<div class="stlms-notification-card read-notification">
+									<div class="stlms-notification-card">
 										<div class="stlms-notification-image">
 											<img src="<?php echo esc_url( get_avatar_url( $from_user ) ); ?>" alt="">
 										</div>

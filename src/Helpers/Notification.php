@@ -131,13 +131,6 @@ abstract class Notification {
 		$message             = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
-		wp_mail(
-			$to_user->user_email,
-			wp_strip_all_tags( $subject ),
-			$message,
-			array( 'Content-Type: text/html; charset=UTF-8' )
-		);
-
 		$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$notifications_table,
 			array(
@@ -165,6 +158,13 @@ abstract class Notification {
 				'error',
 				__FILE__,
 				__LINE__
+			);
+		} else {
+			wp_mail(
+				$to_user->user_email,
+				wp_strip_all_tags( $subject ),
+				$message,
+				array( 'Content-Type: text/html; charset=UTF-8' )
 			);
 		}
 	}

@@ -154,7 +154,7 @@ class OverDueCourseNotification extends \ST\Lms\Helpers\Notification {
 				$to_user_id                       = $user_id;
 
 				if ( $course_id && $from_user_id && $to_user_id ) {
-					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false );
+					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 6 );
 					$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
 				}
 			}

@@ -45,6 +45,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</form>
 		</div>
 		<div class="stlms-profile-wrap">
+			<div class="stlms-notification-popup">
+				<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'notifications' ) ); ?>">
+					<svg width="24" height="24">
+						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#Bell"></use>
+					</svg>
+				</a>
+			</div>
 			<?php $userinfo = wp_get_current_user(); ?>
 			<div class="stlms-profile-popup stlms-dd-wrap">
 				<button class="stlms-dd-btn" data-dropdown="profile">

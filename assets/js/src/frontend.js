@@ -364,3 +364,22 @@ jQuery(window).on('load', function() {
 		});
 	});
 });
+
+jQuery(document).on('click', '.stlms-notification-icon', function(e) {
+    e.preventDefault();
+	var iconButton = jQuery(this);
+    var dataId = jQuery(this).data('id');
+
+    jQuery.ajax({
+      url: StlmsObject.ajaxurl,
+      type: 'POST',
+      data: {
+        action: 'stlms_read_notification',
+        _nonce: StlmsObject.nonce,
+        data_id: dataId,
+      },
+      success: function(response) {
+        iconButton.closest('.stlms-notification-card').addClass('read-notification');
+      }
+    });
+});

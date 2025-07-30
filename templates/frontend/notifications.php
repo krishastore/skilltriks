@@ -48,17 +48,17 @@ $total_items          = $notifications['items'];
 							if ( ! empty( $notifications['data'] ) ) {
 								foreach ( $notifications['data'] as $notification ) :
 									$from_user   = get_userdata( $notification['from_user_id'] );
-									$from_name   = $from_user->display_name;
+									$from_name   = $from_user ? $from_user->display_name : 'Someone';
 									$course_name = get_the_title( $notification['course_id'] );
 									$course_link = get_permalink( $notification['course_id'] );
 									$date_format = get_option( 'date_format' );
-									$due_date    = ! empty( $notification['due_date'] ) ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : '';
+									$due_date    = '0000-00-00' !== $notification['due_date'] ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : '';
 									$time_diff   = human_time_diff( strtotime( $notification['created_at'] ), (int) current_datetime()->format( 'U' ) );
 									$action_type = $notification['action_type'];
 									$message     = $notification_message[ $action_type - 1 ];
 									?>
 								<li>
-									<div class="stlms-notification-card">
+									<div class="stlms-notification-card <?php echo $notification['is_read'] ? esc_attr( 'read-notification' ) : ''; ?>">
 										<div class="stlms-notification-image">
 											<img src="<?php echo esc_url( get_avatar_url( $from_user ) ); ?>" alt="">
 										</div>
@@ -82,7 +82,7 @@ $total_items          = $notifications['items'];
 												</div>
 											</div>
 										</div>
-										<div class="stlms-notification-icon">
+										<div class="stlms-notification-icon" data-id="<?php echo esc_attr( $notification['id'] ); ?>">
 											<button>
 												<svg width="30" height="30">
 													<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#unread-icon"></use>
@@ -97,7 +97,7 @@ $total_items          = $notifications['items'];
 								?>
 								<li>
 									<div class="stlms-notification-card read-notification">
-										No Notifications to read!
+										<?php esc_html_e( 'No Notifications to read!', 'skilltriks' ); ?>
 									</div>
 								</li>
 								<?php

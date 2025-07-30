@@ -8,6 +8,7 @@
 namespace ST\Lms\Notification;
 
 use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
+use const ST\Lms\STLMS_NOTIFICATION_TABLE;
 
 /**
  * DueSoonCourseNotification class.
@@ -127,10 +128,13 @@ class DueSoonCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * Check due courses and send email notifications.
 	 */
 	public function check_due_soon_courses_daily() {
-		$options       = get_option( 'stlms_settings' );
-		$due_soon      = ! empty( $options['due_soon'] ) ? $options['due_soon'] : 7;
-		$due_soon_day  = '+' . $due_soon . ' day';
-		$due_soon_date = wp_date( 'Y-m-d', strtotime( $due_soon_day, (int) current_datetime()->format( 'U' ) ) );
+		global $wpdb;
+
+		$options             = get_option( 'stlms_settings' );
+		$due_soon            = ! empty( $options['due_soon'] ) ? $options['due_soon'] : 7;
+		$due_soon_day        = '+' . $due_soon . ' day';
+		$due_soon_date       = wp_date( 'Y-m-d', strtotime( $due_soon_day, (int) current_datetime()->format( 'U' ) ) );
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
 		$users = get_users(
 			array(
@@ -157,8 +161,13 @@ class DueSoonCourseNotification extends \ST\Lms\Helpers\Notification {
 				$to_user_id                       = $user_id;
 
 				if ( $course_id && $from_user_id && $to_user_id ) {
-					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 5 );
-					$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
+
+					$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE to_user_id = %d AND from_user_id = %d AND course_id = %d", (int) $to_user_id, (int) $from_user_id, (int) $course_id ) ); // phpcs:ignore.
+
+					if ( ! $sent_notification ) {
+						$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 5 );
+						$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
+					}
 				}
 			}
 		}

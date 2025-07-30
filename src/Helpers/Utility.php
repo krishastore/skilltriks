@@ -196,33 +196,45 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 	public static function stlms_custom_table() {
 		global $wpdb;
 
-		// Define the custom table name.
-		$table_name = $wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE;
-
-		// Check if the table already exists.
-		if ( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) {
-
-			$_charset_collate = $wpdb->get_charset_collate();
-
-			$sql = "CREATE TABLE $table_name (
-				id INT(11)  NOT NULL AUTO_INCREMENT,
-				attachment_id INT(11)  NOT NULL,
+		$tables = array(
+			$wpdb->prefix . \ST\Lms\STLMS_CRON_TABLE => 'CREATE TABLE %s (
+				id INT(11) NOT NULL AUTO_INCREMENT,
+				attachment_id INT(11) NOT NULL,
 				file_name VARCHAR(255) NOT NULL,
-				progress INT(11)  NOT NULL,
-				import_status INT(11)  NOT NULL,
+				progress INT(11) NOT NULL,
+				import_status INT(11) NOT NULL,
 				import_type INT(11) NOT NULL,
-				total_rows INT(11)  NOT NULL,
-				success_rows INT(11)  NOT NULL,
-				fail_rows INT(11)  NOT NULL,
+				total_rows INT(11) NOT NULL,
+				success_rows INT(11) NOT NULL,
+				fail_rows INT(11) NOT NULL,
 				import_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				PRIMARY KEY (id)
-			) $_charset_collate;";
+			)',
 
-			// Include the WordPress database upgrade script.
-			require_once ABSPATH . '/wp-admin/includes/upgrade.php';
+			$wpdb->prefix . \ST\Lms\STLMS_NOTIFICATION_TABLE => 'CREATE TABLE %s (
+				id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+				from_user_id BIGINT(20) UNSIGNED NOT NULL,
+				to_user_id BIGINT(20) UNSIGNED NOT NULL,
+				course_id BIGINT(20) UNSIGNED NOT NULL,
+				due_date DATE DEFAULT NULL,
+				action_type TINYINT(1) NOT NULL COMMENT \'1=assigned, 2=updated, 3=deleted, 4=due, 5=due_soon, 6=over_due, 7=completed\',
+				is_read TINYINT(1) DEFAULT 0,
+				notification_sent TINYINT(1) DEFAULT 0,
+				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (id),
+				KEY user_date (to_user_id, created_at)
+			)',
+		);
 
-			// Create or update the table.
-			dbDelta( $sql );
+		require_once ABSPATH . '/wp-admin/includes/upgrade.php';
+		$charset_collate = $wpdb->get_charset_collate();
+
+		foreach ( $tables as $table_name => $table_sql_template ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) !== $table_name ) {
+				$sql = sprintf( $table_sql_template, $table_name ) . " $charset_collate;";
+				dbDelta( $sql );
+			}
 		}
 	}
 

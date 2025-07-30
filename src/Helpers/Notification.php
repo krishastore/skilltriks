@@ -10,6 +10,9 @@
 
 namespace ST\Lms\Helpers;
 
+use ST\Lms\ErrorLog as EL;
+use const ST\Lms\STLMS_NOTIFICATION_TABLE;
+
 /**
  * Main Notification class.
  */
@@ -91,31 +94,78 @@ abstract class Notification {
 	/**
 	 * Send email notification logic.
 	 *
-	 * @param int         $from_user_id User ID who initiated the action.
-	 * @param int         $to_user_id   Recipient user ID.
-	 * @param int         $course_id    Course ID related to the notification.
-	 * @param string|null $due_date Optional course due date.
-	 * @param bool        $is_assigner Optional course assigner.
+	 * Handles the process of preparing and sending an email notification
+	 * related to course assignments, due dates, completions, and other actions.
+	 * This method is designed to be flexible for both the assigner and assignee.
+	 *
+	 * @param int         $from_user_id  ID of the user who initiated the action (typically the assigner).
+	 * @param int         $to_user_id    ID of the recipient user (assignee or assigner based on context).
+	 * @param int         $course_id     ID of the course related to the notification.
+	 * @param string|null $due_date      Optional. Due date of the course in 'Y-m-d' format. Default null.
+	 * @param bool        $is_assigner   Optional. Whether the recipient is the assigner. Default false.
+	 * @param int         $action_type   Type of action triggering the notification:
+	 *                                   1 = Assigned,
+	 *                                   2 = Updated,
+	 *                                   3 = Deleted,
+	 *                                   4 = Due Today,
+	 *                                   5 = Due Soon,
+	 *                                   6 = Overdue,
+	 *                                   7 = Completed.
+	 *
+	 * @return void
 	 */
-	public function send_email_notification( $from_user_id, $to_user_id, $course_id, $due_date = null, $is_assigner = false ) {
+	public function send_email_notification( $from_user_id, $to_user_id, $course_id, $due_date = null, $is_assigner = false, $action_type = 0 ) {
+		global $wpdb;
+
 		if ( ! $this->should_send_email_notification() ) {
 			return;
 		}
 
-		$from_user      = get_userdata( $from_user_id );
-		$from_user_name = $from_user->display_name;
-		$to_user        = get_userdata( $to_user_id );
-		$to_user_name   = $to_user->display_name;
-		$course         = get_post( $course_id );
-		$course_name    = ! empty( $course ) ? $course->post_title : '';
-		$subject        = $this->email_subject( $course_name, $is_assigner );
-		$message        = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
+		$from_user           = get_userdata( $from_user_id );
+		$from_user_name      = $from_user->display_name;
+		$to_user             = get_userdata( $to_user_id );
+		$to_user_name        = $to_user->display_name;
+		$course              = get_post( $course_id );
+		$course_name         = ! empty( $course ) ? $course->post_title : '';
+		$subject             = $this->email_subject( $course_name, $is_assigner );
+		$message             = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
-		wp_mail(
-			$to_user->user_email,
-			wp_strip_all_tags( $subject ),
-			$message,
-			array( 'Content-Type: text/html; charset=UTF-8' )
+		$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$notifications_table,
+			array(
+				'from_user_id'      => $from_user_id,
+				'to_user_id'        => $to_user_id,
+				'course_id'         => $course_id,
+				'due_date'          => $due_date,
+				'action_type'       => $action_type,
+				'is_read'           => 0,
+				'notification_sent' => 1,
+			),
+			array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
 		);
+
+		delete_transient( 'stlms_notification_data_' . $to_user_id );
+
+		if ( ! $result || is_wp_error( $result ) ) {
+			EL::add(
+				sprintf(
+					'DB insert failed for user ID %d, course ID %d. Error: %s',
+					$to_user_id,
+					$course_id,
+					$wpdb->last_error
+				),
+				'error',
+				__FILE__,
+				__LINE__
+			);
+		} else {
+			wp_mail(
+				$to_user->user_email,
+				wp_strip_all_tags( $subject ),
+				$message,
+				array( 'Content-Type: text/html; charset=UTF-8' )
+			);
+		}
 	}
 }

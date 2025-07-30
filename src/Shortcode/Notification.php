@@ -11,6 +11,7 @@
 namespace ST\Lms\Shortcode;
 
 use ST\Lms\ErrorLog as EL;
+use const ST\Lms\STLMS_NOTIFICATION_TABLE;
 
 /**
  * Shortcode register manage class.

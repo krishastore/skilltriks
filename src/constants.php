@@ -83,4 +83,5 @@ const STLMS_SETTING = 'stlms-setting';
 const META_KEY_IMPORT = '_stlms_import_id';
 
 // Tables.
-const STLMS_CRON_TABLE = 'stlms_cron_jobs';
+const STLMS_CRON_TABLE         = 'stlms_cron_jobs';
+const STLMS_NOTIFICATION_TABLE = 'stlms_notifications';

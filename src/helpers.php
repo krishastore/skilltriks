@@ -859,3 +859,67 @@ function user_capability_list() {
 		)
 	);
 }
+
+/**
+ * Fetches the notification table data from database.
+ *
+ * @param  int $_paged page number.
+ * @param  int $items_per_page items per page.
+ * @return array
+ */
+function fetch_notification_data( $_paged, $items_per_page ) {
+	global $wpdb;
+
+	$table_name       = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+	$user_id          = get_current_user_id();
+	$notification_log = get_transient( 'stlms_notification_data' );
+	$offset           = ( $_paged - 1 ) * (int) $items_per_page;
+
+	if ( ! empty( $notification_log ) ) {
+		return $notification_log;
+	}
+
+	$notification_log = $wpdb->get_results( // phpcs:ignore
+		$wpdb->prepare(
+			"SELECT * FROM $table_name WHERE to_user_id = %d ORDER BY created_at DESC LIMIT %d OFFSET %d", // phpcs:ignore
+			$user_id,
+			(int) $items_per_page,
+			$offset
+		),
+		ARRAY_A
+	);
+
+	if ( $notification_log ) {
+		$notification_log['data'] = $notification_log;
+	}
+
+	$notification_log['items'] = $wpdb->get_var( // phpcs:ignore
+		$wpdb->prepare(
+			"SELECT count(*) FROM $table_name WHERE to_user_id = %d", // phpcs:ignore
+			$user_id
+		)
+	);
+
+	set_transient( 'stlms_notification_data_' . $user_id, $notification_log );
+	return $notification_log;
+}
+
+/**
+ * Notification message to be displayed.
+ *
+ * @return array
+ */
+function notification_message() {
+	return apply_filters(
+		'stlms_notification_message',
+		array(
+			'<strong>%1$s</strong> assigned you a new course <a href="%2$s">%3$s</a> with a completion date of %4$s.',
+			'<strong>%1$s</strong> updated the completion date of the course <a href="%2$s">%3$s</a> to %4$s.',
+			'<strong>%1$s</strong> removed the course %3$s.',
+			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due tomorrow.',
+			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
+			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
+			'<strong>Achievement Unlocked :</strong> You have successfully completed the course <a href="%2$s">%3$s</a> and achieved a certificate.',
+		)
+	);
+}

@@ -365,21 +365,29 @@ jQuery(window).on('load', function() {
 	});
 });
 
-jQuery(document).on('click', '.stlms-notification-icon', function(e) {
+jQuery(document).on('click', '.stlms-notification-icon, #mark-all-read', function(e) {
     e.preventDefault();
-	var iconButton = jQuery(this);
-    var dataId = jQuery(this).data('id');
+
+    var iconButton = jQuery(this);
+    var dataId = iconButton.data('id');
+    var type = iconButton.attr('id') === 'mark-all-read' ? 'all' : 'single';
 
     jQuery.ajax({
-      url: StlmsObject.ajaxurl,
-      type: 'POST',
-      data: {
-        action: 'stlms_read_notification',
-        _nonce: StlmsObject.nonce,
-        data_id: dataId,
-      },
-      success: function(response) {
-        iconButton.closest('.stlms-notification-card').addClass('read-notification');
-      }
+        url: StlmsObject.ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'stlms_read_notification',
+            _nonce: StlmsObject.nonce,
+            data_id: dataId,
+            type: type
+        },
+        success: function(response) {
+            if (type === 'all') {
+                jQuery('.stlms-notification-card').addClass('read-notification');
+            } else {
+                iconButton.closest('.stlms-notification-card').addClass('read-notification');
+            }
+        }
     });
 });
+

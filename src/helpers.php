@@ -916,7 +916,7 @@ function notification_message() {
 			'<strong>%1$s</strong> assigned you a new course <a href="%2$s">%3$s</a> with a completion date of %4$s.',
 			'<strong>%1$s</strong> updated the completion date of the course <a href="%2$s">%3$s</a> to %4$s.',
 			'<strong>%1$s</strong> removed the course %3$s.',
-			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due tomorrow.',
+			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due today.',
 			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
 			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
 			'<strong>Achievement Unlocked :</strong> You have successfully completed the course <a href="%2$s">%3$s</a> and achieved a certificate.',

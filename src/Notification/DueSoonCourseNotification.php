@@ -161,13 +161,21 @@ class DueSoonCourseNotification extends \ST\Lms\Helpers\Notification {
 				$to_user_id                       = $user_id;
 
 				if ( $course_id && $from_user_id && $to_user_id ) {
+					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 5 );
+					$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
 
-					$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE to_user_id = %d AND from_user_id = %d AND course_id = %d", (int) $to_user_id, (int) $from_user_id, (int) $course_id ) ); // phpcs:ignore.
-
-					if ( ! $sent_notification ) {
-						$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 5 );
-						$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
-					}
+					$updated = $wpdb->update( // phpcs:ignore.
+						$notifications_table,
+						array( 'notification_sent' => 1 ),
+						array(
+							'action_type'  => 5,
+							'to_user_id'   => $to_user_id,
+							'from_user_id' => $from_user_id,
+							'course_id'    => $course_id,
+						),
+						array( '%d' ),
+						array( '%d', '%d', '%d', '%d' )
+					);
 				}
 			}
 		}

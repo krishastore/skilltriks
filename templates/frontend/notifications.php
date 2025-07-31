@@ -31,7 +31,7 @@ $total_items          = $notifications['items'];
 						<?php esc_html_e( 'Notifications', 'skilltriks' ); ?>	
 					</div>
 					<div class="stlms-sort-by">
-						<a href="#" class="stlms-btn stlms-btn-light stlms-btn-block">
+						<a href="#" class="stlms-btn stlms-btn-light stlms-btn-block" id="mark-all-read">
 							<?php esc_html_e( 'Mark All As Read', 'skilltriks' ); ?>	
 						</a>
 						<button class="stlms-filter-toggle">

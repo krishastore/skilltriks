@@ -94,29 +94,43 @@ class Notification extends \ST\Lms\Shortcode\Register {
 
 		check_ajax_referer( STLMS_BASEFILE, '_nonce' );
 		$data_id             = ! empty( $_POST['data_id'] ) ? (int) $_POST['data_id'] : 0;
+		$type                = ! empty( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : 'single';
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+		$result              = 0;
 
-		if ( ! $data_id ) {
-			return;
+		if ( 'single' === $type ) {
+			if ( ! $data_id ) {
+				return;
+			}
+			$result = $wpdb->update( // phpcs:ignore
+				$notifications_table,
+				array(
+					'is_read' => 1,
+				),
+				array(
+					'id' => $data_id,
+				),
+				array( '%d' ),
+				array( '%d' )
+			);
+		} elseif ( 'all' === $type ) {
+			$result = $wpdb->update( // phpcs:ignore
+				$notifications_table,
+				array(
+					'is_read' => 1,
+				),
+				array(
+					'to_user_id' => get_current_user_id(),
+				),
+				array( '%d' ),
+				array( '%d' )
+			);
 		}
-
-		$result = $wpdb->update( // phpcs:ignore
-			$notifications_table,
-			array(
-				'is_read' => 1,
-			),
-			array(
-				'id' => $data_id,
-			),
-			array( '%d' ),
-			array( '%d' )
-		);
 
 		if ( ! $result || is_wp_error( $result ) ) {
 			EL::add(
 				sprintf(
-					'DB delete query failed for course ID %d. Error: %s',
-					$data_id,
+					'DB update query failed for read notification. Error: %s',
 					$wpdb->last_error
 				),
 				'error',

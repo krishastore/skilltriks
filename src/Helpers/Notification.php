@@ -131,41 +131,45 @@ abstract class Notification {
 		$message             = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
-		$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$notifications_table,
-			array(
-				'from_user_id'      => $from_user_id,
-				'to_user_id'        => $to_user_id,
-				'course_id'         => $course_id,
-				'due_date'          => $due_date,
-				'action_type'       => $action_type,
-				'is_read'           => 0,
-				'notification_sent' => 1,
-			),
-			array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
-		);
+		$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE action_type = %d AND to_user_id = %d AND from_user_id = %d AND course_id = %d", $action_type, (int) $to_user_id, (int) $from_user_id, (int) $course_id ) ); // phpcs:ignore.
 
-		delete_transient( 'stlms_notification_data_' . $to_user_id );
-
-		if ( ! $result || is_wp_error( $result ) ) {
-			EL::add(
-				sprintf(
-					'DB insert failed for user ID %d, course ID %d. Error: %s',
-					$to_user_id,
-					$course_id,
-					$wpdb->last_error
+		if ( ! $sent_notification ) {
+			$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$notifications_table,
+				array(
+					'from_user_id'      => $from_user_id,
+					'to_user_id'        => $to_user_id,
+					'course_id'         => $course_id,
+					'due_date'          => $due_date,
+					'action_type'       => $action_type,
+					'is_read'           => 0,
+					'notification_sent' => 1,
 				),
-				'error',
-				__FILE__,
-				__LINE__
+				array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
 			);
-		} else {
-			wp_mail(
-				$to_user->user_email,
-				wp_strip_all_tags( $subject ),
-				$message,
-				array( 'Content-Type: text/html; charset=UTF-8' )
-			);
+
+			delete_transient( 'stlms_notification_data_' . $to_user_id );
+
+			if ( ! $result || is_wp_error( $result ) ) {
+				EL::add(
+					sprintf(
+						'DB insert failed for user ID %d, course ID %d. Error: %s',
+						$to_user_id,
+						$course_id,
+						$wpdb->last_error
+					),
+					'error',
+					__FILE__,
+					__LINE__
+				);
+			} else {
+				wp_mail(
+					$to_user->user_email,
+					wp_strip_all_tags( $subject ),
+					$message,
+					array( 'Content-Type: text/html; charset=UTF-8' )
+				);
+			}
 		}
 	}
 }

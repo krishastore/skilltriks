@@ -8,6 +8,7 @@
 namespace ST\Lms\Notification;
 
 use const ST\Lms\STLMS_COURSE_ASSIGN_TO_ME;
+use const ST\Lms\STLMS_NOTIFICATION_TABLE;
 
 /**
  * DueSoonCourseNotification class.
@@ -127,10 +128,13 @@ class DueSoonCourseNotification extends \ST\Lms\Helpers\Notification {
 	 * Check due courses and send email notifications.
 	 */
 	public function check_due_soon_courses_daily() {
-		$options       = get_option( 'stlms_settings' );
-		$due_soon      = ! empty( $options['due_soon'] ) ? $options['due_soon'] : 7;
-		$due_soon_day  = '+' . $due_soon . ' day';
-		$due_soon_date = wp_date( 'Y-m-d', strtotime( $due_soon_day, (int) current_datetime()->format( 'U' ) ) );
+		global $wpdb;
+
+		$options             = get_option( 'stlms_settings' );
+		$due_soon            = ! empty( $options['due_soon'] ) ? $options['due_soon'] : 7;
+		$due_soon_day        = '+' . $due_soon . ' day';
+		$due_soon_date       = wp_date( 'Y-m-d', strtotime( $due_soon_day, (int) current_datetime()->format( 'U' ) ) );
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
 		$users = get_users(
 			array(
@@ -159,6 +163,19 @@ class DueSoonCourseNotification extends \ST\Lms\Helpers\Notification {
 				if ( $course_id && $from_user_id && $to_user_id ) {
 					$this->send_email_notification( (int) $from_user_id, $to_user_id, (int) $course_id, $due_date, $is_assigner = false, 5 );
 					$this->send_email_notification( $to_user_id, (int) $from_user_id, (int) $course_id, $due_date, $is_assigner = true );
+
+					$updated = $wpdb->update( // phpcs:ignore.
+						$notifications_table,
+						array( 'notification_sent' => 1 ),
+						array(
+							'action_type'  => 5,
+							'to_user_id'   => $to_user_id,
+							'from_user_id' => $from_user_id,
+							'course_id'    => $course_id,
+						),
+						array( '%d' ),
+						array( '%d', '%d', '%d', '%d' )
+					);
 				}
 			}
 		}

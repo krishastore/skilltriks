@@ -12,6 +12,7 @@ namespace ST\Lms\Helpers;
 
 use ST\Lms\ErrorLog as EL;
 use const ST\Lms\STLMS_NOTIFICATION_TABLE;
+use const ST\Lms\STLMS_COURSE_COMPLETED_ON;
 
 /**
  * Main Notification class.
@@ -131,10 +132,27 @@ abstract class Notification {
 		$message             = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 		$result              = 1;
+		$completed_on        = 0;
+		$_date               = empty( $due_date ) ? '0000-00-00' : $due_date;
 
-		$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE action_type = %d AND to_user_id = %d AND from_user_id = %d AND course_id = %d AND due_date = %s", $action_type, (int) $to_user_id, (int) $from_user_id, (int) $course_id, $due_date ) ); // phpcs:ignore.
+		if ( in_array( $action_type, array( 4, 5, 6 ), true ) ) {
+			$course_completed_key = sprintf( \ST\Lms\STLMS_COURSE_COMPLETED_ON, $course_id );
+			$completed_on         = get_user_meta( $to_user_id, $course_completed_key, true );
+			EL::add(
+				sprintf(
+					'Course progress for user ID %d, completed status %s.',
+					$to_user_id,
+					$completed_on
+				),
+				'info',
+				__FILE__,
+				__LINE__
+			);
+		}
 
-		if ( ! $sent_notification ) {
+		$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE action_type = %d AND to_user_id = %d AND from_user_id = %d AND course_id = %d AND due_date = %s", $action_type, (int) $to_user_id, (int) $from_user_id, (int) $course_id, $_date  ) ); // phpcs:ignore.
+
+		if ( ! $sent_notification && ! $completed_on ) {
 			if ( $action_type ) {
 				$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 					$notifications_table,

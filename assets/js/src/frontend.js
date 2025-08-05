@@ -384,8 +384,11 @@ jQuery(document).on('click', '.stlms-notification-icon, #mark-all-read', functio
         success: function(response) {
             if (type === 'all') {
                 jQuery('.stlms-notification-card').addClass('read-notification');
+				jQuery('#mark-all-read').css('display','none');
+				jQuery('.stlms-notification-icon').addClass('hide');
             } else {
                 iconButton.closest('.stlms-notification-card').addClass('read-notification');
+                iconButton.addClass('hide');
             }
         }
     });

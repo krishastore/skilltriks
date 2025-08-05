@@ -19,6 +19,7 @@ if ( isset( $args['pagination'] ) && 'yes' === $args['pagination'] ) {
 $notifications        = \ST\Lms\fetch_notification_data( $_paged, (int) $items_per_page );
 $notification_message = \ST\Lms\notification_message();
 $total_items          = $notifications['items'];
+$has_unread           = ! empty( array_filter( $notifications['data'], fn( $n ) => '0' === $n['is_read'] ) );
 ?>
 
 <div class="stlms-wrap alignfull">
@@ -30,11 +31,13 @@ $total_items          = $notifications['items'];
 					<div class="stlms-filtered-item">
 						<?php esc_html_e( 'Notifications', 'skilltriks' ); ?>	
 					</div>
+					<?php if ( ! empty( $notifications['data'] ) && $has_unread ) : ?>
 					<div class="stlms-sort-by">
-						<a href="#" class="stlms-btn stlms-btn-light stlms-btn-block" id="mark-all-read">
+						<a href="javascript:void(0);" class="stlms-btn stlms-btn-light stlms-btn-block" id="mark-all-read">
 							<?php esc_html_e( 'Mark All As Read', 'skilltriks' ); ?>	
 						</a>
 					</div>
+					<?php endif; ?>
 				</div>
 				<div class="stlms-course-view__body">
 					<div class="stlms-notification-wrap">
@@ -81,6 +84,7 @@ $total_items          = $notifications['items'];
 												</div>
 											</div>
 										</div>
+										<?php if ( ! $notification['is_read'] ) : ?>
 										<div class="stlms-notification-icon" data-id="<?php echo esc_attr( $notification['id'] ); ?>">
 											<button>
 												<svg width="30" height="30">
@@ -88,6 +92,7 @@ $total_items          = $notifications['items'];
 												</svg>
 											</button>
 										</div>
+										<?php endif; ?>
 									</div>
 								</li>
 									<?php

@@ -92,6 +92,10 @@
       flex-shrink: 0;
       margin-left: auto;
       @include transition(all 0.3s ease-in-out);
+      
+      &.hide {
+        display: none;
+      }
 
       button {
         background-color: transparent;

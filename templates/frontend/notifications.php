@@ -34,11 +34,6 @@ $total_items          = $notifications['items'];
 						<a href="#" class="stlms-btn stlms-btn-light stlms-btn-block" id="mark-all-read">
 							<?php esc_html_e( 'Mark All As Read', 'skilltriks' ); ?>	
 						</a>
-						<button class="stlms-filter-toggle">
-							<svg width="24" height="24">
-								<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#filters"></use>
-							</svg>
-						</button>
 					</div>
 				</div>
 				<div class="stlms-course-view__body">
@@ -52,15 +47,19 @@ $total_items          = $notifications['items'];
 									$course_name = get_the_title( $notification['course_id'] );
 									$course_link = get_permalink( $notification['course_id'] );
 									$date_format = get_option( 'date_format' );
-									$due_date    = '0000-00-00' !== $notification['due_date'] ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : '';
+									$due_date    = '0000-00-00' !== $notification['due_date'] ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : 'that has not been set';
 									$time_diff   = human_time_diff( strtotime( $notification['created_at'] ), (int) current_datetime()->format( 'U' ) );
 									$action_type = $notification['action_type'];
-									$message     = $notification_message[ $action_type - 1 ];
+									$message     = isset( $notification_message[ $action_type - 1 ] ) ? $notification_message[ $action_type - 1 ] : '';
 									?>
 								<li>
 									<div class="stlms-notification-card <?php echo $notification['is_read'] ? esc_attr( 'read-notification' ) : ''; ?>">
 										<div class="stlms-notification-image">
-											<img src="<?php echo esc_url( get_avatar_url( $from_user ) ); ?>" alt="">
+											<?php if ( ! in_array( $action_type, array( 4, 5, 6, 7 ), true ) ) : ?>
+												<img src="<?php echo esc_url( get_avatar_url( $from_user ) ); ?>" alt="user-icon">
+											<?php else : ?>
+												<img src="<?php echo esc_url( STLMS_ASSETS ); ?>/images/ST.png" alt="skilltriks">
+											<?php endif; ?>
 										</div>
 										<div class="stlms-notification-content">
 											<div class="stlms-notification-heading">

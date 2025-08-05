@@ -130,25 +130,27 @@ abstract class Notification {
 		$subject             = $this->email_subject( $course_name, $is_assigner );
 		$message             = $this->email_message( $from_user_name, $to_user_name, $course_id, $due_date, $is_assigner );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+		$result              = 1;
 
-		$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE action_type = %d AND to_user_id = %d AND from_user_id = %d AND course_id = %d", $action_type, (int) $to_user_id, (int) $from_user_id, (int) $course_id ) ); // phpcs:ignore.
+		$sent_notification = $wpdb->get_var( $wpdb->prepare( "SELECT `notification_sent` FROM $notifications_table WHERE action_type = %d AND to_user_id = %d AND from_user_id = %d AND course_id = %d AND due_date = %s", $action_type, (int) $to_user_id, (int) $from_user_id, (int) $course_id, $due_date ) ); // phpcs:ignore.
 
 		if ( ! $sent_notification ) {
-			$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$notifications_table,
-				array(
-					'from_user_id'      => $from_user_id,
-					'to_user_id'        => $to_user_id,
-					'course_id'         => $course_id,
-					'due_date'          => $due_date,
-					'action_type'       => $action_type,
-					'is_read'           => 0,
-					'notification_sent' => 1,
-				),
-				array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
-			);
-
-			delete_transient( 'stlms_notification_data_' . $to_user_id );
+			if ( $action_type ) {
+				$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+					$notifications_table,
+					array(
+						'from_user_id'      => $from_user_id,
+						'to_user_id'        => $to_user_id,
+						'course_id'         => $course_id,
+						'due_date'          => $due_date,
+						'action_type'       => $action_type,
+						'is_read'           => 0,
+						'notification_sent' => 1,
+					),
+					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
+				);
+				delete_transient( 'stlms_notification_data_' . $to_user_id );
+			}
 
 			if ( ! $result || is_wp_error( $result ) ) {
 				EL::add(

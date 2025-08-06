@@ -19,7 +19,7 @@ if ( isset( $args['pagination'] ) && 'yes' === $args['pagination'] ) {
 $notifications        = \ST\Lms\fetch_notification_data( $_paged, (int) $items_per_page );
 $notification_message = \ST\Lms\notification_message();
 $total_items          = $notifications['items'];
-$has_unread           = ! empty( array_filter( $notifications['data'], fn( $n ) => '0' === $n['is_read'] ) );
+$has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filter( $notifications['data'], fn( $n ) => '0' === $n['is_read'] ) ) : 0;
 ?>
 
 <div class="stlms-wrap alignfull">

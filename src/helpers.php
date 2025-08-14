@@ -919,7 +919,8 @@ function notification_message() {
 			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due today.',
 			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
 			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
-			'<strong>Course Completed :</strong> The course you assigned to %1s <a href="%2$s">%3$s</a> has been successfully completed.',
+			'<strong>Course Completed :</strong> The course you assigned to %1$s <a href="%2$s">%3$s</a> has been successfully completed.',
+			'<strong>%1$s:</strong> <a href="%2$s">%3$s</a> has been %4$s %5$s the course.',
 		)
 	);
 }

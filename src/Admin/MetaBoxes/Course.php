@@ -243,6 +243,9 @@ class Course extends \ST\Lms\Collections\PostTypes {
 		}
 
 		$post_data = apply_filters( 'stlms_course_post_data', $post_data, $post_id );
+
+		do_action( 'stlms_save_course_meta_before', $post_id, $post_data );
+
 		foreach ( $post_data as $key => $data ) {
 			$key = $this->meta_key_prefix . '_' . $key;
 			if ( empty( $data ) ) {

@@ -62,6 +62,7 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		\ST\Lms\Notification\DueCourseNotification::instance()->init();
 		\ST\Lms\Notification\OverDueCourseNotification::instance()->init();
 		\ST\Lms\Notification\DueSoonCourseNotification::instance()->init();
+		\ST\Lms\Notification\AdminActivityNotification::instance()->init();
 		new \ST\Lms\Import\QuestionImport();
 		new \ST\Lms\Import\LessonImport();
 		new \ST\Lms\Import\CourseImport();

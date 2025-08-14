@@ -68,6 +68,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			wp_clear_scheduled_hook( 'stlms_check_due_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_check_over_due_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );
+			wp_clear_scheduled_hook( 'stlms_notify_course_content_changes' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}
@@ -217,7 +218,8 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				to_user_id BIGINT(20) UNSIGNED NOT NULL,
 				course_id BIGINT(20) UNSIGNED NOT NULL,
 				due_date DATE DEFAULT NULL,
-				action_type TINYINT(1) NOT NULL COMMENT \'1=assigned, 2=updated, 3=deleted, 4=due, 5=due_soon, 6=over_due, 7=completed\',
+				action_type TINYINT(1) NOT NULL COMMENT \'1=assigned, 2=updated, 3=removed, 4=due, 5=due_soon, 6=over_due, 7=completed, 8=content_changes\',
+				content_changes JSON DEFAULT NULL,
 				is_read TINYINT(1) DEFAULT 0,
 				notification_sent TINYINT(1) DEFAULT 0,
 				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -230,11 +232,8 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		foreach ( $tables as $table_name => $table_sql_template ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) !== $table_name ) {
-				$sql = sprintf( $table_sql_template, $table_name ) . " $charset_collate;";
-				dbDelta( $sql );
-			}
+			$sql = sprintf( $table_sql_template, $table_name ) . " $charset_collate;";
+			dbDelta( $sql );
 		}
 	}
 

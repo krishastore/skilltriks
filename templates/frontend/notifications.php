@@ -45,15 +45,17 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 							<?php
 							if ( ! empty( $notifications['data'] ) ) {
 								foreach ( $notifications['data'] as $notification ) :
-									$from_user   = get_userdata( $notification['from_user_id'] );
-									$from_name   = $from_user ? $from_user->display_name : 'Someone';
-									$course_name = get_the_title( $notification['course_id'] );
-									$course_link = get_permalink( $notification['course_id'] );
-									$date_format = get_option( 'date_format' );
-									$due_date    = '0000-00-00' !== $notification['due_date'] ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : 'that has not been set';
-									$time_diff   = human_time_diff( strtotime( $notification['created_at'] ), (int) current_datetime()->format( 'U' ) );
-									$action_type = $notification['action_type'];
-									$message     = isset( $notification_message[ $action_type - 1 ] ) ? $notification_message[ $action_type - 1 ] : '';
+
+									$from_user       = get_userdata( $notification['from_user_id'] );
+									$from_name       = $from_user ? $from_user->display_name : 'Someone';
+									$course_name     = get_the_title( $notification['course_id'] );
+									$course_link     = get_permalink( $notification['course_id'] );
+									$date_format     = get_option( 'date_format' );
+									$due_date        = '0000-00-00' !== $notification['due_date'] ? wp_date( $date_format, strtotime( $notification['due_date'] ) ) : 'that has not been set';
+									$time_diff       = human_time_diff( strtotime( $notification['created_at'] ), (int) current_datetime()->format( 'U' ) );
+									$action_type     = (int) $notification['action_type'];
+									$message         = isset( $notification_message[ $action_type - 1 ] ) ? $notification_message[ $action_type - 1 ] : '';
+									$content_changes = ! empty( $notification['content_changes'] ) ? json_decode( $notification['content_changes'] ) : array();
 									?>
 								<li>
 									<div class="stlms-notification-card <?php echo $notification['is_read'] ? esc_attr( 'read-notification' ) : ''; ?>">
@@ -68,21 +70,57 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 											<div class="stlms-notification-heading">
 												<div class="stlms-notification-title">
 													<?php
-													echo wp_kses_post(
-														wp_sprintf(
-															$message,
-															esc_html( $from_name ),
-															esc_url( $course_link ),
-															esc_html( $course_name ),
-															esc_html( $due_date )
-														)
-													);
+													if ( 8 !== $action_type ) {
+														echo wp_kses_post(
+															wp_sprintf(
+																$message,
+																esc_html( $from_name ),
+																esc_url( $course_link ),
+																esc_html( $course_name ),
+																esc_html( $due_date )
+															)
+														);
+													} else {
+														echo wp_kses_post( wp_sprintf( '<strong>%1$s</strong> updated the content of the course <a href="%2$s">%3$s</a>.', esc_html( $from_name ), esc_url( $course_link ), esc_html( $course_name ) ) );
+													}
 													?>
 												</div>
 												<div class="stlms-notification-time">
-														<?php echo esc_html( $time_diff ) . ' ago'; ?>
+													<?php echo esc_html( $time_diff ) . ' ago'; ?>
 												</div>
 											</div>
+											<?php if ( 8 === $action_type ) : ?>
+											<div class="stlms-notification-desc" bis_skin_checked="1">
+												<ul>
+													<?php
+													foreach ( $content_changes as $key => $_ids ) :
+
+														list( $_type, $_action ) = explode( '_', $key, 2 );
+														$prepositions            = ( 'added' === $_action ) ? 'to' : 'from';
+
+														foreach ( $_ids as $_id ) :
+															$content_name = get_the_title( $_id );
+															$content_link = get_permalink( $_id );
+															?>
+														<li>
+															<?php
+																echo wp_kses_post(
+																	wp_sprintf(
+																		$message,
+																		esc_html( ucfirst( $_type ) ),
+																		esc_url( $content_link ),
+																		esc_html( $content_name ),
+																		esc_html( $_action ),
+																		esc_html( $prepositions )
+																	)
+																);
+															?>
+														</li>
+														<?php endforeach; ?>
+													<?php endforeach; ?>
+												</ul>
+											</div>
+											<?php endif; ?>
 										</div>
 										<?php if ( ! $notification['is_read'] ) : ?>
 										<div class="stlms-notification-icon" data-id="<?php echo esc_attr( $notification['id'] ); ?>">

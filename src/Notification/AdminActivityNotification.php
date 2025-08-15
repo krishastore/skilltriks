@@ -13,6 +13,7 @@ use const ST\Lms\STLMS_NOTIFICATION_TABLE;
 use const ST\Lms\STLMS_ENROL_COURSES;
 use const ST\Lms\STLMS_LESSON_CPT;
 use const ST\Lms\STLMS_QUIZ_CPT;
+use const ST\Lms\STLMS_COURSE_CPT;
 
 /**
  * AdminActivityNotification class.
@@ -45,6 +46,7 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 	public function init() {
 		add_action( 'stlms_save_course_meta_before', array( $this, 'stlms_updated_course_content' ), 10, 2 );
 		add_action( 'stlms_notify_course_content_changes', array( $this, 'notify_course_content_changes' ), 10, 3 );
+		add_action( 'transition_post_status', array( $this, 'notify_course_status_changes' ), 10, 3 );
 	}
 
 	/**
@@ -211,6 +213,88 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 							'DB insert failed for user ID %d, course ID %d. Error: %s',
 							$user_id,
 							$course_id,
+							$wpdb->last_error
+						),
+						'error',
+						__FILE__,
+						__LINE__
+					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Handle course status changes and send notifications accordingly.
+	 *
+	 * This function hooks into the 'transition_post_status' action and determines
+	 * when to send notifications based on post status changes.
+	 *
+	 *  1. Send notification when a course is published, but NOT when it's first created/published.
+	 *  2. Send notification when a course transitions from 'publish' to any other status.
+	 *
+	 * @param string $new_status The new status of the post (e.g. 'publish', 'draft', 'pending').
+	 * @param string $old_status The old status of the post (e.g. 'draft', 'publish').
+	 * @param object $post       The post object being transitioned.
+	 */
+	public function notify_course_status_changes( $new_status, $old_status, $post ) {
+		global $wpdb;
+
+		// Bail out if not course.
+		if ( STLMS_COURSE_CPT !== $post->post_type ) {
+			return;
+		}
+
+		$action_type         = 9;
+		$author_id           = (int) get_post_field( 'post_author', $post->ID );
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+
+		if ( 'publish' === $new_status && 'publish' !== $old_status && ! in_array( $old_status, array( 'new', 'auto-draft', 'draft' ), true ) ) {
+			$action_type = 9;
+		}
+
+		if ( 'publish' === $old_status && 'publish' !== $new_status ) {
+			$action_type = 10;
+		}
+
+		$user_query = new \WP_User_Query(
+			array(
+				'meta_key'     => STLMS_ENROL_COURSES, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'meta_value'   => (string) $post->ID, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'meta_compare' => 'LIKE',
+				'fields'       => 'ID',
+			)
+		);
+		$user_ids   = $user_query->get_results();
+
+		foreach ( array_chunk( $user_ids, 50 ) as $batch ) {
+			foreach ( $batch as $user_id ) {
+
+				$to_user      = get_userdata( $user_id );
+				$to_user_name = $to_user->display_name;
+
+				$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+					$notifications_table,
+					array(
+						'from_user_id'      => $author_id,
+						'to_user_id'        => $user_id,
+						'course_id'         => $post->ID,
+						'due_date'          => '0000-00-00',
+						'action_type'       => $action_type,
+						'is_read'           => 0,
+						'notification_sent' => 1,
+					),
+					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
+				);
+
+				delete_transient( 'stlms_notification_data_' . $user_id );
+
+				if ( ! $result || is_wp_error( $result ) ) {
+					EL::add(
+						sprintf(
+							'DB insert failed for user ID %d, course ID %d. Error: %s',
+							$user_id,
+							$post->ID,
 							$wpdb->last_error
 						),
 						'error',

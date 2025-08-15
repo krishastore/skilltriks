@@ -915,12 +915,14 @@ function notification_message() {
 		array(
 			'<strong>%1$s</strong> assigned you a new course <a href="%2$s">%3$s</a> with a completion date of %4$s.',
 			'<strong>%1$s</strong> updated the completion date of the course <a href="%2$s">%3$s</a> to %4$s.',
-			'<strong>%1$s</strong> removed the course %3$s.',
+			'<strong>%1$s</strong> unassigned the course %3$s.',
 			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due today.',
 			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
 			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
 			'<strong>Course Completed :</strong> The course you assigned to %1$s <a href="%2$s">%3$s</a> has been successfully completed.',
-			'<strong>%1$s:</strong> <a href="%2$s">%3$s</a> has been %4$s %5$s the course.',
+			'<strong>%1$s:</strong> %2$s has been %3$s %4$s the course.',
+			'The course <a href="%2$s">%3$s</a> is now active again. You can resume learning anytime.',
+			'<strong>%1$s</strong> removed the course %3$s.',
 		)
 	);
 }

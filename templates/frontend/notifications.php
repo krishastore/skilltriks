@@ -100,7 +100,6 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 
 														foreach ( $_ids as $_id ) :
 															$content_name = get_the_title( $_id );
-															$content_link = get_permalink( $_id );
 															?>
 														<li>
 															<?php
@@ -108,7 +107,6 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 																	wp_sprintf(
 																		$message,
 																		esc_html( ucfirst( $_type ) ),
-																		esc_url( $content_link ),
 																		esc_html( $content_name ),
 																		esc_html( $_action ),
 																		esc_html( $prepositions )

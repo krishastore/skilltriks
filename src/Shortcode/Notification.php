@@ -63,12 +63,12 @@ class Notification extends \ST\Lms\Shortcode\Register {
 		if ( STLMS_COURSE_CPT === $post->post_type && empty( get_post( $post_id ) ) ) {
 			$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
-			$result = $wpdb->delete( // phpcs:ignore
-				$notifications_table,
-				array(
-					'course_id' => $post_id,
-				),
-				array( '%d' )
+			$result = $wpdb->query( // phpcs:ignore.
+				$wpdb->prepare(
+					"DELETE FROM $notifications_table WHERE course_id = %d AND action_type != %d", // phpcs:ignore.
+					$post_id,
+					10
+				)
 			);
 
 			if ( ! $result || is_wp_error( $result ) ) {

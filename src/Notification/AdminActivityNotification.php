@@ -250,16 +250,23 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 			return;
 		}
 
-		$action_type         = 9;
+		$action_type         = 0;
 		$author_id           = (int) get_post_field( 'post_author', $post->ID );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+		$title               = null;
 
-		if ( 'publish' === $new_status && 'publish' !== $old_status && ! in_array( $old_status, array( 'new', 'auto-draft', 'draft', 'pending' ), true ) ) {
+		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
 			$action_type = 9;
 		}
 
 		if ( 'publish' === $old_status && 'publish' !== $new_status ) {
 			$action_type = 10;
+			$title       = get_the_title( $post->ID );
+		}
+
+		// Bail out if course status is changed internally instead of publish.
+		if ( ! $action_type ) {
+			return;
 		}
 
 		$user_query = new \WP_User_Query(
@@ -288,8 +295,9 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 						'action_type'       => $action_type,
 						'is_read'           => 0,
 						'notification_sent' => 1,
+						'content_changes'   => wp_json_encode( $title ),
 					),
-					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d' )
+					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d', '%s' )
 				);
 
 				delete_transient( 'stlms_notification_data_' . $user_id );

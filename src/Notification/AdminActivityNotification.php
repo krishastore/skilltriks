@@ -110,7 +110,7 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 					}
 				}
 			}
-			return $items;
+			return array_unique( $items );
 		};
 
 		$old_items = $extract_items( $old_data );
@@ -245,11 +245,16 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 			return;
 		}
 
+		// Bail out if status is not changed.
+		if ( $old_status === $new_status ) {
+			return;
+		}
+
 		$action_type         = 9;
 		$author_id           = (int) get_post_field( 'post_author', $post->ID );
 		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
 
-		if ( 'publish' === $new_status && 'publish' !== $old_status && ! in_array( $old_status, array( 'new', 'auto-draft', 'draft' ), true ) ) {
+		if ( 'publish' === $new_status && 'publish' !== $old_status && ! in_array( $old_status, array( 'new', 'auto-draft', 'draft', 'pending' ), true ) ) {
 			$action_type = 9;
 		}
 

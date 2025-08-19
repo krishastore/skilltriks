@@ -69,6 +69,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			wp_clear_scheduled_hook( 'stlms_check_over_due_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_notify_course_content_changes' );
+			wp_clear_scheduled_hook( 'stlms_daily_notification_cleanup' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}

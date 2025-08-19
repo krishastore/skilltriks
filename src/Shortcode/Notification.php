@@ -26,6 +26,7 @@ class Notification extends \ST\Lms\Shortcode\Register {
 		$this->set_shortcode_tag( 'notifications' );
 		add_action( 'after_delete_post', array( $this, 'remove_notification' ), 10, 2 );
 		add_action( 'wp_ajax_stlms_read_notification', array( $this, 'read_notification' ) );
+		add_action( 'init', array( $this, 'schedule_notification_cleanup' ) );
 		$this->init();
 	}
 
@@ -138,5 +139,33 @@ class Notification extends \ST\Lms\Shortcode\Register {
 				__LINE__
 			);
 		}
+	}
+
+	/**
+	 * Schedule the daily cron event if not already scheduled.
+	 */
+	public function schedule_notification_cleanup() {
+		if ( ! wp_next_scheduled( 'stlms_daily_notification_cleanup' ) ) {
+			wp_schedule_event( time(), 'daily', 'stlms_daily_notification_cleanup' );
+		}
+
+		add_action( 'stlms_daily_notification_cleanup', array( $this, 'run_notification_cleanup' ) );
+	}
+
+	/**
+	 * Delete notifications older than 180 days.
+	 */
+	public function run_notification_cleanup() {
+		global $wpdb;
+
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+		$cutoff              = gmdate( 'Y-m-d H:i:s', strtotime( '-180 days' ) );
+
+		$wpdb->query( //phpcs:ignore.
+			$wpdb->prepare(
+				"DELETE FROM $notifications_table WHERE created_at < %s", //phpcs:ignore.
+				$cutoff
+			)
+		);
 	}
 }

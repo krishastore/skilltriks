@@ -157,7 +157,6 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 		}
 	}
 
-
 	/**
 	 * Compare old and new course curriculum and detect added/removed lessons/quizzes.
 	 *
@@ -167,6 +166,10 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 	 */
 	public function notify_course_content_changes( $course_id, $changes, $author_id ) {
 		global $wpdb;
+
+		if ( false === get_post_status( $course_id ) ) {
+			return;
+		}
 
 		$user_query = new \WP_User_Query(
 			array(

@@ -56,7 +56,7 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 									$action_type     = (int) $notification['action_type'];
 									$message         = isset( $notification_message[ $action_type - 1 ] ) ? $notification_message[ $action_type - 1 ] : '';
 									$content_changes = ! empty( $notification['content_changes'] ) ? json_decode( $notification['content_changes'] ) : array();
-									$course_name     = empty( $course_name ) ? $content_changes : $course_name;
+									$course_name     = empty( $course_name ) && ! empty( $notification['content_changes'] ) ? $content_changes : $course_name;
 									?>
 								<li>
 									<div class="stlms-notification-card <?php echo $notification['is_read'] ? esc_attr( 'read-notification' ) : ''; ?>">

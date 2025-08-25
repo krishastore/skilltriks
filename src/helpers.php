@@ -923,6 +923,7 @@ function notification_message() {
 			'<strong>%1$s</strong> %2$s has been %3$s %4$s the course.',
 			'The course <a href="%2$s">%3$s</a> is now active again. You can resume learning anytime.',
 			'<strong>%1$s</strong> removed the course %3$s.',
+			'<strong>%1$s</strong> updated the content of the lesson %3$s',
 		)
 	);
 }

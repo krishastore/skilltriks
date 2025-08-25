@@ -14,6 +14,8 @@ use const ST\Lms\STLMS_ENROL_COURSES;
 use const ST\Lms\STLMS_LESSON_CPT;
 use const ST\Lms\STLMS_QUIZ_CPT;
 use const ST\Lms\STLMS_COURSE_CPT;
+use const ST\Lms\META_KEY_LESSON_COURSE_IDS;
+use const ST\Lms\META_KEY_LESSON_MEDIA;
 
 /**
  * AdminActivityNotification class.
@@ -47,6 +49,7 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 		add_action( 'stlms_save_course_meta_before', array( $this, 'stlms_updated_course_content' ), 10, 2 );
 		add_action( 'stlms_notify_course_content_changes', array( $this, 'notify_course_content_changes' ), 10, 3 );
 		add_action( 'transition_post_status', array( $this, 'notify_course_status_changes' ), 10, 3 );
+		add_action( 'stlms_save_lesson_meta_before', array( $this, 'notify_lesson_content_changes' ), 10, 2 );
 	}
 
 	/**
@@ -128,6 +131,13 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 
 		foreach ( $added as $id ) {
 			if ( STLMS_LESSON_CPT === get_post_type( $id ) ) {
+				$lessons = get_post_meta( $id, META_KEY_LESSON_COURSE_IDS, true ) ? get_post_meta( $id, META_KEY_LESSON_COURSE_IDS, true ) : array();
+
+				if ( ! in_array( $post_id, $lessons, true ) ) {
+					$lessons[] = $post_id;
+					update_post_meta( $id, META_KEY_LESSON_COURSE_IDS, $lessons );
+				}
+
 				$changes['lesson_added'][] = $id;
 
 			} elseif ( STLMS_QUIZ_CPT === get_post_type( $id ) ) {
@@ -137,6 +147,15 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 
 		foreach ( $removed as $id ) {
 			if ( STLMS_LESSON_CPT === get_post_type( $id ) ) {
+				$lessons = get_post_meta( $id, META_KEY_LESSON_COURSE_IDS, true ) ? get_post_meta( $id, META_KEY_LESSON_COURSE_IDS, true ) : array();
+				$key     = array_search( $post_id, $lessons, true );
+
+				if ( false !== $key ) {
+					unset( $lessons[ $key ] );
+					$lessons = array_values( $lessons );
+					update_post_meta( $id, META_KEY_LESSON_COURSE_IDS, $lessons );
+				}
+
 				$changes['lesson_removed'][] = $id;
 			} elseif ( STLMS_QUIZ_CPT === get_post_type( $id ) ) {
 				$changes['quiz_removed'][] = $id;
@@ -165,66 +184,11 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 	 * @param int   $author_id  Author who updated the course.
 	 */
 	public function notify_course_content_changes( $course_id, $changes, $author_id ) {
-		global $wpdb;
-
 		if ( false === get_post_status( $course_id ) ) {
 			return;
 		}
 
-		$user_query = new \WP_User_Query(
-			array(
-				'meta_key'     => STLMS_ENROL_COURSES, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'meta_value'   => (string) $course_id, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-				'meta_compare' => 'LIKE',
-				'fields'       => 'ID',
-			)
-		);
-		$user_ids   = $user_query->get_results();
-
-		$from_user           = get_userdata( $author_id );
-		$from_user_name      = $from_user->display_name;
-		$course              = get_post( $course_id );
-		$course_name         = ! empty( $course ) ? $course->post_title : '';
-		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
-
-		foreach ( array_chunk( $user_ids, 50 ) as $batch ) {
-			foreach ( $batch as $user_id ) {
-
-				$to_user      = get_userdata( $user_id );
-				$to_user_name = $to_user->display_name;
-
-				$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-					$notifications_table,
-					array(
-						'from_user_id'      => $author_id,
-						'to_user_id'        => $user_id,
-						'course_id'         => $course_id,
-						'due_date'          => '0000-00-00',
-						'action_type'       => 8,
-						'is_read'           => 0,
-						'notification_sent' => 1,
-						'content_changes'   => wp_json_encode( $changes ),
-					),
-					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d', '%s' )
-				);
-
-				delete_transient( 'stlms_notification_data_' . $user_id );
-
-				if ( ! $result || is_wp_error( $result ) ) {
-					EL::add(
-						sprintf(
-							'DB insert failed for user ID %d, course ID %d. Error: %s',
-							$user_id,
-							$course_id,
-							$wpdb->last_error
-						),
-						'error',
-						__FILE__,
-						__LINE__
-					);
-				}
-			}
-		}
+		$this->stlms_store_notifications_data( $course_id, $changes, 8 );
 	}
 
 	/**
@@ -241,8 +205,6 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 	 * @param object $post       The post object being transitioned.
 	 */
 	public function notify_course_status_changes( $new_status, $old_status, $post ) {
-		global $wpdb;
-
 		// Bail out if not course.
 		if ( STLMS_COURSE_CPT !== $post->post_type ) {
 			return;
@@ -253,10 +215,8 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 			return;
 		}
 
-		$action_type         = 0;
-		$author_id           = (int) get_post_field( 'post_author', $post->ID );
-		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
-		$title               = null;
+		$action_type = 0;
+		$title       = null;
 
 		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
 			$action_type = 9;
@@ -272,10 +232,62 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 			return;
 		}
 
+		$this->stlms_store_notifications_data( $post->ID, $title, $action_type );
+	}
+
+	/**
+	 * Compare old and new lesson media and detect added/removed videos/files.
+	 *
+	 * @param int   $lesson_id  The lesson post ID.
+	 * @param array $meta_data The new meta data from save request.
+	 */
+	public function notify_lesson_content_changes( $lesson_id, $meta_data ) {
+		if ( empty( $meta_data['media'] ) ) {
+			return;
+		}
+
+		$existing_meta = get_post_meta( $lesson_id, META_KEY_LESSON_MEDIA, true );
+		$course_ids    = get_post_meta( $lesson_id, META_KEY_LESSON_COURSE_IDS, true );
+
+		if ( empty( $existing_meta ) || ! is_array( $existing_meta ) ) {
+			foreach ( $course_ids as $course_id ) {
+				$this->stlms_store_notifications_data( $lesson_id, null, 11, $course_id );
+			}
+			return;
+		}
+
+		$keys_to_check = array( 'media_type', 'video_id', 'file_id', 'file_url', 'embed_video_url' );
+
+		$existing_data = array_intersect_key( $existing_meta, array_flip( $keys_to_check ) );
+		$changed_data  = array_intersect_key( $meta_data['media'], array_flip( $keys_to_check ) );
+
+		if ( $existing_data !== $changed_data ) {
+			foreach ( $course_ids as $course_id ) {
+				$this->stlms_store_notifications_data( $lesson_id, null, 11, $course_id );
+			}
+		}
+	}
+
+	/**
+	 * Store notifications data.
+	 *
+	 * @param int               $content_id  The ID of the course,lesson.
+	 * @param array|null|string $content_changes The content changed when the course/lesson is updated.
+	 * @param int               $action_type  The action type.
+	 * @param int               $course_id  The course ID.
+	 */
+	private function stlms_store_notifications_data( $content_id, $content_changes, $action_type, $course_id = 0 ) {
+		global $wpdb;
+
+		$author_id           = (int) get_post_field( 'post_author', $content_id );
+		$notifications_table = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+		$content_changes     = ! empty( $content_changes ) ? wp_json_encode( $content_changes ) : null;
+		$course_id           = $course_id ? $course_id : $content_id;
+
 		$user_query = new \WP_User_Query(
 			array(
 				'meta_key'     => STLMS_ENROL_COURSES, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'meta_value'   => (string) $post->ID, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'meta_value'   => (string) $course_id, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 				'meta_compare' => 'LIKE',
 				'fields'       => 'ID',
 			)
@@ -293,12 +305,12 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 					array(
 						'from_user_id'      => $author_id,
 						'to_user_id'        => $user_id,
-						'course_id'         => $post->ID,
+						'course_id'         => $content_id,
 						'due_date'          => '0000-00-00',
 						'action_type'       => $action_type,
 						'is_read'           => 0,
 						'notification_sent' => 1,
-						'content_changes'   => wp_json_encode( $title ),
+						'content_changes'   => $content_changes,
 					),
 					array( '%d', '%d', '%d', '%s', '%d', '%d', '%d', '%s' )
 				);
@@ -310,7 +322,7 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 						sprintf(
 							'DB insert failed for user ID %d, course ID %d. Error: %s',
 							$user_id,
-							$post->ID,
+							$content_id,
 							$wpdb->last_error
 						),
 						'error',

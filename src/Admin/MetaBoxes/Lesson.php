@@ -204,6 +204,8 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 			$post_data['media']['text'] = wp_kses_post( wp_unslash( $_POST[ $this->meta_key_prefix ]['media']['text'] ) );
 		}
 
+		do_action( 'stlms_save_lesson_meta_before', $post_id, $post_data );
+
 		if ( isset( $_POST[ $this->meta_key_prefix ]['settings']['duration'] ) ) {
 			$post_data['settings']['duration'] = (int) $_POST[ $this->meta_key_prefix ]['settings']['duration'];
 		}
@@ -300,6 +302,12 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 				if ( empty( $connected ) ) {
 					esc_html_e( 'Not Assigned Yet', 'skilltriks' );
 					break;
+				}
+
+				$existing_course_ids = get_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, true );
+
+				if ( empty( $existing_course_ids ) || $existing_course_ids !== $connected ) {
+					update_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, $connected );
 				}
 				$connected = array_map(
 					function ( $q ) {

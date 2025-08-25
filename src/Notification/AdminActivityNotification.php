@@ -249,6 +249,10 @@ class AdminActivityNotification extends \ST\Lms\Helpers\Notification {
 		$existing_meta = get_post_meta( $lesson_id, META_KEY_LESSON_MEDIA, true );
 		$course_ids    = get_post_meta( $lesson_id, META_KEY_LESSON_COURSE_IDS, true );
 
+		if ( empty( $course_ids ) ) {
+			return;
+		}
+
 		if ( empty( $existing_meta ) || ! is_array( $existing_meta ) ) {
 			foreach ( $course_ids as $course_id ) {
 				$this->stlms_store_notifications_data( $lesson_id, null, 11, $course_id );

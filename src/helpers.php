@@ -920,10 +920,10 @@ function notification_message() {
 			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
 			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
 			'<strong>Course Completed :</strong> The course you assigned to %1$s <a href="%2$s">%3$s</a> has been successfully completed.',
-			'<strong>%1$s</strong> %2$s has been %3$s %4$s the course.',
+			'<strong>%1$s %2$s</strong> has been %3$s %4$s the course.',
 			'The course <a href="%2$s">%3$s</a> is now active again. You can resume learning anytime.',
 			'<strong>%1$s</strong> removed the course %3$s.',
-			'<strong>%1$s</strong> updated the content of the lesson %3$s',
+			'<strong>%1$s</strong> updated the content of the lesson <strong>%3$s</strong>',
 		)
 	);
 }

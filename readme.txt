@@ -6,7 +6,7 @@ Tags: learning management system, LMS, E-Learning, Courses, Education
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1
+Stable tag: 1.2
 Copyright: (c) 2012-2025 KrishaWeb Technologies PVT LTD (info@krishaweb.com)
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -144,6 +144,9 @@ If you're managing people, tracking learning outcomes, or building a culture of 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.0 =
+* Notification module including admin and in-app notifications
 
 = 1.1.0 =
 * User Role Modules

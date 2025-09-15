@@ -204,6 +204,8 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 			$post_data['media']['text'] = wp_kses_post( wp_unslash( $_POST[ $this->meta_key_prefix ]['media']['text'] ) );
 		}
 
+		do_action( 'stlms_save_lesson_meta_before', $post_id, $post_data );
+
 		if ( isset( $_POST[ $this->meta_key_prefix ]['settings']['duration'] ) ) {
 			$post_data['settings']['duration'] = (int) $_POST[ $this->meta_key_prefix ]['settings']['duration'];
 		}
@@ -301,6 +303,12 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 					esc_html_e( 'Not Assigned Yet', 'skilltriks' );
 					break;
 				}
+
+				$existing_course_ids = get_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, true );
+
+				if ( empty( $existing_course_ids ) || $existing_course_ids !== $connected ) {
+					update_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, $connected );
+				}
 				$connected = array_map(
 					function ( $q ) {
 						$url   = get_edit_post_link( $q );
@@ -372,8 +380,9 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 	 */
 	public function assign_to_course() {
 		check_ajax_referer( STLMS_BASEFILE, 'stlms_nonce' );
-		$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
-		$courses = isset( $_POST['selected'] ) ? map_deep( $_POST['selected'], 'intval' ) : array();
+		$post_id             = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+		$courses             = isset( $_POST['selected'] ) ? map_deep( $_POST['selected'], 'intval' ) : array();
+		$existing_course_ids = get_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, true ) ? get_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, true ) : array();
 
 		foreach ( $courses as $course ) {
 			$curriculums = get_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, true );
@@ -389,6 +398,10 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 				$curriculums[ $last_index ]['items'][] = $post_id;
 			}
 			update_post_meta( $course, \ST\Lms\META_KEY_COURSE_CURRICULUM, $curriculums );
+			if ( empty( $existing_course_ids ) || ! in_array( $course, $existing_course_ids, true ) ) {
+				$existing_course_ids[] = $course;
+				update_post_meta( $post_id, META_KEY_LESSON_COURSE_IDS, $existing_course_ids );
+			}
 		}
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		EL::add( sprintf( 'Assigned to course: %s, Post ID: %d', print_r( array_unique( $courses ), true ), $post_id ), 'info', __FILE__, __LINE__ );

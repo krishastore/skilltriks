@@ -89,8 +89,9 @@ class AssignNewCourse extends \ST\Lms\Shortcode\Register {
 
 				update_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, $assigned_to_me );
 
-				Notification::instance()->send_email_notification( $current_user_id, $_user_id, $course_id, $completion_date );
+				Notification::instance()->send_email_notification( $current_user_id, $_user_id, $course_id, $completion_date, $is_assigner = false, 1 );
 				DueNotification::instance()->check_due_courses_daily();
+				DueSoonNotification::instance()->check_due_soon_courses_daily();
 			}
 
 			$existing_users = get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true ) ? get_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, true ) : array();

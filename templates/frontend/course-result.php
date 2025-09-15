@@ -118,7 +118,7 @@ if ( ! empty( $course_assigned_to_me ) ) :
 
 	if ( ! empty( $data ) ) :
 		list( $course_id, $_user_id ) = explode( '_', $data, 2 );
-		\ST\Lms\Notification\CompleteCourseNotification::instance()->send_email_notification( get_current_user_id(), $_user_id, $course_id, $completion_date );
+		\ST\Lms\Notification\CompleteCourseNotification::instance()->send_email_notification( get_current_user_id(), $_user_id, $course_id, $completion_date, $is_assigner = false, 7 );
 	endif;
 endif;
 ?>

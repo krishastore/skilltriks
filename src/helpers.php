@@ -183,15 +183,15 @@ function get_curriculums( $curriculums = array(), $reference = '' ) {
 function locate_template( $template ) {
 
 	$layout = 'default';
-	if ( function_exists( 'stlms_addons_template' ) ) {
-		$layout = \stlms_addons_template();
+	if ( function_exists( 'stlmstp_addons_template' ) ) {
+		$layout = \stlmstp_addons_template();
 	}
 	if ( file_exists( get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
 		$template = get_stylesheet_directory() . '/skilltriks/' . $layout . '/' . $template;
 	} elseif ( file_exists( get_template_directory() . '/skilltriks/' . $layout . '/' . $template ) ) {
 		$template = get_template_directory() . '/skilltriks/' . $layout . '/' . $template;
-	} elseif ( 'default' !== $layout && defined( 'STLMS_ADDONS_TEMPLATEPATH' ) && file_exists( STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
-		$template = STLMS_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
+	} elseif ( 'default' !== $layout && defined( 'STLMSTP_ADDONS_TEMPLATEPATH' ) && file_exists( STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
+		$template = STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
 	} elseif ( file_exists( STLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
 		$template = STLMS_TEMPLATEPATH . '/frontend/' . $template;
 	}
@@ -856,6 +856,74 @@ function user_capability_list() {
 				'label'   => __( 'Allow To Delete Others', 'skilltriks' ),
 				'tooltip' => __( 'Allows the user to delete content created by others.', 'skilltriks' ),
 			),
+		)
+	);
+}
+
+/**
+ * Fetches the notification table data from database.
+ *
+ * @param  int $_paged page number.
+ * @param  int $items_per_page items per page.
+ * @return array
+ */
+function fetch_notification_data( $_paged, $items_per_page ) {
+	global $wpdb;
+
+	$table_name       = $wpdb->prefix . STLMS_NOTIFICATION_TABLE;
+	$user_id          = get_current_user_id();
+	$notification_log = get_transient( 'stlms_notification_data' );
+	$offset           = ( $_paged - 1 ) * (int) $items_per_page;
+
+	if ( ! empty( $notification_log ) ) {
+		return $notification_log;
+	}
+
+	$notification_log = $wpdb->get_results( // phpcs:ignore
+		$wpdb->prepare(
+			"SELECT * FROM $table_name WHERE to_user_id = %d ORDER BY created_at DESC LIMIT %d OFFSET %d", // phpcs:ignore
+			$user_id,
+			(int) $items_per_page,
+			$offset
+		),
+		ARRAY_A
+	);
+
+	if ( $notification_log ) {
+		$notification_log['data'] = $notification_log;
+	}
+
+	$notification_log['items'] = $wpdb->get_var( // phpcs:ignore
+		$wpdb->prepare(
+			"SELECT count(*) FROM $table_name WHERE to_user_id = %d", // phpcs:ignore
+			$user_id
+		)
+	);
+
+	set_transient( 'stlms_notification_data_' . $user_id, $notification_log );
+	return $notification_log;
+}
+
+/**
+ * Notification message to be displayed.
+ *
+ * @return array
+ */
+function notification_message() {
+	return apply_filters(
+		'stlms_notification_message',
+		array(
+			'<strong>%1$s</strong> assigned you a new course <a href="%2$s">%3$s</a> with a completion date of %4$s.',
+			'<strong>%1$s</strong> updated the completion date of the course <a href="%2$s">%3$s</a> to %4$s.',
+			'<strong>%1$s</strong> unassigned the course %3$s.',
+			'<strong>Due:</strong> The course <a href="%2$s">%3$s</a> is getting due today.',
+			'<strong>Due Soon:</strong> The course <a href="%2$s">%3$s</a> completion date is getting due on %4$s.',
+			'<strong>Overdue:</strong> The course <a href="%2$s">%3$s</a> completion date is overdue by a day.',
+			'<strong>Course Completed :</strong> The course you assigned to %1$s <a href="%2$s">%3$s</a> has been successfully completed.',
+			'<strong>%1$s %2$s</strong> has been %3$s %4$s the course.',
+			'The course <a href="%2$s">%3$s</a> is now active again. You can resume learning anytime.',
+			'<strong>%1$s</strong> removed the course %3$s.',
+			'<strong>%1$s</strong> updated the content of the lesson <strong>%3$s</strong>',
 		)
 	);
 }

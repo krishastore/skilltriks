@@ -66,7 +66,7 @@ jQuery(function($) {
     });
 
     function updateEmployeeCount() {
-        let count = $('.stlms-employee:checked').length;
+        let count = $('.stlms-employee:checked:not(:disabled)').length;
         $('#employee_cnt').text(count + ' Selected');
 
         count = $('.stlms-select2-multi').val() ? $('.stlms-select2-multi').val().length : count;
@@ -102,7 +102,7 @@ jQuery(function($) {
             const selectedOptions = $employeeList.select2('data');
             selectedEmployees = selectedOptions.map(opt => opt.text.trim());
         } else {
-            selectedEmployees = $employeeList.find('.stlms-check:checked').map(function () {
+            selectedEmployees = $employeeList.find('.stlms-check:checked:not(:disabled)').map(function () {
                 return $(this).closest('label').text().trim();
             }).get();
         }
@@ -145,13 +145,12 @@ jQuery(function($) {
         dropdownParent: $('#assign-course')
     });
 
-    // Reset filter js
-    $('.stlms-form-control').on('change', function () {
+    $('.stlms-form-control, .stlms-filter-item .form-control').on('change', function () {
         const $this = $(this);
         let selectedValue = $this.val();
         selectedValue = selectedValue.replace('-', ' ');
 
-        $('.stlms-form-control').not($this).each(function () {
+        $('.stlms-form-control, .stlms-filter-item .form-control').not($this).each(function () {
             $(this).val('').trigger('change.select2');
         });
 
@@ -161,10 +160,10 @@ jQuery(function($) {
             $('.dt-input').val('').trigger('input');
         }
     });
-
+    // Reset filter js
     $('.stlms-reset-btn').on('click', function (e) {
         e.preventDefault();
-        $('.stlms-form-control').val('').trigger('change.select2');
+        $('.stlms-form-control, .form-control').val('').trigger('change.select2');
         $('.dt-input').val('').trigger('input');
     });
 });
@@ -186,6 +185,10 @@ function showSnackbar(snackbarId) {
 jQuery(document).on('click', '.hideSnackbar', function (e) {
     e.preventDefault();
     jQuery(this).closest('.stlms-snackbar').removeClass('show');
+    jQuery(this).closest('.stlms-snackbar').addClass('hide');
+    var url = new URL(window.location.href);
+    url.searchParams.delete('status');
+    window.history.replaceState(null, null, url.toString());
     clearTimeout(snackbarTimeout);
 });
 
@@ -254,7 +257,7 @@ jQuery('#showSnackbar').on('click', function (e) {
             function (response) {
                 showSnackbar('snackbar-success');
                 setTimeout(function () {
-                    window.location.href = StlmsObject.assignCourseUrl;
+                    window.location.href = StlmsObject.assignCourseUrl + '?status=success';
                 }, 500);
             }
         );
@@ -339,8 +342,12 @@ jQuery('#edit-course .update, #delete-course .delete').on('click', function () {
 
 let currentActionKey = null;
 
-jQuery('.stlms-assigned-course__button.edit, .stlms-assigned-course__button.delete').on('click', function () {
-    currentActionKey = jQuery(this).closest('tr').data('key');
+jQuery('#myTable').on('click', '.stlms-assigned-course__button.edit, .stlms-assigned-course__button.delete', function () {
+    let $tr = jQuery(this).closest('tr');
+    if ($tr.hasClass('child')) {
+        $tr = $tr.prev('tr[data-key]');
+    }
+    currentActionKey = $tr.data('key');
 });
 
 function UpdateAssignCourse(actionType) {

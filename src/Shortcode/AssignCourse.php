@@ -84,7 +84,7 @@ class AssignCourse extends \ST\Lms\Shortcode\Register {
 				$existing_users = array_diff( $existing_users, array( (int) $_user_id ) );
 				update_post_meta( $course_id, META_KEY_COURSE_ASSIGNED, $existing_users );
 			}
-			DeleteNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date );
+			DeleteNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date, $is_assigner = false, 3 );
 		}
 
 		if ( 'edit' === $type ) {
@@ -96,8 +96,9 @@ class AssignCourse extends \ST\Lms\Shortcode\Register {
 
 			update_user_meta( $curr_user_id, STLMS_COURSE_ASSIGN_BY_ME, $course_assigned_by_me );
 			update_user_meta( $_user_id, STLMS_COURSE_ASSIGN_TO_ME, $course_assigned_to_me );
-			UpdateNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date );
+			UpdateNotification::instance()->send_email_notification( $curr_user_id, $_user_id, $course_id, $completion_date, $is_assigner = false, 2 );
 			DueNotification::instance()->check_due_courses_daily();
+			DueSoonNotification::instance()->check_due_soon_courses_daily();
 		}
 
 		wp_send_json_success( array( 'message' => 'Updated successfully.' ) );

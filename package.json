@@ -1,7 +1,7 @@
 {
   "name": "skilltriks",
   "version": "1.0.0",
-  "description": "SkilTriks LMS",
+  "description": "SkillTriks LMS",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/krishastore/skilltriks.git"

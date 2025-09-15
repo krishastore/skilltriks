@@ -2,11 +2,11 @@
 Author: KrishaWeb
 Author URI: https://profiles.wordpress.org/krishaweb/
 Contributors: krishaweb, dilipbheda, Dhruvang21, parthvataliya
-Tags: learnpress, lms, e-learning, education, courses
+Tags: learning management system, LMS, E-Learning, Courses, Education
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1
+Stable tag: 1.2
 Copyright: (c) 2012-2025 KrishaWeb Technologies PVT LTD (info@krishaweb.com)
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -15,16 +15,11 @@ Transform your WordPress site into a dynamic Learning Management System (LMS) us
 
 == Description ==
 
-**<a href="https://www.skilltriks.com/" target="_blank">SkillTriks</a>** - SkillTriks is a modern, modular Learning Experience Platform (LXP) built for organizations that want to centralize learning, foster team growth, and make data-driven decisions—right within WordPress.
+**<a href="https://www.skilltriks.com/" target="_blank">SkillTriks</a>** **is a modern, modular WordPress LMS Plugin built for organizations that want to centralize learning, facilitate team growth, and make data-driven decisions—right within WordPress.** It goes beyond basic training programs. Whether you’re running onboarding, employee training, or leadership development, SkillTriks empowers corporate learning with a platform that is easy, secure, and built for growth.
 
-It goes beyond basic course delivery. SkillTriks empowers your workforce through personalized learning journeys, interactive content, and insightful progress tracking. Whether you're running onboarding programs, employee training, or leadership development—SkillTriks makes it easy and secure.
+This **100% self-hosted platform** gives you complete control over data and learner privacy while delivering a fully branded learning experience that feels uniquely yours. SkillTriks provides a dashboard to plan, create, organize, and assess training sessions with a result-oriented approach.
 
-Unlike typical SaaS-based tools, SkillTriks is 100% self-hosted, giving you full control over data, branding, and learner privacy.
-
-## BECOME A CONTRIBUTOR ##
-
-SkillTriks plugin is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [Github LINK](https://github.com/krishastore/skilltriks)
-**<a href="https://www.skilltriks.com/" target="_blank">SkillTriks</a>** - SkillTriks stands as a robust WordPress LMS Plugin, designed to empower your WordPress experience. Renowned as one of the finest options available, it facilitates effortless online course creation. Craft your curriculum seamlessly, integrating lessons and quizzes, all managed through a user-friendly interface. With SkillTriks, delve into the world of online course creation with ease, requiring only minimal expertise to launch your own educational platform.
+With full customization and a built-in **skill gap assessment**, SkillTriks tracks training, identifies needs, monitors progress, and highlights areas for improvement. Learners can also earn **certifications** upon course completion, making achievements visible and motivating continued growth. The detailed insights help top management make informed decisions that drive overall organizational development. Best of all, it’s free, feature-rich, and simple to install—enabling you to create a corporate eLearning system that reflects your brand best.
 
 ## BECOME A CONTRIBUTOR ##
 
@@ -149,6 +144,9 @@ If you're managing people, tracking learning outcomes, or building a culture of 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.0 =
+* Notification module including admin and in-app notifications
 
 = 1.1.0 =
 * User Role Modules

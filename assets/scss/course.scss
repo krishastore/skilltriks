@@ -316,6 +316,11 @@ td {
 
 .stlms-quiz-qus-footer{
     padding: 20px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    #trimmer {
+        font-weight: 600;
+    }
 }
 .stlms-quiz-qus-list {
     margin: 0;

@@ -156,9 +156,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</ul>
 	<div class="stlms-quiz-qus-footer">
 		<a href="javascript:;" class="button button-primary add-new-section"><?php esc_html_e( 'Add New Section', 'skilltriks' ); ?></a>
+		<div class="button" id="trimmer"><span>Trim Video Lesson</span></div>
 	</div>
+	<div id="trimmer-container"></div>
 	<?php do_action( 'stlms_course_curriculum_after', $this->curriculums, $this ); ?>
 </div>
 <?php
 require_once STLMS_TEMPLATEPATH . '/admin/course/modal-popup.php';
-

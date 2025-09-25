@@ -67,7 +67,7 @@ function stlms_lesson_init() {
 			'show_in_menu'          => current_user_can( apply_filters( 'stlms/lesson_menu/capability', 'edit_lessons' ) ) || current_user_can( 'manage_options' ) ? PARENT_MENU_SLUG : false,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => true,
-			'supports'              => array( 'title', 'editor', 'revisions', 'author' ),
+			'supports'              => array( 'title', 'editor', 'revisions', 'author', 'custom-fields' ),
 			'register_meta_box_cb'  => array( new \ST\Lms\Admin\MetaBoxes\Lesson(), 'register_boxes' ),
 			'has_archive'           => false,
 			'rewrite'               => false,

@@ -100,6 +100,16 @@ abstract class Register {
 		wp_register_style( $this->handler . '-swiper', STLMS_ASSETS . '/css/swiper.css', array(), $version );
 		wp_register_style( $this->handler . '-assigncourse', STLMS_ASSETS . '/css/assigncourse.css', array(), $version );
 		wp_register_style( $this->handler . '-userprofile', STLMS_ASSETS . '/css/userprofile.css', array(), $version );
+
+		wp_localize_script(
+			$this->handler . '-userprofile',
+			'StlmsRestObj',
+			array(
+				'restMediaUrl' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
+				'restUserUrl'  => esc_url_raw( rest_url( 'wp/v2/users/me' ) ),
+				'nonce'        => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 	}
 
 	/**

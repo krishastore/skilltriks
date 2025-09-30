@@ -36,7 +36,6 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		add_action( 'wp_ajax_stlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
 		add_action( 'wp_ajax_nopriv_stlms_save_quiz_data', array( $this, 'save_quiz_data' ) );
 		add_action( 'wp_ajax_stlms_download_course_certificate', array( $this, 'download_course_certificate' ) );
-		add_action( 'stlms_before_search_bar', array( $this, 'add_userinfo_before_search_bar' ) );
 		add_action( 'wp_ajax_stlms_enrol_course', array( $this, 'enrol_course' ) );
 		$this->init();
 	}
@@ -489,13 +488,6 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 			'passed'             => $grade_percentage >= $passing_mark,
 		);
 		wp_send_json( $response );
-	}
-
-	/**
-	 * Add userinfo before search bar.
-	 */
-	public function add_userinfo_before_search_bar() {
-		echo do_shortcode( '[stlms_userinfo]' );
 	}
 
 	/**

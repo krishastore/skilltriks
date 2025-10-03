@@ -197,6 +197,53 @@
     padding-top: 20px;
     text-align: right;
   }
+
+  .stlms-pswd-wrap {
+
+    .stlms-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: start;
+    }
+
+
+    .stlms-pswd-btn-wrap {
+        display: flex;
+        gap: 8px;
+        padding-top: 16px;
+    }
+
+    .pw-weak label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        line-height: 1;
+        padding-top: 20px;
+    }
+
+  div.stlms-pass-strength {
+      text-align: center;
+      color: $black;
+
+      &.short {
+        background-color: $red;
+      }
+      &.bad {
+        background-color: $red;
+      }
+      &.good {
+        background-color: $yellow;
+      }      
+      &.strong {
+        background-color: $green;
+      }
+    }
+  } 
+  
+  input.not-allowed {
+	  cursor: not-allowed;
+  }
 }
 
 .stlms-select-search {
@@ -303,5 +350,71 @@
   &:focus-visible {
     outline: none;
     border: 1px solid $gray_dark !important;
+  }
+}
+
+// snackbar
+.stlms-snackbar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  min-width: 450px;
+  border-radius: 4px;
+  color: $white;
+  background-color: $green;
+  position: fixed;
+  z-index: 1000;
+  right: 50px;
+  bottom: 50px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-left: 50px;
+
+  &.error-snackbar {
+    background-color: $red;
+  }
+  &.show {
+    display: flex;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  svg {
+    flex-shrink: 0;
+  }
+  button {
+    margin-left: auto;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  @include breakpoint(max, $sm) {
+    right: 15px;
+    bottom: 15px;
+    min-width: auto;
+    width: 280px;
+    margin-left: 15px;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
   }
 }

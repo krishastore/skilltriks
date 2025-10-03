@@ -11,6 +11,7 @@
 namespace ST\Lms\Shortcode;
 
 use ST\Lms\ErrorLog as EL;
+
 /**
  * Shortcode register manage class.
  */
@@ -21,8 +22,10 @@ class UserProfile extends \ST\Lms\Shortcode\Register {
 	 */
 	public function __construct() {
 		$this->set_shortcode_tag( 'user_profile' );
+		add_action( 'init', array( $this, 'skilltriks_register_user_meta' ) );
 		$this->init();
 	}
+
 	/**
 	 * Register shortcode.
 	 *
@@ -40,5 +43,24 @@ class UserProfile extends \ST\Lms\Shortcode\Register {
 		load_template( \ST\Lms\locate_template( 'userprofile.php' ), false, array() );
 		$content = ob_get_clean();
 		return $content;
+	}
+
+	/**
+	 * Register user meta to store the user profile pic.
+	 */
+	public function skilltriks_register_user_meta() {
+		register_meta(
+			'user',
+			'avatar_url',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'esc_url_raw',
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_user', get_current_user_id() );
+				},
+			)
+		);
 	}
 }

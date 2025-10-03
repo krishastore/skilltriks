@@ -37,23 +37,28 @@ jQuery(function ($) {
 });
 
 jQuery(function ($) { 
-    $('.stlms-select2-multi').select2();
-});
-
-jQuery(function ($) { 
 
     // Set New Password
-    $(document).on('click', '.stlms-form-group .wp-generate-pw', function(){
-        var $wrap  = $(this).closest('.stlms-form-group').find('.stlms-password-field.wp-pwd');
-        var $input = $wrap.find('.stlms-form-control');
+    $(document).on('click', '.stlms-form-group .wp-generate-pw', function() {
+        var $wrap   = $(this).closest('.stlms-form-group').find('.stlms-password-field.wp-pwd');
+        var $input  = $wrap.find('.stlms-form-control');
+        var $toggle = $wrap.find('.wp-hide-pw');
+        var $eyeOn  = $toggle.find('.eye-on');
+        var $eyeOff = $toggle.find('.eye-off');
+        var $text   = $toggle.find('.text');
 
         $wrap.show();
-        $(this).attr('aria-expanded','true');
+        $(this).attr('aria-expanded', 'true');
         $input.prop('disabled', false);
 
         // Get password from data-pw or generate a fallback
         var newPass = $input.data('pw') || '';
         $input.val(newPass).trigger('keyup');
+        $input.attr('type', 'text');
+        $eyeOn.hide();
+        $eyeOff.show();
+        $text.text('Hide');
+        $toggle.attr('aria-label', 'Hide password');
 
         // Initially hide weak password checkbox; strength meter JS will handle showing if needed
         $('.pw-weak').hide().find('input.pw-checkbox').prop('checked', false);
@@ -64,12 +69,13 @@ jQuery(function ($) {
         var $wrap  = $(this).closest('.stlms-password-field.wp-pwd');
         var $input = $wrap.find('.stlms-form-control');
 
-        $input.val('').prop('disabled', true).attr('type','password');
+        $input.val('').prop('disabled', true).attr('type','text');
         $wrap.hide();
         $('.wp-generate-pw').attr('aria-expanded','false');
 
         // Hide weak password checkbox
         $('.pw-weak').hide().find('input.pw-checkbox').prop('checked', false);
+        $('.save-profile').prop('disabled', false);
     });
 
     // Show/Hide toggle
@@ -77,26 +83,31 @@ jQuery(function ($) {
         var $input  = $(this).closest('.stlms-password-field.wp-pwd').find('.stlms-form-control');
         var $eyeOn  = $(this).find('.eye-on');
         var $eyeOff = $(this).find('.eye-off');
+        var $text   = $(this).find('.text');
 
         if ($input.attr('type') === 'password') {
             $input.attr('type', 'text');
             $eyeOn.hide();
             $eyeOff.show();
+            $text.text('Hide');$text.text('Hide');
             $(this).attr('aria-label','Hide password');
         } else {
             $input.attr('type', 'password');
             $eyeOn.show();
             $eyeOff.hide();
+            $text.text('Show');
             $(this).attr('aria-label','Show password');
         }
     });
 
     // Password strength meter
-    $(document).on('keyup paste', '.stlms-form-group .stlms-form-control', function(){
-        var $input  = $(this);
-        var pass    = $input.val();
-        var $result = $('#pass-strength-result');
-        var $pwWeak = $('.pw-weak');
+    $(document).on('keyup paste', '.stlms-form-group .stlms-form-control#pass1', function(){
+        var $input    = $(this);
+        var pass      = $input.val();
+        var $result   = $('#pass-strength-result');
+        var $pwWeak   = $('.pw-weak');
+        var $checkbox = $pwWeak.find('input.pw-checkbox');
+        var $submit   = $('.save-profile');
 
         if (typeof wp !== 'undefined' && wp.passwordStrength) {
             var strength = wp.passwordStrength.meter(pass, wp.passwordStrength.userInputDisallowedList(), pass);
@@ -117,6 +128,105 @@ jQuery(function ($) {
                 $pwWeak.hide().find('input.pw-checkbox').prop('checked', false);
             }
         }
+
+        if (
+            pass.length === 0 ||
+            (strength <= 2 && !$checkbox.is(':checked'))
+        ) {
+            $submit.prop('disabled', true);
+        } else {
+            $submit.prop('disabled', false);
+        }
     });
 });
 
+jQuery(function ($) { 
+    $('.save-profile').on('click', function(e){
+        e.preventDefault();
+
+        let firstName = $('#first-name').val();
+        let lastName = $('#last-name').val();
+        let password = $('#pass1').val();
+        let fileInput = $('#fileInput')[0].files[0];
+
+        function updateUserProfile(avatarUrl = null){
+            let userData = {
+                first_name: firstName,
+                last_name: lastName
+            };
+
+            if(password){
+                userData.password = password;
+            }
+
+            if(avatarUrl){
+                userData.meta = {
+                    avatar_url: avatarUrl
+                };
+            }
+
+            $.ajax({
+                url: StlmsRestObj.restUserUrl,
+                method: 'POST',
+                data: JSON.stringify(userData),
+                contentType: 'application/json',
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader('X-WP-Nonce', StlmsRestObj.nonce);
+                },
+                success: function(response){
+                    showSnackbar('snackbar-success');
+                },
+                error: function(err){
+                    showSnackbar('snackbar-error');
+                }
+            });
+        }
+
+        if(fileInput){
+            let formData = new FormData();
+            formData.append('file', fileInput);
+
+            $.ajax({
+                url: StlmsRestObj.restMediaUrl,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader('X-WP-Nonce', StlmsRestObj.nonce);
+                },
+                success: function(mediaResponse){
+                    let avatarUrl = mediaResponse.source_url;
+                    updateUserProfile(avatarUrl);
+                },
+                error: function(err){
+                    showSnackbar('snackbar-error');
+                }
+            });
+        } else {
+            // No file selected, just update user
+            updateUserProfile();
+        }
+
+    });
+});
+
+let snackbarTimeout;
+
+function showSnackbar(snackbarId) {
+    const $snackbar = jQuery('#' + snackbarId);
+    $snackbar.addClass('show');
+
+    clearTimeout(snackbarTimeout);
+
+    snackbarTimeout = setTimeout(() => {
+        $snackbar.removeClass('show');
+    }, 3000);
+}
+
+// Hide snackbar on close button click
+jQuery(document).on('click', '.hideSnackbar', function (e) {
+    e.preventDefault();
+    jQuery(this).closest('.stlms-snackbar').removeClass('show');
+    jQuery(this).closest('.stlms-snackbar').addClass('hide');
+});

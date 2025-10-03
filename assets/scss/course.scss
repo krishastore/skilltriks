@@ -318,9 +318,6 @@ td {
     padding: 20px 10px 10px;
     display: flex;
     justify-content: space-between;
-    #trimmer {
-        font-weight: 600;
-    }
 }
 .stlms-quiz-qus-list {
     margin: 0;
@@ -414,7 +411,13 @@ td {
         display: flex;
         align-items: center;
         gap: 10px;
-        > a {
+        justify-content: space-between;
+        .stlms-item-footer-wrap{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        a {
             display: flex;
             align-items: center;
             text-decoration: none;
@@ -429,6 +432,12 @@ td {
                 padding-left: 10px;
                 border-left: 1px solid #dddddd;
             }
+        }
+        > #trimmer {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap : 5px;
         }
     }
 }

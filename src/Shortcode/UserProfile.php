@@ -32,6 +32,7 @@ class UserProfile extends \ST\Lms\Shortcode\Register {
 	 * @param array $atts Shortcode attributes.
 	 */
 	public function register_shortcode( $atts ) {
+		wp_enqueue_script( $this->handler );
 		wp_enqueue_script( $this->handler . '-userprofile' );
 		wp_enqueue_style( $this->handler . '-userprofile' );
 		// Core scripts needed for password generator + strength meter.

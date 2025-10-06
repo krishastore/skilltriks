@@ -3,6 +3,9 @@ jQuery(function ($) {
     const $preview = $('#preview');
     const $uploadBtn = $('#uploadBtn');
     const $deleteBtn = $('#deleteBtn');
+    const defaultSrc = $preview.attr('src');
+
+    $deleteBtn.hide();
 
     $uploadBtn.on('click', function () {
         $fileInput.trigger('click');
@@ -24,15 +27,16 @@ jQuery(function ($) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 $preview.attr('src', e.target.result);
+                $deleteBtn.show();
             };
             reader.readAsDataURL(file);
         }
     });
 
     $deleteBtn.on('click', function () {
-        $preview.attr('src', "");
-        $preview.attr('alt', "No Profile Picture Available");
+        $preview.attr('src', defaultSrc);
         $fileInput.val("");
+        $deleteBtn.hide();
     });
 });
 

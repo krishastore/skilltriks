@@ -56,14 +56,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="stlms-profile-popup stlms-dd-wrap">
 				<button class="stlms-dd-btn" data-dropdown="profile">
 					<div class="profile-picture">
-						<?php echo get_avatar( $userinfo->ID ); ?>
+						<?php if ( ! empty( get_user_meta( $userinfo->ID, 'avatar_url', true ) ) ) { ?>
+							<img src="<?php echo esc_url( get_user_meta( $userinfo->ID, 'avatar_url', true ) ); ?>" width="48" height="48" alt="user-profile">
+						<?php } else { ?>
+							<?php echo get_avatar( $userinfo->ID ); ?>
+						<?php } ?>
 					</div>
 				</button>
 				<div class="stlms-dd-content" id="profile">
 					<div class="stlms-profile-dd">
 						<div class="stlms-profile-info">
 							<div class="stlms-profile-picture">
-								<?php echo get_avatar( $userinfo->ID ); ?>
+								<?php if ( ! empty( get_user_meta( $userinfo->ID, 'avatar_url', true ) ) ) { ?>
+									<img src="<?php echo esc_url( get_user_meta( $userinfo->ID, 'avatar_url', true ) ); ?>" width="48" height="48" alt="user-profile">
+								<?php } else { ?>
+									<?php echo get_avatar( $userinfo->ID ); ?>
+								<?php } ?>
 							</div>
 							<div class="stlms-profile-name">
 								<?php echo esc_html( $userinfo->display_name ); ?>
@@ -78,9 +86,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</a>
 							<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'assign_course_to_me' ) ); ?>" class="stlms-profile-link">
 								<svg width="24" height="24">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#learning"></use>
+									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#assigned-course"></use>
 								</svg>
 								<?php esc_html_e( 'Assigned Course', 'skilltriks' ); ?>
+							</a>
+							<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'user_profile' ) ); ?>" class="stlms-profile-link">
+								<svg width="24" height="24">
+									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#account-settings"></use>
+								</svg>
+								<?php esc_html_e( 'Account Settings', 'skilltriks' ); ?>
 							</a>
 							<a href="<?php echo esc_url( wp_logout_url( \ST\Lms\get_page_url( 'login' ) ) ); ?>" class="stlms-profile-link sign-out">
 								<svg width="24" height="24">

@@ -17,6 +17,7 @@ if ( is_user_logged_in() ) :
 	$default_avatar = esc_url( STLMS_ASSETS ) . '/images/profile-pic.png';
 	?>
 	<div class="stlms-wrap alignfull">
+		<?php require_once STLMS_TEMPLATEPATH . '/frontend/sub-header.php'; ?>
 		<div class="stlms-course-list-wrap">
 			<div class="stlms-container">
 				<div class="stlms-course-view">
@@ -67,6 +68,7 @@ if ( is_user_logged_in() ) :
 												</div>
 											</div>
 										</div>
+										<?php if ( ! current_user_can( 'manage_options' ) ) : ?>
 										<div class="stlms-profile-col">
 											<div class="stlms-profile-box">
 												<div class="stlms-profile-box__title">
@@ -115,6 +117,7 @@ if ( is_user_logged_in() ) :
 												</div>
 											</div>
 										</div>
+										<?php endif; ?>
 									</div>
 									<div class="stlms-profile-row">
 										<div class="stlms-profile-col">

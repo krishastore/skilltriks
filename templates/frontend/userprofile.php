@@ -99,7 +99,6 @@ if ( is_user_logged_in() ) :
 																	</button>
 																	<button type="button" class="button stlms-btn stlms-btn-light wp-cancel-pw hide-if-no-js"
 																		aria-label="Cancel password change">
-																		<span class="dashicons dashicons-no" aria-hidden="true"></span>
 																		<span class="text"><?php esc_html_e( 'Cancel', 'skilltriks' ); ?></span>
 																	</button>
 																</div>
@@ -134,9 +133,9 @@ if ( is_user_logged_in() ) :
 													<input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg" style="display:none">
 													<div class="stlms-profile-action">
 														<button type="button" class="stlms-btn" id="uploadBtn"><?php esc_html_e( 'Upload Photo', 'skilltriks' ); ?></button>
-														<button type="button" class="stlms-btn stlms-btn-light" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
+														<button type="button" class="stlms-btn stlms-btn-light" style="display:none;" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
 														<div class="stlms-profile-action__text">
-															<?php esc_html_e( 'JPG, JPEG & PNG only. File size up to 2 MB. For best result upload a square image at least 250px by 250px.', 'skilltriks' ); ?>
+															<?php esc_html_e( 'Only JPG, JPEG, and PNG files are supported. Maximum file size: 2 MB. For best results, upload a square image of at least 250×250 pixels.', 'skilltriks' ); ?>
 														</div>
 													</div>
 												</div>
@@ -164,7 +163,7 @@ if ( is_user_logged_in() ) :
 									<svg width="30" height="30">
 										<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross-error"></use>
 									</svg>
-									<?php esc_html_e( 'Oops, something went wrong, please try again later.', 'skilltriks' ); ?>
+									<span class="snackbar-message"><?php esc_html_e( 'Oops, something went wrong, please try again later.', 'skilltriks' ); ?></span>
 									<button class="hideSnackbar">
 										<svg width="20" height="20">
 											<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#cross"></use>

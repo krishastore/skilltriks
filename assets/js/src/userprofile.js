@@ -14,13 +14,13 @@ jQuery(function ($) {
     $fileInput.on('change', function () {
         const file = this.files[0];
         if (file) {
-            if (file.size > 4 * 1024 * 1024) {
-                alert("File size exceeds 4 MB.");
+            if (file.size > 2 * 1024 * 1024) {
+                showSnackbar('snackbar-error', "File size exceeds 2 MB.");
                 $(this).val("");
                 return;
             }
             if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-                alert("Only JPG, PNG & GIF files are allowed.");
+                showSnackbar('snackbar-error', "Only JPG, PNG & GIF files are allowed.");
                 $(this).val("");
                 return;
             }
@@ -179,6 +179,7 @@ jQuery(function ($) {
                 },
                 success: function(response){
                     showSnackbar('snackbar-success');
+                    location.reload();
                 },
                 error: function(err){
                     showSnackbar('snackbar-error');
@@ -217,8 +218,13 @@ jQuery(function ($) {
 
 let snackbarTimeout;
 
-function showSnackbar(snackbarId) {
+function showSnackbar(snackbarId, message = null) {
     const $snackbar = jQuery('#' + snackbarId);
+
+    if (message) {
+        $snackbar.find('.snackbar-message').text(message);
+    }
+
     $snackbar.addClass('show');
 
     clearTimeout(snackbarTimeout);

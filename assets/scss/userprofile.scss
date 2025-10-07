@@ -196,6 +196,11 @@
   .stlms-profile-submit {
     padding-top: 20px;
     text-align: right;
+    .save-profile {
+      &:disabled {
+        opacity: 0.6;
+      }
+    }
   }
 
   .stlms-pswd-wrap {
@@ -225,6 +230,8 @@
   div.stlms-pass-strength {
       text-align: center;
       color: $black;
+      font-size: 12px;
+      border-radius: 0 0 6px 6px;
 
       &.short {
         background-color: $red;
@@ -239,10 +246,16 @@
         background-color: $green;
       }
     }
-  } 
+  }
+  
+  .password-input-wrapper .stlms-form-control {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
   
   input.not-allowed {
 	  cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 

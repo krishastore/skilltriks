@@ -191,7 +191,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	 * Handle template redirect hook.
 	 */
 	public function template_redirect() {
-		if ( ( ! is_user_logged_in() ) && ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) || is_page( array( 'stlms-my-learning', 'courses', 'stlms-notifications' ) ) ) ) {
+		if ( ( ! is_user_logged_in() ) && ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) || is_page( array( 'stlms-my-learning', 'courses', 'stlms-notifications', 'stlms-user-profile' ) ) ) ) {
 			wp_safe_redirect( \ST\Lms\get_page_url( 'login' ) );
 			exit;
 		}

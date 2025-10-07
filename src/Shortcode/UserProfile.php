@@ -58,8 +58,8 @@ class UserProfile extends \ST\Lms\Shortcode\Register {
 				'single'            => true,
 				'show_in_rest'      => true,
 				'sanitize_callback' => 'esc_url_raw',
-				'auth_callback'     => function () {
-					return current_user_can( 'edit_user', get_current_user_id() );
+				'auth_callback'     => function ( $allowed, $meta_key, $user_id ) {
+					return get_current_user_id() === (int) $user_id;
 				},
 			)
 		);

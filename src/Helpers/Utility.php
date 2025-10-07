@@ -71,6 +71,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_notify_course_content_changes' );
 			wp_clear_scheduled_hook( 'stlms_daily_notification_cleanup' );
+			remove_role( 'stlms' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}
@@ -187,8 +188,9 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			'stlms',
 			esc_html__( 'SkillTriks LMS', 'skilltriks' ),
 			array(
-				'read'    => true,
-				'level_0' => true,
+				'read'         => true,
+				'level_0'      => true,
+				'upload_files' => true,
 			)
 		);
 	}

@@ -72,6 +72,7 @@ abstract class Register {
 		wp_register_script( $this->handler . '-countdowntimer', STLMS_ASSETS . '/js/build/countdowntimer.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-swiper', STLMS_ASSETS . '/js/build/swiper.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-assigncourse', STLMS_ASSETS . '/js/build/assigncourse.js', array( 'jquery' ), $version, true );
+		wp_register_script( $this->handler . '-userprofile', STLMS_ASSETS . '/js/build/userprofile.js', array( 'jquery' ), $version, true );
 
 		$curriculum_type = get_query_var( 'curriculum_type' );
 		$userinfo        = wp_get_current_user();
@@ -98,6 +99,17 @@ abstract class Register {
 		wp_register_style( $this->handler . '-smartwizard', STLMS_ASSETS . '/css/smartwizard.css', array(), $version );
 		wp_register_style( $this->handler . '-swiper', STLMS_ASSETS . '/css/swiper.css', array(), $version );
 		wp_register_style( $this->handler . '-assigncourse', STLMS_ASSETS . '/css/assigncourse.css', array(), $version );
+		wp_register_style( $this->handler . '-userprofile', STLMS_ASSETS . '/css/userprofile.css', array(), $version );
+
+		wp_localize_script(
+			$this->handler . '-userprofile',
+			'StlmsRestObj',
+			array(
+				'restMediaUrl' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
+				'restUserUrl'  => esc_url_raw( rest_url( 'wp/v2/users/me' ) ),
+				'nonce'        => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 	}
 
 	/**

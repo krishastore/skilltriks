@@ -121,9 +121,10 @@ window.wp = window.wp || {};
 				appendTo: 'parent',
 				axis: 'y',
 				containment: 'parent',
-				items: 'li',
+				items: '> li',
 				handle: '.stlms-options-drag',
 				placeholder: 'sortable-placeholder',
+				cancel: '.stlms-curriculum-type *',
 				forcePlaceholderSize: true,
 				stop: function () {
 				},

@@ -4,11 +4,18 @@
 # Bash script to deploy code on development environment.
 # Author: krishaweb
 
+# Enable strict error handling on GitHub-hosted runner
+set -euo pipefail
+
 # Print message about deploying to development environment.
 echo -e "\n\nDeploying project on ${DEV_ENV_IP} environment\n"
 
 # SSH into the development server and execute commands remotely.
 ssh -o StrictHostKeyChecking=no "${DEV_ENV_USER}@${DEV_ENV_IP}" -p ${DEV_ENV_PORT} bash <<EOF
+
+# Enable strict error handling on remote dev server
+set -euo pipefail
+
 # Check if root directory exists.
 if [ -d "/var/www/wpress/skilltriks/wp-content/plugins/" ]; then
   echo "Root directory exists"

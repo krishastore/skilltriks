@@ -31,6 +31,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		'assign_course_to_me',
 		'assign_course_by_me',
 		'notifications',
+		'user_profile',
 	);
 
 	/**
@@ -70,6 +71,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_notify_course_content_changes' );
 			wp_clear_scheduled_hook( 'stlms_daily_notification_cleanup' );
+			remove_role( 'stlms' );
 		} catch ( \Exception $ex ) {
 			EL::add( $ex->getMessage() );
 		}
@@ -144,6 +146,8 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_assign_course_by_me]<!-- /wp:shortcode -->';
 			} elseif ( preg_match( '#^stlms_notifications_page_id.*#', $key_option ) ) {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_notifications]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_user_profile_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_user_profile]<!-- /wp:shortcode -->';
 			}
 
 			$args = array_merge(
@@ -184,8 +188,9 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 			'stlms',
 			esc_html__( 'SkillTriks LMS', 'skilltriks' ),
 			array(
-				'read'    => true,
-				'level_0' => true,
+				'read'         => true,
+				'level_0'      => true,
+				'upload_files' => true,
 			)
 		);
 	}

@@ -141,13 +141,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php endforeach ?>
 						</div>
 						<div class="stlms-quiz-qus-item__footer">
-							<a href="javascript:;" class="button select-items"><?php esc_html_e( 'Select Items', 'skilltriks' ); ?></a>
-							<a href="javascript:;" class="stlms-delete-link">
-								<svg class="icon" width="12" height="12">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
-								</svg>
-								<?php esc_html_e( 'Delete', 'skilltriks' ); ?>
-							</a>
+							<div class="stlms-item-footer-wrap">
+								<a href="javascript:;" class="button select-items"><?php esc_html_e( 'Select Items', 'skilltriks' ); ?></a>
+								<a href="javascript:;" class="stlms-delete-link">
+									<svg class="icon" width="12" height="12">
+										<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#delete"></use>
+									</svg>
+									<?php esc_html_e( 'Delete', 'skilltriks' ); ?>
+								</a>
+							</div>
+							<div class="button" id="trimmer">
+								<svg class="icon" width="18" height="12">
+									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#Union"></use>
+								</svg>	
+								<span><?php esc_html_e( 'Trim Video Lesson', 'skilltriks' ); ?></span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -157,8 +165,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="stlms-quiz-qus-footer">
 		<a href="javascript:;" class="button button-primary add-new-section"><?php esc_html_e( 'Add New Section', 'skilltriks' ); ?></a>
 	</div>
+	<div id="trimmer-container"></div>
 	<?php do_action( 'stlms_course_curriculum_after', $this->curriculums, $this ); ?>
 </div>
 <?php
 require_once STLMS_TEMPLATEPATH . '/admin/course/modal-popup.php';
-

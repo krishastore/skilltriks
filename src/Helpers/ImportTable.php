@@ -46,8 +46,9 @@ class ImportTable extends \WP_List_Table {
 
 	/**
 	 * Calling class construct.
+	 * Prevent direct instantiation
 	 */
-	public function __construct() {
+	private function __construct() {
 		// Set parent defaults.
 		parent::__construct(
 			array(
@@ -330,4 +331,14 @@ class ImportTable extends \WP_List_Table {
 				return ''; // Show the whole array for troubleshooting purposes.
 		}
 	}
+
+	/**
+	 * Prevent cloning
+	 */
+    private function __clone() {}
+
+    /**
+	 * Prevent unserializing
+	 */
+    private function __wakeup() {}
 }

@@ -53,6 +53,7 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		new \ST\Lms\Shortcode\Login();
 		new \ST\Lms\Shortcode\Courses();
 		new \ST\Lms\Shortcode\UserProfile();
+		new \ST\Lms\Shortcode\ForgotPassword();
 		new \ST\Lms\Shortcode\MyLearning();
 		new \ST\Lms\Shortcode\AssignCourse();
 		new \ST\Lms\Shortcode\AssignedCourse();

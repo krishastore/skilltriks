@@ -51,8 +51,10 @@ class Login extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\Log
 	 */
 	public function login_process() {
 		check_ajax_referer( \ST\Lms\STLMS_LOGIN_NONCE, '_stlms_nonce' );
-		$username = isset( $_POST['username'] ) ? sanitize_text_field( wp_unslash( $_POST['username'] ) ) : '';
-		$password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+		$username   = isset( $_POST['username'] ) ? sanitize_text_field( wp_unslash( $_POST['username'] ) ) : '';
+		$password   = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+		$settings   = get_option( 'stlms_settings' );
+		$user_roles = ! empty( $settings['user_role'] ) ? $settings['user_role'] : array();
 
 		$credential                  = array();
 		$credential['user_login']    = $username;
@@ -69,7 +71,7 @@ class Login extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\Log
 			EL::add( 'User singon error: ' . $user_verify->get_error_message(), 'error', __FILE__, __LINE__ );
 			wp_send_json( $response );
 		}
-		if ( ! in_array( 'stlms', $user_verify->roles, true ) ) {
+		if ( ! array_key_exists( reset( $user_verify->roles ), $user_roles ) ) {
 			wp_logout();
 			$response = array(
 				'status'  => 0,

@@ -70,16 +70,16 @@ class ForgotPassword extends \ST\Lms\Shortcode\Register {
 		$site_name = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		$locale    = get_user_locale( $user_data );
 
-		$message = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
+		$message = __( 'Someone has requested a password reset for the following account:', 'skilltriks' ) . "\r\n\r\n";
 
 		/* translators: %s: Site name. */
-		$message .= sprintf( __( 'Site Name: %s', 'text-domain' ), $site_name ) . "\r\n\r\n";
+		$message .= sprintf( __( 'Site Name: %s', 'skilltriks' ), $site_name ) . "\r\n\r\n";
 
 		/* translators: %s: Username. */
-		$message .= sprintf( __( 'Username: %s', 'text-domain' ), $user_login ) . "\r\n\r\n";
+		$message .= sprintf( __( 'Username: %s', 'skilltriks' ), $user_login ) . "\r\n\r\n";
 
-		$message .= __( 'If this was a mistake, ignore this email and nothing will happen.', 'text-domain' ) . "\r\n\r\n";
-		$message .= __( 'To reset your password, visit the following address:', 'text-domain' ) . "\r\n\r\n";
+		$message .= __( 'If this was a mistake, ignore this email and nothing will happen.', 'skilltriks' ) . "\r\n\r\n";
+		$message .= __( 'To reset your password, visit the following address:', 'skilltriks' ) . "\r\n\r\n";
 
 		$message .= network_site_url(
 			'stlms-forgot-password/?login=' . rawurlencode( $user_login ) . "&key=$key&action=rp",

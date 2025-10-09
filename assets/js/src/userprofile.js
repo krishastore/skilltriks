@@ -3,9 +3,7 @@ jQuery(function ($) {
     const $preview = $('#preview');
     const $uploadBtn = $('#uploadBtn');
     const $deleteBtn = $('#deleteBtn');
-    const defaultSrc = $preview.attr('src');
-
-    $deleteBtn.hide();
+    const defaultSrc = StlmsRestObj.defaultSrc;
 
     $uploadBtn.on('click', function () {
         $fileInput.trigger('click');
@@ -37,6 +35,7 @@ jQuery(function ($) {
         $preview.attr('src', defaultSrc);
         $fileInput.val("");
         $deleteBtn.hide();
+        avatarToDelete = true;
     });
 });
 
@@ -163,7 +162,7 @@ jQuery(function ($) {
                 userData.password = password;
             }
 
-            if(avatarUrl){
+            if(avatarUrl !== undefined){
                 userData.meta = {
                     avatar_url: avatarUrl
                 };
@@ -209,10 +208,13 @@ jQuery(function ($) {
                 }
             });
         } else {
-            // No file selected, just update user
-            updateUserProfile();
+             if(avatarToDelete){
+                updateUserProfile(null);
+            } else {
+                updateUserProfile();
+            }
         }
-
+        avatarToDelete = false;
     });
 });
 

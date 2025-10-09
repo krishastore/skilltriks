@@ -102,11 +102,13 @@ class GoogleLogin {
 			$google_oauth        = new \Google_Service_Oauth2( $client );
 			$google_account_info = $google_oauth->userinfo->get();
 			$email               = $google_account_info->email;
+			$settings            = get_option( 'stlms_settings' );
+			$user_roles          = ! empty( $settings['user_role'] ) ? $settings['user_role'] : array();
 
 			if ( is_email( $email ) ) {
 				$userinfo = get_user_by( 'email', $email );
 				if ( $userinfo ) {
-					if ( ! in_array( 'stlms', $userinfo->roles, true ) ) {
+					if ( ! array_key_exists( reset( $userinfo->roles ), $user_roles ) ) {
 						wp_safe_redirect(
 							add_query_arg(
 								array(

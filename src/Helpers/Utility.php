@@ -32,6 +32,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 		'assign_course_by_me',
 		'notifications',
 		'user_profile',
+		'forgot_password',
 	);
 
 	/**
@@ -148,6 +149,8 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_notifications]<!-- /wp:shortcode -->';
 			} elseif ( preg_match( '#^stlms_user_profile_page_id.*#', $key_option ) ) {
 				$args['post_content'] = '<!-- wp:shortcode -->[stlms_user_profile]<!-- /wp:shortcode -->';
+			} elseif ( preg_match( '#^stlms_forgot_password_page_id.*#', $key_option ) ) {
+				$args['post_content'] = '<!-- wp:shortcode -->[stlms_forgot_password]<!-- /wp:shortcode -->';
 			}
 
 			$args = array_merge(
@@ -193,6 +196,23 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				'upload_files' => true,
 			)
 		);
+
+		$settings = get_option( 'stlms_settings', array() );
+
+		if ( ! is_array( $settings ) ) {
+			$settings = array();
+		}
+		if ( empty( $settings['user_role'] ) || ! is_array( $settings['user_role'] ) ) {
+			$settings['user_role'] = array();
+		}
+
+		$settings['user_role']['stlms'] = 'skilltriks';
+
+		if ( false === get_option( 'stlms_settings', false ) ) {
+			add_option( 'stlms_settings', $settings );
+		} else {
+			update_option( 'stlms_settings', $settings );
+		}
 	}
 
 	/**

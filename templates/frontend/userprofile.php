@@ -133,7 +133,7 @@ if ( is_user_logged_in() ) :
 													<input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg" style="display:none">
 													<div class="stlms-profile-action">
 														<button type="button" class="stlms-btn" id="uploadBtn"><?php esc_html_e( 'Upload Photo', 'skilltriks' ); ?></button>
-														<button type="button" class="stlms-btn stlms-btn-light" style="display:none;" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
+														<button type="button" class="stlms-btn stlms-btn-light" style="display:<?php echo $avatar_url ? 'block' : 'none'; ?>" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
 														<div class="stlms-profile-action__text">
 															<?php esc_html_e( 'Only JPG, JPEG, and PNG files are supported. Maximum file size: 2 MB. For best results, upload a square image of at least 250×250 pixels.', 'skilltriks' ); ?>
 														</div>

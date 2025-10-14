@@ -107,7 +107,7 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 				esc_html__( 'Delete', 'skilltriks' )
 			),
 		);
-		return sprintf( '%1$s %2$s', $item, $this->row_actions( $action ) );
+		return 'skilltriks' === $item ? sprintf( '%s', $item ) : sprintf( '%1$s %2$s', $item, $this->row_actions( $action ) );
 	}
 
 	/**

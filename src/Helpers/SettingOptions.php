@@ -130,6 +130,12 @@ class SettingOptions {
 				'type'  => 'number',
 				'value' => isset( $this->options['due_soon'] ) ? absint( $this->options['due_soon'] ) : '',
 			),
+			'override_login'        => array(
+				'title' => esc_html__( 'Override Login', 'skilltriks' ),
+				'desc'  => sprintf( __( 'Allow all users to login into skilltriks platform', 'skilltriks' ) ),
+				'type'  => 'checkbox',
+				'value' => isset( $this->options['override_login'] ) ? absint( $this->options['override_login'] ) : 0,
+			),
 		);
 		add_action( 'admin_post_customize_theme', array( $this, 'customize_theme_options' ) );
 		add_action( 'admin_post_user_role', array( $this, 'stlms_new_user_role' ) );
@@ -145,7 +151,9 @@ class SettingOptions {
 		if ( isset( $_POST['stlms-setting-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['stlms-setting-nonce'] ) ), 'stlms_setting' ) ) :
 			$setting_options = array();
 			foreach ( $this->fields as $key => $field ) :
-				if ( isset( $_POST[ $this->option_name ][ $key ] ) ) :
+				if ( 'checkbox' === $field['type'] ) :
+					$setting_options[ $key ] = isset( $_POST[ $this->option_name ][ $key ] ) ? 1 : 0;
+				elseif ( isset( $_POST[ $this->option_name ][ $key ] ) ) :
 					$setting_options[ $key ] = sanitize_text_field( wp_unslash( $_POST[ $this->option_name ][ $key ] ) );
 				endif;
 			endforeach;
@@ -287,6 +295,9 @@ class SettingOptions {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" readonly/>';
 		} elseif ( 'number' === $type ) {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" min="1" max="30"/>';
+		} elseif ( 'checkbox' === $type ) {
+			$checked = $value ? 'checked' : '';
+			echo '<input id="' . esc_attr( $id ) . '" name="' . esc_attr( $this->option_name ) . '[' . esc_attr( $id ) . ']" type="checkbox" value="1" ' . esc_attr( $checked ) . ' />';
 		} else {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" />';
 		}
@@ -471,7 +482,7 @@ class SettingOptions {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			$caps         = isset( $_POST['users_can'] ) ? map_deep( $_POST['users_can'], 'sanitize_text_field' ) : array();
 			$user_role    = isset( $_POST['role'] ) ? sanitize_text_field( wp_unslash( $_POST['role'] ) ) : '';
-			$default_caps = ! empty( get_role( 'author' ) ) ? get_role( 'author' )->capabilities : array( 'read' => true );
+			$default_caps = ! empty( get_role( 'editor' ) ) ? get_role( 'editor' )->capabilities : array( 'read' => true );
 
 			if ( ! empty( $user_role ) && ! empty( $caps ) ) {
 				if ( array_key_exists( $user_role, $this->options['user_role'] ) ) {

@@ -104,11 +104,12 @@ class GoogleLogin {
 			$email               = $google_account_info->email;
 			$settings            = get_option( 'stlms_settings' );
 			$user_roles          = ! empty( $settings['user_role'] ) ? $settings['user_role'] : array();
+			$override_login      = ! empty( $settings['override_login'] ) ? $settings['override_login'] : 0;
 
 			if ( is_email( $email ) ) {
 				$userinfo = get_user_by( 'email', $email );
 				if ( $userinfo ) {
-					if ( ! array_key_exists( reset( $userinfo->roles ), $user_roles ) ) {
+					if ( ! $override_login && ! array_key_exists( reset( $userinfo->roles ), $user_roles ) ) {
 						wp_safe_redirect(
 							add_query_arg(
 								array(

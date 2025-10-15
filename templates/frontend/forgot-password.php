@@ -36,7 +36,7 @@ if ( isset( $_POST['new_password'], $_POST['login'], $_POST['key'] ) ) {
 	$new_password = wp_unslash( $_POST['new_password'] ); //phpcs:ignore.
 
 	$user = check_password_reset_key( $key, $login );
-	if ( is_wp_error( $user ) ) {
+	if ( is_wp_error( $user ) || strtolower( $user->user_login ) !== strtolower( $login ) ) {
 		wp_safe_redirect( add_query_arg( array( 'message' => 1 ) ) );
 		exit;
 	}

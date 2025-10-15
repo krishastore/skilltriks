@@ -46,7 +46,6 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'cb'   => '<input type="checkbox" />',
 			'name' => __( 'Role Name', 'skilltriks' ),
 		);
 		return $columns;
@@ -108,16 +107,6 @@ class CapabilityList extends \ST\Lms\Admin\Users\Capability {
 			),
 		);
 		return 'skilltriks' === $item ? sprintf( '%s', $item ) : sprintf( '%1$s %2$s', $item, $this->row_actions( $action ) );
-	}
-
-	/**
-	 * Get value for checkbox column.
-	 *
-	 * @param object $item A singular item (one full row's worth of data).
-	 * @return string Text to be placed inside the column <td>.
-	 */
-	public function column_cb( $item ) {
-		return sprintf( '<input type="checkbox" name="role_ids[]" value="%s" />', (string) $item );
 	}
 
 	/**

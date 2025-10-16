@@ -118,6 +118,7 @@ if ( is_user_logged_in() ) :
 										</div>
 										<?php endif; ?>
 									</div>
+									<?php if ( current_user_can( 'upload_files' ) ) : ?>
 									<div class="stlms-profile-row">
 										<div class="stlms-profile-col">
 											<div class="stlms-profile-box">
@@ -142,6 +143,7 @@ if ( is_user_logged_in() ) :
 											</div>
 										</div>
 									</div>
+									<?php endif; ?>
 								</div>
 								<div class="stlms-profile-submit">
 									<input type="submit" value="Save Profile" class="stlms-btn save-profile">

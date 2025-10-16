@@ -152,7 +152,7 @@ jQuery(function ($) {
         let password = $('#pass1').val();
         let fileInput = $('#fileInput')[0].files[0];
 
-        function updateUserProfile(avatarUrl = null){
+        function updateUserProfile(avatarUrl){
             let userData = {
                 first_name: firstName,
                 last_name: lastName
@@ -219,6 +219,7 @@ jQuery(function ($) {
 });
 
 let snackbarTimeout;
+let avatarToDelete = false;
 
 function showSnackbar(snackbarId, message = null) {
     const $snackbar = jQuery('#' + snackbarId);

@@ -49,6 +49,14 @@ class ForgotPassword extends \ST\Lms\Shortcode\Register {
 	 * @return string Modified lost password URL.
 	 */
 	public function update_lostpassword_url( $lostpassword_url, $redirect ) {
+		if ( is_admin() || ( defined( 'WP_ADMIN' ) && WP_ADMIN ) ) {
+			return $lostpassword_url;
+		}
+
+		if ( isset( $_SERVER['REQUEST_URI'] ) && strpos( sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'wp-login.php' ) !== false ) {
+			return $lostpassword_url;
+		}
+
 		$custom_url = home_url( '/stlms-forgot-password' );
 		$args       = array(
 			'action'      => 'lostpassword',

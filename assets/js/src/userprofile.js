@@ -109,7 +109,6 @@ jQuery(function ($) {
         var pass      = $input.val();
         var $result   = $('#pass-strength-result');
         var $pwWeak   = $('.pw-weak');
-        var $checkbox = $pwWeak.find('input.pw-checkbox');
         var $submit   = $('.save-profile');
 
         if (typeof wp !== 'undefined' && wp.passwordStrength) {
@@ -134,11 +133,19 @@ jQuery(function ($) {
 
         if (
             pass.length === 0 ||
-            (strength <= 2 && !$checkbox.is(':checked'))
+            (strength <= 2)
         ) {
             $submit.prop('disabled', true);
         } else {
             $submit.prop('disabled', false);
+        }
+    });
+
+    $(document).on('click', '.pw-checkbox.stlms-check', function(){
+        if ( $(this).is(':checked') ) {
+            $('.save-profile').prop('disabled', false);
+        } else {
+            $('.save-profile').prop('disabled', true);
         }
     });
 });
@@ -150,7 +157,7 @@ jQuery(function ($) {
         let firstName = $('#first-name').val();
         let lastName = $('#last-name').val();
         let password = $('#pass1').val();
-        let fileInput = $('#fileInput')[0].files[0];
+        let fileInput = $('#fileInput').length ? $('#fileInput')[0].files[0] : false;
 
         function updateUserProfile(avatarUrl){
             let userData = {

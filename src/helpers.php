@@ -192,6 +192,8 @@ function locate_template( $template ) {
 		$template = get_template_directory() . '/skilltriks/' . $layout . '/' . $template;
 	} elseif ( 'default' !== $layout && defined( 'STLMSTP_ADDONS_TEMPLATEPATH' ) && file_exists( STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
 		$template = STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
+	} elseif ( defined( 'STLMSLC_TEMPLATEPATH' ) && file_exists( STLMSLC_TEMPLATEPATH . '/' . $template ) ) {
+		$template = STLMSLC_TEMPLATEPATH . '/' . $template;
 	} elseif ( file_exists( STLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
 		$template = STLMS_TEMPLATEPATH . '/frontend/' . $template;
 	}

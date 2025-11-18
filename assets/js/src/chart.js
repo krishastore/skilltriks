@@ -1,12 +1,11 @@
 import ApexCharts from 'apexcharts';
 
-
 var options = {
 	chart: {
 		type: 'donut',
 		height: 230
 	},
-	series: [3, 2, 1], // Not Started, In Progress, Completed
+	series: [ parseInt(StlmsChartObj.courseNotStarted), parseInt(StlmsChartObj.courseInProgress), parseInt(StlmsChartObj.courseCompleted)], // Not Started, In Progress, Completed
 	labels: ['Not Started', 'In progress', 'Completed'],
 	colors: ['#E8EBF2', '#436CFB', '#00D000'],
 	legend: {

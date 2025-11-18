@@ -17,8 +17,8 @@
   ],
   "type": "wordpress-plugin",
   "support": {
-    "issues": "https://github.com/krishaweb/bluedolphin-lms/issues",
-    "source": "https://github.com/krishaweb/bluedolphin-lms"
+    "issues": "https://github.com/krishaweb/skilltriks/issues",
+    "source": "https://github.com/krishaweb/skilltriks"
   },
   "autoload": {
     "psr-4": {

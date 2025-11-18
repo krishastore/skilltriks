@@ -116,7 +116,6 @@ jQuery(function ($) {
 			url.searchParams.delete('levels');
 			url.searchParams.delete('progress');
             var updateUrl = StlmsObject.currentUrl;
-            console.log(StlmsObject.currentUrl);
 			var url = new URL(updateUrl);
 			$.each(data, function(index, item){
 				var inputName = item.name.replace('[]', '');

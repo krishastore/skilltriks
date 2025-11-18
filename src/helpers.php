@@ -697,6 +697,7 @@ function course_statistics() {
 					$not_started[] = $course_id;
 				}
 			}
+			wp_reset_postdata();
 		}
 	}
 	return array(
@@ -928,4 +929,70 @@ function notification_message() {
 			'<strong>%1$s</strong> updated the content of the lesson <strong>%3$s</strong>',
 		)
 	);
+}
+
+/**
+ * Fetches the trending courses data from database.
+ *
+ * @param  int $limit number of trending courses.
+ * @return array
+ */
+function stlms_get_trending_courses( $limit = 10 ) {
+
+	$cache_key = 'stlms_trending_courses';
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	global $wpdb;
+
+	// Get all enrolments from usermeta in a single query.
+	$rows = $wpdb->get_results( //phpcs:ignore
+		$wpdb->prepare(
+			"SELECT meta_value FROM $wpdb->usermeta WHERE meta_key = %s",
+			'_stlms_enrol_courses'
+		),
+		ARRAY_A
+	);
+
+	if ( empty( $rows ) ) {
+		return array();
+	}
+
+	$course_counts = array();
+
+	foreach ( $rows as $row ) {
+
+		// Unserialize to get array of course IDs.
+		$courses = maybe_unserialize( $row['meta_value'] );
+
+		if ( ! is_array( $courses ) ) {
+			continue;
+		}
+
+		foreach ( $courses as $course_id ) {
+
+			$course_id = (int) $course_id;
+
+			if ( 0 === $course_id ) {
+				continue;
+			}
+
+			if ( ! isset( $course_counts[ $course_id ] ) ) {
+				$course_counts[ $course_id ] = 0;
+			}
+
+			++$course_counts[ $course_id ];
+		}
+	}
+
+	arsort( $course_counts );
+
+	$trending_courses = array_slice( $course_counts, 0, $limit, true );
+
+	set_transient( $cache_key, $trending_courses, HOUR_IN_SECONDS );
+
+	return $trending_courses;
 }

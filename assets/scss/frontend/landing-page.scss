@@ -1465,6 +1465,7 @@
   h2 {
     font-size: 30px;
     padding-bottom: 6px;
+    color: $white;
     @include breakpoint(max, $sm) {
       font-size: 20px;
     }

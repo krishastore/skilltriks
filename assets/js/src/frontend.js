@@ -116,6 +116,7 @@ jQuery(function ($) {
 			url.searchParams.delete('levels');
 			url.searchParams.delete('progress');
             var updateUrl = StlmsObject.currentUrl;
+            console.log(StlmsObject.currentUrl);
 			var url = new URL(updateUrl);
 			$.each(data, function(index, item){
 				var inputName = item.name.replace('[]', '');
@@ -394,3 +395,60 @@ jQuery(document).on('click', '.stlms-notification-icon, #mark-all-read', functio
     });
 });
 
+jQuery(function($) {
+    
+    function filterSlides() {
+        var selectedCheckbox = $('.stlms-check:checked');
+    
+        if (selectedCheckbox.length === 0 || selectedCheckbox.attr('id') === 'all') {
+            $('.topSwiper .swiper-slide').show();
+        } else {
+            var selectedCategory = selectedCheckbox.attr('id').toLowerCase();
+            
+            $('.topSwiper .swiper-slide').each(function() {
+                var slideTagsText = $(this).find('.stlms-course-item__tag span').text().trim();
+                
+                // Split tags by comma and trim each tag
+                var slideTags = slideTagsText.split(',').map(function(tag) {
+                    return tag.trim().toLowerCase();
+                });
+                
+                // Show slide if it contains the selected category
+                if (slideTags.includes(selectedCategory)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+        
+        // Update Swiper after filtering
+        updateSwiperInstance();
+    }
+    
+    function updateSwiperInstance() {
+        // Check if swiper5 exists and update it
+        if (typeof swiper5 !== 'undefined' && swiper5 !== null) {
+            swiper5.update();
+            swiper5.updateSlides();
+            swiper5.slideTo(0, 0);
+            
+            setTimeout(function() {
+                swiper5.update();
+            }, 50);
+        }
+    }
+    
+    // Handle checkbox change events
+    $('.stlms-check').on('change', function() {
+        if ($(this).is(':checked')) {
+            // Uncheck all other checkboxes
+            $('.stlms-check').not(this).prop('checked', false);
+
+            filterSlides();
+        } else {
+            $('#all').prop('checked', true);
+            filterSlides();
+        }
+    });
+});

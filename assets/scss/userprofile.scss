@@ -1,3 +1,4 @@
+@import '~select2/dist/css/select2.min.css';
 @import "./frontend/variable";
 @import "./frontend/mixins";
 @import "./frontend/utility";
@@ -364,6 +365,90 @@
     outline: none;
     border: 1px solid $gray_dark !important;
   }
+}
+.select2-results__option--selectable,
+.select2-results__option--disabled {
+  padding: 5px 15px 5px 15px !important;
+  font-size: $font_size_sm;
+  line-height: 20px;
+  color: $gray_light !important;
+  font-family: $primary_font !important;
+}
+
+.select2-container {
+  font-family: $primary_font !important;
+}
+
+.select2-container--default
+  .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color: $primary !important;
+  color: $white !important;
+}
+
+.select2-results__option.select2-results__message {
+  text-align: center;
+  padding: 10px;
+  color: $red;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__display {
+  cursor: default;
+  padding-right: 5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: $white;
+  font-weight: 400;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__remove {
+  padding: 0;
+  width: 16px;
+  font-size: inherit;
+  height: 100%;
+  z-index: 1;
+  border: 0;
+  color: $white;
+  line-height: 1;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__remove:hover,
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__remove:focus {
+  background-color: $primary;
+  color: $white;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice {
+  padding-left: 16px;
+  height: 20px;
+  border: 1px solid $primary;
+  background-color: $primary;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+  margin-top: 11px;
+  margin-left: 12px;
+}
+
+.select2-container--default .select2-selection--multiple {
+  min-height: 40px;
+  border: 1px solid $gray;
+}
+
+.select2-container--default .select2-results__option--selected,
+.select2-results__option--disabled {
+	background-color: $gray;
+	color: $primary !important;
 }
 
 // snackbar

@@ -63,5 +63,31 @@ class UserProfile extends \ST\Lms\Shortcode\Register {
 				},
 			)
 		);
+		// User preferred topics.
+		register_meta(
+			'user',
+			'_stlms_user_topics',
+			array(
+				'type'              => 'array',
+				'single'            => true,
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type' => 'integer',
+						),
+					),
+				),
+				'sanitize_callback' => function ( $value ) {
+					if ( is_array( $value ) ) {
+						return array_map( 'intval', $value );
+					}
+					return array();
+				},
+				'auth_callback'     => function ( $allowed, $meta_key, $user_id ) {
+					return get_current_user_id() === (int) $user_id;
+				},
+			)
+		);
 	}
 }

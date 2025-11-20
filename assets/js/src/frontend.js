@@ -395,59 +395,57 @@ jQuery(document).on('click', '.stlms-notification-icon, #mark-all-read', functio
 });
 
 jQuery(function($) {
-    
-    function filterSlides() {
-        var selectedCheckbox = $('.stlms-check:checked');
-    
-        if (selectedCheckbox.length === 0 || selectedCheckbox.attr('id') === 'all') {
-            $('.topSwiper .swiper-slide').show();
-        } else {
-            var selectedCategory = selectedCheckbox.attr('id').toLowerCase();
-            
-            $('.topSwiper .swiper-slide').each(function() {
-                var slideTagsText = $(this).find('.stlms-course-item__tag span').text().trim();
-                
-                // Split tags by comma and trim each tag
-                var slideTags = slideTagsText.split(',').map(function(tag) {
-                    return tag.trim().toLowerCase();
-                });
-                
-                // Show slide if it contains the selected category
-                if (slideTags.includes(selectedCategory)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
-        
-        // Update Swiper after filtering
-        updateSwiperInstance();
-    }
-    
-    function updateSwiperInstance() {
-        // Check if swiper5 exists and update it
-        if (typeof swiper5 !== 'undefined' && swiper5 !== null) {
-            swiper5.update();
-            swiper5.updateSlides();
-            swiper5.slideTo(0, 0);
-            
-            setTimeout(function() {
-                swiper5.update();
-            }, 50);
-        }
-    }
-    
-    // Handle checkbox change events
-    $('.stlms-check').on('change', function() {
-        if ($(this).is(':checked')) {
-            // Uncheck all other checkboxes
-            $('.stlms-check').not(this).prop('checked', false);
+    var filterTopCourses = function(categoryId) {
+        var url = new URL(window.location.href);
 
-            filterSlides();
-        } else {
-            $('#all').prop('checked', true);
-            filterSlides();
+        url.searchParams.delete('top_course_category');
+        
+        if (categoryId && categoryId !== 'all') {
+            url.searchParams.set('top_course_category', categoryId);
+        }
+
+        window.history.replaceState(null, null, url.toString());
+
+        $.ajax({
+            url: url.toString(),
+            type: 'GET',
+            success: function(response) {
+                var newContent = $(response).find('.topSwiper .swiper-wrapper').html();
+                $('.topSwiper .swiper-wrapper').html(newContent);
+            }
+        });
+    };
+    
+    $(document).on('change', '.stlms-category-nav-wrap #all', function() {
+        if ($(this).is(':checked')) {
+            $('.stlms-category-nav-wrap input[type="checkbox"]').not(this).prop('checked', false);
+            filterTopCourses('all');
         }
     });
+    
+    $(document).on('change', '.stlms-category-nav-wrap input[type="checkbox"]:not(#all)', function() {
+        var categoryId = $(this).attr('id');
+        
+        if ($(this).is(':checked')) {
+            $('.stlms-category-nav-wrap input[type="checkbox"]').not(this).prop('checked', false);
+            filterTopCourses(categoryId);
+        } else {
+            $('#all').prop('checked', true);
+            filterTopCourses('all');
+        }
+    });
+    
+    var loadFiltersFromURL = function() {
+        var url = new URL(window.location.href);
+        var category = url.searchParams.get('top_course_category');
+        
+        if (category) {
+            $('#all').prop('checked', false);
+            $('.stlms-category-nav-wrap input[id="' + category + '"]').prop('checked', true);
+        } else {
+            $('#all').prop('checked', true);
+        }
+    };
+
+    loadFiltersFromURL(); 
 });

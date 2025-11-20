@@ -778,6 +778,23 @@
         padding-top: 0;
       }
     }
+    &.is-normal-block{
+      &:hover{
+        transform: none;
+        box-shadow: none;
+        .stlms-course-item__info{
+          background: $white;
+        }
+      }
+      .stlms-course-item__info{
+        background: $white;
+        padding-top: 60px;
+        padding-bottom: 60px;
+      }
+      .stlms-course-item__title{
+        font-size: 26px !important;
+      }
+    }
   }
 
   .stlms-continue-learning-box{
@@ -1506,10 +1523,11 @@
     row-gap: 12px;
   }
   .stlms-statistics-list-item{
-    width: 50%;
+    width: 33.33%;
     padding: 0 12px;
     @include breakpoint(max, $sm) {
       padding: 0 6px;
+	  width: 50%;
     }
   }
 }

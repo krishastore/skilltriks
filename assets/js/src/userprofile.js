@@ -174,10 +174,8 @@ jQuery(function ($) {
                 userData.password = password;
             }
 
-            if(selectTopics.length > 0){
-                userData.meta = {
-                    _stlms_user_topics: selectTopics
-                }
+            userData.meta = {
+                _stlms_user_topics: selectTopics
             }
 
             if(avatarUrl !== undefined){

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( is_user_logged_in() ) :
 	$user_info      = get_userdata( get_current_user_id() );
 	$avatar_url     = get_user_meta( get_current_user_id(), 'avatar_url', true );
-	$topics         = get_user_meta( get_current_user_id(), '_stlms_user_topics', true );
+	$topics         = get_user_meta( get_current_user_id(), '_stlms_user_topics', true ) ? get_user_meta( get_current_user_id(), '_stlms_user_topics', true ) : array();
 	$default_avatar = esc_url( STLMS_ASSETS ) . '/images/profile-pic.png';
 	?>
 	<div class="stlms-wrap alignfull">
@@ -154,7 +154,7 @@ if ( is_user_logged_in() ) :
 														<label for="select-topics" class="stlms-select-search">
 															<?php esc_html_e( 'Select Topics', 'skilltriks' ); ?>
 															<select id="select-topics"
-																multiple data-placeholder="Please choose" class="stlms-select2-multi js-states form-control" id="id_label_single">
+																multiple data-placeholder="Please choose" class="stlms-select2-multi js-states form-control" id="id_label_single" style="width: 100%;">
 																<?php
 																$terms_list  = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
 																$course_page = \ST\Lms\get_page_url( 'courses' );

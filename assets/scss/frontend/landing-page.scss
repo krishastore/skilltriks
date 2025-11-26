@@ -582,7 +582,7 @@
     font-weight: 700;
     font-size: 32px;
     line-height: 42px;
-    color: #101011;
+    color: $primary_dark;
 
     @include breakpoint(max, $md) {
       font-size: 28px;
@@ -704,7 +704,7 @@
     &__title {
       font-weight: 700;
       font-size: 16px;
-      color: #101011;
+      color: $primary_dark;
       padding: 0;
     }
 
@@ -873,7 +873,7 @@
       font-weight: 700;
       font-size: 32px;
       line-height: 42px;
-      color: #101011;
+      color: $primary_dark;
     }
   }
 
@@ -1048,7 +1048,7 @@
                 font-size: 28px;
                 line-height: 100%;
                 letter-spacing: 0%;
-                color: #101011;
+                color: $primary_dark;
               }
 
               .perfomers-designation {
@@ -1199,7 +1199,7 @@
     font-weight: 700;
     font-size: 28px;
     line-height: 1.2;
-    color: #101011;
+    color: $primary_dark;
 
     @include breakpoint(max, $sm) {
       font-size: 22px;
@@ -1352,7 +1352,7 @@
       font-weight: 700;
       font-size: 16px;
       line-height: 20.8px;
-      color: #101011;
+      color: $primary_dark;
       text-wrap: nowrap;
     }
   }
@@ -1596,11 +1596,11 @@
   .stlms-course-completion-title{
     font-size: 18px;
     font-weight: 700;
-    color: #101011;
+    color: $primary_dark;
     padding-bottom: 24px;
   }
   .chart-legends{
-    padding-top: 24px;
+    padding-top: 8px;
     display: flex;
     flex-direction: column;
     gap: 10px;

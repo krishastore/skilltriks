@@ -1,3 +1,5 @@
+import Select2 from 'select2';
+
 jQuery(function ($) { 
     const $fileInput = $('#fileInput');
     const $preview = $('#preview');
@@ -8,6 +10,8 @@ jQuery(function ($) {
     $uploadBtn.on('click', function () {
         $fileInput.trigger('click');
     });
+
+    $('.stlms-select2-multi').select2();
 
     $fileInput.on('change', function () {
         const file = this.files[0];
@@ -158,6 +162,7 @@ jQuery(function ($) {
         let lastName = $('#last-name').val();
         let password = $('#pass1').val();
         let fileInput = $('#fileInput').length ? $('#fileInput')[0].files[0] : false;
+        let selectTopics = $('#select-topics').val();
 
         function updateUserProfile(avatarUrl){
             let userData = {
@@ -167,6 +172,10 @@ jQuery(function ($) {
 
             if(password){
                 userData.password = password;
+            }
+
+            userData.meta = {
+                _stlms_user_topics: selectTopics
             }
 
             if(avatarUrl !== undefined){

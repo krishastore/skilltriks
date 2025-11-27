@@ -43,5 +43,8 @@
     "select2": "^4.1.0-rc.0",
     "smartwizard": "^6.0.6",
     "swiper": "^11.1.15"
+  },
+  "dependencies": {
+    "apexcharts": "^5.3.6"
   }
 }

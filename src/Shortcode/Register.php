@@ -73,10 +73,12 @@ abstract class Register {
 		wp_register_script( $this->handler . '-swiper', STLMS_ASSETS . '/js/build/swiper.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-assigncourse', STLMS_ASSETS . '/js/build/assigncourse.js', array( 'jquery' ), $version, true );
 		wp_register_script( $this->handler . '-userprofile', STLMS_ASSETS . '/js/build/userprofile.js', array( 'jquery' ), $version, true );
+		wp_register_script( $this->handler . '-chart', STLMS_ASSETS . '/js/build/chart.js', array( 'jquery' ), $version, true );
 
 		$curriculum_type = get_query_var( 'curriculum_type' );
 		$userinfo        = wp_get_current_user();
 		$user_name       = $userinfo->display_name;
+		$course_status   = \ST\Lms\course_statistics();
 
 		wp_localize_script(
 			$this->handler,
@@ -92,6 +94,16 @@ abstract class Register {
 				'iconUrl'         => STLMS_ASSETS . '/images/plyr.svg',
 				'blankVideo'      => STLMS_ASSETS . '/images/blank.mp4',
 				'assignCourseUrl' => \ST\Lms\get_page_url( 'assign_course_by_me' ),
+			)
+		);
+
+		wp_localize_script(
+			$this->handler . '-chart',
+			'StlmsChartObj',
+			array(
+				'courseNotStarted' => count( $course_status['not_started'] ),
+				'courseInProgress' => count( $course_status['in_progress'] ),
+				'courseCompleted'  => count( $course_status['completed'] ),
 			)
 		);
 

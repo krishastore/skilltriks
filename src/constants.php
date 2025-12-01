@@ -25,6 +25,7 @@ const STLMS_RESULTS_CPT  = 'stlms_results';
 // Define constants for custom taxonomies.
 const STLMS_COURSE_CATEGORY_TAX   = 'stlms_course_category';
 const STLMS_COURSE_TAXONOMY_TAG   = 'stlms_course_tag';
+const STLMS_COURSE_TAXONOMY_DEP   = 'stlms_course_department';
 const STLMS_QUESTION_TAXONOMY_TAG = 'stlms_quesion_topics';
 const STLMS_QUIZ_TAXONOMY_LEVEL_1 = 'stlms_quiz_level_1';
 const STLMS_QUIZ_TAXONOMY_LEVEL_2 = 'stlms_quiz_level_2';
@@ -75,6 +76,7 @@ const STLMS_COURSE_COMPLETED_ON = '_stlms_%d_course_completed_on';
 const STLMS_ENROL_COURSES       = '_stlms_enrol_courses';
 const STLMS_COURSE_ASSIGN_TO_ME = '_stlms_course_assigned_to_me';
 const STLMS_COURSE_ASSIGN_BY_ME = '_stlms_course_assigned_by_me';
+const STLMS_USER_DEPARTMENTS    = '_stlms_user_departments';
 
 // Define constant for setting.
 const STLMS_SETTING = 'stlms-setting';

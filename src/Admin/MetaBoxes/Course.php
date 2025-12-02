@@ -399,7 +399,7 @@ class Course extends \ST\Lms\Collections\PostTypes {
 			return;
 		}
 		$id = $current_screen->id;
-		if ( function_exists( 'str_contains' ) && str_contains( $id, 'edit-stlms_course' ) ) {
+		if ( function_exists( 'str_contains' ) && str_contains( $id, 'edit-stlms_course' ) && ! str_contains( $id, 'edit-stlms_course_department' ) ) {
 			$id = str_replace( 'edit-', '', $id );
 			?>
 			<div class="stlms-course-wrap">

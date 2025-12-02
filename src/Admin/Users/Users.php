@@ -10,7 +10,8 @@
 
 namespace ST\Lms\Admin\Users;
 
-use const ST\Lms\PARENT_MENU_SLUG;
+use const ST\Lms\STLMS_USER_DEPARTMENTS;
+use const ST\Lms\STLMS_COURSE_TAXONOMY_DEP;
 
 /**
  * Users manage class.
@@ -31,6 +32,12 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	public function __construct() {
 		// Hooks.
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 20 );
+		add_action( 'user_new_form', array( $this, 'stlms_user_departments_dropdown' ), 10, 1 );
+		add_action( 'show_user_profile', array( $this, 'stlms_user_departments_dropdown' ), 10, 1 );
+		add_action( 'edit_user_profile', array( $this, 'stlms_user_departments_dropdown' ), 10, 1 );
+		add_action( 'user_register', array( $this, 'stlms_save_user_departments' ), 10, 1 );
+		add_action( 'personal_options_update', array( $this, 'stlms_save_user_departments' ), 10, 1 );
+		add_action( 'edit_user_profile_update', array( $this, 'stlms_save_user_departments' ), 10, 1 );
 	}
 
 	/**
@@ -63,5 +70,65 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 */
 	public function render_menu_page() {
 		require_once STLMS_TEMPLATEPATH . '/admin/users/capability-list.php';
+	}
+
+	/**
+	 * Display department dropdown in user profile and add new user page.
+	 *
+	 * @param string|object $operation Current operation.
+	 */
+	public function stlms_user_departments_dropdown( $operation ) {
+		if ( is_string( $operation ) && 'add-new-user' !== $operation ) {
+			return;
+		}
+
+		$user_department = is_object( $operation )
+			? get_user_meta( $operation->ID, STLMS_USER_DEPARTMENTS, true )
+			: '';
+
+		$dep_list = get_terms(
+			array(
+				'taxonomy'   => STLMS_COURSE_TAXONOMY_DEP,
+				'hide_empty' => false,
+				'fields'     => 'id=>name',
+			)
+		);
+		?>
+		
+		<h3><?php esc_html_e( 'Additional Information', 'skilltriks' ); ?></h3>
+		<table class="form-table">
+			<tr>
+				<th><label for="<?php echo esc_attr( STLMS_USER_DEPARTMENTS ); ?>"><?php esc_html_e( 'Department', 'skilltriks' ); ?></label></th>
+				<td>
+					<select name="<?php echo esc_attr( STLMS_USER_DEPARTMENTS ); ?>" id="<?php echo esc_attr( STLMS_USER_DEPARTMENTS ); ?>">
+						<option value=""><?php esc_html_e( 'Select Department', 'skilltriks' ); ?></option>
+						<?php if ( ! is_wp_error( $dep_list ) && ! empty( $dep_list ) ) : ?>
+							<?php foreach ( $dep_list as $dep_id => $dep_name ) : ?>
+								<option value="<?php echo absint( $dep_id ); ?>" <?php selected( $user_department, $dep_id ); ?>>
+									<?php echo esc_html( $dep_name ); ?>
+								</option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+					<p class="description"><?php esc_html_e( 'Please select user department.', 'skilltriks' ); ?></p>
+				</td>
+			</tr>
+		</table>
+		<?php
+	}
+
+	/**
+	 * Save user department on profile update and new user creation.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function stlms_save_user_departments( $user_id ) {
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return false;
+		}
+
+		if ( isset( $_POST[ STLMS_USER_DEPARTMENTS ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_user_meta( $user_id, STLMS_USER_DEPARTMENTS, absint( $_POST[ STLMS_USER_DEPARTMENTS ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		}
 	}
 }

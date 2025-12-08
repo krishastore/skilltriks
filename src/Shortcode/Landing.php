@@ -34,6 +34,7 @@ class Landing extends \ST\Lms\Shortcode\Register {
 		wp_enqueue_style( $this->handler . '-swiper' );
 		wp_enqueue_script( $this->handler . '-swiper' );
 		wp_enqueue_script( $this->handler . '-chart' );
+		wp_enqueue_script( $this->handler . '-dashboard' );
 		wp_enqueue_script( $this->handler );
 		wp_enqueue_style( $this->handler );
 		ob_start();

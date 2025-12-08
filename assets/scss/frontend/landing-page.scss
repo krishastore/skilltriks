@@ -1498,13 +1498,29 @@
     row-gap: 12px;
   }
   .stlms-statistics-left{
+    width: 100%;
+    padding: 0 12px;
+  }
+}
+
+.stlms-charts-info{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -12px;
+  @include breakpoint(max, $sm) {
+    row-gap: 12px;
+  }
+  &.stlms-reverse-column{
+    flex-direction: row-reverse;
+  }
+  .stlms-charts-info-left{
     width: 66.66666667%;
     padding: 0 12px;
     @include breakpoint(max, $sm) {
       width: 100%;
     }
   }
-  .stlms-statistics-right{
+  .stlms-charts-info-right{
     width: 33.33333333%;
     padding: 0 12px;
     @include breakpoint(max, $sm) {
@@ -1518,16 +1534,33 @@
   flex-wrap: wrap;
   margin: 0 -12px;
   row-gap: 24px;
+  &.stlms-three-column{
+    .stlms-statistics-list-item{
+      width: 33.33%;
+      @include breakpoint(max, 991) {
+        width: 50%;
+      }
+      @include breakpoint(max, $sm) {
+        width: 100%;
+      }
+    }
+  }
   @include breakpoint(max, $sm) {
     margin: 0 -6px;
     row-gap: 12px;
   }
   .stlms-statistics-list-item{
-    width: 33.33%;
+    width: 25%;
     padding: 0 12px;
+    @include breakpoint(max, $lg) {
+	    width: 33.33%;
+    }
+    @include breakpoint(max, 991) {
+	    width: 50%;
+    }
     @include breakpoint(max, $sm) {
       padding: 0 6px;
-	  width: 50%;
+	    width: 100%;
     }
   }
 }
@@ -1542,6 +1575,15 @@
   border-radius: 16px;
   @include breakpoint(max, $sm) {
     padding: 16px 12px;
+  }
+  &__icon-check{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 24px;
+    .stlms-statistics-item__icon{
+      margin-bottom: 0;
+    }
   }
   &__icon{
     display: flex;
@@ -1597,7 +1639,11 @@
     font-size: 18px;
     font-weight: 700;
     color: $primary_dark;
-    padding-bottom: 24px;
+  }
+  .stlms-course-completion-text{
+    font-size: 16px;
+    font-weight: 400;
+    color: $gray_dark;
   }
   .chart-legends{
     padding-top: 8px;
@@ -1646,5 +1692,43 @@
   &.is-yellow{
     background: #EEBA56;
     color: $white;
+  }
+}
+
+.stlms-assign-check{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .stlms-assign-check-label{
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+  }
+  .stlms-assign-box{
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 10px;
+    background: $gray;
+    label{
+      position: relative;
+      padding: 4px 8px;
+      font-size: 12px;
+      color: $gray_dark;
+      background: transparent;
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      &:has( input:checked ){
+        background: $white;
+        color: $primary;
+        box-shadow: 2px 4px 24px -3px rgba(0, 0, 0, 0.1);
+      }
+      input{
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
   }
 }

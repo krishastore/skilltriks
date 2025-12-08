@@ -19,7 +19,7 @@ function stlms_course_department_init() {
 		STLMS_COURSE_TAXONOMY_DEP,
 		array( STLMS_COURSE_CPT ),
 		array(
-			'hierarchical'          => true,
+			'hierarchical'          => false,
 			'public'                => true,
 			'show_in_nav_menus'     => true,
 			'show_in_menu'          => true,
@@ -87,3 +87,50 @@ function stlms_course_department_updated_messages( $messages ) {
 }
 
 add_filter( 'term_updated_messages', __NAMESPACE__ . '\\stlms_course_department_updated_messages' );
+
+/**
+ * Filters the result of `term_exists()` to provide a custom
+ * "term already exists" error message for the stlms_course_department taxonomy.
+ *
+ * @param int|array|\WP_Error $term     The term ID, term object data, or WP_Error returned by `term_exists()`.
+ * @param string              $taxonomy The taxonomy slug being checked.
+ * @param array               $args     Array of arguments passed to `term_exists()`.
+ *
+ * @return int|array|\WP_Error Modified term value or WP_Error with a custom message.
+ */
+function stlms_modify_department_exists_msg( $term, $taxonomy, $args ) {
+
+	if ( STLMS_COURSE_TAXONOMY_DEP !== $taxonomy ) {
+		return $term;
+	}
+
+	$exists = term_exists( $term, $taxonomy, $args['parents'] );
+
+	if ( ! empty( $exists ) ) {
+		return new \WP_Error(
+			'term_exists',
+			/* translators: custom message when the department already exists. */
+			__( 'This department name already exists. Please choose a different name.', 'skilltriks' ),
+			$exists
+		);
+	}
+
+	return $term;
+}
+
+add_filter( 'pre_insert_term', __NAMESPACE__ . '\\stlms_modify_department_exists_msg', 10, 3 );
+
+/**
+ * Remove the 'Count' column from the Department taxonomy list.
+ *
+ * @param array $columns An array of columns displayed in the list table.
+ * @return array Modified columns array.
+ */
+function stlms_remove_department_count_column( $columns ) {
+	if ( isset( $columns['posts'] ) ) {
+		unset( $columns['posts'] );
+	}
+	return $columns;
+}
+
+add_filter( 'manage_edit-' . STLMS_COURSE_TAXONOMY_DEP . '_columns', __NAMESPACE__ . '\\stlms_remove_department_count_column' );

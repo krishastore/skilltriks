@@ -270,6 +270,12 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 										$course_link = apply_filters( 'stlms_course_view_button_link', $course_link );
 
 										$existing_users = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_ASSIGNED, true ) ? get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_ASSIGNED, true ) : array();
+
+										if ( '100%' === $course_progress ) {
+											$assessment        = get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_ASSESSMENT, true );
+											$completed_results = \ST\Lms\calculate_assessment_result( $assessment, get_post_meta( $course_id, \ST\Lms\META_KEY_COURSE_CURRICULUM, true ), $course_id );
+											list( $passing_grade, $grade_percentage, $completed_on ) = $completed_results;
+										}
 										?>
 										<li>
 											<div class="stlms-course-item">
@@ -410,7 +416,7 @@ $due_soon              = ! empty( $due_soon['due_soon'] ) ? $due_soon['due_soon'
 													</div>
 													<div class="stlms-course-item__action">
 														<a href="<?php echo esc_url( $course_link ); ?>" class="stlms-btn stlms-btn-block<?php echo esc_attr( $extra_class ); ?>" ><?php echo esc_html( $button_text ); ?></a>
-														<?php if ( $has_certificate && '100%' === $course_progress ) : ?>
+														<?php if ( $has_certificate && '100%' === $course_progress && $grade_percentage >= $passing_grade ) : ?>
 															<a href="javascript:;" id="download-certificate" data-course="<?php echo esc_attr( (string) $course_id ); ?>" class="stlms-btn stlms-btn-block download-certificate"><?php esc_html_e( 'Download certificate', 'skilltriks' ); ?></a>
 														<?php endif; ?>
 													</div>

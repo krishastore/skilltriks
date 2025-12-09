@@ -38,6 +38,8 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 		add_action( 'user_register', array( $this, 'stlms_save_user_departments' ), 10, 1 );
 		add_action( 'personal_options_update', array( $this, 'stlms_save_user_departments' ), 10, 1 );
 		add_action( 'edit_user_profile_update', array( $this, 'stlms_save_user_departments' ), 10, 1 );
+		add_action( 'manage_users_extra_tablenav', array( $this, 'stlms_users_department_filter' ), 10 );
+		add_filter( 'pre_get_users', array( $this, 'stlms_filter_users_by_department' ), 10 );
 	}
 
 	/**
@@ -130,5 +132,66 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 		if ( isset( $_POST[ STLMS_USER_DEPARTMENTS ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			update_user_meta( $user_id, STLMS_USER_DEPARTMENTS, absint( $_POST[ STLMS_USER_DEPARTMENTS ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
+	}
+
+	/**
+	 * Add Department filter dropdown on Users list page.
+	 *
+	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+	 */
+	public function stlms_users_department_filter( $which ) {
+
+		if ( 'top' !== $which ) {
+			return;
+		}
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => STLMS_COURSE_TAXONOMY_DEP,
+				'hide_empty' => false,
+			)
+		);
+		?>
+
+		<select name="user_department" id="user_department" class="postform">
+			<option value="0"><?php esc_html_e( 'All Departments', 'skilltriks' ); ?></option>
+			<?php
+			if ( ! empty( $terms ) ) :
+				foreach ( $terms as $term ) :
+					$selected = isset( $_GET['user_department'] ) ? absint( $_GET['user_department'] ) : 0; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					?>
+					<option value="<?php echo absint( $term->term_id ); ?>"
+						<?php selected( $selected, $term->term_id ); ?>>
+						<?php echo esc_html( $term->name ); ?>
+					</option>
+					<?php
+				endforeach;
+			endif;
+			?>
+		</select>
+		<input type="submit" name="filter_action" id="filter_action" class="button" value="<?php esc_attr_e( 'Filter', 'skilltriks' ); ?>">
+		<?php
+	}
+
+	/**
+	 * Filter users list by department using the admin dropdown.
+	 *
+	 * @param \WP_User_Query $query Current WP_User_Query object.
+	 *
+	 * @return \WP_User_Query Modified query with department filter applied.
+	 */
+	public function stlms_filter_users_by_department( $query ) {
+
+		if ( ! is_admin() || 'users' !== get_current_screen()->id ) {
+			return $query;
+		}
+
+		if ( isset( $_GET['user_department'] ) && ! empty( $_GET['user_department'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$term_id = absint( $_GET['user_department'] ); //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$query->set( 'meta_key', STLMS_USER_DEPARTMENTS );
+			$query->set( 'meta_value', $term_id );
+		}
+
+		return $query;
 	}
 }

@@ -27,7 +27,6 @@ module.exports = {
         result: './assets/scss/result.scss',
         assigncourse: ['./assets/js/src/assigncourse.js', './assets/scss/assigncourse.scss'],
         userprofile: ['./assets/js/src/userprofile.js', './assets/scss/userprofile.scss'],
-        chart: './assets/js/src/chart.js',
     },
     output: {
         path: path.resolve(__dirname, './assets'),

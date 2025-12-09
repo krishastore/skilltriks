@@ -459,6 +459,7 @@ function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
 	$results = get_posts(
 		array(
 			'post_type'      => \ST\Lms\STLMS_RESULTS_CPT,
+			'author'         => get_current_user_id(),
 			'fields'         => 'ids',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'meta_key'       => 'course_id',
@@ -478,13 +479,14 @@ function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
  * @param int    $assessment Course assessment.
  * @param array  $curriculums Curriculums list.
  * @param int    $course_id Course ID.
+ * @param int    $user_id User ID.
  * @param string $curriculum_type Curriculums type.
  * @return array|float|int Results Ids.
  */
-function calculate_assessment_result( $assessment, $curriculums = array(), $course_id = 0, $curriculum_type = '' ) {
+function calculate_assessment_result( $assessment, $curriculums = array(), $course_id = 0, $user_id = 0, $curriculum_type = '' ) {
 	$passing_grade      = isset( $assessment['passing_grade'] ) ? (int) $assessment['passing_grade'] : 0;
 	$evaluation         = isset( $assessment['evaluation'] ) ? $assessment['evaluation'] : 1;
-	$user_id            = get_current_user_id();
+	$user_id            = $user_id ? $user_id : get_current_user_id();
 	$completed_grade    = 0;
 	$return_grade_only  = true;
 	$meta_key           = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
@@ -519,7 +521,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			}
 		}
 	} elseif ( 'quiz' === $curriculum_type ) {
-		$results               = \ST\Lms\get_results_course_by_id();
+		$results               = \ST\Lms\get_results_course_by_id( $course_id );
 		$total_questions       = 0;
 		$total_correct_answers = 0;
 		if ( ! empty( $results ) ) {
@@ -533,7 +535,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			$completed_grade = round( $total_correct_answers / $total_questions * 100, 2 );
 		}
 	} elseif ( 'last_quiz' === $curriculum_type ) {
-		$results   = \ST\Lms\get_results_course_by_id( 0, 1 );
+		$results   = \ST\Lms\get_results_course_by_id( $course_id, 1 );
 		$result_id = ! empty( $results ) ? reset( $results ) : 0;
 		if ( $result_id ) {
 			$grade_percentage = get_post_meta( $result_id, 'grade_percentage', true );

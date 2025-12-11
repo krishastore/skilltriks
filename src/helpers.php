@@ -781,17 +781,17 @@ function layout_colors() {
 	$colors = array(
 		'layout-2' => array(
 			'primary_color'          => '#893bf8',
-			'secondary_color'        => '#00cfbe',
+			'secondary_color'        => '#66c7c4',
 			'background_color'       => '#f6f6f7',
 			'background_light_color' => '#fbfbfb',
 			'border_color'           => '#ededed',
 			'white_color'            => '#ffffff',
 			'heading_color'          => '#101011',
 			'paragraph_color'        => '#5d5d73',
-			'paragraph_light_color'  => '#85859d',
+			'paragraph_light_color'  => '#72728c',
 			'link_color'             => '#7d3cd9',
-			'icon_color'             => '#a9a9a9',
-			'success_color'          => '#25af3d',
+			'icon_color'             => '#757575',
+			'success_color'          => '#208738',
 			'error_color'            => '#c53434',
 		),
 	);

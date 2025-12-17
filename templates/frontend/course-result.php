@@ -89,11 +89,11 @@ list( $passing_grade, $grade_percentage, $completed_on ) = $completed_results;
 						</div>
 						<div class="stlms-quiz-result-list stlms-course-complete-result">
 							<div class="stlms-quiz-result-item">
-								<p><?php echo (int) \ST\Lms\calculate_assessment_result( $assessment, $curriculums, $course_id, 'lesson' ); ?>%</p>
+								<p><?php echo (int) \ST\Lms\calculate_assessment_result( $assessment, $curriculums, $course_id, 0, 'lesson' ); ?>%</p>
 								<span><?php esc_html_e( 'Lessons Completed', 'skilltriks' ); ?></span>
 							</div>
 							<div class="stlms-quiz-result-item">
-								<p><?php echo (int) \ST\Lms\calculate_assessment_result( $assessment, $curriculums, $course_id, 'quiz' ); ?>%</p>
+								<p><?php echo (int) \ST\Lms\calculate_assessment_result( $assessment, $curriculums, $course_id, 0, 'quiz' ); ?>%</p>
 								<span><?php esc_html_e( 'Quiz Completed', 'skilltriks' ); ?></span>
 							</div>
 						</div>

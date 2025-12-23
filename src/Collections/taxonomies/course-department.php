@@ -134,3 +134,12 @@ function stlms_remove_department_count_column( $columns ) {
 }
 
 add_filter( 'manage_edit-' . STLMS_COURSE_TAXONOMY_DEP . '_columns', __NAMESPACE__ . '\\stlms_remove_department_count_column' );
+
+/**
+ * Remove the metabox from the course CPT.
+ */
+function stlms_remove_department_metabox() {
+	remove_meta_box( 'tagsdiv-' . STLMS_COURSE_TAXONOMY_DEP, STLMS_COURSE_CPT, 'side' );
+}
+
+add_action( 'admin_menu', __NAMESPACE__ . '\\stlms_remove_department_metabox' );

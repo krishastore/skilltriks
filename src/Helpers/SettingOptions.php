@@ -302,7 +302,7 @@ class SettingOptions {
 			echo '<input id="' . esc_attr( $id ) . '" name=' . esc_html( $this->option_name ) . '[' . esc_attr( $id ) . ']" size="40" type="' . esc_attr( $type ) . '" value="' . esc_attr( $value ) . '" />';
 		}
 		if ( $desc ) {
-			echo "<p class='description'>" . wp_kses_post( $desc ) . '</div>';
+			echo "<p class='stlms-description'>" . wp_kses_post( $desc ) . '</div>';
 		}
 	}
 

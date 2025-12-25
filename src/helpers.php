@@ -450,16 +450,17 @@ function restart_course( $course_id = 0 ) {
  *
  * @param int $course_id Course ID.
  * @param int $per_page Posts per page.
+ * @param int $user_id User ID.
  * @return array Results Ids.
  */
-function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
+function get_results_course_by_id( $course_id = 0, $per_page = -1, $user_id = 0 ) {
 	if ( empty( $course_id ) ) {
 		$course_id = get_query_var( 'course_id', 0 );
 	}
 	$results = get_posts(
 		array(
 			'post_type'      => \ST\Lms\STLMS_RESULTS_CPT,
-			'author'         => get_current_user_id(),
+			'author'         => $user_id ? $user_id : get_current_user_id(),
 			'fields'         => 'ids',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'meta_key'       => 'course_id',
@@ -521,7 +522,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			}
 		}
 	} elseif ( 'quiz' === $curriculum_type ) {
-		$results               = \ST\Lms\get_results_course_by_id( $course_id );
+		$results               = \ST\Lms\get_results_course_by_id( $course_id, -1, $user_id );
 		$total_questions       = 0;
 		$total_correct_answers = 0;
 		if ( ! empty( $results ) ) {
@@ -535,7 +536,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			$completed_grade = round( $total_correct_answers / $total_questions * 100, 2 );
 		}
 	} elseif ( 'last_quiz' === $curriculum_type ) {
-		$results   = \ST\Lms\get_results_course_by_id( $course_id, 1 );
+		$results   = \ST\Lms\get_results_course_by_id( $course_id, 1, $user_id );
 		$result_id = ! empty( $results ) ? reset( $results ) : 0;
 		if ( $result_id ) {
 			$grade_percentage = get_post_meta( $result_id, 'grade_percentage', true );

@@ -15,7 +15,15 @@
   .stlms-profile-row {
     display: flex;
     align-items: stretch;
-
+    &.is-two-column{
+      flex-wrap: wrap;
+      .stlms-profile-col{
+        width: 50%;
+        @include breakpoint(max, $lg) {
+          width: 100%;
+        }
+      }
+    }
     @include breakpoint(max, $lg) {
       flex-wrap: wrap;
     }

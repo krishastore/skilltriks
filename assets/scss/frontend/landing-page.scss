@@ -193,63 +193,6 @@
 }
 
 // stlms-browse-wrap (sub-header)
-// .stlms-browse-wrap {
-//   @include breakpoint(max, $sm) {
-//     order: 2;
-//   }
-//   .stlms-user-dd {
-//     padding: 11px 18px;
-//     border: 1px solid #e6e6e7;
-//     border-radius: 50px;
-//     min-width: 180px;
-
-//     .stlms-user-dd__toggle {
-//       display: flex;
-//       justify-content: space-between;
-//       gap: 16px;
-//       font-weight: 400;
-//       font-size: 16px;
-//       line-height: 24px;
-//       letter-spacing: 0%;
-//       color: #4e5566;
-
-//       svg {
-//         @include transition(all 0.3s ease-in-out);
-//       }
-
-//       &.active {
-//         color: #1d2026;
-
-//         svg {
-//           transform: rotate(180deg);
-//         }
-//       }
-//     }
-
-//     .stlms-user-dd__menu {
-//       top: calc(100% + 16px);
-//       border: 1px solid #e9eaf0;
-//       border-radius: 8px;
-//       padding: 12px 0;
-//       box-shadow: 0px 6px 16px 0px #0000000f;
-//       background-color: $white;
-
-//       .stlms-user-dd__link {
-//         padding: 8px 20px;
-//         font-size: 16px;
-//         color: #6e7485;
-//         border-bottom: 0;
-
-//         &:hover {
-//           background-color: #e3f0fc;
-//           color: #091bdd;
-//         }
-//       }
-//     }
-//   }
-// }
-
-// stlms-browse-wrap (sub-header)
 .stlms-browse-wrap {
   @include breakpoint(max, $sm) {
     order: 2;
@@ -518,6 +461,10 @@
 // swiper-nav
 .stlms-swiper-wrap {
   position: relative;
+
+  .trendSwiper .swiper-slide, .topSwiper .swiper-slide, .upcoming-learning-slider .swiper-slide {
+    height: auto;
+  }
 
   .stlms-swiper-nav {
     position: absolute;
@@ -933,6 +880,7 @@
 
     input[type="checkbox"]:checked+label {
       background-color: #0f5aa7;
+      border-color: #0f5aa7;
       color: $white;
       font-weight: 600;
     }
@@ -1507,7 +1455,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: 0 -12px;
-  @include breakpoint(max, $sm) {
+  @include breakpoint(max, $md) {
     row-gap: 12px;
   }
   &.stlms-reverse-column{
@@ -1516,14 +1464,14 @@
   .stlms-charts-info-left{
     width: 66.66666667%;
     padding: 0 12px;
-    @include breakpoint(max, $sm) {
+    @include breakpoint(max, $md) {
       width: 100%;
     }
   }
   .stlms-charts-info-right{
     width: 33.33333333%;
     padding: 0 12px;
-    @include breakpoint(max, $sm) {
+    @include breakpoint(max, $md) {
       width: 100%;
     }
   }
@@ -1606,7 +1554,7 @@
     color: $primary_dark;
     padding-bottom: 8px;
     @include breakpoint(max, $sm) {
-      font-size: 20px;
+      font-size: 25px;
     }
   }
   &__text{

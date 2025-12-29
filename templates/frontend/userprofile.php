@@ -119,7 +119,7 @@ if ( is_user_logged_in() ) :
 										</div>
 										<?php endif; ?>
 									</div>
-									<div class="stlms-profile-row">
+									<div class="stlms-profile-row is-two-column">
 										<?php if ( current_user_can( 'upload_files' ) ) : ?>
 										<div class="stlms-profile-col">
 											<div class="stlms-profile-box">

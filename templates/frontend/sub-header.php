@@ -78,6 +78,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 						</div>
 						<div class="stlms-profile-link-wrap">
+							<?php if ( is_plugin_active( 'skilltriks-pro/skilltriks-pro.php' ) ) : ?>
+							<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'landing' ) ); ?>" class="stlms-profile-link">
+								<svg width="24" height="24">
+									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/dashboard-icon.svg"></use>
+								</svg>
+								<?php esc_html_e( 'Dashboard', 'skilltriks' ); ?>
+							</a>
+							<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'courses' ) ); ?>" class="stlms-profile-link">
+								<svg width="24" height="24">
+									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/all-courses-icon.svg"></use>
+								</svg>
+								<?php esc_html_e( 'All Courses', 'skilltriks' ); ?>
+							</a>
+							<?php endif; ?>
 							<a href="<?php echo esc_url( \ST\Lms\get_page_url( 'my_learning' ) ); ?>" class="stlms-profile-link">
 								<svg width="24" height="24">
 									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#learning"></use>

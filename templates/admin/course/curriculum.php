@@ -150,12 +150,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php esc_html_e( 'Delete', 'skilltriks' ); ?>
 								</a>
 							</div>
-							<div class="button" id="trimmer">
-								<svg class="icon" width="18" height="12">
-									<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#Union"></use>
-								</svg>	
-								<span><?php esc_html_e( 'Trim Video Lesson', 'skilltriks' ); ?></span>
-							</div>
+							<?php
+							if ( class_exists( '\LSI\License\LicenseManager' ) ) :
+								if ( \LSI\License\LicenseManager::instance()->is_pro() ) :
+									?>
+									<div class="button" id="trimmer">
+										<svg class="icon" width="18" height="12">
+											<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite.svg#Union"></use>
+										</svg>	
+										<span><?php esc_html_e( 'Trim Video Lesson', 'skilltriks' ); ?></span>
+									</div>
+									<?php
+								endif;
+							endif;
+							?>
 						</div>
 					</div>
 				</div>

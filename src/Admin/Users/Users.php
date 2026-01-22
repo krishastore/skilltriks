@@ -80,6 +80,15 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 * @param string|object $operation Current operation.
 	 */
 	public function stlms_user_departments_dropdown( $operation ) {
+		// Add department only for pro version.
+		if ( ! class_exists( '\LSI\License\LicenseManager' ) ) :
+			return;
+		endif;
+
+		if ( ! \LSI\License\LicenseManager::instance()->is_pro() ) :
+			return;
+		endif;
+
 		if ( is_string( $operation ) && 'add-new-user' !== $operation ) {
 			return;
 		}
@@ -140,6 +149,14 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
 	 */
 	public function stlms_users_department_filter( $which ) {
+		// Add department only for pro version.
+		if ( ! class_exists( '\LSI\License\LicenseManager' ) ) :
+			return;
+		endif;
+
+		if ( ! \LSI\License\LicenseManager::instance()->is_pro() ) :
+			return;
+		endif;
 
 		if ( 'top' !== $which ) {
 			return;

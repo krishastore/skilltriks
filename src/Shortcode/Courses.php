@@ -122,6 +122,12 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		// SmartWizard.
 		wp_enqueue_script( $this->handler . '-smartwizard' );
 		wp_enqueue_style( $this->handler . '-smartwizard' );
+		if ( class_exists( '\LSI\License\LicenseManager' ) ) {
+			if ( \LSI\License\LicenseManager::instance()->is_pro() ) {
+				// Chatbot.
+				wp_enqueue_script( $this->handler . '-chatbot' );
+			}
+		}
 		// Frontend.
 		wp_enqueue_script( $this->handler );
 		wp_enqueue_style( $this->handler );

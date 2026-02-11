@@ -18,6 +18,7 @@ $curriculum_type  = $args['curriculum_type'];
 $curriculums_keys = array_keys( $curriculums );
 $current_index    = \ST\Lms\find_current_curriculum_index( $current_item, $curriculums, $section_id );
 $is_quiz          = \ST\Lms\STLMS_QUIZ_CPT === get_post_type( $current_item );
+$media            = get_post_meta( $current_item, \ST\Lms\META_KEY_LESSON_MEDIA, true );
 
 $next_key = array_search( $current_index, $curriculums_keys, true );
 if ( false !== $next_key ) {

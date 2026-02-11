@@ -9,12 +9,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$media_type = $media['media_type'];
-$video_id   = $media['video_id'];
-$video_url  = $media['embed_video_url'];
-$text       = $media['text'];
-$file_id    = $media['file_id'];
-$file_url   = $media['file_url'];
+global $stlms_license;
+
+$media_type     = $media['media_type'];
+$video_id       = $media['video_id'];
+$video_url      = $media['embed_video_url'];
+$text           = $media['text'];
+$file_id        = $media['file_id'];
+$file_url       = $media['file_url'];
+$has_ai_chatbot = ! empty( $media['ai_chatbot'] ) ? $media['ai_chatbot'] : 0;
 ?>
 <?php do_action( 'stlms_lesson_media_before', $media, $this ); ?>
 <input type="hidden" name="stlms_nonce" value="<?php echo esc_attr( wp_create_nonce( STLMS_BASEFILE ) ); ?>">
@@ -25,6 +28,22 @@ $file_url   = $media['file_url'];
 	<?php do_action( 'stlms_lesson_after_media_type', $media, $this ); ?>
 </div>
 <div id="media_video" class="stlms-video-type-box<?php echo in_array( $media_type, array( 'text', 'file' ), true ) ? ' hidden' : ''; ?>">
+	<?php
+	if ( ! empty( $stlms_license ) ) :
+		if ( $stlms_license->is_pro() ) :
+			?>
+	<div class="stlms-media-choose ai-chatbot-option">
+		<label>
+			<?php esc_html_e( 'Enable AI Chatbot', 'skilltriks' ); ?>
+		</label>
+		<div>
+			<label><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][ai_chatbot]" value="1" <?php checked( $has_ai_chatbot, 1 ); ?>><?php esc_html_e( 'Yes', 'skilltriks' ); ?></label>
+		</div>
+	</div>
+			<?php
+		endif;
+	endif;
+	?>
 	<div class="stlms-media-choose">
 		<label><?php esc_html_e( 'Choose File', 'skilltriks' ); ?></label>
 		<div class="stlms-media-file">

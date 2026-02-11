@@ -72,6 +72,14 @@ jQuery(function ($) {
     $(".stlms-lesson-view").removeClass("active");
   });
 
+   $(".stlms-ai-chat").on("click", function () {
+  $(".stlms-ai-chat__wrap, body").addClass("active");
+});
+
+$(".stlms-ai-chat__overlay, .stlms-ai-chat-close").on("click", function () {
+  $(".stlms-ai-chat__wrap, body").removeClass("active");
+});
+
   // Login form ajax.
   $(document).on('submit', '.stlms-login__body form', function() {
     var _this =  $(this);

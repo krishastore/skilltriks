@@ -98,6 +98,7 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 				'text'            => '',
 				'file_id'         => 0,
 				'file_url'        => '',
+				'ai_chatbot'      => 0,
 			)
 		);
 		require_once STLMS_TEMPLATEPATH . '/admin/lesson/add-media.php';
@@ -202,6 +203,9 @@ class Lesson extends \ST\Lms\Collections\PostTypes {
 		}
 		if ( isset( $_POST[ $this->meta_key_prefix ]['media']['text'] ) ) {
 			$post_data['media']['text'] = wp_kses_post( wp_unslash( $_POST[ $this->meta_key_prefix ]['media']['text'] ) );
+		}
+		if ( isset( $_POST[ $this->meta_key_prefix ]['media']['ai_chatbot'] ) ) {
+			$post_data['media']['ai_chatbot'] = (int) $_POST[ $this->meta_key_prefix ]['media']['ai_chatbot'];
 		}
 
 		do_action( 'stlms_save_lesson_meta_before', $post_id, $post_data );

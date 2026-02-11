@@ -29,7 +29,7 @@
 		font-weight: 600;
 		flex-shrink: 0;
 	}
-	input{
+	input:not([type="checkbox"]){
 		width: 226px
 	}
 	.stlms-media-file{
@@ -43,6 +43,9 @@
 				text-decoration: none;
 			}
 		}
+	}
+	&.ai-chatbot-option {
+		padding-bottom: 8px;
 	}
 }
 .stlms-video-type-box{

@@ -81,11 +81,11 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 */
 	public function stlms_user_departments_dropdown( $operation ) {
 		// Add department only for pro version.
-		if ( ! class_exists( '\LSI\License\LicenseManager' ) ) :
+		if ( ! class_exists( \LSI\Stlms\LicenseManager::class ) ) :
 			return;
 		endif;
 
-		if ( ! \LSI\License\LicenseManager::instance()->is_pro() ) :
+		if ( ! \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
 			return;
 		endif;
 
@@ -150,11 +150,11 @@ class Users extends \ST\Lms\Admin\Core implements \ST\Lms\Interfaces\AdminCore {
 	 */
 	public function stlms_users_department_filter( $which ) {
 		// Add department only for pro version.
-		if ( ! class_exists( '\LSI\License\LicenseManager' ) ) :
+		if ( ! class_exists( \LSI\Stlms\LicenseManager::class ) ) :
 			return;
 		endif;
 
-		if ( ! \LSI\License\LicenseManager::instance()->is_pro() ) :
+		if ( ! \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
 			return;
 		endif;
 

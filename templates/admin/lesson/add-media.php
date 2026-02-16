@@ -9,8 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $stlms_license;
-
 $media_type     = $media['media_type'];
 $video_id       = $media['video_id'];
 $video_url      = $media['embed_video_url'];
@@ -29,8 +27,8 @@ $has_ai_chatbot = ! empty( $media['ai_chatbot'] ) ? $media['ai_chatbot'] : 0;
 </div>
 <div id="media_video" class="stlms-video-type-box<?php echo in_array( $media_type, array( 'text', 'file' ), true ) ? ' hidden' : ''; ?>">
 	<?php
-	if ( ! empty( $stlms_license ) ) :
-		if ( $stlms_license->is_pro() ) :
+	if ( class_exists( \LSI\Stlms\LicenseManager::class ) ) :
+		if ( \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
 			?>
 	<div class="stlms-media-choose ai-chatbot-option">
 		<label>

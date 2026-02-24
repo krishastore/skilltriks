@@ -70,8 +70,8 @@ $result_page_url = sprintf( '%s/%s/%d/', untrailingslashit( home_url() ), $cours
 				</svg>
 			</a>
 		<?php endif; ?>
-		<?php if ( class_exists( \LSI\Stlms\LicenseManager::class ) ) : ?>
-			<?php if ( \LSI\Stlms\LicenseManager::instance()->is_pro() && ! $is_quiz ) : ?>
+		<?php if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) : ?>
+			<?php if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() && ! $is_quiz && 'video' === $curriculum_type && ! empty( $media['video_id'] ) && ! empty( $media['ai_chatbot'] ) && 1 === $media['ai_chatbot'] ) : ?>
 				<button class="stlms-ai-chat">
 					<svg class="icon" width="20" height="20">
 						<use xlink:href="<?php echo esc_url( STLMS_ASSETS ); ?>/images/sprite-front.svg#ai-chat"></use>

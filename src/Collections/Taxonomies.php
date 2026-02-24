@@ -87,8 +87,8 @@ class Taxonomies {
 			'edit-tags.php?taxonomy=stlms_course_tag',
 			'__return_null'
 		);
-		if ( class_exists( \LSI\Stlms\LicenseManager::class ) ) :
-			if ( \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
+		if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) :
+			if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() ) :
 				add_submenu_page(
 					PARENT_MENU_SLUG,
 					__( 'Departments', 'skilltriks' ),

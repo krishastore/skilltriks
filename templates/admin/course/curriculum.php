@@ -151,8 +151,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</a>
 							</div>
 							<?php
-							if ( class_exists( \LSI\Stlms\LicenseManager::class ) ) :
-								if ( \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
+							if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) :
+								if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() ) :
 									?>
 									<div class="button" id="trimmer">
 										<svg class="icon" width="18" height="12">

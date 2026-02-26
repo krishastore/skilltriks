@@ -36,8 +36,8 @@ class Landing extends \ST\Lms\Shortcode\Register {
 
 		$template_name = 'landing-disabled.php';
 
-		if ( class_exists( \LSI\Stlms\LicenseManager::class ) ) :
-			if ( \LSI\Stlms\LicenseManager::instance()->is_pro() ) :
+		if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) :
+			if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() ) :
 				$template_name = 'landing.php';
 				wp_enqueue_style( $this->handler . '-swiper' );
 				wp_enqueue_script( $this->handler . '-swiper' );

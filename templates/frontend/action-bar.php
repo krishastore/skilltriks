@@ -120,7 +120,7 @@ $result_page_url = sprintf( '%s/%s/%d/', untrailingslashit( home_url() ), $cours
 				</div>
 			</div>
 		</div>
-		<div class="stlms-ai-chat__body">
+		<div class="stlms-ai-chat__body" id="stlms-ai-chat-body">
 			<ul class="stlms-ai-chat__messages">
 				<li class="stlms-ai-chat__message--bot">
 					<div class="stlms-ai-chat__message--content">

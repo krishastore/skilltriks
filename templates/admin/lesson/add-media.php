@@ -16,6 +16,7 @@ $text           = $media['text'];
 $file_id        = $media['file_id'];
 $file_url       = $media['file_url'];
 $has_ai_chatbot = ! empty( $media['ai_chatbot'] ) ? $media['ai_chatbot'] : 0;
+$ingestion_data = get_transient( 'stlms_video_ingestion_in_progress' );
 ?>
 <?php do_action( 'stlms_lesson_media_before', $media, $this ); ?>
 <input type="hidden" name="stlms_nonce" value="<?php echo esc_attr( wp_create_nonce( STLMS_BASEFILE ) ); ?>">
@@ -35,7 +36,16 @@ $has_ai_chatbot = ! empty( $media['ai_chatbot'] ) ? $media['ai_chatbot'] : 0;
 			<?php esc_html_e( 'Enable AI Chatbot', 'skilltriks' ); ?>
 		</label>
 		<div>
-			<label><input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][ai_chatbot]" value="1" <?php checked( $has_ai_chatbot, 1 ); ?>><?php esc_html_e( 'Yes', 'skilltriks' ); ?></label>
+			<label>
+				<input type="checkbox" name="<?php echo esc_attr( $this->meta_key_prefix ); ?>[media][ai_chatbot]" value="1" <?php checked( $has_ai_chatbot, 1 ); ?> <?php disabled( ! empty( $ingestion_data ), true ); ?>>
+				<?php
+				if ( ! empty( $ingestion_data ) ) {
+					echo esc_html( __( 'Transcription already in progress. Please wait for it to finish before adding another video.', 'skilltriks' ) );
+				} else {
+					esc_html_e( 'Yes', 'skilltriks' );
+				}
+				?>
+			</label>
 		</div>
 	</div>
 			<?php

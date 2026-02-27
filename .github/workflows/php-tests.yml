@@ -55,11 +55,16 @@ jobs:
           set -e
 
       - name: Post PHPCS Summary
-        if: always()
-        uses: actions/github-script@v7
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const prNumber = context.issue.number || context.payload.pull_request?.number;
+            if (!prNumber) {
+              console.log('No PR number found, skipping comment.');
+              return;
+            }
             const fs = require('fs');
             const report = fs.readFileSync('phpcs_report.txt', 'utf8');
             const exitCode = '${{ steps.phpcs.outputs.exit_code }}';
@@ -75,7 +80,7 @@ jobs:
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: prNumber,
             });
 
             const botComment = comments.data.find(c => 
@@ -93,13 +98,13 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                issue_number: prNumber,
                 body: body
               });
             }
 
       - name: PHPCS Job Summary
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         run: |
           echo "## PHPCS Report" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
@@ -166,11 +171,16 @@ jobs:
           set -e
 
       - name: Post PHPUnit PR Comment
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const prNumber = context.issue.number || context.payload.pull_request?.number;
+            if (!prNumber) {
+              console.log('No PR number found, skipping comment.');
+              return;
+            }
             const fs = require('fs');
             const report = fs.readFileSync('phpunit_report.txt', 'utf8');
             const exitCode = '${{ steps.phpunit.outputs.exit_code }}';
@@ -201,7 +211,7 @@ jobs:
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: prNumber,
             });
 
             const botComment = comments.data.find(c =>
@@ -219,7 +229,7 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                issue_number: prNumber,
                 body: body
               });
             }
@@ -267,11 +277,16 @@ jobs:
           set -e
 
       - name: Post PHPStan PR Comment
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const prNumber = context.issue.number || context.payload.pull_request?.number;
+            if (!prNumber) {
+              console.log('No PR number found, skipping comment.');
+              return;
+            }
             const fs = require('fs');
             const report = fs.readFileSync('phpstan_report.txt', 'utf8');
             const exitCode = '${{ steps.phpstan.outputs.exit_code }}';
@@ -282,7 +297,7 @@ jobs:
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: prNumber,
             });
 
             const botComment = comments.data.find(c =>
@@ -300,13 +315,13 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                issue_number: prNumber,
                 body: body
               });
             }
 
       - name: PHPStan Job Summary
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         run: |
           echo "## PHPStan Report" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

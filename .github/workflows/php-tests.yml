@@ -56,7 +56,7 @@ jobs:
 
       - name: Post PHPCS Summary
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -167,7 +167,7 @@ jobs:
 
       - name: Post PHPUnit PR Comment
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -268,7 +268,7 @@ jobs:
 
       - name: Post PHPStan PR Comment
         if: always()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

@@ -1,0 +1,49 @@
+name: Build & Release Plugin
+
+on:
+  push:
+    tags:
+      - "v*" # Only runs when tag like v1.0.0 is pushed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build ZIP and Create Release
+    steps:
+      # Checkout artifacts branch (where ZIP exists)
+      - name: Checkout artifacts branch
+        uses: actions/checkout@v4
+        with:
+          ref: artifacts
+
+      - name: Find Latest PR Artifact
+        id: findzip
+        run: |
+          ZIP_FILE=$(ls -t pr*-smart-sale-scheduler-for-woocommerce.zip | head -n 1)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "No PR artifact found!"
+            exit 1
+          fi
+
+          echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_ENV
+
+      - name: Rename ZIP For Release
+        run: |
+          RELEASE_ZIP="smart-sale-scheduler-for-woocommerce-${{ github.ref_name }}.zip"
+          mv "$ZIP_FILE" "$RELEASE_ZIP"
+          echo "RELEASE_ZIP=$RELEASE_ZIP" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.RELEASE_ZIP }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}

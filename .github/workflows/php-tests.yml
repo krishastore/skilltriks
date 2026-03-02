@@ -24,7 +24,7 @@ jobs:
       - name: Setup PHP version
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.1"
           tools: phpcs
 
       - name: Get Composer cache directory
@@ -137,7 +137,7 @@ jobs:
       - name: Setup PHP version
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.1"
           extensions: mysql
           tools: phpunit-polyfills
 
@@ -164,14 +164,12 @@ jobs:
       - name: Run PHPUnit with Coverage
         id: phpunit
         run: |
-          set +e
           ./vendor/bin/phpunit \
             --colors=never \
             --coverage-text=phpunit_coverage.txt \
             --log-junit=phpunit_junit.xml \
             2>&1 > phpunit_report.txt
           echo "exit_code=$?" >> $GITHUB_OUTPUT
-          set -e
 
       - name: Post PHPUnit PR Comment
         if: always() && github.event_name == 'pull_request'
@@ -251,7 +249,7 @@ jobs:
       - name: Setup PHP version
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.1"
           extensions: simplexml, mysql
           tools: phpstan
 

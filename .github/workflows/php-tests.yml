@@ -1,13 +1,14 @@
-name: PHP Tests
+name: PHP Quality Tests
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
   cancel-in-progress: true
 
 on:
+  pull_request:
+    branches: [development]
   push:
-    branches-ignore:
-      - "main"
+    branches: [development]
 
 permissions:
   contents: read
@@ -19,20 +20,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP version
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.1"
-          tools: phpcs
+          extensions: mbstring, intl
+          tools: composer
 
-      - name: Get Composer cache directory
+      - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Setup Composer cache
-        uses: actions/cache@v5
+      - uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -41,78 +43,63 @@ jobs:
 
       - name: Install composer
         run: |
-          composer install --prefer-dist --no-progress
-
-      - name: Verify PHPCS standards
-        run: ./vendor/bin/phpcs -i
+          composer install --no-progress --prefer-dist --no-interaction
 
       - name: Run PHPCS
         id: phpcs
+        continue-on-error: true
         run: |
-          set +e
-          ./vendor/bin/phpcs --report=full 2>&1 > phpcs_report.txt
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
-          set -e
+          ./vendor/bin/phpcs | tee phpcs_report.txt
 
-      - name: Post PHPCS Summary
-        if: always()
+      - name: PHPCS Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🎨 PHPCS Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpcs_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPCS PR Comment
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v8
         with:
-          github-token: ${{ secrets.GIT_SECRET_TOKEN }}
           script: |
-            const prNumber = context.issue.number || context.payload.pull_request?.number;
-            if (!prNumber) {
-              console.log('No PR number found, skipping comment.');
-              return;
-            }
             const fs = require('fs');
-            const report = fs.readFileSync('phpcs_report.txt', 'utf8');
-            const exitCode = '${{ steps.phpcs.outputs.exit_code }}';
-            const status = exitCode === '0' ? '✅ No issues found' : '❌ Issues found';
+            const output = fs.readFileSync('phpcs_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
 
-            const body = `## PHPCS Report | ${status}
+            const body = `
+            ## 🎨 PHPCS Result
             \`\`\`
-            ${report}
+            ${output}
             \`\`\`
             `;
 
-            // Delete previous PHPCS comment if exists
-            const comments = await github.rest.issues.listComments({
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
+              issue_number: context.issue.number,
             });
 
-            const botComment = comments.data.find(c => 
-              c.user.type === 'Bot' && c.body.includes('PHPCS Report')
-            );
-
-            if (botComment) {
+            const existing = comments.find(c => c.body.includes("🎨 PHPCS Result"));
+            if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: body
+                comment_id: existing.id,
+                body
               });
             } else {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: prNumber,
-                body: body
+                issue_number: context.issue.number,
+                body
               });
             }
 
-      - name: PHPCS Job Summary
-        if: always()
-        run: |
-          echo "## PHPCS Report" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat phpcs_report.txt >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-      - name: Fail if PHPCS errors
-        if: steps.phpcs.outputs.exit_code != '0'
+      - name: Fail if PHPCS failed
+        if: steps.phpcs.outcome == 'failure'
         run: exit 1
 
   phpunit:
@@ -129,7 +116,7 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Subversion
         run: sudo apt-get install -y subversion
@@ -139,18 +126,18 @@ jobs:
         with:
           php-version: "8.1"
           extensions: mysql
-          tools: phpunit-polyfills
+          tools: composer
 
       - name: Install WordPress Test Suite
         run: |
           bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
 
-      - name: Get Composer cache directory
+      - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Setup Composer cache
-        uses: actions/cache@v5
+      - uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -159,84 +146,62 @@ jobs:
 
       - name: Install composer
         run: |
-          composer install --prefer-dist --no-progress
+          composer install --no-progress --prefer-dist --no-interaction
 
       - name: Run PHPUnit with Coverage
         id: phpunit
         run: |
-          ./vendor/bin/phpunit \
-            --colors=never \
-            --coverage-text=phpunit_coverage.txt \
-            --log-junit=phpunit_junit.xml \
-            2>&1 > phpunit_report.txt
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
+          ./vendor/bin/phpunit | tee phpunit_report.txt
 
-      - name: Post PHPUnit PR Comment
-        if: always()
+      - name: PHPUnit Step Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🧪 PHPUnit Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpunit_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPUnit PR Comment
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v8
         with:
-          github-token: ${{ secrets.GIT_SECRET_TOKEN }}
           script: |
-            const prNumber = context.issue.number || context.payload.pull_request?.number;
-            if (!prNumber) {
-              console.log('No PR number found, skipping comment.');
-              return;
-            }
             const fs = require('fs');
-            const report = fs.readFileSync('phpunit_report.txt', 'utf8');
-            const exitCode = '${{ steps.phpunit.outputs.exit_code }}';
-            const status = exitCode === '0' ? '✅ All tests passed' : '❌ Tests failed';
+            const output = fs.readFileSync('phpunit_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
 
-            // Extract test summary line e.g "Tests: 42, Assertions: 100, Failures: 2"
-            const summaryMatch = report.match(/Tests:.*$/m);
-            const summary = summaryMatch ? summaryMatch[0] : 'No summary available';
-
-            // Extract coverage line e.g "Lines: 72.50% (290/400)"
-            let coverage = '';
-            if (fs.existsSync('phpunit_coverage.txt')) {
-              const coverageReport = fs.readFileSync('phpunit_coverage.txt', 'utf8');
-              const coverageMatch = coverageReport.match(/Lines:\s+[\d.]+%\s+\(\d+\/\d+\)/);
-              coverage = coverageMatch ? `\n📊 **Coverage:** ${coverageMatch[0]}` : '';
-            }
-
-            const body = `## PHPUnit Report ${status}
-            📋 **${summary}**${coverage}
-            <details>
-            <summary>Full Report</summary>
-
+            const body = `
+            ## 🧪 PHPUnit Result
             \`\`\`
-            ${report}
+            ${output}
             \`\`\`
-            </details>`;
+            `;
 
-            const comments = await github.rest.issues.listComments({
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
+              issue_number: context.issue.number,
             });
 
-            const botComment = comments.data.find(c =>
-              c.user.type === 'Bot' && c.body.includes('PHPUnit Report')
-            );
-
-            if (botComment) {
+            const existing = comments.find(c => c.body.includes("🧪 PHPUnit Result"));
+            if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: body
+                comment_id: existing.id,
+                body
               });
             } else {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: prNumber,
-                body: body
+                issue_number: context.issue.number,
+                body
               });
             }
 
-      - name: Fail if PHPUnit errors
-        if: steps.phpunit.outputs.exit_code != '0'
+      - name: Fail if PHPUnit failed
+        if: steps.phpunit.outcome == 'failure'
         run: exit 1
 
   phpstan:
@@ -244,21 +209,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup PHP version
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.1"
-          extensions: simplexml, mysql
-          tools: phpstan
+          extensions: mbstring, intl
+          tools: composer
 
-      - name: Get Composer cache directory
+      - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Setup Composer cache
-        uses: actions/cache@v5
+      - uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -267,68 +232,60 @@ jobs:
 
       - name: Install composer
         run: |
-          composer install --prefer-dist --no-progress
+          composer install --no-progress --prefer-dist --no-interaction
 
       - name: Run PHPStan
         id: phpstan
         run: |
-          set +e
-          ./vendor/bin/phpstan analyse --error-format=table --no-progress 2>&1 > phpstan_report.txt
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
-          set -e
+          ./vendor/bin/phpstan analyse | tee phpstan_report.txt
 
-      - name: Post PHPStan PR Comment
-        if: always()
+      - name: PHPStan Step Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🔎 PHPStan Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpstan_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPStan PR Comment
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v8
         with:
-          github-token: ${{ secrets.GIT_SECRET_TOKEN }}
           script: |
-            const prNumber = context.issue.number || context.payload.pull_request?.number;
-            if (!prNumber) {
-              console.log('No PR number found, skipping comment.');
-              return;
-            }
             const fs = require('fs');
-            const report = fs.readFileSync('phpstan_report.txt', 'utf8');
-            const exitCode = '${{ steps.phpstan.outputs.exit_code }}';
-            const status = exitCode === '0' ? '✅ No issues found' : '❌ Issues found';
+            const output = fs.readFileSync('phpstan_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
 
-            const body = `## PHPStan Report | ${status}\n\`\`\`\n${report}\n\`\`\``;
+            const body = `
+            ## 🔎 PHPStan Result
+            \`\`\`
+            ${output}
+            \`\`\`
+            `;
 
-            const comments = await github.rest.issues.listComments({
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
+              issue_number: context.issue.number,
             });
 
-            const botComment = comments.data.find(c =>
-              c.user.type === 'Bot' && c.body.includes('PHPStan Report')
-            );
-
-            if (botComment) {
+            const existing = comments.find(c => c.body.includes("🔎 PHPStan Result"));
+            if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: body
+                comment_id: existing.id,
+                body
               });
             } else {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: prNumber,
-                body: body
+                issue_number: context.issue.number,
+                body
               });
             }
 
-      - name: PHPStan Job Summary
-        if: always()
-        run: |
-          echo "## PHPStan Report" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat phpstan_report.txt >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-      - name: Fail if PHPStan errors
-        if: steps.phpstan.outputs.exit_code != '0'
+      - name: Fail if PHPStan failed
+        if: steps.phpstan.outcome == 'failure'
         run: exit 1

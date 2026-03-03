@@ -54,7 +54,7 @@ jobs:
       - name: PHPCS Summary
         if: github.event_name == 'pull_request'
         run: |
-          echo "## 🎨 PHPCS Report" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧹 PHPCS Report" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           tail -n 30 phpcs_report.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
@@ -67,9 +67,8 @@ jobs:
             const fs = require('fs');
             const output = fs.readFileSync('phpcs_report.txt','utf8')
                              .split('\n').slice(-20).join('\n');
-
             const body = `
-            ## 🎨 PHPCS Result
+            ## 🧹 PHPCS Result
             \`\`\`
             ${output}
             \`\`\`
@@ -81,7 +80,7 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            const existing = comments.find(c => c.body.includes("🎨 PHPCS Result"));
+            const existing = comments.find(c => c.body.includes("🧹 PHPCS Result"));
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -169,7 +168,6 @@ jobs:
             const fs = require('fs');
             const output = fs.readFileSync('phpunit_report.txt','utf8')
                              .split('\n').slice(-20).join('\n');
-
             const body = `
             ## 🧪 PHPUnit Result
             \`\`\`
@@ -255,7 +253,6 @@ jobs:
             const fs = require('fs');
             const output = fs.readFileSync('phpstan_report.txt','utf8')
                              .split('\n').slice(-20).join('\n');
-
             const body = `
             ## 🔎 PHPStan Result
             \`\`\`

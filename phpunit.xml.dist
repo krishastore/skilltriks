@@ -1,16 +1,28 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit
 	bootstrap="tests/bootstrap.php"
 	backupGlobals="false"
 	colors="true"
+	cacheResult="true"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="testing">
+		<testsuite name="KrishaWeb Plugin Unit Tests">
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 			<exclude>./tests/test-sample.php</exclude>
 		</testsuite>
 	</testsuites>
+
+    <!-- PHP Settings -->
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+
+        <!-- WordPress Test Constants -->
+        <const name="WP_TESTS_MULTISITE" value="false"/>
+        <const name="WP_DEBUG_LOG" value="true"/>
+        <const name="WP_DEBUG_DISPLAY" value="false"/>
+    </php>
 </phpunit>

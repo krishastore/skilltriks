@@ -1,37 +1,80 @@
 <?xml version="1.0"?>
 <ruleset name="KrishaWeb">
-    <description>KrishaWeb rules for PHP_CodeSnifferr</description>
+    <description>KrishaWeb PHPCS Rules</description>
 
     <file>.</file>
-
     <exclude-pattern>node_modules/*</exclude-pattern>
     <exclude-pattern>vendor/*</exclude-pattern>
     <exclude-pattern>lib/*</exclude-pattern>
     <exclude-pattern>tests/*</exclude-pattern>
+    <exclude-pattern>bin/*</exclude-pattern>
+    <exclude-pattern>artifacts/*</exclude-pattern>
 
     <rule ref="WordPress-Core">
         <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
         <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
     </rule>
-    <rule ref="WordPress-Docs">
+    <rule ref="WordPress-Docs"/>
+    <!-- Recommended for plugins -->
+    <rule ref="WordPress-Extra"/>
+    <!-- PHP Compatibility -->
+    <config name="testVersion" value="8.0-8.2"/>
+    <!-- WordPress Minimum Version -->
+    <config name="minimum_supported_wp_version" value="6.6"/>
+    <rule ref="PHPCompatibilityWP"/>
 
+    <!-- Strict Internationalization -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="skilltriks"/>
+            </property>
+        </properties>
     </rule>
-    <rule ref="WordPress">
-    </rule>
-    <config name="testVersion" value="5.6-"/>
-    <rule ref="PHPCompatibilityWP">
-    </rule>
+
+    <!-- Force translation functions -->
+    <rule ref="WordPress.WP.I18n.MissingTranslatorsComment"/>
+    <rule ref="WordPress.WP.I18n.NoEmptyStrings"/>
+
+    <!-- Disable strict scalar type docblock warning -->
     <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
         <severity>0</severity>
     </rule>
+
+    <!-- Disallow printing raw variables -->
+    <rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+        <severity>10</severity>
+    </rule>
+
+    <!-- Nonce Verification -->
+    <rule ref="WordPress.Security.NonceVerification">
+        <severity>10</severity>
+    </rule>
+
+    <!-- Input validation / sanitization -->
+    <rule ref="WordPress.Security.ValidatedSanitizedInput">
+        <severity>10</severity>
+    </rule>
+
+    <!-- REST API Hardening -->
+    <!-- <rule ref="WordPress.Security.RestAPI">
+        <severity>10</severity>
+    </rule> -->
+
+    <!-- Security Hardening -->
     <rule ref="WordPress.Security.EscapeOutput">
         <properties>
-            <property name="customAutoEscapedFunctions" type="array" value="stlms_utmify"/>
+            <property name="customAutoEscapedFunctions">
+                <element value="esc_html"/>
+                <element value="esc_attr"/>
+                <element value="wp_kses_post"/>
+            </property>
         </properties>
     </rule>
+    <!-- Arguments -->
     <arg name="extensions" value="php"/>
+    <arg name="basepath" value="./"/>
+    <arg name="parallel" value="8"/>
     <arg value="sp"/>
-    <arg name="basepath" value="./" />
-    <arg name="parallel" value="20"/>
 </ruleset>

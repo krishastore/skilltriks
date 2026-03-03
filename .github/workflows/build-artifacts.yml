@@ -4,13 +4,14 @@ on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
     branches:
-      - 'main'
+      - "main"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
   cancel-in-progress: true
+
 jobs:
-  dev-zip:
+  build_zip:
     permissions:
       contents: write
       pull-requests: write
@@ -22,35 +23,44 @@ jobs:
       git-sha-8: ${{ steps.retrieve-git-sha-8.outputs.sha8 }}
     steps:
       - name: Check out source files
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Configure Composer cache
-        uses: actions/cache@v4
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Setup Composer cache
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - name: Install composer deps
+
+      - name: Install composer dependencies
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
         run: |
-          composer install --no-dev --prefer-dist --no-progress
+          composer install --prefer-dist --no-progress --no-interaction
+
       - name: Install Dependencies
         run: npm install
+
       - name: Build zip
         run: npm run build
+
       - name: Create zip
         run: npm run dist
+
       - name: Retrieve branch name
         id: retrieve-branch-name
         run: echo "::set-output name=branch_name::$(REF=${GITHUB_HEAD_REF:-$GITHUB_REF} && echo ${REF#refs/heads/} | sed 's/\//-/g')"
+
       - name: Retrieve git SHA-8 string
         id: retrieve-git-sha-8
         run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+
       - name: Pull request artifacts
         uses: gavv/pull-request-artifacts@v2
         env:
@@ -62,11 +72,12 @@ jobs:
           artifacts-branch: artifacts
           artifacts: |
             artifact/skilltriks.zip
+
       - name: Run WP plugin checker
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './dist/skilltriks'
-          exclude-directories: 'vendor'
+          build-dir: "./dist/skilltriks"
+          exclude-directories: "vendor"
           categories: |
             general
             plugin_repo

@@ -1,0 +1,288 @@
+name: PHP Quality Tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [development]
+  push:
+    branches: [development]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  phplint:
+    name: PHP Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP version
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring, intl
+          tools: composer
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install composer
+        run: |
+          composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Run PHPCS
+        id: phpcs
+        continue-on-error: true
+        run: |
+          ./vendor/bin/phpcs | tee phpcs_report.txt
+
+      - name: PHPCS Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🧹 PHPCS Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpcs_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPCS PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('phpcs_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
+            const body = `
+            ## 🧹 PHPCS Result
+            \`\`\`
+            ${output}
+            \`\`\`
+            `;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes("🧹 PHPCS Result"));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }
+
+      - name: Fail if PHPCS failed
+        if: steps.phpcs.outcome == 'failure'
+        run: exit 1
+
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Install Subversion
+        run: sudo apt-get install -y subversion
+
+      - name: Setup PHP version
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mysql
+          tools: composer
+
+      - name: Install WordPress Test Suite
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install composer
+        run: |
+          composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Run PHPUnit with Coverage
+        id: phpunit
+        run: |
+          ./vendor/bin/phpunit | tee phpunit_report.txt
+
+      - name: PHPUnit Step Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🧪 PHPUnit Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpunit_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPUnit PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('phpunit_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
+            const body = `
+            ## 🧪 PHPUnit Result
+            \`\`\`
+            ${output}
+            \`\`\`
+            `;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes("🧪 PHPUnit Result"));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }
+
+      - name: Fail if PHPUnit failed
+        if: steps.phpunit.outcome == 'failure'
+        run: exit 1
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP version
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring, intl
+          tools: composer
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install composer
+        run: |
+          composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Run PHPStan
+        id: phpstan
+        run: |
+          ./vendor/bin/phpstan analyse | tee phpstan_report.txt
+
+      - name: PHPStan Step Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## 🔎 PHPStan Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -n 30 phpstan_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: PHPStan PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('phpstan_report.txt','utf8')
+                             .split('\n').slice(-20).join('\n');
+            const body = `
+            ## 🔎 PHPStan Result
+            \`\`\`
+            ${output}
+            \`\`\`
+            `;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes("🔎 PHPStan Result"));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }
+
+      - name: Fail if PHPStan failed
+        if: steps.phpstan.outcome == 'failure'
+        run: exit 1

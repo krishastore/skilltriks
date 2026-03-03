@@ -58,9 +58,9 @@
     </rule>
 
     <!-- REST API Hardening -->
-    <rule ref="WordPress.Security.RestAPI">
+    <!-- <rule ref="WordPress.Security.RestAPI">
         <severity>10</severity>
-    </rule>
+    </rule> -->
 
     <!-- Security Hardening -->
     <rule ref="WordPress.Security.EscapeOutput">

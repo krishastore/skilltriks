@@ -31,6 +31,7 @@ jobs:
     outputs:
       php: ${{ steps.filter.outputs.php }}
       tests: ${{ steps.filter.outputs.tests }}
+      config: ${{ steps.filter.outputs.config }}
 
     steps:
       - name: Checkout source code
@@ -48,12 +49,14 @@ jobs:
             tests:
               - 'tests/**'
               - 'phpunit.xml.dist'
+            config:
+              - '.github/workflows/phpunit.yml'
 
   # Job 1 — PHPUnit matrix across PHP versions
   phpunit:
     name: "🧪 PHPUnit (PHP ${{ matrix.php-version }})"
     needs: changes
-    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.tests == 'true'
+    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.tests == 'true' || needs.changes.outputs.config == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 

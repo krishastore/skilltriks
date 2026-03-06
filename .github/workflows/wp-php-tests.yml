@@ -1,0 +1,339 @@
+# WordPress + PHP Compatibility Tests — WP 6.5–6.9 × PHP 8.1–8.5
+name: WordPress & PHP Compatibility
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [development]
+    paths:
+      - "**.php"
+      - "composer.json"
+      - "composer.lock"
+      - "phpunit.xml.dist"
+      - ".github/workflows/wp-php-tests.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  COMPOSER_NO_INTERACTION: 1
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    outputs:
+      php: ${{ steps.filter.outputs.php }}
+      tests: ${{ steps.filter.outputs.tests }}
+      config: ${{ steps.filter.outputs.config }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Check changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            php:
+              - '**/*.php'
+              - 'composer.json'
+              - 'composer.lock'
+            tests:
+              - 'tests/**'
+              - 'phpunit.xml.dist'
+            config:
+              - '.github/workflows/wp-php-tests.yml'
+
+  # Job 1 — Test matrix: WordPress versions × PHP versions
+  test:
+    name: "🧪 WP ${{ matrix.wp }} · PHP ${{ matrix.php }}"
+    needs: changes
+    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.tests == 'true' || needs.changes.outputs.config == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        wp: ["6.5", "6.6", "6.7", "6.8", "6.9"]
+        php: ["8.1", "8.3", "8.4", "8.5"]
+        # Exclude incompatible WP + PHP combinations
+        exclude:
+          # WP 6.5 — supports up to PHP 8.3 (beta)
+          - { wp: "6.5", php: "8.4" }
+          - { wp: "6.5", php: "8.5" }
+          # WP 6.6 — supports up to PHP 8.3 (beta)
+          - { wp: "6.6", php: "8.4" }
+          - { wp: "6.6", php: "8.5" }
+          # WP 6.7 — supports up to PHP 8.4 (beta)
+          - { wp: "6.7", php: "8.5" }
+          # WP 6.8 — supports up to PHP 8.4 (beta)
+          - { wp: "6.8", php: "8.5" }
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Install Subversion
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysql, mbstring, intl
+          tools: composer
+          coverage: none
+
+      - name: Cache WordPress test suite
+        uses: actions/cache@v5
+        with:
+          path: /tmp/wordpress-tests-lib
+          key: wp-tests-${{ matrix.wp }}-php${{ matrix.php }}
+          restore-keys: wp-tests-${{ matrix.wp }}-
+
+      - name: Install WordPress ${{ matrix.wp }} test suite
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root root \
+            127.0.0.1:${{ job.services.mysql.ports['3306'] }} \
+            ${{ matrix.wp }}
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-php${{ matrix.php }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run tests (WP ${{ matrix.wp }} + PHP ${{ matrix.php }})
+        id: tests
+        continue-on-error: true
+        run: |
+          ./vendor/bin/phpunit 2>&1 | tee test_report.txt
+          TEST_EXIT=${PIPESTATUS[0]}
+
+          if [ "$TEST_EXIT" -ne 0 ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-report-wp${{ matrix.wp }}-php${{ matrix.php }}
+          path: test_report.txt
+          retention-days: 5
+
+      - name: Fail if tests failed
+        if: steps.tests.outputs.status == 'failure'
+        run: exit 1
+
+  # Job 2 — Consolidated PR Summary
+  summary:
+    name: "📋 Test Matrix Summary"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [changes, test]
+
+    steps:
+      - name: Download all test reports
+        if: always()
+        uses: actions/download-artifact@v8
+        with:
+          pattern: test-report-wp*
+          path: reports
+        continue-on-error: true
+
+      - name: Post test matrix PR summary comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // ── Matrix definition (must match the strategy above) ─────
+            const wpVersions  = ['6.5', '6.6', '6.7', '6.8', '6.9'];
+            const phpVersions = ['8.1', '8.3', '8.4', '8.5'];
+
+            // Excluded combos (same as strategy.matrix.exclude)
+            const excluded = new Set([
+              '6.5+8.4', '6.5+8.5',
+              '6.6+8.4', '6.6+8.5',
+              '6.7+8.5',
+              '6.8+8.5',
+            ]);
+
+            const overallResult = '${{ needs.test.result }}';
+            const wasSkipped = (r) => r === 'skipped' || r === 'cancelled';
+
+            const icon = (status) => {
+              if (status === 'passed')  return '✅';
+              if (status === 'failed')  return '❌';
+              if (status === 'skipped') return '⏭️';
+              if (status === 'excluded') return '➖';
+              return '⚠️';
+            };
+
+            const truncate = (text, max = 10000) => {
+              if (!text || text.length <= max) return text;
+              const half = Math.floor((max - 100) / 2);
+              return text.slice(0, half) + '\n\n... ✂️ TRUNCATED ...\n\n' + text.slice(-half);
+            };
+
+            const readReport = (file) => {
+              try {
+                const txt = fs.readFileSync(file, 'utf8').trim();
+                return txt.length ? txt : null;
+              } catch {
+                return null;
+              }
+            };
+
+            // ── Overall status ────────────────────────────────────────
+            let overallIcon, overallLabel;
+            if (wasSkipped(overallResult)) {
+              overallIcon = '⏭️';
+              overallLabel = 'Skipped — no changes detected';
+            } else if (overallResult === 'success') {
+              overallIcon = '✅';
+              overallLabel = 'All combinations passed';
+            } else if (overallResult === 'failure') {
+              overallIcon = '❌';
+              overallLabel = 'One or more combinations failed';
+            } else {
+              overallIcon = '⚠️';
+              overallLabel = 'Completed with warnings';
+            }
+
+            // ── Build the matrix table ────────────────────────────────
+            // Header row: | WP \ PHP | 8.1 | 8.3 | 8.4 | 8.5 |
+            let header = '| WP \\ PHP |';
+            let divider = '|:--------|';
+            for (const php of phpVersions) {
+              header  += ` **${php}** |`;
+              divider += ':------:|';
+            }
+
+            let tableRows = '';
+            let detailBlocks = '';
+
+            for (const wp of wpVersions) {
+              let row = `| **WP ${wp}** |`;
+
+              for (const php of phpVersions) {
+                const combo = `${wp}+${php}`;
+
+                if (excluded.has(combo)) {
+                  row += ` ${icon('excluded')} |`;
+                  continue;
+                }
+
+                if (wasSkipped(overallResult)) {
+                  row += ` ${icon('skipped')} |`;
+                  continue;
+                }
+
+                const reportPath = path.join('reports', `test-report-wp${wp}-php${php}`, 'test_report.txt');
+                const report = readReport(reportPath);
+
+                if (!report) {
+                  row += ` ${icon('skipped')} |`;
+                } else if (report.match(/FAILURES!|ERRORS!/)) {
+                  row += ` ${icon('failed')} |`;
+                } else if (report.match(/OK/)) {
+                  row += ` ${icon('passed')} |`;
+                } else {
+                  row += ` ${icon('warning')} |`;
+                }
+
+                // Add collapsible detail for each combo
+                if (report) {
+                  detailBlocks += `<details>\n<summary>WP ${wp} + PHP ${php}</summary>\n\n\`\`\`\n${truncate(report)}\n\`\`\`\n\n</details>\n\n`;
+                }
+              }
+
+              tableRows += row + '\n';
+            }
+
+            // ── Legend ────────────────────────────────────────────────
+            const legend = '> ✅ Passed · ❌ Failed · ⏭️ Skipped · ➖ Incompatible';
+
+            // ── Assemble comment body ─────────────────────────────────
+            const body = [
+              `## ${overallIcon} WordPress & PHP Compatibility — ${overallLabel}`,
+              '',
+              legend,
+              '',
+              header,
+              divider,
+              tableRows.trim(),
+              '',
+              '---',
+              '',
+              detailBlocks.trim(),
+              '',
+              '---',
+              `_Commit: \`${{ github.event.pull_request.head.sha }}\` · Branch: \`${{ github.head_ref }}\` → \`development\`_`,
+              `_Run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})_`,
+            ].join('\n');
+
+            // ── Upsert the comment ────────────────────────────────────
+            const MARKER = '<!-- wp-php-compat-summary -->';
+            const fullBody = MARKER + '\n' + body;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body && c.body.startsWith(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existing.id,
+                body:       fullBody,
+              });
+              core.info(`Updated existing summary comment #${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.issue.number,
+                body:         fullBody,
+              });
+              core.info('Created new summary comment');
+            }

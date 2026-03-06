@@ -1,0 +1,323 @@
+# PHPUnit Tests — Multi-PHP Matrix (8.0, 8.1, 8.3, 8.4)
+name: PHPUnit Tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [development]
+    paths:
+      - "**.php"
+      - "composer.json"
+      - "composer.lock"
+      - "phpunit.xml.dist"
+      - ".github/workflows/phpunit.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  COMPOSER_NO_INTERACTION: 1
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    outputs:
+      php: ${{ steps.filter.outputs.php }}
+      tests: ${{ steps.filter.outputs.tests }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Check changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            php:
+              - '**/*.php'
+              - 'composer.json'
+              - 'composer.lock'
+            tests:
+              - 'tests/**'
+              - 'phpunit.xml.dist'
+
+  # Job 1 — PHPUnit matrix across PHP versions
+  phpunit:
+    name: "🧪 PHPUnit (PHP ${{ matrix.php-version }})"
+    needs: changes
+    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.tests == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["8.0", "8.1", "8.3", "8.4"]
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Install Subversion
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mysql, mbstring, intl
+          tools: composer
+          coverage: xdebug
+
+      - name: Cache WordPress test suite
+        uses: actions/cache@v5
+        with:
+          path: /tmp/wordpress-tests-lib
+          key: wp-tests-${{ matrix.php-version }}-latest
+          restore-keys: wp-tests-
+
+      - name: Install WordPress Test Suite
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root root \
+            127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-php${{ matrix.php-version }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPUnit with coverage
+        id: phpunit
+        continue-on-error: true
+        run: |
+          ./vendor/bin/phpunit \
+            --coverage-text \
+            --coverage-clover=coverage.xml \
+            2>&1 | tee phpunit_report.txt
+          PHPUNIT_EXIT=${PIPESTATUS[0]}
+
+          TESTS=$(grep -oP 'OK \(\K[0-9]+' phpunit_report.txt 2>/dev/null || echo "")
+          if [ -z "$TESTS" ]; then
+            TESTS=$(grep -oP 'Tests: \K[0-9]+' phpunit_report.txt 2>/dev/null || echo "0")
+          fi
+          ASSERTIONS=$(grep -oP 'Assertions: \K[0-9]+' phpunit_report.txt 2>/dev/null || echo "0")
+          FAILURES=$(grep -oP 'Failures: \K[0-9]+' phpunit_report.txt 2>/dev/null || echo "0")
+          ERRORS=$(grep -oP 'Errors: \K[0-9]+' phpunit_report.txt 2>/dev/null || echo "0")
+          SKIPPED=$(grep -oP 'Skipped: \K[0-9]+' phpunit_report.txt 2>/dev/null || echo "0")
+          COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' phpunit_report.txt 2>/dev/null || echo "N/A")
+
+          echo "tests=$TESTS"       >> $GITHUB_OUTPUT
+          echo "assertions=$ASSERTIONS" >> $GITHUB_OUTPUT
+          echo "failures=$FAILURES" >> $GITHUB_OUTPUT
+          echo "errors=$ERRORS"     >> $GITHUB_OUTPUT
+          echo "skipped=$SKIPPED"   >> $GITHUB_OUTPUT
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+
+          if [ "$PHPUNIT_EXIT" -ne 0 ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload PHPUnit reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phpunit-report-php${{ matrix.php-version }}
+          path: |
+            phpunit_report.txt
+            coverage.xml
+          retention-days: 5
+
+      - name: Fail if PHPUnit failed
+        if: steps.phpunit.outputs.status == 'failure'
+        run: exit 1
+
+  # Job 2 — Consolidated PR Summary
+  summary:
+    name: "📋 PHPUnit Summary"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [changes, phpunit]
+
+    steps:
+      - name: Download all PHPUnit reports
+        if: always()
+        uses: actions/download-artifact@v8
+        with:
+          pattern: phpunit-report-php*
+          path: reports
+        continue-on-error: true
+
+      - name: Post PHPUnit PR summary comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const phpVersions = ['8.0', '8.1', '8.3', '8.4'];
+            const overallResult = '${{ needs.phpunit.result }}';
+
+            const wasSkipped = (r) => r === 'skipped' || r === 'cancelled';
+
+            const icon = (r) => {
+              if (r === 'success') return '✅';
+              if (r === 'failure') return '❌';
+              if (r === 'skipped') return '⏭️';
+              return '⚠️';
+            };
+
+            const truncate = (text, max = 15000) => {
+              if (!text || text.length <= max) return text;
+              const half = Math.floor((max - 100) / 2);
+              return text.slice(0, half) + '\n\n... ✂️ OUTPUT TRUNCATED (too large for PR comment) ...\n\n' + text.slice(-half);
+            };
+
+            const readReport = (file) => {
+              try {
+                const txt = fs.readFileSync(file, 'utf8').trim();
+                return txt.length ? txt : '(no output)';
+              } catch {
+                return '(report not available)';
+              }
+            };
+
+            const extractStat = (report, pattern) =>
+              (report.match(pattern) || ['', '0'])[1] || '0';
+
+            let overallIcon, overallLabel;
+            if (wasSkipped(overallResult)) {
+              overallIcon = '⏭️';
+              overallLabel = 'Skipped — no PHP or test changes detected';
+            } else if (overallResult === 'success') {
+              overallIcon = '✅';
+              overallLabel = 'All PHP versions passed';
+            } else if (overallResult === 'failure') {
+              overallIcon = '❌';
+              overallLabel = 'One or more PHP versions failed';
+            } else {
+              overallIcon = '⚠️';
+              overallLabel = 'Completed with warnings';
+            }
+
+            let tableRows = '';
+            let detailBlocks = '';
+
+            for (const ver of phpVersions) {
+              const reportPath = path.join('reports', `phpunit-report-php${ver}`, 'phpunit_report.txt');
+              const report = readReport(reportPath);
+              const hasReport = report !== '(report not available)';
+
+              // Determine per-version status from the report content
+              let versionIcon;
+              if (wasSkipped(overallResult) || !hasReport) {
+                versionIcon = '⏭️';
+              } else if (report.match(/FAILURES!|ERRORS!/)) {
+                versionIcon = '❌';
+              } else if (report.match(/OK \(/)) {
+                versionIcon = '✅';
+              } else {
+                versionIcon = '⚠️';
+              }
+
+              // Extract stats
+              let tests = extractStat(report, /OK \((\d+) tests?/);
+              if (tests === '0') {
+                tests = extractStat(report, /Tests:\s+(\d+)/);
+              }
+              const assertions = extractStat(report, /Assertions:\s+(\d+)/);
+              const failures   = extractStat(report, /Failures:\s+(\d+)/);
+              const errors     = extractStat(report, /Errors:\s+(\d+)/);
+              const skipped    = extractStat(report, /Skipped:\s+(\d+)/);
+              const coverage   = (report.match(/Lines:\s+([0-9.]+%)/) || ['', 'N/A'])[1];
+
+              const parts = [`${tests} tests`, `${assertions} assertions`];
+              if (parseInt(failures) > 0) parts.push(`${failures} failures`);
+              if (parseInt(errors)   > 0) parts.push(`${errors} errors`);
+              if (parseInt(skipped)  > 0) parts.push(`${skipped} skipped`);
+              const detail = !hasReport ? 'Skipped' : parts.join(', ');
+
+              const covNum = parseFloat(coverage) || 0;
+              const covBadge = coverage === 'N/A' ? '' : ` · ${covNum >= 80 ? '🟢' : covNum >= 50 ? '🟡' : '🔴'} ${coverage} coverage`;
+
+              tableRows    += `| PHP ${ver} | ${versionIcon} | ${detail}${covBadge} |\n`;
+              detailBlocks += `<details>\n<summary>🧪 <strong>PHPUnit PHP ${ver}</strong> — Full Output</summary>\n\n\`\`\`\n${truncate(report)}\n\`\`\`\n\n</details>\n\n`;
+            }
+
+            const body = [
+              `## ${overallIcon} PHPUnit Tests — ${overallLabel}`,
+              '',
+              '| PHP Version | Result | Details |',
+              '|:------------|:------:|:--------|',
+              tableRows.trim(),
+              '',
+              '---',
+              '',
+              detailBlocks.trim(),
+              '',
+              '---',
+              `_Commit: \`${{ github.event.pull_request.head.sha }}\` · Branch: \`${{ github.head_ref }}\` → \`development\`_`,
+              `_Triggered: ${{ github.event_name }} · Run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})_`,
+            ].join('\n');
+
+            const MARKER = '<!-- phpunit-ci-summary -->';
+            const fullBody = MARKER + '\n' + body;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body && c.body.startsWith(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existing.id,
+                body:       fullBody,
+              });
+              core.info(`Updated existing PHPUnit summary comment #${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.issue.number,
+                body:         fullBody,
+              });
+              core.info('Created new PHPUnit summary comment');
+            }

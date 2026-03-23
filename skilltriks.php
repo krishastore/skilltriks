@@ -9,7 +9,7 @@
  * License:         GPLv3 or later
  * License URI:     https://www.gnu.org/licenses/gpl-3.0.html
  * Domain Path:     /languages
- * Version:         1.2
+ * Version:         1.3
  *
  * @package         ST\Lms
  */

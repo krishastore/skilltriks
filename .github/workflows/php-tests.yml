@@ -1,0 +1,405 @@
+# PHP Quality Checks — PHPCS · PHPStan
+
+name: PHP Quality Checks
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [development]
+    paths:
+      - "**.php"
+      - "composer.json"
+      - "composer.lock"
+      - "phpcs.xml"
+      - "phpstan.neon"
+      - ".github/workflows/php-tests.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# Shared environment — keeps PHP version in one place
+env:
+  PHP_VERSION: "8.2"
+  COMPOSER_NO_INTERACTION: 1
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    outputs:
+      php: ${{ steps.filter.outputs.php }}
+      config: ${{ steps.filter.outputs.config }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Check changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            php:
+              - '**/*.php'
+              - 'composer.json'
+              - 'composer.lock'
+            config:
+              - 'phpcs.xml'
+              - 'phpstan.neon'
+              - '.github/workflows/php-tests.yml'
+
+  phpcs:
+    name: "🧹 PHPCS"
+    needs: changes
+    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.config == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    outputs:
+      errors: ${{ steps.phpcs.outputs.errors }}
+      warnings: ${{ steps.phpcs.outputs.warnings }}
+      files: ${{ steps.phpcs.outputs.files }}
+      status: ${{ steps.phpcs.outputs.status }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl
+          tools: composer, cs2pr
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPCS (full report)
+        id: phpcs
+        continue-on-error: true
+        run: |
+          # Generate human-readable report
+          ./vendor/bin/phpcs --report=full --report-file=phpcs_report.txt || true
+
+          # Generate checkstyle XML for inline PR annotations
+          ./vendor/bin/phpcs --report=checkstyle --report-file=phpcs_checkstyle.xml || true
+
+          # Generate JSON for summary stats
+          ./vendor/bin/phpcs --report=json --report-file=phpcs_json.json || PHPCS_EXIT=$?
+
+          # Extract error and warning counts from JSON using jq
+          if [ -f phpcs_json.json ]; then
+            ERRORS=$(jq -r '.totals.errors // 0' phpcs_json.json 2>/dev/null || echo "0")
+            WARNINGS=$(jq -r '.totals.warnings // 0' phpcs_json.json 2>/dev/null || echo "0")
+            FILES=$(jq -r '[.files | to_entries[] | select(.value.errors > 0 or .value.warnings > 0)] | length' phpcs_json.json 2>/dev/null || echo "0")
+          else
+            ERRORS=0; WARNINGS=0; FILES=0
+          fi
+
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+
+          # Determine outcome
+          if [ "${PHPCS_EXIT:-0}" -ne 0 ] && [ "$ERRORS" -gt 0 ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Annotate PR with PHPCS issues
+        if: always() && hashFiles('phpcs_checkstyle.xml') != ''
+        run: cs2pr phpcs_checkstyle.xml
+
+      - name: Upload PHPCS reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phpcs-report
+          path: |
+            phpcs_report.txt
+            phpcs_json.json
+          retention-days: 5
+
+      - name: Fail if PHPCS found errors
+        if: steps.phpcs.outputs.status == 'failure'
+        run: exit 1
+
+  phpstan:
+    name: "🔎 PHPStan"
+    needs: changes
+    if: needs.changes.outputs.php == 'true' || needs.changes.outputs.config == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    outputs:
+      errors: ${{ steps.phpstan.outputs.errors }}
+      status: ${{ steps.phpstan.outputs.status }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl
+          tools: composer
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPStan
+        id: phpstan
+        continue-on-error: true
+        run: |
+          # Run PHPStan with error-format for GitHub Actions annotations
+          ./vendor/bin/phpstan analyse \
+            --memory-limit=2G \
+            --error-format=github \
+            2>&1 | tee phpstan_github.txt || true
+
+          # Also generate table format for the PR comment
+          ./vendor/bin/phpstan analyse \
+            --memory-limit=2G \
+            --error-format=table \
+            2>&1 | tee phpstan_report.txt
+          PHPSTAN_EXIT=${PIPESTATUS[0]}
+
+          # Extract error count from the table output
+          ERRORS=$(grep -oP '\[ERROR\] Found \K[0-9]+' phpstan_report.txt 2>/dev/null || echo "0")
+          if [ "$ERRORS" = "0" ] && grep -q "\[OK\] No errors" phpstan_report.txt; then
+            ERRORS=0
+          elif [ "$ERRORS" = "0" ] && [ "$PHPSTAN_EXIT" -ne 0 ]; then
+            ERRORS=$(grep -c "Line" phpstan_report.txt 2>/dev/null || echo "?")
+          fi
+
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+
+          if [ "$PHPSTAN_EXIT" -ne 0 ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Annotate PR with PHPStan errors
+        if: always() && hashFiles('phpstan_github.txt') != ''
+        run: |
+          # PHPStan's --error-format=github outputs ::error annotations natively
+          grep "^::error" phpstan_github.txt || true
+
+      - name: Upload PHPStan report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phpstan-report
+          path: phpstan_report.txt
+          retention-days: 5
+
+      - name: Fail if PHPStan found errors
+        if: steps.phpstan.outputs.status == 'failure'
+        run: exit 1
+
+  # Job 3 — Consolidated PR Summary (PHPCS + PHPStan)
+  summary:
+    name: "📋 PR Summary"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs: [changes, phpcs, phpstan]
+
+    steps:
+      - name: Download all reports
+        uses: actions/download-artifact@v8
+        with:
+          merge-multiple: true
+
+      - name: Post consolidated PR summary comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+
+            // ── Helper: check if a job was skipped vs ran ──────────────
+            const wasSkipped = (result) => result === 'skipped' || result === 'cancelled';
+
+            // ── Results from each job ──────────────────────────────────
+            const results = {
+              phpcs:   '${{ needs.phpcs.result }}',
+              phpstan: '${{ needs.phpstan.result }}',
+            };
+
+            // ── Stats from each job ────────────────────────────────────
+            const stats = {
+              phpcs: {
+                errors:   '${{ needs.phpcs.outputs.errors || '0' }}',
+                warnings: '${{ needs.phpcs.outputs.warnings || '0' }}',
+                files:    '${{ needs.phpcs.outputs.files || '0' }}',
+              },
+              phpstan: {
+                errors: '${{ needs.phpstan.outputs.errors || '0' }}',
+              },
+            };
+
+            // ── Formatting helpers ─────────────────────────────────────
+            const icon = (r) => {
+              if (r === 'success') return '✅';
+              if (r === 'failure') return '❌';
+              if (r === 'skipped') return '⏭️';
+              return '⚠️';
+            };
+
+            const label = (r) => {
+              if (r === 'success') return 'Passed';
+              if (r === 'failure') return 'Failed';
+              if (r === 'skipped') return 'Skipped';
+              return r.charAt(0).toUpperCase() + r.slice(1);
+            };
+
+            const truncate = (text, max = 30000) => {
+              if (!text || text.length <= max) return text;
+              const half = Math.floor((max - 100) / 2);
+              return text.slice(0, half) + '\n\n... ✂️ OUTPUT TRUNCATED (too large for PR comment) ...\n\n' + text.slice(-half);
+            };
+
+            const readReport = (file) => {
+              try {
+                const txt = fs.readFileSync(file, 'utf8').trim();
+                return txt.length ? txt : '(no output)';
+              } catch {
+                return '(report not available)';
+              }
+            };
+
+            // ── Read reports ───────────────────────────────────────────
+            const phpcsReport   = truncate(readReport('phpcs_report.txt'));
+            const phpstanReport = truncate(readReport('phpstan_report.txt'));
+
+            // ── Overall status ─────────────────────────────────────────
+            const ranJobs = Object.entries(results).filter(([, r]) => !wasSkipped(r));
+            const allPassed = ranJobs.every(([, r]) => r === 'success');
+            const anyFailed = ranJobs.some(([, r]) => r === 'failure');
+            const allSkipped = ranJobs.length === 0;
+
+            let overallIcon, overallLabel;
+            if (allSkipped) {
+              overallIcon = '⏭️';
+              overallLabel = 'All checks skipped (no PHP changes detected)';
+            } else if (allPassed) {
+              overallIcon = '✅';
+              overallLabel = 'All checks passed';
+            } else if (anyFailed) {
+              overallIcon = '❌';
+              overallLabel = 'One or more checks failed';
+            } else {
+              overallIcon = '⚠️';
+              overallLabel = 'Checks completed with warnings';
+            }
+
+            // ── Build PHPCS detail line ────────────────────────────────
+            let phpcsDetail = `${icon(results.phpcs)} ${label(results.phpcs)}`;
+            if (!wasSkipped(results.phpcs)) {
+              phpcsDetail += ` — ${stats.phpcs.errors} errors, ${stats.phpcs.warnings} warnings in ${stats.phpcs.files} files`;
+            }
+
+            // ── Build PHPStan detail line ──────────────────────────────
+            let phpstanDetail = `${icon(results.phpstan)} ${label(results.phpstan)}`;
+            if (!wasSkipped(results.phpstan)) {
+              phpstanDetail += ` — ${stats.phpstan.errors} errors`;
+            }
+
+            // ── Assemble the comment body ──────────────────────────────
+            const body = [
+              `## ${overallIcon} PHP CI — ${overallLabel}`,
+              '',
+              '| Check | Result | Details |',
+              '|:------|:------:|:--------|',
+              `| 🧹 **PHPCS** (Coding Standards) | ${icon(results.phpcs)} | ${phpcsDetail} |`,
+              `| 🔎 **PHPStan** (Static Analysis) | ${icon(results.phpstan)} | ${phpstanDetail} |`,
+              '',
+              '---',
+              '',
+              '<details>',
+              '<summary>🧹 <strong>PHPCS</strong> — Full Output</summary>',
+              '',
+              '```',
+              phpcsReport,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details>',
+              '<summary>🔎 <strong>PHPStan</strong> — Full Output</summary>',
+              '',
+              '```',
+              phpstanReport,
+              '```',
+              '',
+              '</details>',
+              '',
+              '---',
+              `_Commit: \`${{ github.event.pull_request.head.sha }}\` · Branch: \`${{ github.head_ref }}\` → \`development\`_`,
+              `_Triggered: ${{ github.event_name }} · Run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})_`,
+            ].join('\n');
+
+            // ── Upsert the comment ─────────────────────────────────────
+            const MARKER = '<!-- php-ci-summary -->';
+            const fullBody = MARKER + '\n' + body;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body && c.body.startsWith(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existing.id,
+                body:       fullBody,
+              });
+              core.info(`Updated existing summary comment #${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.issue.number,
+                body:         fullBody,
+              });
+              core.info('Created new summary comment');
+            }

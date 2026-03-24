@@ -62,8 +62,8 @@ $has_unread           = ! empty( $notifications['data'] ) ? ! empty( array_filte
 									<div class="stlms-notification-card <?php echo $notification['is_read'] ? esc_attr( 'read-notification' ) : ''; ?>">
 										<div class="stlms-notification-image">
 											<?php if ( ! in_array( $action_type, array( 4, 5, 6, 7 ), true ) ) : ?>
-												<?php if ( ! empty( get_user_meta( $from_user, 'avatar_url', true ) ) ) { ?>
-													<img src="<?php echo esc_url( get_user_meta( $from_user, 'avatar_url', true ) ); ?>" alt="user-icon">
+												<?php if ( ! empty( get_user_meta( $notification['from_user_id'], 'avatar_url', true ) ) ) { ?>
+													<img src="<?php echo esc_url( get_user_meta( $notification['from_user_id'], 'avatar_url', true ) ); ?>" alt="user-icon">
 												<?php } else { ?>
 													<img src="<?php echo esc_url( get_avatar_url( $from_user ) ); ?>" alt="user-icon">
 												<?php } ?>

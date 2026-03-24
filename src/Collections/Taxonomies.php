@@ -61,7 +61,7 @@ class Taxonomies {
 	public function filter_parent_file( $parent_file ) {
 		global $current_screen;
 		$taxonomy = $current_screen->taxonomy;
-		if ( in_array( $taxonomy, array( 'stlms_course_tag', 'stlms_course_category' ), true ) ) {
+		if ( in_array( $taxonomy, array( 'stlms_course_tag', 'stlms_course_category', 'stlms_course_department' ), true ) ) {
 			$parent_file = PARENT_MENU_SLUG;
 		}
 		return $parent_file;
@@ -87,5 +87,17 @@ class Taxonomies {
 			'edit-tags.php?taxonomy=stlms_course_tag',
 			'__return_null'
 		);
+		if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) :
+			if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() ) :
+				add_submenu_page(
+					PARENT_MENU_SLUG,
+					__( 'Departments', 'skilltriks' ),
+					__( 'Departments', 'skilltriks' ),
+					apply_filters( 'stlms/menu/capability', 'manage_options' ),
+					'edit-tags.php?taxonomy=stlms_course_department',
+					'__return_null'
+				);
+			endif;
+		endif;
 	}
 }

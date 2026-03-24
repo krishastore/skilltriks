@@ -108,6 +108,7 @@ abstract class Register {
 				'restMediaUrl' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'restUserUrl'  => esc_url_raw( rest_url( 'wp/v2/users/me' ) ),
 				'nonce'        => wp_create_nonce( 'wp_rest' ),
+				'defaultSrc'   => esc_url( STLMS_ASSETS ) . '/images/profile-pic.png',
 			)
 		);
 	}

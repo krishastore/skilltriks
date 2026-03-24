@@ -122,6 +122,12 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 		// SmartWizard.
 		wp_enqueue_script( $this->handler . '-smartwizard' );
 		wp_enqueue_style( $this->handler . '-smartwizard' );
+		if ( class_exists( \LFI\Stlms\LicenseIntegration::class ) ) {
+			if ( \LFI\Stlms\LicenseIntegration::instance()->is_pro() ) {
+				// Chatbot.
+				wp_enqueue_script( $this->handler . '-chatbot' );
+			}
+		}
 		// Frontend.
 		wp_enqueue_script( $this->handler );
 		wp_enqueue_style( $this->handler );
@@ -191,7 +197,7 @@ class Courses extends \ST\Lms\Shortcode\Register implements \ST\Lms\Interfaces\C
 	 * Handle template redirect hook.
 	 */
 	public function template_redirect() {
-		if ( ( ! is_user_logged_in() ) && ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) || is_page( array( 'stlms-my-learning', 'courses', 'stlms-notifications', 'stlms-user-profile' ) ) ) ) {
+		if ( ( ! is_user_logged_in() ) && ( is_singular( \ST\Lms\STLMS_COURSE_CPT ) || is_page( array( 'stlms-my-learning', 'courses', 'stlms-notifications', 'stlms-user-profile', 'stlms-landing' ) ) ) ) {
 			wp_safe_redirect( \ST\Lms\get_page_url( 'login' ) );
 			exit;
 		}

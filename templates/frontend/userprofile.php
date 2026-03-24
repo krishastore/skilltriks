@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( is_user_logged_in() ) :
 	$user_info      = get_userdata( get_current_user_id() );
 	$avatar_url     = get_user_meta( get_current_user_id(), 'avatar_url', true );
+	$topics         = get_user_meta( get_current_user_id(), '_stlms_user_topics', true ) ? get_user_meta( get_current_user_id(), '_stlms_user_topics', true ) : array();
 	$default_avatar = esc_url( STLMS_ASSETS ) . '/images/profile-pic.png';
 	?>
 	<div class="stlms-wrap alignfull">
@@ -118,7 +119,8 @@ if ( is_user_logged_in() ) :
 										</div>
 										<?php endif; ?>
 									</div>
-									<div class="stlms-profile-row">
+									<div class="stlms-profile-row is-two-column">
+										<?php if ( current_user_can( 'upload_files' ) ) : ?>
 										<div class="stlms-profile-col">
 											<div class="stlms-profile-box">
 												<div class="stlms-profile-box__title">
@@ -133,10 +135,35 @@ if ( is_user_logged_in() ) :
 													<input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg" style="display:none">
 													<div class="stlms-profile-action">
 														<button type="button" class="stlms-btn" id="uploadBtn"><?php esc_html_e( 'Upload Photo', 'skilltriks' ); ?></button>
-														<button type="button" class="stlms-btn stlms-btn-light" style="display:none;" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
+														<button type="button" class="stlms-btn stlms-btn-light" style="display:<?php echo $avatar_url ? 'block' : 'none'; ?>" id="deleteBtn"><?php esc_html_e( 'Delete Photo', 'skilltriks' ); ?></button>
 														<div class="stlms-profile-action__text">
 															<?php esc_html_e( 'Only JPG, JPEG, and PNG files are supported. Maximum file size: 2 MB. For best results, upload a square image of at least 250×250 pixels.', 'skilltriks' ); ?>
 														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<?php endif; ?>
+										<div class="stlms-profile-col">
+											<div class="stlms-profile-box">
+												<div class="stlms-profile-box__title">
+													<?php esc_html_e( 'Preferred Topics', 'skilltriks' ); ?>
+												</div>
+												<div class="stlms-profile-form">
+													<div class="stlms-profile-form__group">
+														<label for="select-topics" class="stlms-select-search">
+															<?php esc_html_e( 'Select Topics', 'skilltriks' ); ?>
+															<select id="select-topics"
+																multiple data-placeholder="Please choose" class="stlms-select2-multi js-states form-control" id="id_label_single" style="width: 100%;">
+																<?php
+																$terms_list  = \ST\Lms\course_taxonomies( \ST\Lms\STLMS_COURSE_CATEGORY_TAX );
+																$course_page = \ST\Lms\get_page_url( 'courses' );
+																?>
+																<?php foreach ( $terms_list as $key => $course_term ) : ?>
+																<option value="<?php echo absint( $course_term['id'] ); ?>" <?php echo in_array( $course_term['id'], $topics, true ) ? 'selected' : ''; ?>><?php echo esc_html( $course_term['name'] ); ?></option>
+																<?php endforeach; ?>
+															</select>
+														</label>
 													</div>
 												</div>
 											</div>

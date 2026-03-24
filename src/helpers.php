@@ -192,6 +192,8 @@ function locate_template( $template ) {
 		$template = get_template_directory() . '/skilltriks/' . $layout . '/' . $template;
 	} elseif ( 'default' !== $layout && defined( 'STLMSTP_ADDONS_TEMPLATEPATH' ) && file_exists( STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template ) ) {
 		$template = STLMSTP_ADDONS_TEMPLATEPATH . '/' . $layout . '/' . $template;
+	} elseif ( defined( 'STLMS_PRO_TEMPLATEPATH' ) && file_exists( STLMS_PRO_TEMPLATEPATH . '/' . $template ) ) {
+		$template = STLMS_PRO_TEMPLATEPATH . '/' . $template;
 	} elseif ( file_exists( STLMS_TEMPLATEPATH . '/frontend/' . $template ) ) {
 		$template = STLMS_TEMPLATEPATH . '/frontend/' . $template;
 	}
@@ -448,15 +450,17 @@ function restart_course( $course_id = 0 ) {
  *
  * @param int $course_id Course ID.
  * @param int $per_page Posts per page.
+ * @param int $user_id User ID.
  * @return array Results Ids.
  */
-function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
+function get_results_course_by_id( $course_id = 0, $per_page = -1, $user_id = 0 ) {
 	if ( empty( $course_id ) ) {
 		$course_id = get_query_var( 'course_id', 0 );
 	}
 	$results = get_posts(
 		array(
 			'post_type'      => \ST\Lms\STLMS_RESULTS_CPT,
+			'author'         => $user_id ? $user_id : get_current_user_id(),
 			'fields'         => 'ids',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'meta_key'       => 'course_id',
@@ -476,13 +480,14 @@ function get_results_course_by_id( $course_id = 0, $per_page = -1 ) {
  * @param int    $assessment Course assessment.
  * @param array  $curriculums Curriculums list.
  * @param int    $course_id Course ID.
+ * @param int    $user_id User ID.
  * @param string $curriculum_type Curriculums type.
  * @return array|float|int Results Ids.
  */
-function calculate_assessment_result( $assessment, $curriculums = array(), $course_id = 0, $curriculum_type = '' ) {
+function calculate_assessment_result( $assessment, $curriculums = array(), $course_id = 0, $user_id = 0, $curriculum_type = '' ) {
 	$passing_grade      = isset( $assessment['passing_grade'] ) ? (int) $assessment['passing_grade'] : 0;
 	$evaluation         = isset( $assessment['evaluation'] ) ? $assessment['evaluation'] : 1;
-	$user_id            = get_current_user_id();
+	$user_id            = $user_id ? $user_id : get_current_user_id();
 	$completed_grade    = 0;
 	$return_grade_only  = true;
 	$meta_key           = sprintf( \ST\Lms\STLMS_COURSE_STATUS, $course_id );
@@ -517,7 +522,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			}
 		}
 	} elseif ( 'quiz' === $curriculum_type ) {
-		$results               = \ST\Lms\get_results_course_by_id();
+		$results               = \ST\Lms\get_results_course_by_id( $course_id, -1, $user_id );
 		$total_questions       = 0;
 		$total_correct_answers = 0;
 		if ( ! empty( $results ) ) {
@@ -531,7 +536,7 @@ function calculate_assessment_result( $assessment, $curriculums = array(), $cour
 			$completed_grade = round( $total_correct_answers / $total_questions * 100, 2 );
 		}
 	} elseif ( 'last_quiz' === $curriculum_type ) {
-		$results   = \ST\Lms\get_results_course_by_id( 0, 1 );
+		$results   = \ST\Lms\get_results_course_by_id( $course_id, 1, $user_id );
 		$result_id = ! empty( $results ) ? reset( $results ) : 0;
 		if ( $result_id ) {
 			$grade_percentage = get_post_meta( $result_id, 'grade_percentage', true );
@@ -695,6 +700,7 @@ function course_statistics() {
 					$not_started[] = $course_id;
 				}
 			}
+			wp_reset_postdata();
 		}
 	}
 	return array(
@@ -776,17 +782,17 @@ function layout_colors() {
 	$colors = array(
 		'layout-2' => array(
 			'primary_color'          => '#893bf8',
-			'secondary_color'        => '#00cfbe',
+			'secondary_color'        => '#66c7c4',
 			'background_color'       => '#f6f6f7',
 			'background_light_color' => '#fbfbfb',
 			'border_color'           => '#ededed',
 			'white_color'            => '#ffffff',
 			'heading_color'          => '#101011',
 			'paragraph_color'        => '#5d5d73',
-			'paragraph_light_color'  => '#85859d',
+			'paragraph_light_color'  => '#72728c',
 			'link_color'             => '#7d3cd9',
-			'icon_color'             => '#a9a9a9',
-			'success_color'          => '#25af3d',
+			'icon_color'             => '#757575',
+			'success_color'          => '#208738',
 			'error_color'            => '#c53434',
 		),
 	);
@@ -926,4 +932,70 @@ function notification_message() {
 			'<strong>%1$s</strong> updated the content of the lesson <strong>%3$s</strong>',
 		)
 	);
+}
+
+/**
+ * Fetches the trending courses data from database.
+ *
+ * @param  int $limit number of trending courses.
+ * @return array
+ */
+function stlms_get_trending_courses( $limit = 10 ) {
+
+	$cache_key = 'stlms_trending_courses';
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	global $wpdb;
+
+	// Get all enrolments from usermeta in a single query.
+	$rows = $wpdb->get_results( //phpcs:ignore
+		$wpdb->prepare(
+			"SELECT meta_value FROM $wpdb->usermeta WHERE meta_key = %s",
+			'_stlms_enrol_courses'
+		),
+		ARRAY_A
+	);
+
+	if ( empty( $rows ) ) {
+		return array();
+	}
+
+	$course_counts = array();
+
+	foreach ( $rows as $row ) {
+
+		// Unserialize to get array of course IDs.
+		$courses = maybe_unserialize( $row['meta_value'] );
+
+		if ( ! is_array( $courses ) ) {
+			continue;
+		}
+
+		foreach ( $courses as $course_id ) {
+
+			$course_id = (int) $course_id;
+
+			if ( 0 === $course_id ) {
+				continue;
+			}
+
+			if ( ! isset( $course_counts[ $course_id ] ) ) {
+				$course_counts[ $course_id ] = 0;
+			}
+
+			++$course_counts[ $course_id ];
+		}
+	}
+
+	arsort( $course_counts );
+
+	$trending_courses = array_slice( $course_counts, 0, $limit, true );
+
+	set_transient( $cache_key, $trending_courses, HOUR_IN_SECONDS );
+
+	return $trending_courses;
 }

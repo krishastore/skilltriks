@@ -72,6 +72,14 @@ jQuery(function ($) {
     $(".stlms-lesson-view").removeClass("active");
   });
 
+   $(".stlms-ai-chat").on("click", function () {
+  $(".stlms-ai-chat__wrap, body").addClass("active");
+});
+
+$(".stlms-ai-chat__overlay, .stlms-ai-chat-close").on("click", function () {
+  $(".stlms-ai-chat__wrap, body").removeClass("active");
+});
+
   // Login form ajax.
   $(document).on('submit', '.stlms-login__body form', function() {
     var _this =  $(this);
@@ -394,3 +402,58 @@ jQuery(document).on('click', '.stlms-notification-icon, #mark-all-read', functio
     });
 });
 
+jQuery(function($) {
+    var filterTopCourses = function(categoryId) {
+        var url = new URL(window.location.href);
+
+        url.searchParams.delete('top_course_category');
+        
+        if (categoryId && categoryId !== 'all') {
+            url.searchParams.set('top_course_category', categoryId);
+        }
+
+        window.history.replaceState(null, null, url.toString());
+
+        $.ajax({
+            url: url.toString(),
+            type: 'GET',
+            success: function(response) {
+                var newContent = $(response).find('.topSwiper .swiper-wrapper').html();
+                $('.topSwiper .swiper-wrapper').html(newContent);
+            }
+        });
+    };
+    
+    $(document).on('change', '.stlms-category-nav-wrap #all', function() {
+        if ($(this).is(':checked')) {
+            $('.stlms-category-nav-wrap input[type="checkbox"]').not(this).prop('checked', false);
+            filterTopCourses('all');
+        }
+    });
+    
+    $(document).on('change', '.stlms-category-nav-wrap input[type="checkbox"]:not(#all)', function() {
+        var categoryId = $(this).attr('id');
+        
+        if ($(this).is(':checked')) {
+            $('.stlms-category-nav-wrap input[type="checkbox"]').not(this).prop('checked', false);
+            filterTopCourses(categoryId);
+        } else {
+            $('#all').prop('checked', true);
+            filterTopCourses('all');
+        }
+    });
+    
+    var loadFiltersFromURL = function() {
+        var url = new URL(window.location.href);
+        var category = url.searchParams.get('top_course_category');
+        
+        if (category) {
+            $('#all').prop('checked', false);
+            $('.stlms-category-nav-wrap input[id="' + category + '"]').prop('checked', true);
+        } else {
+            $('#all').prop('checked', true);
+        }
+    };
+
+    loadFiltersFromURL(); 
+});

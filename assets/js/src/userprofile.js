@@ -1,15 +1,17 @@
+import Select2 from 'select2';
+
 jQuery(function ($) { 
     const $fileInput = $('#fileInput');
     const $preview = $('#preview');
     const $uploadBtn = $('#uploadBtn');
     const $deleteBtn = $('#deleteBtn');
-    const defaultSrc = $preview.attr('src');
-
-    $deleteBtn.hide();
+    const defaultSrc = StlmsRestObj.defaultSrc;
 
     $uploadBtn.on('click', function () {
         $fileInput.trigger('click');
     });
+
+    $('.stlms-select2-multi').select2();
 
     $fileInput.on('change', function () {
         const file = this.files[0];
@@ -37,6 +39,7 @@ jQuery(function ($) {
         $preview.attr('src', defaultSrc);
         $fileInput.val("");
         $deleteBtn.hide();
+        avatarToDelete = true;
     });
 });
 
@@ -110,7 +113,6 @@ jQuery(function ($) {
         var pass      = $input.val();
         var $result   = $('#pass-strength-result');
         var $pwWeak   = $('.pw-weak');
-        var $checkbox = $pwWeak.find('input.pw-checkbox');
         var $submit   = $('.save-profile');
 
         if (typeof wp !== 'undefined' && wp.passwordStrength) {
@@ -135,11 +137,19 @@ jQuery(function ($) {
 
         if (
             pass.length === 0 ||
-            (strength <= 2 && !$checkbox.is(':checked'))
+            (strength <= 2)
         ) {
             $submit.prop('disabled', true);
         } else {
             $submit.prop('disabled', false);
+        }
+    });
+
+    $(document).on('click', '.pw-checkbox.stlms-check', function(){
+        if ( $(this).is(':checked') ) {
+            $('.save-profile').prop('disabled', false);
+        } else {
+            $('.save-profile').prop('disabled', true);
         }
     });
 });
@@ -151,9 +161,10 @@ jQuery(function ($) {
         let firstName = $('#first-name').val();
         let lastName = $('#last-name').val();
         let password = $('#pass1').val();
-        let fileInput = $('#fileInput')[0].files[0];
+        let fileInput = $('#fileInput').length ? $('#fileInput')[0].files[0] : false;
+        let selectTopics = $('#select-topics').val();
 
-        function updateUserProfile(avatarUrl = null){
+        function updateUserProfile(avatarUrl){
             let userData = {
                 first_name: firstName,
                 last_name: lastName
@@ -163,7 +174,11 @@ jQuery(function ($) {
                 userData.password = password;
             }
 
-            if(avatarUrl){
+            userData.meta = {
+                _stlms_user_topics: selectTopics
+            }
+
+            if(avatarUrl !== undefined){
                 userData.meta = {
                     avatar_url: avatarUrl
                 };
@@ -209,14 +224,18 @@ jQuery(function ($) {
                 }
             });
         } else {
-            // No file selected, just update user
-            updateUserProfile();
+             if(avatarToDelete){
+                updateUserProfile(null);
+            } else {
+                updateUserProfile();
+            }
         }
-
+        avatarToDelete = false;
     });
 });
 
 let snackbarTimeout;
+let avatarToDelete = false;
 
 function showSnackbar(snackbarId, message = null) {
     const $snackbar = jQuery('#' + snackbarId);

@@ -4,8 +4,24 @@ on:
   push:
     branches:
       - development
+    paths-ignore:
+      - '**/*.md'
+      - 'readme.txt'
+      - '.github/**'
+      - '.gitignore'
+      - 'LICENSE'
+      - '**/composer.lock'
+      - '**/package-lock.json'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'readme.txt'
+      - '.github/**'
+      - '.gitignore'
+      - 'LICENSE'
+      - '**/composer.lock'
+      - '**/package-lock.json'
 
 permissions:
   contents: read

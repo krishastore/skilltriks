@@ -19,6 +19,8 @@ use ST\Lms\Api\LeadClient;
 use ST\Lms\ErrorLog as EL;
 
 use const ST\Lms\PARENT_MENU_SLUG;
+use const ST\Lms\STLMS_SUBSCRIBE_NOTICE_STATE;
+use const ST\Lms\STLMS_SUBSCRIBER_EMAIL;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,18 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SubscribeNotice Class.
  */
 class SubscribeNotice {
-
-	/**
-	 * Option key holding the submitted subscriber email.
-	 */
-	const OPTION_KEY = 'stlms_subscriber_email';
-
-	/**
-	 * User meta key holding the notice schedule for that user.
-	 *
-	 * Stored as array( 'responses' => int, 'next_show' => timestamp ).
-	 */
-	const STATE_META_KEY = 'stlms_subscribe_notice_state';
 
 	/**
 	 * Responses (submit or cancel) after which the notice never returns.
@@ -57,9 +47,29 @@ class SubscribeNotice {
 	const RETRY_HOOK = 'stlms_retry_lead_sync';
 
 	/**
-	 * Constructor.
+	 * The main instance var.
+	 *
+	 * @var SubscribeNotice|null $instance The one SubscribeNotice instance.
+	 * @since 1.3.0
 	 */
-	public function __construct() {
+	private static $instance = null;
+
+	/**
+	 * Init the main singleton instance class.
+	 *
+	 * @return SubscribeNotice Return the instance class
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new SubscribeNotice();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Init function.
+	 */
+	public function init() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'in_admin_header', array( $this, 'render_notice' ) );
 		add_action( 'wp_ajax_stlms_submit_subscribe_email', array( $this, 'ajax_submit_email' ) );
@@ -124,7 +134,7 @@ class SubscribeNotice {
 	 */
 	private static function get_state( $user_id = 0 ) {
 		$user_id = $user_id ? (int) $user_id : get_current_user_id();
-		$state   = get_user_meta( $user_id, self::STATE_META_KEY, true );
+		$state   = get_user_meta( $user_id, STLMS_SUBSCRIBE_NOTICE_STATE, true );
 		$state   = is_array( $state ) ? $state : array();
 
 		return array(
@@ -165,7 +175,7 @@ class SubscribeNotice {
 			? time() + (int) $intervals[ $state['responses'] ]
 			: 0;
 
-		update_user_meta( $user_id, self::STATE_META_KEY, $state );
+		update_user_meta( $user_id, STLMS_SUBSCRIBE_NOTICE_STATE, $state );
 	}
 
 	/**
@@ -294,7 +304,7 @@ class SubscribeNotice {
 		}
 
 		// One subscriber per site: a later submission replaces the earlier one.
-		update_option( self::OPTION_KEY, $email );
+		update_option( STLMS_SUBSCRIBER_EMAIL, $email );
 
 		// Send email notification to site admin.
 		$admin_email = get_option( 'admin_email' );

@@ -68,7 +68,7 @@ class Core implements \ST\Lms\Interfaces\AdminCore {
 		new \ST\Lms\Import\QuestionImport();
 		new \ST\Lms\Import\LessonImport();
 		new \ST\Lms\Import\CourseImport();
-		new \ST\Lms\Admin\SubscribeNotice();
+		\ST\Lms\Admin\SubscribeNotice::instance()->init();
 
 		// Hooks.
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );

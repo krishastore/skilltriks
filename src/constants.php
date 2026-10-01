@@ -77,9 +77,14 @@ const STLMS_ENROL_COURSES       = '_stlms_enrol_courses';
 const STLMS_COURSE_ASSIGN_TO_ME = '_stlms_course_assigned_to_me';
 const STLMS_COURSE_ASSIGN_BY_ME = '_stlms_course_assigned_by_me';
 const STLMS_USER_DEPARTMENTS    = '_stlms_user_departments';
+// Subscribe notice schedule: array( 'responses' => int, 'next_show' => timestamp ).
+const STLMS_SUBSCRIBE_NOTICE_STATE = 'stlms_subscribe_notice_state';
 
 // Define constant for setting.
 const STLMS_SETTING = 'stlms-setting';
+
+// Subscribe notice: email submitted for the site.
+const STLMS_SUBSCRIBER_EMAIL = 'stlms_subscriber_email';
 
 // Import meta key.
 const META_KEY_IMPORT = '_stlms_import_id';

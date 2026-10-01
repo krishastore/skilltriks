@@ -25,3 +25,9 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 
 // clean up after ourselves, that's a good plugin!
+
+// Subscribe notice: stored subscriber email, lead sync state and per-user notice schedule.
+delete_option( 'stlms_subscriber_email' );
+delete_option( 'stlms_lead_sync' );
+delete_option( 'stlms_site_hash' );
+delete_metadata( 'user', 0, 'stlms_subscribe_notice_state', '', true );

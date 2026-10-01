@@ -67,6 +67,7 @@ class Utility implements \ST\Lms\Interfaces\Helpers {
 				delete_option( $option_key );
 			}
 			delete_option( 'stlms_permalinks_flushed' );
+			wp_clear_scheduled_hook( \ST\Lms\Admin\SubscribeNotice::RETRY_HOOK );
 			wp_clear_scheduled_hook( 'stlms_check_due_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_check_over_due_courses_daily' );
 			wp_clear_scheduled_hook( 'stlms_check_due_soon_courses_daily' );

@@ -12,276 +12,276 @@ $stlms-green-bg: #e3f1e6;
 $stlms-pill-bg: #cdebd5;
 
 .stlms-subscribe-notice {
-    margin: 10px 20px 4px 0;
-    padding: 16px 18px;
-    background: #f9f9fb;
-    border: 1px solid #dcdcde;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    color: #1d2327;
-    transition: background 0.2s ease, border-color 0.2s ease;
+	margin: 10px 20px 4px 0;
+	padding: 16px 18px;
+	background: #f9f9fb;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+	color: #1d2327;
+	transition: background 0.2s ease, border-color 0.2s ease;
 
-    &.is-success {
-        background: $stlms-green-bg;
-        border-color: #b8dfc2;
-    }
+	&.is-success {
+		background: $stlms-green-bg;
+		border-color: #b8dfc2;
+	}
 
-    p {
-        margin: 0;
-        padding: 0;
-    }
+	p {
+		margin: 0;
+		padding: 0;
+	}
 
-    @media screen and (max-width: 782px) {
-        margin-right: 10px;
-        padding: 14px;
-    }
+	@media screen and (max-width: 782px) {
+		margin-right: 10px;
+		padding: 14px;
+	}
 }
 
 .stlms-subscribe-pill {
-    display: inline-block;
-    padding: 2px 8px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.5;
-    color: $stlms-green;
-    background: $stlms-pill-bg;
-    border-radius: 999px;
+	display: inline-block;
+	padding: 2px 8px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.5;
+	color: $stlms-green;
+	background: $stlms-pill-bg;
+	border-radius: 999px;
 }
 
 /* Before submit
    ========================================================================== */
 
 .stlms-subscribe-form-view {
-    .stlms-subscribe-title {
-        margin: 10px 0 8px;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 1.4;
-        color: $stlms-title-blue;
-    }
+	.stlms-subscribe-title {
+		margin: 10px 0 8px;
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: $stlms-title-blue;
+	}
 
-    .stlms-subscribe-description {
-        max-width: 860px;
-        font-size: 14px;
-        line-height: 1.65;
-        color: #2c3338;
-    }
+	.stlms-subscribe-description {
+		max-width: 860px;
+		font-size: 14px;
+		line-height: 1.65;
+		color: #2c3338;
+	}
 }
 
 .stlms-subscribe-form {
-    margin: 14px 0 0;
+	margin: 14px 0 0;
 }
 
 .stlms-subscribe-field {
-    width: 380px;
-    max-width: 100%;
+	width: 380px;
+	max-width: 100%;
 
-    label {
-        display: block;
-        margin: 0 0 6px;
-        font-size: 13px;
-        font-weight: 600;
-        line-height: 1.4;
-        color: #1d2327;
-    }
+	label {
+		display: block;
+		margin: 0 0 6px;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: #1d2327;
+	}
 }
 
 // Input with an envelope icon so it reads clearly as the place to type.
 .stlms-subscribe-input {
-    position: relative;
+	position: relative;
 
-    .dashicons {
-        position: absolute;
-        top: 50%;
-        left: 12px;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        font-size: 18px;
-        color: #8c8f94;
-        pointer-events: none;
-        transition: color 0.15s ease;
-    }
+	.dashicons {
+		position: absolute;
+		top: 50%;
+		left: 12px;
+		transform: translateY(-50%);
+		width: 18px;
+		height: 18px;
+		font-size: 18px;
+		color: #8c8f94;
+		pointer-events: none;
+		transition: color 0.15s ease;
+	}
 
-    input[type="email"] {
-        width: 100%;
-        min-height: 42px;
-        margin: 0;
-        padding: 0 12px 0 38px;
-        font-size: 14px;
-        color: #1d2327;
-        background: #fff;
-        border: 1px solid #8c8f94;
-        border-radius: 6px;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	input[type="email"] {
+		width: 100%;
+		min-height: 42px;
+		margin: 0;
+		padding: 0 12px 0 38px;
+		font-size: 14px;
+		color: #1d2327;
+		background: #fff;
+		border: 1px solid #8c8f94;
+		border-radius: 6px;
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
-        &:hover {
-            border-color: #50575e;
-        }
+		&:hover {
+			border-color: #50575e;
+		}
 
-        &:focus {
-            border-color: $stlms-indigo;
-            box-shadow: 0 0 0 3px rgba(59, 69, 217, 0.18);
-            outline: none;
-        }
+		&:focus {
+			border-color: $stlms-indigo;
+			box-shadow: 0 0 0 3px rgba(59, 69, 217, 0.18);
+			outline: none;
+		}
 
-        &::placeholder {
-            color: #a7aaad;
-        }
-    }
+		&::placeholder {
+			color: #a7aaad;
+		}
+	}
 
-    &:focus-within .dashicons {
-        color: $stlms-indigo;
-    }
+	&:focus-within .dashicons {
+		color: $stlms-indigo;
+	}
 
-    .stlms-has-error & {
-        .dashicons {
-            color: #d63638;
-        }
+	.stlms-has-error & {
+		.dashicons {
+			color: #d63638;
+		}
 
-        input[type="email"] {
-            border-color: #d63638;
+		input[type="email"] {
+			border-color: #d63638;
 
-            &:focus {
-                box-shadow: 0 0 0 3px rgba(214, 54, 56, 0.15);
-            }
-        }
-    }
+			&:focus {
+				box-shadow: 0 0 0 3px rgba(214, 54, 56, 0.15);
+			}
+		}
+	}
 }
 
 .stlms-subscribe-message {
-    margin-top: 8px !important;
-    font-size: 13px;
+	margin-top: 8px !important;
+	font-size: 13px;
 
-    &.stlms-notice-error {
-        color: #d63638;
-    }
+	&.stlms-notice-error {
+		color: #d63638;
+	}
 }
 
 .stlms-subscribe-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin-top: 16px;
 
-    .button {
-        min-height: 40px;
-        margin: 0;
-        padding: 0 16px;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 38px;
-        border-radius: 6px;
-    }
+	.button {
+		min-height: 40px;
+		margin: 0;
+		padding: 0 16px;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 38px;
+		border-radius: 6px;
+	}
 
-    .stlms-btn-submit {
-        background: $stlms-indigo;
-        border-color: $stlms-indigo;
-        color: #fff;
+	.stlms-btn-submit {
+		background: $stlms-indigo;
+		border-color: $stlms-indigo;
+		color: #fff;
 
-        &:hover,
-        &:focus {
-            background: $stlms-indigo-dark;
-            border-color: $stlms-indigo-dark;
-            color: #fff;
-        }
+		&:hover,
+		&:focus {
+			background: $stlms-indigo-dark;
+			border-color: $stlms-indigo-dark;
+			color: #fff;
+		}
 
-        &:focus {
-            box-shadow: 0 0 0 1px #fff, 0 0 0 3px $stlms-indigo;
-        }
+		&:focus {
+			box-shadow: 0 0 0 1px #fff, 0 0 0 3px $stlms-indigo;
+		}
 
-        &:disabled,
-        &:disabled:hover {
-            background: $stlms-indigo !important;
-            border-color: $stlms-indigo !important;
-            color: #fff !important;
-            opacity: 0.7;
-        }
-    }
+		&:disabled,
+		&:disabled:hover {
+			background: $stlms-indigo !important;
+			border-color: $stlms-indigo !important;
+			color: #fff !important;
+			opacity: 0.7;
+		}
+	}
 
-    .stlms-btn-cancel {
-        background: #fff;
-        border-color: $stlms-indigo;
-        color: $stlms-indigo;
+	.stlms-btn-cancel {
+		background: #fff;
+		border-color: $stlms-indigo;
+		color: $stlms-indigo;
 
-        &:hover,
-        &:focus {
-            background: #f0f1fd;
-            border-color: $stlms-indigo-dark;
-            color: $stlms-indigo-dark;
-        }
+		&:hover,
+		&:focus {
+			background: #f0f1fd;
+			border-color: $stlms-indigo-dark;
+			color: $stlms-indigo-dark;
+		}
 
-        &:focus {
-            box-shadow: 0 0 0 1px #fff, 0 0 0 3px $stlms-indigo;
-        }
-    }
+		&:focus {
+			box-shadow: 0 0 0 1px #fff, 0 0 0 3px $stlms-indigo;
+		}
+	}
 
-    .spinner {
-        float: none;
-        margin: 0;
-    }
+	.spinner {
+		float: none;
+		margin: 0;
+	}
 
-    @media screen and (max-width: 600px) {
-        .button {
-            flex: 1 1 auto;
-        }
-    }
+	@media screen and (max-width: 600px) {
+		.button {
+			flex: 1 1 auto;
+		}
+	}
 }
 
 /* After submit
    ========================================================================== */
 
 .stlms-subscribe-success-inner {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
 }
 
 .stlms-subscribe-success-icon {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: #fff;
-    border: 1px solid #b8dfc2;
-    border-radius: 50%;
-    color: $stlms-green;
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: #fff;
+	border: 1px solid #b8dfc2;
+	border-radius: 50%;
+	color: $stlms-green;
 
-    .dashicons {
-        width: 26px;
-        height: 26px;
-        font-size: 26px;
-    }
+	.dashicons {
+		width: 26px;
+		height: 26px;
+		font-size: 26px;
+	}
 }
 
 .stlms-subscribe-success-body {
-    flex: 1 1 auto;
-    min-width: 0;
-    padding-top: 1px;
+	flex: 1 1 auto;
+	min-width: 0;
+	padding-top: 1px;
 }
 
 .stlms-subscribe-success-heading {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-    margin-bottom: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 10px;
+	margin-bottom: 4px;
 }
 
 .stlms-subscribe-success-title {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: $stlms-green;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: $stlms-green;
 }
 
 .stlms-subscribe-success-text {
-    max-width: 860px;
-    font-size: 14px;
-    line-height: 1.65;
-    color: #2c3338;
+	max-width: 860px;
+	font-size: 14px;
+	line-height: 1.65;
+	color: #2c3338;
 }

@@ -72,9 +72,17 @@ $stlms-pill-bg: #cdebd5;
 	margin: 14px 0 0;
 }
 
+// First name and email side by side, stacking once the row gets narrow.
+.stlms-subscribe-fields {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 16px;
+	max-width: 776px;
+}
+
 .stlms-subscribe-field {
-	width: 380px;
-	max-width: 100%;
+	flex: 1 1 280px;
+	min-width: 0;
 
 	label {
 		display: block;
@@ -84,6 +92,15 @@ $stlms-pill-bg: #cdebd5;
 		line-height: 1.4;
 		color: #1d2327;
 	}
+}
+
+// Brevo honeypot field, kept out of sight and out of the tab order.
+.stlms-subscribe-hp {
+	position: absolute !important;
+	left: -9999px !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
 }
 
 // Input with an envelope icon so it reads clearly as the place to type.
@@ -103,6 +120,7 @@ $stlms-pill-bg: #cdebd5;
 		transition: color 0.15s ease;
 	}
 
+	input[type="text"],
 	input[type="email"] {
 		width: 100%;
 		min-height: 42px;
@@ -135,7 +153,7 @@ $stlms-pill-bg: #cdebd5;
 		color: $stlms-indigo;
 	}
 
-	.stlms-has-error & {
+	.stlms-has-error &--email {
 		.dashicons {
 			color: #d63638;
 		}

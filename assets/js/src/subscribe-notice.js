@@ -70,6 +70,29 @@
 			$message.slideUp(200).removeClass('stlms-notice-error stlms-notice-success');
 			$form.removeClass('stlms-has-error');
 
+			// Subscribe on Brevo first, the same request its own form script makes.
+			$.ajax({
+				url: $form.attr('action') + '?isAjax=1',
+				type: 'POST',
+				data: new FormData($form[0]),
+				processData: false,
+				contentType: false,
+				dataType: 'json'
+			}).done(function (brevo) {
+				if (!brevo || !brevo.success) {
+					showMessage('error', brevo && brevo.message ? brevo.message : stlmsSubscribeObject.i18n.serverError);
+					resetSubmitButton();
+					return;
+				}
+				saveSubscription(emailVal);
+			}).fail(function () {
+				showMessage('error', stlmsSubscribeObject.i18n.serverError);
+				resetSubmitButton();
+			});
+		});
+
+		// Record the subscription locally once Brevo has accepted it.
+		function saveSubscription(emailVal) {
 			$.ajax({
 				url: stlmsSubscribeObject.ajaxurl,
 				type: 'POST',
@@ -101,6 +124,6 @@
 					resetSubmitButton();
 				}
 			});
-		});
+		}
 	});
 })(jQuery);

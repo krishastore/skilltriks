@@ -15,7 +15,6 @@
 
 namespace ST\Lms\Admin;
 
-use ST\Lms\Api\LeadClient;
 use ST\Lms\ErrorLog as EL;
 
 use const ST\Lms\PARENT_MENU_SLUG;
@@ -42,9 +41,9 @@ class SubscribeNotice {
 	const CAPABILITY = 'activate_plugins';
 
 	/**
-	 * Cron hook used to retry a failed lead sync once.
+	 * Brevo form endpoint the subscribe form posts to.
 	 */
-	const RETRY_HOOK = 'stlms_retry_lead_sync';
+	const BREVO_FORM_ACTION = 'https://d44a4db5.sibforms.com/serve/MUIFADdEsCUjrSZqxajtphXru_MSVco6uSYbmqK1miGF_0t5dF7WaddPS4R-2udYbBEmvQ5dqgI_1w6p5iCx91mRXo9JQcCOazr5_CtWZBX70RygkWP5-ugDNhJ3RF2SzVlUdXbZpOZYvwyLSzSZ_EkAVL3zhV4zYuuDzcVRpEH8tNZbtQKBPoD1GDTgRnyxELQdMuEQbXUFtMdS0g==';
 
 	/**
 	 * The main instance var.
@@ -74,14 +73,6 @@ class SubscribeNotice {
 		add_action( 'in_admin_header', array( $this, 'render_notice' ) );
 		add_action( 'wp_ajax_stlms_submit_subscribe_email', array( $this, 'ajax_submit_email' ) );
 		add_action( 'wp_ajax_stlms_dismiss_subscribe_notice', array( $this, 'ajax_dismiss_notice' ) );
-
-		/*
-		 * WP-Cron fires on frontend requests too, so this callback must be
-		 * registered outside the admin. That holds today because Admin\Core is
-		 * instantiated unconditionally in \ST\Lms\Core::init(). If that is ever
-		 * moved behind an is_admin() guard, retries stop firing silently.
-		 */
-		add_action( self::RETRY_HOOK, array( $this, 'retry_lead_sync' ), 10, 2 );
 	}
 
 	/**
@@ -233,6 +224,7 @@ class SubscribeNotice {
 
 		$current_user  = wp_get_current_user();
 		$default_email = $current_user->user_email ? $current_user->user_email : '';
+		$default_name  = $current_user->first_name ? $current_user->first_name : '';
 		?>
 		<div id="stlms-subscribe-notice" class="stlms-subscribe-notice" role="region" aria-labelledby="stlms-subscribe-title">
 			<div class="stlms-subscribe-form-view">
@@ -240,14 +232,27 @@ class SubscribeNotice {
 				<p id="stlms-subscribe-title" class="stlms-subscribe-title"><?php esc_html_e( 'Stay Connected with SkillTriks LMS!', 'skilltriks' ); ?></p>
 				<p class="stlms-subscribe-description"><?php esc_html_e( 'Enter your email address to receive important SkillTriks product updates, new feature announcements, release notifications, and practical LMS tips. Your email helps us keep you informed about what\'s new.', 'skilltriks' ); ?></p>
 
-				<form id="stlms-subscribe-form" class="stlms-subscribe-form" method="post" action="">
-					<div class="stlms-subscribe-field">
-						<label for="stlms_subscribe_email"><?php esc_html_e( 'Your work email address', 'skilltriks' ); ?></label>
-						<div class="stlms-subscribe-input">
-							<span class="dashicons dashicons-email-alt" aria-hidden="true"></span>
-							<input type="email" id="stlms_subscribe_email" name="stlms_subscribe_email" placeholder="<?php esc_attr_e( 'you@company.com', 'skilltriks' ); ?>" value="<?php echo esc_attr( $default_email ); ?>" required />
+				<form id="stlms-subscribe-form" class="stlms-subscribe-form" method="post" action="<?php echo esc_url( self::BREVO_FORM_ACTION ); ?>" novalidate>
+					<div class="stlms-subscribe-fields">
+						<div class="stlms-subscribe-field">
+							<label for="stlms_subscribe_firstname"><?php esc_html_e( 'First Name', 'skilltriks' ); ?></label>
+							<div class="stlms-subscribe-input">
+								<span class="dashicons dashicons-admin-users" aria-hidden="true"></span>
+								<input type="text" id="stlms_subscribe_firstname" name="FIRSTNAME" maxlength="200" autocomplete="given-name" placeholder="<?php esc_attr_e( 'John', 'skilltriks' ); ?>" value="<?php echo esc_attr( $default_name ); ?>" />
+							</div>
+						</div>
+
+						<div class="stlms-subscribe-field">
+							<label for="stlms_subscribe_email"><?php esc_html_e( 'Email Address', 'skilltriks' ); ?></label>
+							<div class="stlms-subscribe-input stlms-subscribe-input--email">
+								<span class="dashicons dashicons-email-alt" aria-hidden="true"></span>
+								<input type="email" id="stlms_subscribe_email" name="EMAIL" autocomplete="email" placeholder="<?php esc_attr_e( 'you@company.com', 'skilltriks' ); ?>" value="<?php echo esc_attr( $default_email ); ?>" required />
+							</div>
 						</div>
 					</div>
+
+					<?php // Brevo honeypot: bots fill it, Brevo drops those submissions. ?>
+					<input type="text" name="email_address_check" value="" class="stlms-subscribe-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
 					<p id="stlms-subscribe-message" class="stlms-subscribe-message" style="display:none;" role="alert" aria-live="polite"></p>
 
@@ -328,57 +333,9 @@ class SubscribeNotice {
 			);
 		}
 
-		// Forward to skilltriks.com. Best-effort: the option above already
-		// holds the record, so nothing here can fail the user's submission.
-		$this->sync_lead( $email );
-
 		self::record_response();
 
 		wp_send_json_success( array( 'message' => __( 'Email submitted successfully.', 'skilltriks' ) ) );
-	}
-
-	/**
-	 * Push the lead to the remote endpoint and schedule a retry on failure.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $email Subscriber email.
-	 * @return void
-	 */
-	private function sync_lead( $email ) {
-		$result = LeadClient::send( $email );
-		LeadClient::record_result( $result, 1 );
-
-		if ( $result['ok'] || ! $result['retryable'] ) {
-			return;
-		}
-
-		if ( wp_next_scheduled( self::RETRY_HOOK, array( $email, 2 ) ) ) {
-			return;
-		}
-
-		wp_schedule_single_event(
-			time() + ( 15 * MINUTE_IN_SECONDS ),
-			self::RETRY_HOOK,
-			array( $email, 2 )
-		);
-	}
-
-	/**
-	 * Cron callback: one retry, then give up.
-	 *
-	 * Retrying a 400 or 401 forever would just burn cron slots, so only
-	 * retryable outcomes get here and none of them reschedule.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $email   Subscriber email.
-	 * @param int    $attempt Attempt number.
-	 * @return void
-	 */
-	public function retry_lead_sync( $email, $attempt = 2 ) {
-		$result = LeadClient::send( $email );
-		LeadClient::record_result( $result, (int) $attempt );
 	}
 
 	/**

@@ -15,9 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="stlms-lesson-view__body">
 	<div class="stlms-lesson-video-box">
 		<?php
-		if ( ! empty( $args['curriculum']['media']['video_id'] ) ) :
-			$video_id   = $args['curriculum']['media']['video_id'];
-			$media_url  = wp_get_attachment_url( $video_id );
+		$video_id        = ! empty( $args['curriculum']['media']['video_id'] ) ? $args['curriculum']['media']['video_id'] : 0;
+		$media_url       = $video_id ? wp_get_attachment_url( $video_id ) : false;
+
+		if ( $video_id && $media_url ) :
 			$media_data = wp_get_attachment_metadata( $video_id );
 			$fileformat = isset( $media_data['fileformat'] ) ? $media_data['fileformat'] : 'mp4';
 			$filesize   = isset( $media_data['filesize'] ) ? $media_data['filesize'] : '';

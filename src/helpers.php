@@ -7,6 +7,10 @@
 
 namespace ST\Lms;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Utility method to insert before specific key
  * in an associative array.

@@ -12,6 +12,10 @@
 
 namespace ST\Lms;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 const STLMS_SCRIPT_HANDLE = 'stlms-';
 const PARENT_MENU_SLUG    = 'skilltriks';
 // Define constants for custom post types.

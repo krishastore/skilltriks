@@ -4,7 +4,7 @@ Author URI: https://profiles.wordpress.org/krishaweb/
 Contributors: krishaweb, dilipbheda, Dhruvang21, parthvataliya
 Tags: learning management system, LMS, E-Learning, Courses, Education
 Requires at least: 6.0
-Tested up to: 7.1.3
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.4
 Copyright: (c) 2012-2026 KrishaWeb Technologies PVT LTD (info@krishaweb.com)

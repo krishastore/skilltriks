@@ -27,6 +27,7 @@ module.exports = {
         result: './assets/scss/result.scss',
         assigncourse: ['./assets/js/src/assigncourse.js', './assets/scss/assigncourse.scss'],
         userprofile: ['./assets/js/src/userprofile.js', './assets/scss/userprofile.scss'],
+        'subscribe-notice': ['./assets/js/src/subscribe-notice.js', './assets/scss/subscribe-notice.scss'],
     },
     output: {
         path: path.resolve(__dirname, './assets'),

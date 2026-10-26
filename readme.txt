@@ -4,9 +4,9 @@ Author URI: https://profiles.wordpress.org/krishaweb/
 Contributors: krishaweb, dilipbheda, Dhruvang21, parthvataliya
 Tags: learning management system, LMS, E-Learning, Courses, Education
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.1.3
 Requires PHP: 7.4
-Stable tag: 1.3
+Stable tag: 1.4
 Copyright: (c) 2012-2026 KrishaWeb Technologies PVT LTD (info@krishaweb.com)
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -139,11 +139,26 @@ If you're managing people, tracking learning outcomes, or building a culture of 
 **18. Can I contribute to the plugin’s development?**  
       Yes! We're open-source. You can follow our roadmap or contribute via GitHub.
 
+== Privacy and Newsletter Subscription ==
+
+SkillTriks includes an optional newsletter subscription form in the WordPress admin dashboard. Users can choose to subscribe to receive SkillTriks product updates, feature announcements, release notifications, and LMS tips.
+
+Newsletter subscription is optional and is not required to use the plugin.
+
+When a user chooses to subscribe, the name and email address submitted through the form are sent directly to Brevo, our third-party email marketing service, to manage the subscription and deliver newsletter communications. SkillTriks does not collect or store this information on its own server through this form.
+
+Users can unsubscribe from newsletter communications at any time using the unsubscribe link provided in the emails.
+
+For more information about how Brevo processes personal data, please review its Privacy Policy: https://www.brevo.com/legal/privacypolicy/
+
 == Screenshots ==
 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.4.0 =
+* Fixed bugs and added a newsletter subscription section to the plugin activation screen
 
 = 1.3.0 =
 * Add PRO Features Support
